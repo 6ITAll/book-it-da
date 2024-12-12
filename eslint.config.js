@@ -17,6 +17,14 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
+    settings: {
+      // import/resolver 설정 추가
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json', // TypeScript 설정 파일
+        },
+      },
+    },
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [

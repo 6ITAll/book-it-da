@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true, // 프로젝트 참조를 위한 필수 옵션
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2023"],
