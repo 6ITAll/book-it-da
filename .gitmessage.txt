@@ -24,6 +24,6 @@
 # <Type (Footer)>
 # Related to: 관련된 이슈
 # Resolves: 해결한 이슈
-# Ref: 참고한 이슈
+# Ref: 참고할 이슈
 # Fixes: 이슈 수정 중
 ################
