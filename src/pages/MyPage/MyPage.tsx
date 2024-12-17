@@ -4,7 +4,7 @@ import { Container } from '@mui/material';
 
 const MyPage = (): JSX.Element => {
   return (
-    <Container>
+    <Container maxWidth="md">
       <UserInfoSection />
       <TabSection />
     </Container>
