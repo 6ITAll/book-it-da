@@ -4,7 +4,6 @@ about: 버그 수정 템플릿
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 ## 버그 수정 요약
