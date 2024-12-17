@@ -1,8 +1,13 @@
+import TabSection from '@components/MyPage/TabSection';
+import UserInfoSection from '@components/MyPage/UserInfoSection';
+import { Container } from '@mui/material';
+
 const MyPage = (): JSX.Element => {
   return (
-    <div>
-      <h2>마이페이지</h2>
-    </div>
+    <Container>
+      <UserInfoSection />
+      <TabSection />
+    </Container>
   );
 };
 
