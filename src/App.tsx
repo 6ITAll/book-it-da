@@ -24,9 +24,15 @@ const App: React.FC = () => {
           <aside className="sidebar">
             <nav>
               <ul>
-                <li><Link to="/feed">홈</Link></li>
-                <li><Link to="/search">책 검색</Link></li>
-                <li><Link to="/my-page">마이페이지</Link></li>
+                <li>
+                  <Link to="/feed">홈</Link>
+                </li>
+                <li>
+                  <Link to="/search">책 검색</Link>
+                </li>
+                <li>
+                  <Link to="/my-page">마이페이지</Link>
+                </li>
               </ul>
             </nav>
           </aside>
@@ -51,4 +57,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
