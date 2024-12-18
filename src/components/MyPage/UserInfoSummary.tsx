@@ -7,7 +7,7 @@ interface UserInfoSummaryProps {
 
 const UserInfoSummary = ({ count, label }: UserInfoSummaryProps) => {
   return (
-    <Stack>
+    <Stack alignItems="center">
       <Typography>{count}</Typography>
       <Typography>{label}</Typography>
     </Stack>

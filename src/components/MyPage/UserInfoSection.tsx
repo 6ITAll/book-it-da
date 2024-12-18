@@ -15,13 +15,25 @@ const UserInfoSection = (): JSX.Element => {
   };
 
   return (
-    <Stack>
-      <Avatar alt={user.name} src={user.avartarUrl} />
-      <Typography>{user.name}</Typography>
-      {user?.userStats?.map(({ count, label }) => (
-        <UserInfoSummary key={label} count={count} label={label} />
-      ))}
-      <Typography>{user.about}</Typography>
+    <Stack direction="row" alignItems="center" spacing={4} padding={4}>
+      <Avatar
+        alt={user.name}
+        src={user.avartarUrl}
+        sx={{ width: 100, height: 100 }}
+      />
+      <Stack spacing={2}>
+        <Typography variant="h6" fontWeight="bold">
+          {user.name}
+        </Typography>
+        <Stack direction="row" spacing={4}>
+          {user?.userStats?.map(({ count, label }) => (
+            <UserInfoSummary key={label} count={count} label={label} />
+          ))}
+        </Stack>
+        <Typography variant="body2" color="grey.700">
+          {user.about}
+        </Typography>
+      </Stack>
     </Stack>
   );
 };
