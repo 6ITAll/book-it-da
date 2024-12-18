@@ -5,7 +5,7 @@ const TabSection = (): JSX.Element => {
   const tabs = [
     { id: 1, label: '내 서재', component: <></> },
     { id: 2, label: '내 피드', component: <></> },
-    { id: 2, label: '북마크 피드', component: <></> },
+    { id: 2, label: '북마크', component: <></> },
   ];
 
   const [tab, setTab] = useState(0);
