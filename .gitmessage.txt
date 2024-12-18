@@ -20,6 +20,8 @@
 # refactor: 코드 리팩토링
 # style: 코드 의미에 영향을 주지 않는 변경사항
 # chore: 빌드 부분 혹은 패키지 매니저 수정사항
+# design: UI 디자인 변경
+# rename: 파일 위치 및 이름 변경
 ################
 # <Type (Footer)>
 # Related to: 관련된 이슈
