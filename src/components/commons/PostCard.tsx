@@ -10,6 +10,7 @@ interface PostCardProps {
   feedType: string;
   bookTitle: string;
   bookAuthor: string;
+  isDetail: boolean;
 }
 
 const PostCard = ({
@@ -22,6 +23,7 @@ const PostCard = ({
   feedType,
   bookTitle,
   bookAuthor,
+  isDetail,
 }: PostCardProps): JSX.Element => {
   const isFollowing = feedType === '팔로잉';
 
@@ -66,19 +68,21 @@ const PostCard = ({
             </Box>
           </Box>
         </Box>
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{
-            color: isFollowing ? 'black' : 'primary',
-            borderColor: isFollowing ? 'black' : 'primary',
-            '&:hover': {
+        {isDetail && (
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              color: isFollowing ? 'black' : 'primary',
               borderColor: isFollowing ? 'black' : 'primary',
-            },
-          }}
-        >
-          {isFollowing ? '팔로잉' : '팔로우'}
-        </Button>
+              '&:hover': {
+                borderColor: isFollowing ? 'black' : 'primary',
+              },
+            }}
+          >
+            {isFollowing ? '팔로잉' : '팔로우'}
+          </Button>
+        )}
       </Box>
 
       {/* Card Content */}
@@ -156,21 +160,17 @@ const PostCard = ({
           )}
         </Box>
       </Box>
-      {postType === '포스팅' ? (
-        <>
-          <Typography
-            variant="body2"
-            sx={{
-              height: '100px',
-              padding: '1rem',
-              backgroundColor: '#f5f5f5',
-            }}
-          >
-            {description}
-          </Typography>
-        </>
-      ) : (
-        <></>
+      {postType === '포스팅' && isDetail && (
+        <Typography
+          variant="body2"
+          sx={{
+            height: '100px',
+            padding: '1rem',
+            backgroundColor: '#f5f5f5',
+          }}
+        >
+          {description}
+        </Typography>
       )}
 
       {/* Card Footer */}
