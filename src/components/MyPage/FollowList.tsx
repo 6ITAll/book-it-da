@@ -46,13 +46,21 @@ const FollowList = () => {
     },
   ];
 
+  const handleDeleteIconClick = () => {
+    /* TODO 삭제 API 연동 필요 */
+  };
+
   return (
     <List sx={{ gap: 2 }}>
       {users.map(({ id, name, avartarUrl }) => (
         <ListItem
           key={id}
           secondaryAction={
-            <IconButton edge="end" aria-label="delete">
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={handleDeleteIconClick}
+            >
               <DeleteIcon />
             </IconButton>
           }
