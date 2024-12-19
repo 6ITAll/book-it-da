@@ -7,12 +7,14 @@ import {
   IconButton,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
 
 const FollowList = () => {
   /* TODO API 연동 필요 */
   const users = [
     {
       id: 1,
+      userId: 'kim',
       name: '김독서',
       avartarUrl: '',
       about: '책을 사랑하는 독서가',
@@ -24,7 +26,8 @@ const FollowList = () => {
     },
     {
       id: 2,
-      name: '김독서',
+      userId: 'lee',
+      name: '이독서',
       avartarUrl: '',
       about: '책을 사랑하는 독서가',
       userStats: [
@@ -35,7 +38,8 @@ const FollowList = () => {
     },
     {
       id: 3,
-      name: '김독서',
+      userId: 'jung',
+      name: '정독서',
       avartarUrl: '',
       about: '책을 사랑하는 독서가',
       userStats: [
@@ -46,13 +50,19 @@ const FollowList = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
+  const handleUserClick = (userId: string) => {
+    navigate(userId);
+  };
+
   const handleDeleteIconClick = () => {
     /* TODO 삭제 API 연동 필요 */
   };
 
   return (
     <List sx={{ gap: 2 }}>
-      {users.map(({ id, name, avartarUrl }) => (
+      {users.map(({ id, userId, name, avartarUrl }) => (
         <ListItem
           key={id}
           secondaryAction={
@@ -65,10 +75,17 @@ const FollowList = () => {
             </IconButton>
           }
         >
-          <ListItemAvatar>
+          <ListItemAvatar
+            onClick={() => handleUserClick(userId)}
+            sx={{ cursor: 'pointer' }}
+          >
             <Avatar src={avartarUrl} />
           </ListItemAvatar>
-          <ListItemText primary={name} />
+          <ListItemText
+            primary={name}
+            onClick={() => handleUserClick(userId)}
+            sx={{ cursor: 'pointer' }}
+          />
         </ListItem>
       ))}
     </List>
