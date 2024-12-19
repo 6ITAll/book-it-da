@@ -7,7 +7,7 @@ export interface BestBookResponse {
     itemId: number;
     cover: string; // 책 이미지 URL
     link: string; // 책 상세 페이지 링크
-    title: string;
+    title: string; // 책 제목
   }>;
 }
 
