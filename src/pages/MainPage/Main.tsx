@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Box, CircularProgress, Container, Typography } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
-// import { Post, PostType, FeedType } from '@/shared/types/type';
 import {
   generateRandomDescription,
   generateRandomFeedType,
