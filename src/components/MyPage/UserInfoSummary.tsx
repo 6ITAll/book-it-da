@@ -1,6 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import HybridDialog from '../commons/HybridDialog';
 import { useState } from 'react';
+import FollowList from './FollowList';
 
 interface UserInfoSummaryProps {
   count: number;
@@ -31,7 +32,7 @@ const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
         open={open}
         setOpen={setOpen}
         title={label}
-        contentNode={<></>}
+        contentNode={<FollowList />}
       />
     </Stack>
   );
