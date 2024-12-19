@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: env.VITE_PROXY_TARGET,
+          target: env.VITE_ALADIN_BASEURL,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
