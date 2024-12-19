@@ -1,65 +1,68 @@
 import { Post, PostType, FeedType, Book } from '@shared/types/type';
-import sampleImage1 from '@/assets/images/sample1.jpg';
-import sampleImage2 from '@/assets/images/sample2.jpg';
-import sampleImage3 from '@/assets/images/sample3.jpg';
-import sampleImage4 from '@/assets/images/sample4.jpg';
-import sampleImage5 from '@/assets/images/sample5.jpg';
-import sampleImage6 from '@/assets/images/sample6.jpg';
-import sampleImage7 from '@/assets/images/sample7.jpg';
-import sampleImage8 from '@/assets/images/sample8.jpg';
-import sampleImage9 from '@/assets/images/sample9.jpg';
-import sampleImage10 from '@/assets/images/sample10.jpg';
+
+const IMAGES = {
+  sample1: new URL('../../assets/images/sample1.jpg', import.meta.url).href,
+  sample2: new URL('../../assets/images/sample2.jpg', import.meta.url).href,
+  sample3: new URL('../../assets/images/sample3.jpg', import.meta.url).href,
+  sample4: new URL('../../assets/images/sample4.jpg', import.meta.url).href,
+  sample5: new URL('../../assets/images/sample5.jpg', import.meta.url).href,
+  sample6: new URL('../../assets/images/sample6.jpg', import.meta.url).href,
+  sample7: new URL('../../assets/images/sample7.jpg', import.meta.url).href,
+  sample8: new URL('../../assets/images/sample8.jpg', import.meta.url).href,
+  sample9: new URL('../../assets/images/sample9.jpg', import.meta.url).href,
+  sample10: new URL('../../assets/images/sample10.jpg', import.meta.url).href,
+};
 
 export const mockBooks: Book[] = [
   {
     bookTitle: '금각사',
     author: '미시마 유키오',
-    imageUrl: sampleImage1,
+    imageUrl: IMAGES.sample1,
   },
   {
     bookTitle: '여행의 이유',
     author: '김영하',
-    imageUrl: sampleImage2,
+    imageUrl: IMAGES.sample2,
   },
   {
     bookTitle: '목숨을 팝니다',
     author: '미시마 유키오',
-    imageUrl: sampleImage3,
+    imageUrl: IMAGES.sample3,
   },
   {
     bookTitle: '눈먼 자들의 도시',
     author: '주제 사라마구',
-    imageUrl: sampleImage4,
+    imageUrl: IMAGES.sample4,
   },
   {
     bookTitle: '밤의 사색',
     author: '헤르만 헤세',
-    imageUrl: sampleImage5,
+    imageUrl: IMAGES.sample5,
   },
   {
     bookTitle: '보통의 존재',
     author: '이석원',
-    imageUrl: sampleImage6,
+    imageUrl: IMAGES.sample6,
   },
   {
     bookTitle: '가나',
     author: '정용준',
-    imageUrl: sampleImage7,
+    imageUrl: IMAGES.sample7,
   },
   {
     bookTitle: '사랑의 잔상들',
     author: '장혜령',
-    imageUrl: sampleImage8,
+    imageUrl: IMAGES.sample8,
   },
   {
     bookTitle: '시와 산책',
     author: '한정원',
-    imageUrl: sampleImage9,
+    imageUrl: IMAGES.sample9,
   },
   {
     bookTitle: '나는 나를 파괴할 권리가 있다',
     author: '김영하',
-    imageUrl: sampleImage10,
+    imageUrl: IMAGES.sample10,
   },
 ];
 
