@@ -1,72 +1,50 @@
-/** @jsxImportSource @emotion/react */
-import { Box, Typography } from '@mui/material';
-import { css } from '@emotion/react';
+import CommonBookCard from '@/components/commons/CommonBookCard';
 
 interface BestBookCardProps {
   image: string;
-  link: string;
-  title?: string; // 제목 추가
+  title?: string;
+  onClick?: () => void;
 }
 
 const BestBookCard = ({
   image,
-  link,
   title,
+  onClick,
 }: BestBookCardProps): JSX.Element => {
   return (
-    <a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      css={css`
-        display: block;
-        text-decoration: none;
-        color: inherit;
-      `}
-    >
-      <Box
-        css={css`
-          width: 140px;
-          height: 200px;
-          margin: 0 auto;
-          border-radius: 8px;
-          overflow: hidden;
-          background-color: #f5f5f5;
-          border: 1px solid #ddd;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          transition:
-            transform 0.3s ease,
-            box-shadow 0.3s ease;
-
-          &:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-          }
-        `}
-      >
-        <img
-          src={image}
-          alt="Best Seller"
-          css={css`
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-          `}
-        />
-      </Box>
-      {title && (
-        <Typography
-          variant="body2"
-          textAlign="center"
-          css={css`
-            padding: 20px;
-            color: #333;
-          `}
-        >
-          {title}
-        </Typography>
-      )}
-    </a>
+    <CommonBookCard
+      image={image}
+      title={title}
+      onClick={onClick}
+      sx={{
+        borderRadius: 0,
+        boxShadow: 'none',
+        border: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        '& .MuiCardMedia-root': {
+          height: 200,
+          width: 'auto',
+          margin: '0 auto',
+        },
+        '& .MuiCardContent-root': {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '8px',
+        },
+        '& .MuiTypography-body1': {
+          fontSize: '14px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginTop: '8px',
+        },
+      }}
+    />
   );
 };
 
