@@ -1,22 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { Container, Box, Typography } from '@mui/material';
-import SearchBookCard from '@/components/BookSearchPage/SearchBookCard';
-import Pagination from '@/components/BookSearchPage/Pagination';
-import BookSearchBar from '@/components/BookSearchPage/BookSearchBar';
-import BestBookCarousel from '@/components/BookSearchPage/BestBookCarousel';
+import SearchBookCard from '';
+import Pagination from '@components/BookSearchPage/Pagination';
+import BookSearchBar from '@components/BookSearchPage/BookSearchBar';
+import BestBookCarousel from '@components/BookSearchPage/BestBookCarousel';
 import { css } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/index';
-import { useSearchBooksQuery } from '@/features/BookSearchPage/api/bookSearchApi';
+import { RootState } from '@store/index';
+import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
 import {
   setSearchQuery,
   setCurrentPage,
   setSortOption,
-} from '@/features/BookSearchPage/Slice/bookSearchSlice';
+} from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useState } from 'react';
 import { SelectChangeEvent } from '@mui/material';
-import SortSelector from '@/components/BookSearchPage/SortSelector';
-import { SortOption } from '@/features/BookSearchPage/Slice/bookSearchSlice';
+import SortSelector from '@components/BookSearchPage/SortSelector';
+import { SortOption } from '@features/BookSearchPage/Slice/bookSearchSlice';
 
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [

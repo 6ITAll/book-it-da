@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { aladinConfig } from '@/shared/config/aladinConfig';
+import { aladinConfig } from '@shared/config/aladinConfig';
 
 // API 응답 타입 (이미지와 링크만 포함)
 export interface BestBookResponse {

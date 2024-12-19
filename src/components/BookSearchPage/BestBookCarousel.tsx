@@ -2,9 +2,9 @@
 import { Typography } from '@mui/material';
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
-import { useGetBestBooksQuery } from '@/features/BookSearchPage/api/bestBookGetApi';
-import Carousel from '@/components/commons/Carousel';
-import BestBookCard from '@/components/BookSearchPage/BestBookCard';
+import { useGetBestBooksQuery } from '@features/BookSearchPage/api/bestBookGetApi';
+import Carousel from '@components/commons/Carousel';
+import BestBookCard from '@components/BookSearchPage/BestBookCard';
 
 const BestBookCarousel = (): JSX.Element => {
   const { data, isLoading, error } = useGetBestBooksQuery();

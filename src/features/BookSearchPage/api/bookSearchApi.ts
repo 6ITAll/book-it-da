@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { aladinConfig } from '@/shared/config/aladinConfig';
+import { aladinConfig } from '@shared/config/aladinConfig';
 
 // 알라딘 상품 검색 Api 관련 인터페이스
 export interface BookResponse {

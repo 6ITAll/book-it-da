@@ -1,4 +1,4 @@
-import CommonBookCard from '@/components/commons/CommonBookCard';
+import CommonBookCard from '@components/commons/CommonBookCard';
 
 interface BestBookCardProps {
   image: string;

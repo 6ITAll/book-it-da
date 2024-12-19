@@ -1,5 +1,5 @@
-import CommonBookCard from '@/components/commons/CommonBookCard';
-import { useFetchRatingInfoQuery } from '@/features/BookSearchPage/api/bookSearchApi';
+import CommonBookCard from '@components/commons/CommonBookCard';
+import { useFetchRatingInfoQuery } from '@features/BookSearchPage/api/bookSearchApi';
 
 interface SearchBookCardProps {
   itemId: number;
