@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, CircularProgress, Container, Typography } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -31,7 +31,7 @@ const Main = (): JSX.Element => {
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
   const handlePostTypeChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newValue: PostType | '',
   ) => {
     setPostType(newValue);
@@ -42,7 +42,7 @@ const Main = (): JSX.Element => {
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링 > 추후 interface 확립 후 변경
   const handleFeedTypeChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newValue: FeedType | null,
   ) => {
     setFeedType(newValue || '추천');
@@ -52,32 +52,34 @@ const Main = (): JSX.Element => {
   };
 
   // mock post 생성 > 추후 API 요청으로 변경
-  const getFilteredPosts = (count: number, startId: number): Post[] => {
-    return Array.from({ length: count }, (_, i) => {
-      const book = getRandomBook(); // 각 포스트마다 새로운 책을 랜덤하게 선택
-
-      return {
-        id: startId + i,
-        title: generateRandomTitle(),
-        description: generateRandomDescription(),
-        imageUrl: book.imageUrl,
-        userName: `user${startId + i}`,
-        timeAgo: generateRandomTimeAgo(),
-        postType: (postType || generateRandomPostType()) as PostType,
-        feedType: (feedType || generateRandomFeedType()) as FeedType,
-        bookTitle: book.bookTitle,
-        bookAuthor: book.author,
-      };
-    }).filter((post) => {
-      const postTypeMatch = !postType || post.postType === postType;
-      const feedTypeMatch =
-        !feedType ||
-        (feedType === '추천'
-          ? post.feedType === '추천'
-          : feedType === post.feedType);
-      return postTypeMatch && feedTypeMatch;
-    });
-  };
+  const getFilteredPosts = useCallback(
+    (count: number, startId: number): Post[] => {
+      return Array.from({ length: count }, (_, i) => {
+        const book = getRandomBook();
+        return {
+          id: startId + i,
+          title: generateRandomTitle(),
+          description: generateRandomDescription(),
+          imageUrl: book.imageUrl,
+          userName: `user${startId + i}`,
+          timeAgo: generateRandomTimeAgo(),
+          postType: (postType || generateRandomPostType()) as PostType,
+          feedType: (feedType || generateRandomFeedType()) as FeedType,
+          bookTitle: book.bookTitle,
+          bookAuthor: book.author,
+        };
+      }).filter((post) => {
+        const postTypeMatch = !postType || post.postType === postType;
+        const feedTypeMatch =
+          !feedType ||
+          (feedType === '추천'
+            ? post.feedType === '추천'
+            : feedType === post.feedType);
+        return postTypeMatch && feedTypeMatch;
+      });
+    },
+    [postType, feedType],
+  );
 
   // Infinite Scroll 시 데이터 요청 > 추후 API 요청으로 변경
   const fetchMoreData = () => {
@@ -102,7 +104,7 @@ const Main = (): JSX.Element => {
   useEffect(() => {
     const initialPosts: Post[] = getFilteredPosts(10, 1);
     setPosts(initialPosts);
-  }, [postType, feedType]);
+  }, [postType, feedType, getFilteredPosts]);
 
   return (
     <Container
