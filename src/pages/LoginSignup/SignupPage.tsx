@@ -1,10 +1,17 @@
 import Signup from '@components/LoginSignup/Signup';
+import { Stack } from '@mui/material';
 
 const SignupPage = (): JSX.Element => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Stack
+      sx={{
+        height: '100vh',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <Signup />
-    </div>
+    </Stack>
   );
 };
 
