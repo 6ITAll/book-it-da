@@ -2,22 +2,24 @@ import { useEffect, useState } from 'react';
 import { Box, CircularProgress, Container, Typography } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Post, PostType, FeedType } from '@/shared/types/type';
+// import { Post, PostType, FeedType } from '@/shared/types/type';
 import {
   generateRandomDescription,
   generateRandomFeedType,
   generateRandomTitle,
   mockPosts,
   getRandomBook,
-} from '@/components/FeedPage/mockPosts';
+} from '@components/FeedPage/mockPosts';
+
+import PostCard from '@components/FeedPage/PostCard';
+import ScrollToTop from '@components/commons/ScrollToTop';
+import { FeedTypeFilter } from '@components/FeedPage/FeedTypeFilter';
+import { PostTypeFilter } from '@components/FeedPage/PostTypeFilter';
+import { Post, PostType, FeedType } from '@shared/types/type';
 import {
   generateRandomPostType,
   generateRandomTimeAgo,
-} from '@/components/FeedPage/mockPosts';
-import PostCard from '@/components/FeedPage/PostCard';
-import ScrollToTop from '@/components/commons/ScrollToTop';
-import { FeedTypeFilter } from '@/components/FeedPage/FeedTypeFilter';
-import { PostTypeFilter } from '@/components/FeedPage/PostTypeFilter';
+} from '@components/FeedPage/mockPosts';
 
 const Main = (): JSX.Element => {
   const [posts, setPosts] = useState<Post[]>(mockPosts);

@@ -1,4 +1,4 @@
-import { Post, PostType, FeedType, Book } from '@/shared/types/type';
+import { Post, PostType, FeedType, Book } from '@shared/types/type';
 import sampleImage1 from '@/assets/images/sample1.jpg';
 import sampleImage2 from '@/assets/images/sample2.jpg';
 import sampleImage3 from '@/assets/images/sample3.jpg';

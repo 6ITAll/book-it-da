@@ -1,5 +1,5 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { PostType } from '@/shared/types/type';
+import { PostType } from '@shared/types/type';
 
 interface PostTypeFilterProps {
   postType: PostType | '';

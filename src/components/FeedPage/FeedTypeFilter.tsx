@@ -1,5 +1,5 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { FeedType } from '@/shared/types/type';
+import { FeedType } from '@shared/types/type';
 
 interface FeedTypeFilterProps {
   feedType: FeedType;
