@@ -1,4 +1,5 @@
 import { Box, Avatar, Button, Typography } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 interface PostCardProps {
   title: string;
@@ -119,17 +120,20 @@ const PostCard = ({
             alignItems: 'center',
             padding: 'auto',
             width: '100%',
-            bottom: '33%',
-            backgroundColor: 'rgba(255,255,255,0)',
-            color: '#f5f5f5',
+            bottom: '50%',
+            background:
+              'linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.6) 30%, rgba(255,255,255,0.6) 90%, rgba(255,255,255,0.1))',
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: '700' }}>
+          <Typography
+            variant="h6"
+            sx={{ fontSize: '16px', fontWeight: '700', color: '#111' }}
+          >
             {bookTitle}
           </Typography>
           <Typography
             variant="body2"
-            sx={{ fontSize: '12px', fontWeight: '300' }}
+            sx={{ fontSize: '12px', fontWeight: '300', color: '#111' }}
           >
             {bookAuthor}
           </Typography>
@@ -148,8 +152,13 @@ const PostCard = ({
           }}
         >
           {postType === '한줄평' ? (
-            <Typography variant="h6" fontWeight="bold" fontSize="17px">
-              {description}
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              fontSize="17px"
+              sx={{ padding: '1rem 0' }}
+            >
+              {title}
             </Typography>
           ) : (
             <>
@@ -188,9 +197,10 @@ const PostCard = ({
             borderRadius: '0px 0px 0px 8px',
             backgroundColor: 'transparent',
             color: '#333',
+            gap: '5px',
           }}
         >
-          {/* 추후 MUI Icon으로 교체 */}♡ 좋아요
+          <FavoriteIcon fontSize="small" /> 좋아요
         </Button>
         <Button
           variant="contained"

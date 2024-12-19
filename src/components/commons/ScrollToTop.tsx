@@ -1,4 +1,6 @@
 import { Box, Fab, Zoom, useScrollTrigger } from '@mui/material';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+
 const ScrollToTop = () => {
   const trigger = useScrollTrigger({
     threshold: 100,
@@ -29,8 +31,7 @@ const ScrollToTop = () => {
           size="small"
           aria-label="scroll back to top"
         >
-          {/* 추후 아이콘으로 교체 */}
-          <div>▲</div>
+          <KeyboardDoubleArrowUpIcon />
         </Fab>
       </Box>
     </Zoom>
