@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { Container, Box, Typography, Stack } from '@mui/material';
-import BookCard from '@/components/BookSearchPage/BookCard';
+import { Container, Box, Typography } from '@mui/material';
+import SearchBookCard from '@/components/BookSearchPage/SearchBookCard';
 import Pagination from '@/components/BookSearchPage/Pagination';
 import BookSearchBar from '@/components/BookSearchPage/BookSearchBar';
 import BestBookCarousel from '@/components/BookSearchPage/BestBookCarousel';
@@ -15,26 +15,30 @@ import {
 } from '@/features/BookSearchPage/Slice/bookSearchSlice';
 import { useState } from 'react';
 import { SelectChangeEvent } from '@mui/material';
-import TagList from '@/components/BookSearchPage/TagList';
 import SortSelector from '@/components/BookSearchPage/SortSelector';
+import { SortOption } from '@/features/BookSearchPage/Slice/bookSearchSlice';
 
-/** 태그 데이터 */
-const tags = ['#베스트셀러', '#신간', '#소설', '#자기계발'];
+// 정렬 옵션 배열 정의
+const sortOptions: Array<{ value: SortOption; label: string }> = [
+  { value: 'SortAccuracy', label: '관련도순' },
+  { value: 'CustomerRating', label: '평점순' },
+  { value: 'SalesPoint', label: '판매량순' },
+  { value: 'PublishTime', label: '출간일순' },
+];
 
 const BookSearchPage = (): JSX.Element => {
   const dispatch = useDispatch();
-
-  // 상태 관리
   const [inputValue, setInputValue] = useState('');
   const { searchQuery, currentPage, sortOption } = useSelector(
     (state: RootState) => state.bookSearch,
   );
 
-  // 핸들러 함수
+  // 정렬 옵션 변경 함수
   const handleSortChange = (event: SelectChangeEvent) => {
-    dispatch(setSortOption(event.target.value));
+    dispatch(setSortOption(event.target.value as SortOption));
   };
 
+  // 검색어 변경 함수
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
@@ -45,8 +49,9 @@ const BookSearchPage = (): JSX.Element => {
     }
   };
 
+  // 페이지네이션 처리 함수
   const handlePageChange = (value: number) => {
-    dispatch(setCurrentPage(value)); // 페이지 변경 처리
+    dispatch(setCurrentPage(value));
   };
 
   // API 호출
@@ -55,13 +60,6 @@ const BookSearchPage = (): JSX.Element => {
     page: currentPage,
     sort: sortOption,
   });
-
-  const sortOptions = [
-    { value: 'SortAccuracy', label: '관련도순' },
-    { value: 'CustomerRating', label: '평점순' },
-    { value: 'SalesPoint', label: '판매량순' },
-    { value: 'PublishTime', label: '출간일순' },
-  ];
 
   // 로딩 및 에러 처리
   if (isLoading) return <Typography>로딩 중...</Typography>;
@@ -83,7 +81,6 @@ const BookSearchPage = (): JSX.Element => {
           onChange={handleInputChange}
           onSearch={handleSearch}
         />
-        <TagList tags={tags} />
       </Box>
 
       {/* 베스트셀러 섹션 */}
@@ -127,30 +124,32 @@ const BookSearchPage = (): JSX.Element => {
         </Box>
 
         {/* 검색 결과 리스트 */}
-        <Stack
-          direction="row"
-          flexWrap="wrap"
-          justifyContent="space-between"
-          spacing={2}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)', // 4열로 정렬
+            gap: 2, // 카드 간격
+          }}
         >
           {data?.item?.map((book) => (
-            <Box key={book.itemId}>
-              <BookCard
-                title={book.title}
-                author={book.author}
-                cover={book.cover}
-                customerReviewRank={book.customerReviewRank}
-                priceStandard={book.priceStandard}
-                link={book.link}
-              />
-            </Box>
+            <SearchBookCard
+              key={book.itemId} // 고유 key 추가
+              itemId={book.itemId}
+              title={book.title}
+              author={book.author}
+              cover={book.cover}
+              customerReviewRank={book.customerReviewRank}
+              priceStandard={book.priceStandard}
+              onClick={() => {
+                console.log('상세페이지 이동');
+              }}
+            />
           )) || <Typography>검색 결과가 없습니다.</Typography>}
-        </Stack>
-
+        </Box>
         {/* 페이지네이션 */}
         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 4 }}>
           <Pagination
-            count={Math.ceil((data?.totalResults || 0) / 10)} // 총 페이지 수 계산
+            count={Math.ceil((data?.totalResults || 0) / 4)}
             page={currentPage}
             onChange={(_, value) => handlePageChange(value)}
           />
