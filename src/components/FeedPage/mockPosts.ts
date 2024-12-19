@@ -4,6 +4,11 @@ import sampleImage2 from '@/assets/images/sample2.jpg';
 import sampleImage3 from '@/assets/images/sample3.jpg';
 import sampleImage4 from '@/assets/images/sample4.jpg';
 import sampleImage5 from '@/assets/images/sample5.jpg';
+import sampleImage6 from '@/assets/images/sample6.jpg';
+import sampleImage7 from '@/assets/images/sample7.jpg';
+import sampleImage8 from '@/assets/images/sample8.jpg';
+import sampleImage9 from '@/assets/images/sample9.jpg';
+import sampleImage10 from '@/assets/images/sample10.jpg';
 
 export const mockBooks: Book[] = [
   {
@@ -30,6 +35,31 @@ export const mockBooks: Book[] = [
     bookTitle: '밤의 사색',
     author: '헤르만 헤세',
     imageUrl: sampleImage5,
+  },
+  {
+    bookTitle: '보통의 존재',
+    author: '이석원',
+    imageUrl: sampleImage6,
+  },
+  {
+    bookTitle: '가나',
+    author: '정용준',
+    imageUrl: sampleImage7,
+  },
+  {
+    bookTitle: '사랑의 잔상들',
+    author: '장혜령',
+    imageUrl: sampleImage8,
+  },
+  {
+    bookTitle: '시와 산책',
+    author: '한정원',
+    imageUrl: sampleImage9,
+  },
+  {
+    bookTitle: '나는 나를 파괴할 권리가 있다',
+    author: '김영하',
+    imageUrl: sampleImage10,
   },
 ];
 
