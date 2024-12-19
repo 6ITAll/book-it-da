@@ -28,7 +28,11 @@ const BookSearchBar = ({
       onKeyDown={handleKeyDown}
       InputProps={{
         startAdornment: (
-          <InputAdornment position="start">
+          <InputAdornment
+            sx={{ cursor: 'pointer' }}
+            onClick={onSearch}
+            position="start"
+          >
             <SearchIcon />
           </InputAdornment>
         ),
