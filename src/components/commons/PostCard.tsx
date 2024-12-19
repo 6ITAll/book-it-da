@@ -1,5 +1,6 @@
 import { Box, Avatar, Button, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { FeedType, PostType } from '@shared/types/type';
 
 interface PostCardProps {
   title: string;
@@ -7,8 +8,8 @@ interface PostCardProps {
   imageUrl: string;
   userName: string;
   timeAgo: string;
-  postType: string;
-  feedType: string;
+  postType: PostType;
+  feedType: FeedType;
   bookTitle: string;
   bookAuthor: string;
   isDetail: boolean;
