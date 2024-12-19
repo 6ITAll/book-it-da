@@ -1,11 +1,16 @@
 import { Stack, Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 
-const TabSection = (): JSX.Element => {
+interface TabSectionProps {
+  userId: string;
+}
+
+const TabSection = ({ userId }: TabSectionProps): JSX.Element => {
+  /* TODO 탭 콘텐츠 제작 완료 후 userId 넘겨주기  */
   const tabs = [
-    { id: 1, label: '내 서재', component: <></> },
-    { id: 2, label: '내 피드', component: <></> },
-    { id: 2, label: '북마크', component: <></> },
+    { id: 1, label: '내 서재', component: <>{userId}</> },
+    { id: 2, label: '내 피드', component: <>{userId}</> },
+    { id: 2, label: '북마크', component: <>{userId}</> },
   ];
 
   const [tab, setTab] = useState(0);
