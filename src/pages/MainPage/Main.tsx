@@ -8,7 +8,7 @@ import {
   generateRandomFeedType,
   generateRandomTitle,
   mockPosts,
-  mockBooks,
+  getRandomBook,
 } from '@/components/FeedPage/mockPosts';
 import {
   generateRandomPostType,
@@ -50,20 +50,22 @@ const Main = (): JSX.Element => {
 
   // mock post 생성 > 추후 API 요청으로 변경
   const getFilteredPosts = (count: number, startId: number): Post[] => {
-    const book = mockBooks[0]; // 현재는 첫 번째 책만 사용
+    return Array.from({ length: count }, (_, i) => {
+      const book = getRandomBook(); // 각 포스트마다 새로운 책을 랜덤하게 선택
 
-    return Array.from({ length: count }, (_, i) => ({
-      id: startId + i,
-      title: generateRandomTitle(),
-      description: generateRandomDescription(),
-      imageUrl: book.imageUrl,
-      userName: `user${startId + i}`,
-      timeAgo: generateRandomTimeAgo(),
-      postType: (postType || generateRandomPostType()) as PostType,
-      feedType: (feedType || generateRandomFeedType()) as FeedType,
-      bookTitle: book.bookTitle,
-      bookAuthor: book.author,
-    })).filter((post) => {
+      return {
+        id: startId + i,
+        title: generateRandomTitle(),
+        description: generateRandomDescription(),
+        imageUrl: book.imageUrl,
+        userName: `user${startId + i}`,
+        timeAgo: generateRandomTimeAgo(),
+        postType: (postType || generateRandomPostType()) as PostType,
+        feedType: (feedType || generateRandomFeedType()) as FeedType,
+        bookTitle: book.bookTitle,
+        bookAuthor: book.author,
+      };
+    }).filter((post) => {
       const postTypeMatch = !postType || post.postType === postType;
       const feedTypeMatch =
         !feedType ||
