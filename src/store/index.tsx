@@ -11,9 +11,10 @@ export const store = configureStore({
     counter: counterReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(bookSearchApi.middleware)
-      .concat(bestBookGetApi.middleware), // 미들웨어 추가
+    getDefaultMiddleware().concat([
+      bookSearchApi.middleware,
+      bestBookGetApi.middleware,
+    ]),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
