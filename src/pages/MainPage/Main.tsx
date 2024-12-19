@@ -1,20 +1,80 @@
-import { useState } from 'react';
-import { CircularProgress, Container } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, CircularProgress, Container, Typography } from '@mui/material';
+import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { Post } from '@/shared/types/type';
-import { mockPosts } from '@/components/FeedPage/mockPosts';
+import { Post, PostType, FeedType } from '@/shared/types/type';
 import {
-  generateRandomHeight,
+  generateRandomDescription,
+  generateRandomFeedType,
+  generateRandomTitle,
+  mockPosts,
+  mockBooks,
+} from '@/components/FeedPage/mockPosts';
+import {
   generateRandomPostType,
   generateRandomTimeAgo,
 } from '@/components/FeedPage/mockPosts';
+import PostCard from '@/components/FeedPage/PostCard';
+import ScrollToTop from '@/components/commons/ScrollToTop';
+import { FeedTypeFilter } from '@/components/FeedPage/FeedTypeFilter';
+import { PostTypeFilter } from '@/components/FeedPage/PostTypeFilter';
 
 const Main = (): JSX.Element => {
   const [posts, setPosts] = useState<Post[]>(mockPosts);
   const [hasMore, setHasMore] = useState(true);
+  const [postType, setPostType] = useState<PostType | ''>('');
+  const [feedType, setFeedType] = useState<FeedType>('추천');
+  const [filterKey, setFilterKey] = useState(0);
 
-  // Mock Posts 생성 > 추후 API 요청으로 수정
+  // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
+  const handlePostTypeChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: PostType | '',
+  ) => {
+    setPostType(newValue);
+    setHasMore(true);
+    setFilterKey((prev) => prev + 1);
+    window.scrollTo(0, 0);
+  };
+
+  // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링 > 추후 interface 확립 후 변경
+  const handleFeedTypeChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: FeedType | null,
+  ) => {
+    setFeedType(newValue || '추천');
+    setHasMore(true);
+    setFilterKey((prev) => prev + 1);
+    window.scrollTo(0, 0);
+  };
+
+  // mock post 생성 > 추후 API 요청으로 변경
+  const getFilteredPosts = (count: number, startId: number): Post[] => {
+    const book = mockBooks[0]; // 현재는 첫 번째 책만 사용
+
+    return Array.from({ length: count }, (_, i) => ({
+      id: startId + i,
+      title: generateRandomTitle(),
+      description: generateRandomDescription(),
+      imageUrl: book.imageUrl,
+      userName: `user${startId + i}`,
+      timeAgo: generateRandomTimeAgo(),
+      postType: (postType || generateRandomPostType()) as PostType,
+      feedType: (feedType || generateRandomFeedType()) as FeedType,
+      bookTitle: book.bookTitle,
+      bookAuthor: book.author,
+    })).filter((post) => {
+      const postTypeMatch = !postType || post.postType === postType;
+      const feedTypeMatch =
+        !feedType ||
+        (feedType === '추천'
+          ? post.feedType === '추천'
+          : feedType === post.feedType);
+      return postTypeMatch && feedTypeMatch;
+    });
+  };
+
+  // Infinite Scroll 시 데이터 요청 > 추후 API 요청으로 변경
   const fetchMoreData = () => {
     if (posts.length >= 100) {
       setHasMore(false);
@@ -22,63 +82,117 @@ const Main = (): JSX.Element => {
     }
 
     setTimeout(() => {
-      const newPosts = Array.from({ length: 20 }, (_, i) => ({
-        id: posts.length + i + 1,
-        title: `Post ${posts.length + i + 1}`,
-        description: `This is post number ${posts.length + i + 1}`,
-        imageUrl: `https://via.placeholder.com/200x${generateRandomHeight()}`,
-        userName: `userName ${posts.length + i + 1}`,
-        timeAgo: generateRandomTimeAgo(),
-        postType: generateRandomPostType(),
-      }));
+      const newPosts: Post[] = getFilteredPosts(10, posts.length + 1);
+
+      if (newPosts.length === 0) {
+        setHasMore(false);
+        return;
+      }
+
       setPosts((prev) => [...prev, ...newPosts]);
     }, 1000);
   };
 
+  // 필터링 타입 변경 시 리렌더링 (초기 10개의 Mock Post 요청)
+  useEffect(() => {
+    const initialPosts: Post[] = getFilteredPosts(10, 1);
+    setPosts(initialPosts);
+  }, [postType, feedType]);
+
   return (
-    <Container maxWidth="md">
+    <Container
+      sx={{
+        width: '100%',
+        padding: '1rem',
+        margin: '0 auto',
+      }}
+    >
+      <Box
+        sx={{
+          padding: '1rem',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        <FeedTypeFilter
+          feedType={feedType}
+          onFeedTypeChange={handleFeedTypeChange}
+        />
+        <PostTypeFilter
+          postType={postType}
+          onPostTypeChange={handlePostTypeChange}
+        />
+      </Box>
+
       <InfiniteScroll
+        key={filterKey}
         dataLength={posts.length}
         next={fetchMoreData}
         hasMore={hasMore}
         loader={
-          <div
+          <Box
             style={{
-              height: '50px',
+              width: '100%',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              border: '1px solid red',
-              padding: '1rem 0',
+              padding: '2rem 1rem',
             }}
           >
             <CircularProgress color="primary" value={25} />
-          </div>
+          </Box>
         }
         endMessage={
-          <div
+          <Box
             style={{
-              height: '50px',
+              width: '100%',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              border: '1px solid red',
-              padding: '1rem 0',
+              padding: '2rem 1rem',
             }}
           >
-            <p>더이상 표시할 것이 없습니다.</p>
-          </div>
+            <Typography>더이상 표시할 것이 없습니다.</Typography>
+          </Box>
         }
-        style={{ paddingBottom: '16px' }}
+        style={{
+          padding: '10px',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflowX: 'hidden',
+        }}
       >
-        <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
-          <Masonry gutter="16px">
-            {posts.map((post) => (
-              <div>카드</div>
-            ))}
-          </Masonry>
-        </ResponsiveMasonry>
+        <Masonry
+          columns={{ xs: 1, sm: 2, md: 4 }}
+          spacing={4}
+          sx={{
+            width: '100%',
+            boxSizing: 'border-box',
+            overflowX: 'hidden',
+          }}
+        >
+          {posts.map((post) => (
+            <Box key={post.id}>
+              <PostCard
+                title={post.title}
+                description={post.description}
+                imageUrl={post.imageUrl}
+                userName={post.userName}
+                timeAgo={post.timeAgo}
+                postType={post.postType}
+                feedType={post.feedType}
+                bookTitle={post.bookTitle}
+                bookAuthor={post.bookAuthor}
+              />
+            </Box>
+          ))}
+        </Masonry>
       </InfiniteScroll>
+      <ScrollToTop />
     </Container>
   );
 };
