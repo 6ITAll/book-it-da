@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import LoginSignup from './pages/MainPage/Login';
 import FeedPage from './pages/MainPage/Main';
-import BookSearchPage from './pages/MainPage/BookSearch';
+import BookSearchPage from './pages/BookSearchPage/BookSearch';
 import MyPage from './pages/MyPage/MyPage';
 import './App.css';
 
