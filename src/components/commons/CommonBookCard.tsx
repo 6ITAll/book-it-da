@@ -52,8 +52,8 @@ const CommonBookCard = ({
         image={image}
         alt={title || '책 이미지'}
         sx={{
-          height: 200, // 고정된 높이
-          objectFit: 'fill', // 이미지를 cover 방식으로 표시
+          height: 160, // 고정된 높이
+          objectFit: 'contain', // 이미지 'contain' 방식으로 표시
           objectPosition: 'center', // 이미지 중심 정렬
           borderRadius: '8px 8px 0 0', // 상단 좌우 둥근 테두리
         }}
@@ -64,13 +64,29 @@ const CommonBookCard = ({
             variant="body1"
             fontWeight="bold"
             gutterBottom
-            sx={{ textOverflow: 'ellipsis' }}
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+            }}
           >
             {title}
           </Typography>
         )}
         {author && (
-          <Typography variant="body2" sx={{ color: 'grey.700' }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'grey.700',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 1,
+            }}
+          >
             {author}
           </Typography>
         )}
