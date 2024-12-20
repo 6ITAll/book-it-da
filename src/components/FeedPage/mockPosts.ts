@@ -91,9 +91,9 @@ export const generateRandomTitle = (): string => {
 // 랜덤 제목을 생성하는 함수 > 추후 삭제할 예정
 export const generateRandomDescription = (): string => {
   const possibleDescription = [
-    '끝까지 읽게 되는 책이네요.',
-    '문장력이 엄청난 책이에요.',
-    '소장 가치가 있는 책이에요.',
+    '끝까지 읽게 되는 책이네요. 내일도 읽을 거예요. 모레도 읽을 거예요. 글피에도 읽을 거예요. 내년에도 읽을 거예요. 죽어서도 읽을 거예요. 사실 오늘 갖다 팔 거예요.',
+    '문장력이 엄청난 책이에요. 좋아요. 재밌어요. 훌륭해요. 도움이 돼요. 또 읽고 싶어요.',
+    '소장 가치가 있는 책이에요. 무덤까지 가져가고 싶네요. 좋아요. 너무 좋아요. 매우 좋아요. 엄청 좋아요. 미치겠어요. 사실 별로 안 좋아요.',
   ];
   return possibleDescription[
     Math.floor(Math.random() * possibleDescription.length)

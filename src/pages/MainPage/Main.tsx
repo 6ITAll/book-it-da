@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, CircularProgress, Container, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Divider,
+  Typography,
+} from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {
@@ -27,7 +33,7 @@ const Main = (): JSX.Element => {
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [filterKey, setFilterKey] = useState(0);
   // 카드 표시 모드 설정
-  const isDetail: boolean = true;
+  const isDetail: boolean = false;
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
   const handlePostTypeChange = (
@@ -116,7 +122,7 @@ const Main = (): JSX.Element => {
     >
       <Box
         sx={{
-          padding: '1rem',
+          padding: '0 1rem',
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -131,7 +137,11 @@ const Main = (): JSX.Element => {
           onPostTypeChange={handlePostTypeChange}
         />
       </Box>
-
+      <Divider
+        sx={{
+          margin: '1rem 0',
+        }}
+      />
       <InfiniteScroll
         key={filterKey}
         dataLength={posts.length}
@@ -164,7 +174,7 @@ const Main = (): JSX.Element => {
           </Box>
         }
         style={{
-          padding: '10px',
+          padding: '20px 0',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',

@@ -1,5 +1,15 @@
-import { Box, Avatar, Button, Typography } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import {
+  Avatar,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Typography,
+  Box,
+} from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { FeedType, PostType } from '@shared/types/type';
 
 interface PostCardProps {
@@ -30,88 +40,101 @@ const PostCard = ({
   const isFollowing = feedType === '팔로잉';
 
   return (
-    <Box
+    <Card
       sx={{
-        border: '1px solid #ddd',
-        borderRadius: '8px',
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
         overflow: 'hidden',
         width: '100%',
-        backgroundColor: '#f5f5f5',
+        aspectRatio: isDetail ? 'auto' : '2/3',
+        bgcolor: '#fafafa',
+        borderRadius: '8px',
+        transition: 'all 0.3s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.02)',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        },
       }}
     >
-      {/* Card Header */}
-      <Box
+      <CardHeader
         sx={{
           display: 'flex',
+          height: '10%',
+          flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '8px',
-          borderBottom: '1px solid #ddd',
+          padding: '0.5rem',
+          '& .MuiCardHeader-action': {
+            margin: 0,
+            alignSelf: 'center',
+          },
         }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar sx={{ marginRight: '8px' }} />
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="body2" fontWeight="bold">
-              {userName}
-            </Typography>
-            <Box
+        avatar={<Avatar />}
+        action={
+          isDetail && (
+            <Button
+              variant="outlined"
+              size="small"
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: '12px',
-                color: '#666',
+                color: isFollowing ? 'black' : 'primary',
+                borderColor: isFollowing ? 'black' : 'primary',
+                mb: '0',
               }}
             >
-              <Typography variant="caption">{timeAgo}</Typography>
-              <Typography variant="caption" sx={{ marginLeft: '8px' }}>
-                {postType}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        {isDetail && (
-          <Button
-            variant="outlined"
-            size="small"
+              {isFollowing ? '팔로잉' : '팔로우'}
+            </Button>
+          )
+        }
+        title={
+          <Typography variant="body2" fontWeight="bold">
+            {userName}
+          </Typography>
+        }
+        subheader={
+          <Box
             sx={{
-              color: isFollowing ? 'black' : 'primary',
-              borderColor: isFollowing ? 'black' : 'primary',
-              '&:hover': {
-                borderColor: isFollowing ? 'black' : 'primary',
-              },
+              display: 'flex',
+              fontSize: '11px',
+              color: '#666',
+              gap: '5px',
             }}
           >
-            {isFollowing ? '팔로잉' : '팔로우'}
-          </Button>
-        )}
-      </Box>
-
-      {/* Card Content */}
+            <Typography variant="caption" sx={{ fontSize: '11px' }}>
+              {postType}
+            </Typography>
+            <Typography variant="caption" sx={{ fontSize: '11px' }}>
+              •
+            </Typography>
+            <Typography variant="caption" sx={{ fontSize: '11px' }}>
+              {timeAgo}
+            </Typography>
+          </Box>
+        }
+      />
+      {/* 책 사진 */}
       <Box
         sx={{
           position: 'relative',
-          overflow: 'hidden',
+          height: '60%',
         }}
       >
-        {/* Image Section */}
-        <Box
+        <CardMedia
           component="img"
-          src={imageUrl}
+          height={isDetail ? '200' : '100%'}
+          image={imageUrl}
           alt={title}
           sx={{
-            width: '100%',
-            height: '200px',
             objectFit: 'cover',
             objectPosition: 'top',
             WebkitMaskImage:
-              'linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0))',
+              'linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0))',
             maskImage:
-              'linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0))',
+              'linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0))',
             filter: 'brightness(0.7)',
           }}
         />
-        {/* Text Content */}
+        {/* 책 제목과 저자 */}
         <Box
           sx={{
             position: 'absolute',
@@ -119,103 +142,120 @@ const PostCard = ({
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: 'auto',
             width: '100%',
-            bottom: '50%',
-            background:
-              'linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.6) 30%, rgba(255,255,255,0.6) 90%, rgba(255,255,255,0.1))',
+            bottom: '10px',
+            boxSizing: 'border-box',
           }}
         >
           <Typography
             variant="h6"
-            sx={{ fontSize: '16px', fontWeight: '700', color: '#111' }}
+            sx={{ fontSize: '19px', fontWeight: '700', color: '#333' }}
           >
             {bookTitle}
           </Typography>
           <Typography
             variant="body2"
-            sx={{ fontSize: '12px', fontWeight: '300', color: '#111' }}
+            sx={{ fontSize: '12px', fontWeight: '300', color: '#333' }}
           >
             {bookAuthor}
           </Typography>
         </Box>
-        <Box
+      </Box>
+      {/* 포스팅 내용 */}
+      <CardContent sx={{ padding: '0', height: '20%' }}>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          fontSize="18px"
+          align={
+            isDetail ? (postType === '한줄평' ? 'center' : 'left') : 'center'
+          }
           sx={{
-            position: 'absolute',
-            display: 'flex',
-            textAlign: 'center',
-            padding: '0 1rem',
+            padding: isDetail
+              ? postType === '한줄평'
+                ? '1rem 0'
+                : '0.3rem 0.5rem'
+              : '1rem 0',
             width: '100%',
-            bottom: '0',
-            zIndex: 2,
+            height: '100%',
             color: '#333',
             boxSizing: 'border-box',
           }}
         >
-          {postType === '한줄평' ? (
-            <Typography
-              variant="h6"
-              fontWeight="bold"
-              fontSize="17px"
-              sx={{ padding: '1rem 0' }}
-            >
-              {title}
-            </Typography>
-          ) : (
-            <>
-              <Typography variant="h6" fontWeight="bold" fontSize="17px">
-                {title}
-              </Typography>
-            </>
-          )}
-        </Box>
-      </Box>
-      {postType === '포스팅' && isDetail && (
-        <Typography
-          variant="body2"
-          sx={{
-            height: '100px',
-            padding: '1rem',
-            backgroundColor: '#f5f5f5',
-          }}
-        >
-          {description}
+          {postType === '한줄평' ? `"${title}"` : title}
         </Typography>
-      )}
+        {postType === '포스팅' && isDetail && (
+          <Typography
+            variant="body2"
+            fontSize="13px"
+            sx={{
+              height: '80px',
+              padding: '0.25rem 0.5rem',
+              color: '#333',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
+              wordBreak: 'break-all',
+              lineHeight: '20px',
+            }}
+          >
+            {description}
+          </Typography>
+        )}
+      </CardContent>
 
-      {/* Card Footer */}
-      <Box
+      <CardActions
+        disableSpacing
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
+          padding: '0',
+          height: '10%',
           borderTop: '1px solid #ddd',
+          gap: 0,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          boxSizing: 'border-box',
         }}
       >
         <Button
-          variant="contained"
           fullWidth
           sx={{
+            padding: '0.7rem 0',
+            width: '100%',
+            height: '100%',
             borderRadius: '0px 0px 0px 8px',
-            backgroundColor: 'transparent',
+            borderRight: '1px solid #ddd',
+            bgcolor: 'transparent',
             color: '#333',
             gap: '5px',
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              bgcolor: '#f0f0f0',
+            },
           }}
         >
-          <FavoriteIcon fontSize="small" /> 좋아요
+          <FavoriteBorderIcon fontSize="small" /> 좋아요
         </Button>
         <Button
-          variant="contained"
           fullWidth
           sx={{
+            padding: '0.7rem 0',
+            width: '100%',
+            height: '100%',
             borderRadius: '0px 0px 8px 0px',
-            backgroundColor: 'transparent',
+            bgcolor: 'transparent',
             color: '#333',
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              bgcolor: '#f0f0f0',
+            },
           }}
         >
           책 보러가기
         </Button>
-      </Box>
-    </Box>
+      </CardActions>
+    </Card>
   );
 };
 
