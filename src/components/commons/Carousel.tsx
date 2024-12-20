@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Slider, { Settings } from 'react-slick';
 import { Box } from '@mui/material';
-import { css } from '@emotion/react';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -26,32 +25,31 @@ const Carousel = ({ settings, children }: CarouselProps): JSX.Element => {
 
   return (
     <Box
-      css={css`
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto;
-        .slick-prev,
-        .slick-next {
-          z-index: 2;
-          &::before {
-            color: #333;
-            font-size: 30px;
-            opacity: 0.8;
-            transition: color 0.3s ease;
-          }
-          &:hover::before {
-            color: #000;
-            opacity: 1;
-          }
-        }
-        .custom-dots li button:before {
-          font-size: 12px;
-          color: #aaa;
-        }
-        .custom-dots li.slick-active button:before {
-          color: #333;
-        }
-      `}
+      sx={{
+        width: '100%',
+        maxWidth: 900,
+        margin: '0 auto',
+        '.slick-prev, .slick-next': {
+          zIndex: 2,
+          '&::before': {
+            color: '#333',
+            fontSize: '30px',
+            opacity: 0.8,
+            transition: 'color 0.3s ease',
+          },
+          '&:hover::before': {
+            color: '#000',
+            opacity: 1,
+          },
+        },
+        '.custom-dots li button:before': {
+          fontSize: '12px',
+          color: '#aaa',
+        },
+        '.custom-dots li.slick-active button:before': {
+          color: '#333',
+        },
+      }}
     >
       <Slider {...defaultSettings}>{children}</Slider>
     </Box>
