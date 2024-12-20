@@ -92,7 +92,7 @@ const Signup = (): JSX.Element => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: -30 }}>
+    <Container maxWidth="sm">
       <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
         회원가입
       </Typography>

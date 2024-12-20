@@ -3,13 +3,7 @@ import { Stack } from '@mui/material';
 
 const SignupPage = (): JSX.Element => {
   return (
-    <Stack
-      sx={{
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <Stack>
       <Signup />
     </Stack>
   );
