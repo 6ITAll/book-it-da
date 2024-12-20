@@ -15,10 +15,18 @@ interface LoginProps {
   onLogin: (userId: string) => void;
 }
 
+interface LoginMessage {
+  content: string;
+  isError: boolean; //에러메시지 속성
+}
+
 const Login = ({ onLogin }: LoginProps): JSX.Element => {
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loginMessage, setLoginMessage] = useState<string>('');
+  const [loginMessage, setLoginMessage] = useState<LoginMessage>({
+    content: '',
+    isError: false,
+  });
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
 
@@ -31,7 +39,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
       passwordParam?: string,
     ) => {
       if (e) e.preventDefault();
-      setLoginMessage('');
+      setLoginMessage({ content: '', isError: false });
 
       const loginUserId = userIdParam || userId;
       const loginPassword = passwordParam || password;
@@ -62,10 +70,16 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
           }
           navigate('/');
         } else {
-          setLoginMessage('아이디 또는 비밀번호가 올바르지 않습니다.');
+          setLoginMessage({
+            content: '아이디 또는 비밀번호가 올바르지 않습니다.',
+            isError: true,
+          });
         }
       } else {
-        setLoginMessage('사용자 정보가 없습니다. 회원가입 후 로그인 해주세요.');
+        setLoginMessage({
+          content: '사용자 정보가 없습니다. 회원가입 후 로그인 해주세요.',
+          isError: true,
+        });
       }
     },
     [userId, password, rememberMe, autoLogin, onLogin, navigate],
@@ -152,14 +166,12 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
           회원가입
         </Link>
       </Stack>
-      {loginMessage && (
+      {loginMessage.content && (
         <Typography
-          color={
-            loginMessage.includes('올바르지 않습니다') ? 'error' : 'primary'
-          }
+          color={loginMessage.isError ? 'error' : 'primary'}
           sx={{ mt: 2 }}
         >
-          {loginMessage}
+          {loginMessage.content}
         </Typography>
       )}
     </Container>
