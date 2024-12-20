@@ -42,7 +42,7 @@ const App: React.FC = () => {
               <Route path="/login-signup" element={<LoginSignup />} />
               <Route path="/feed" element={<FeedPage />} />
               <Route path="/search" element={<BookSearchPage />} />
-              <Route path="/my-page" element={<MyPage />} />
+              <Route path="/my-page/:userId?" element={<MyPage />} />
               <Route path="/" element={<FeedPage />} />
             </Routes>
           </main>
