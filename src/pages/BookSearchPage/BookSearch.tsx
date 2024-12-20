@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Container, Box, Typography } from '@mui/material';
-import SearchBookCard from '';
+import SearchBookCard from '@components/BookSearchPage/SearchBookCard';
 import Pagination from '@components/BookSearchPage/Pagination';
 import BookSearchBar from '@components/BookSearchPage/BookSearchBar';
 import BestBookCarousel from '@components/BookSearchPage/BestBookCarousel';
