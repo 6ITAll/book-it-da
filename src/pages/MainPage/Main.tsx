@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   Box,
+  Button,
   CircularProgress,
   Container,
   Divider,
@@ -25,6 +26,8 @@ import {
   generateRandomPostType,
   generateRandomTimeAgo,
 } from '@components/FeedPage/mockPosts';
+import CreateIcon from '@mui/icons-material/Create';
+import WriteDialog from '@components/FeedPage/WriteDialog';
 
 const Main = (): JSX.Element => {
   const [posts, setPosts] = useState<Post[]>(mockPosts);
@@ -32,8 +35,9 @@ const Main = (): JSX.Element => {
   const [postType, setPostType] = useState<PostType | ''>('');
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [filterKey, setFilterKey] = useState(0);
+  const [writeDialogOpen, setWriteDialogOpen] = useState(false);
   // 카드 표시 모드 설정
-  const isDetail: boolean = false;
+  const isDetail: boolean = true;
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
   const handlePostTypeChange = (
@@ -120,6 +124,27 @@ const Main = (): JSX.Element => {
         margin: '0 auto',
       }}
     >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          mb: '2rem',
+        }}
+      >
+        <Button
+          variant="outlined"
+          onClick={() => setWriteDialogOpen(true)}
+          endIcon={<CreateIcon />}
+        >
+          글쓰기
+        </Button>
+        <WriteDialog
+          writeDialogOpen={writeDialogOpen}
+          setWriteDialogOpen={setWriteDialogOpen}
+        />
+      </Box>
       <Box
         sx={{
           padding: '0 1rem',
