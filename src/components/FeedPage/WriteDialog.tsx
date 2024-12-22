@@ -3,6 +3,8 @@ import { Button, Stack } from '@mui/material';
 import { useState } from 'react';
 import PostingDialog from './PostingDialog';
 import OneLineReviewDialog from './OneLineReviewDialog';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
 
 export type PostType = 'post' | 'review' | null;
 
@@ -32,6 +34,7 @@ const WriteDialog = ({
       <Button
         variant="outlined"
         fullWidth
+        startIcon={<PostAddIcon />}
         onClick={() => handleTypeSelect('post')}
       >
         포스트 작성
@@ -39,6 +42,7 @@ const WriteDialog = ({
       <Button
         variant="outlined"
         fullWidth
+        startIcon={<BorderColorIcon />}
         onClick={() => handleTypeSelect('review')}
       >
         한줄평 작성
