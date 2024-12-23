@@ -1,5 +1,4 @@
 import {
-  Autocomplete,
   Box,
   Button,
   Dialog,
@@ -15,7 +14,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import React, { useEffect, useState } from 'react';
 import { PostType } from './WriteDialog';
-import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
+import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
+import { Book } from '@shared/types/type';
 
 interface OneLineReviewDialogProps {
   handleBack: () => void;
@@ -29,23 +29,7 @@ const OneLineReviewDialog = ({
   handleBack,
 }: OneLineReviewDialogProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBook, setSelectedBook] = useState<null | {
-    title: string;
-    itemId: number;
-    author: string;
-    cover: string;
-  }>(null);
-
-  const { data: searchResults } = useSearchBooksQuery(
-    {
-      query: searchQuery,
-      page: 1,
-      sort: 'Accuracy',
-    },
-    {
-      skip: !searchQuery,
-    },
-  );
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   // 다이얼로그 닫히면 책 검색 결과 초기화
   useEffect(() => {
     if (selectedType !== 'review') {
@@ -93,55 +77,23 @@ const OneLineReviewDialog = ({
           },
         }}
       >
-        <Autocomplete
-          fullWidth
-          options={searchResults?.item || []}
-          getOptionLabel={(option) => option.title}
-          onChange={(_, newValue) => {
-            setSelectedBook(newValue);
-          }}
-          renderOption={(props, option) => (
-            <Box component="li" {...props}>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <img
-                  src={option.cover}
-                  alt={option.title}
-                  style={{ width: 40, height: 60 }}
-                />
-                <Stack>
-                  <Typography variant="body1">{option.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {option.author}
-                  </Typography>
-                </Stack>
-              </Stack>
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="책 검색"
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="책 제목을 입력하세요"
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '8px',
-                },
-              }}
-            />
-          )}
+        <BookSearchAutoComplete
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedBook={selectedBook}
+          setSelectedBook={setSelectedBook}
         />
 
         {selectedBook && (
           <Box sx={{ mb: 2 }}>
             <Stack direction="row" spacing={2} alignItems="center">
               <img
-                src={selectedBook.cover}
-                alt={selectedBook.title}
+                src={selectedBook.imageUrl}
+                alt={selectedBook.bookTitle}
                 style={{ width: 60, height: 90 }}
               />
               <Stack>
-                <Typography>{selectedBook.title}</Typography>
+                <Typography>{selectedBook.bookTitle}</Typography>
                 <Typography variant="body2">{selectedBook.author}</Typography>
                 <Typography>{selectedBook.itemId}</Typography>
               </Stack>
