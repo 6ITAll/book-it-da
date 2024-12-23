@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { PostType } from './WriteDialog';
 import TextEditor from '@components/commons/TextEditor';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
+import { Book } from '@shared/types/type';
 
 interface PostingDialogProps {
   handleBack: () => void;
@@ -29,12 +30,7 @@ const PostingDialog = ({
   handleBack,
 }: PostingDialogProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBook, setSelectedBook] = useState<null | {
-    title: string;
-    itemId: number;
-    author: string;
-    cover: string;
-  }>(null);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
@@ -90,12 +86,12 @@ const PostingDialog = ({
           <Box sx={{ mb: 2 }}>
             <Stack direction="row" spacing={2} alignItems="center">
               <img
-                src={selectedBook.cover}
-                alt={selectedBook.title}
+                src={selectedBook.imageUrl}
+                alt={selectedBook.bookTitle}
                 style={{ width: 60, height: 90 }}
               />
               <Stack>
-                <Typography>{selectedBook.title}</Typography>
+                <Typography>{selectedBook.bookTitle}</Typography>
                 <Typography variant="body2">{selectedBook.author}</Typography>
                 <Typography>{selectedBook.itemId}</Typography>
               </Stack>

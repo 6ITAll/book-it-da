@@ -1,23 +1,12 @@
 import { Autocomplete, Box, Stack, TextField, Typography } from '@mui/material';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
+import { Book } from '@shared/types/type';
 
 interface BookSearchAutoCompleteProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  selectedBook: {
-    title: string;
-    itemId: number;
-    author: string;
-    cover: string;
-  } | null;
-  setSelectedBook: (
-    book: {
-      title: string;
-      itemId: number;
-      author: string;
-      cover: string;
-    } | null,
-  ) => void;
+  selectedBook: Book | null;
+  setSelectedBook: (book: Book | null) => void;
 }
 
 const BookSearchAutoComplete = ({
@@ -43,7 +32,17 @@ const BookSearchAutoComplete = ({
         options={searchResults?.item || []}
         getOptionLabel={(option) => option.title}
         onChange={(_, newValue) => {
-          setSelectedBook(newValue);
+          if (newValue) {
+            const selectedBook: Book = {
+              bookTitle: newValue.title,
+              author: newValue.author,
+              imageUrl: newValue.cover,
+              itemId: newValue.itemId,
+            };
+            setSelectedBook(selectedBook);
+          } else {
+            setSelectedBook(null);
+          }
         }}
         renderOption={(props, option) => (
           <Box component="li" {...props}>
