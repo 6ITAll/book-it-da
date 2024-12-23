@@ -7,7 +7,6 @@ interface UserInfoSectionProps {
 
 const UserInfoSection = ({ userId }: UserInfoSectionProps): JSX.Element => {
   /* TODO user api로 받아오기  */
-  /* 본인이 아닐 경우 isAction은 모두 false -> api 연동 후 처리 */
   const user = (userId: string) => ({
     name: '김독서',
     userId: userId, // 실제로는 응답에 따른 값이 들어갑니다.
