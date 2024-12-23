@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Container,
   Divider,
+  Stack,
   Typography,
 } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
@@ -124,7 +125,7 @@ const Main = (): JSX.Element => {
         margin: '0 auto',
       }}
     >
-      <Box
+      <Stack
         sx={{
           display: 'flex',
           flexDirection: 'row',
@@ -144,7 +145,7 @@ const Main = (): JSX.Element => {
           writeDialogOpen={writeDialogOpen}
           setWriteDialogOpen={setWriteDialogOpen}
         />
-      </Box>
+      </Stack>
       <Box
         sx={{
           padding: '0 1rem',
