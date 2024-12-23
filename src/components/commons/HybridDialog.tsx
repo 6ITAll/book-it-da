@@ -39,17 +39,15 @@ const HybridDialog = ({
   open,
   setOpen,
 }: HybridDialogProps): JSX.Element => {
-  const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handleClose = () => {
     setOpen(false);
   };
 
-  const handleAction = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAction = () => {
     if (!onActionClick) return;
-    e.stopPropagation();
 
     onActionClick();
-    handleClose(e);
+    handleClose();
   };
 
   return (
