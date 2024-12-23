@@ -55,7 +55,7 @@ const WriteDialog = ({
       <HybridDialog
         open={writeDialogOpen}
         setOpen={setWriteDialogOpen}
-        title=""
+        title="포스트 타입"
         contentNode={contentNode}
         maxWidth="xs"
       />
