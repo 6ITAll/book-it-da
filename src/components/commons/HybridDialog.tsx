@@ -56,6 +56,7 @@ const HybridDialog = ({
       fullWidth={true}
       maxWidth={maxWidth}
       open={open}
+      onClose={handleClose}
       closeAfterTransition={false}
     >
       <DialogTitle>
