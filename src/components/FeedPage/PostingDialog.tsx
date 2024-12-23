@@ -122,7 +122,7 @@ const PostingDialog = ({
             },
           }}
         />
-        <TextEditor value={content} setValue={setContent} height="350px" />
+        <TextEditor value={content} setValue={setContent} />
       </DialogContent>
       <DialogActions
         sx={{

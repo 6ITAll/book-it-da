@@ -5,8 +5,6 @@ import { Box, styled } from '@mui/material';
 interface TextEditorProps {
   value: string;
   setValue: (value: string) => void;
-  width?: string;
-  height?: string;
 }
 
 const formats = [
@@ -34,13 +32,10 @@ const modules = {
   ],
 };
 
-const TextEditorContainer = styled(Box)<{
-  editorWidth?: string;
-  editorHeight?: string;
-}>(({ editorWidth, editorHeight }) => ({
+const TextEditorContainer = styled(Box)(() => ({
   '& .ql-editor': {
-    width: editorWidth || '100%',
-    height: editorHeight || '300px',
+    width: '100%',
+    height: '300px',
     backgroundColor: 'inherit',
   },
   '& .ql-container': {
@@ -51,14 +46,9 @@ const TextEditorContainer = styled(Box)<{
   },
 }));
 
-const TextEditor = ({
-  value,
-  setValue,
-  width,
-  height,
-}: TextEditorProps): JSX.Element => {
+const TextEditor = ({ value, setValue }: TextEditorProps): JSX.Element => {
   return (
-    <TextEditorContainer editorWidth={width} editorHeight={height}>
+    <TextEditorContainer>
       <ReactQuill
         value={value}
         onChange={setValue}
