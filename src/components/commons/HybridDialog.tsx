@@ -12,13 +12,14 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 interface BaseDialogProps extends DialogProps {
   title: string;
   contentNode: ReactNode;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onBack?: () => void;
+  fullScreen?: boolean;
 }
 
 interface DialogWithActionProps extends BaseDialogProps {
@@ -42,6 +43,7 @@ const HybridDialog = ({
   open,
   setOpen,
   onBack,
+  fullScreen,
 }: HybridDialogProps): JSX.Element => {
   const handleClose = () => {
     setOpen(false);
@@ -52,6 +54,18 @@ const HybridDialog = ({
     onActionClick();
     handleClose();
   };
+  // FullScreen 다이얼로그가 오픈됐을 때, 바깥 영역의 스크롤바를 없앰
+  useEffect(() => {
+    if (open && fullScreen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open, fullScreen]);
 
   return (
     <Dialog
@@ -61,9 +75,10 @@ const HybridDialog = ({
       open={open}
       onClose={handleClose}
       closeAfterTransition={false}
+      fullScreen={fullScreen}
       sx={{
         '& .MuiDialog-paper': {
-          borderRadius: '10px',
+          borderRadius: fullScreen ? '0px' : '10px',
         },
       }}
     >
@@ -113,7 +128,7 @@ const HybridDialog = ({
               margin: '0',
               width: '100%',
               padding: '0.5rem',
-              borderRadius: '0px 0px 10px 10px',
+              borderRadius: fullScreen ? '0px' : '0px 0px 10px 10px',
             }}
           >
             {action}
