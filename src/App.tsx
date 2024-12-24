@@ -1,14 +1,17 @@
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store/store';
 import LoginSignup from './pages/MainPage/Login';
 import FeedPage from './pages/MainPage/Main';
 import BookSearchPage from './pages/BookSearchPage/BookSearch';
 import MyPage from './pages/MyPage/MyPage';
 import './App.css';
-import SnackBarProvider from '@components/Snackbar/SnackBarProvider';
+import SnackBar from './components/Snackbar/SnackBar';
 
 const App: React.FC = () => {
   return (
-    <SnackBarProvider>
+    <Provider store={store}>
       <Router>
         <div className="app-container">
           <header className="header">
@@ -53,8 +56,9 @@ const App: React.FC = () => {
             <p>&copy; 2024 육잇다 All rights reserved.</p>
           </footer>
         </div>
+        <SnackBar />
       </Router>
-    </SnackBarProvider>
+    </Provider>
   );
 };
 
