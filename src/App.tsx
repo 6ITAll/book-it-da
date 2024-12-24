@@ -38,17 +38,17 @@ const App: React.FC = () => {
                 </ul>
               </nav>
             </aside>
-
-            <main className="content">
-              <Routes>
-                <Route path="/login-signup" element={<LoginSignup />} />
-                <Route path="/feed" element={<FeedPage />} />
-                <Route path="/search" element={<BookSearchPage />} />
-                <Route path="/my-page" element={<MyPage />} />
-                <Route path="/" element={<FeedPage />} />
-              </Routes>
-            </main>
-          </div>
+            
+          <main className="content">
+            <Routes>
+              <Route path="/login-signup" element={<LoginSignup />} />
+              <Route path="/feed" element={<FeedPage />} />
+              <Route path="/search" element={<BookSearchPage />} />
+              <Route path="/my-page/:userId?" element={<MyPage />} />
+              <Route path="/" element={<FeedPage />} />
+            </Routes>
+          </main>
+        </div>
 
           <footer className="footer">
             <p>&copy; 2024 육잇다 All rights reserved.</p>
