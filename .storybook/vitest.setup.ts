@@ -6,4 +6,11 @@ import * as projectAnnotations from './preview';
 // More info at: https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest#setprojectannotations
 const project = setProjectAnnotations([projectAnnotations]);
 
-beforeAll(project.beforeAll);
+beforeAll(async () => {
+  await project.beforeAll();
+  if (!document.getElementById('root')) {
+    const root = document.createElement('div');
+    root.setAttribute('id', 'root');
+    document.body.appendChild(root);
+  }
+});
