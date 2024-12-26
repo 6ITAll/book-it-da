@@ -7,6 +7,7 @@ import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostDetailPage/PostingContent';
 import PostingHeader from '@components/PostDetailPage/PostingHeader';
 import UserOtherPosts from '@components/PostDetailPage/UserOtherPosting';
+import BookOtherPosts from '@components/PostDetailPage/BookOtherPosting';
 
 // 추후 타입 정리 필요
 interface Posting {
@@ -69,10 +70,7 @@ const PostingDetailPage = () => {
         sx={{
           px: 4,
           pt: 3,
-          width: {
-            xs: '100%',
-            md: '60%',
-          },
+          width: '60%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -89,7 +87,10 @@ const PostingDetailPage = () => {
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />
       </Stack>
-      <UserOtherPosts />
+      <Stack>
+        <UserOtherPosts />
+        <BookOtherPosts />
+      </Stack>
       {/* 추후 해당 사용자의 다른 글 표시 */}
       {/* 추후 같은 책에 대한 다른 포스팅 */}
       <PostingShareDialog

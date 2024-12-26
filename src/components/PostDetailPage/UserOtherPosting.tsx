@@ -22,7 +22,7 @@ const UserOtherPosts = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', my: 4, px: 4 }}>
+    <Box sx={{ width: '100%', my: 5, px: 4 }}>
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
         사용자의 다른 포스팅
       </Typography>
@@ -33,6 +33,10 @@ const UserOtherPosts = () => {
             <Card
               sx={{
                 height: '200px',
+                transition: 'box-shadow 0.3s ease-in-out',
+                '&:hover': {
+                  boxShadow: 3,
+                },
                 padding: '1rem',
                 backgroundColor: '#fafafa',
               }}
