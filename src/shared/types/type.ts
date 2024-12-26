@@ -26,3 +26,10 @@ export interface Book {
   imageUrl: string;
   itemId: number;
 }
+
+export interface Bookshelf {
+  id: number;
+  name: string; // 책장 이름
+  bookCount: number; // 책 개수
+  books: Book[]; // 책 목록
+}
