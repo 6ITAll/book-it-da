@@ -1,5 +1,5 @@
 import { Stack, Tab, Tabs } from '@mui/material';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 interface TabSectionProps {
   userId: string;
@@ -10,7 +10,7 @@ const TabSection = ({ userId }: TabSectionProps): JSX.Element => {
   const tabs = [
     { id: 1, label: '내 서재', component: <>{userId}</> },
     { id: 2, label: '내 피드', component: <>{userId}</> },
-    { id: 2, label: '북마크', component: <>{userId}</> },
+    { id: 3, label: '북마크', component: <>{userId}</> },
   ];
 
   const [tab, setTab] = useState(0);
@@ -22,7 +22,10 @@ const TabSection = ({ userId }: TabSectionProps): JSX.Element => {
           <Tab key={id} label={label} />
         ))}
       </Tabs>
-      {tabs.map(({ component }, index) => tab === index && component)}
+      {tabs.map(
+        ({ id, component }, index) =>
+          tab === index && <Fragment key={id}>{component}</Fragment>,
+      )}
     </Stack>
   );
 };
