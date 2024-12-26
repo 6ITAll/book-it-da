@@ -5,10 +5,6 @@ import {
   Typography,
   ToggleButton,
   ToggleButtonGroup,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Button,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -19,10 +15,12 @@ import {
   mockBookshelf,
 } from '@components/BookShelvesPage/mockShelvesBooks';
 import HybridDialog from '@components/commons/HybridDialog';
+import SortSelector from '@components/BookShelvesPage/SortSelector';
+import { SortOption } from '@components/BookShelvesPage/SortSelector';
 
 const BookShelvesPage = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [sortOption, setSortOption] = useState('recent');
+  const [sortOption, setSortOption] = useState<SortOption>('recent');
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -74,18 +72,10 @@ const BookShelvesPage = () => {
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>정렬</InputLabel>
-          <Select
-            value={sortOption}
-            label="정렬"
-            onChange={(e) => setSortOption(e.target.value)}
-          >
-            <MenuItem value="recent">최근 저장순</MenuItem>
-            <MenuItem value="title">제목순</MenuItem>
-            <MenuItem value="author">저자순</MenuItem>
-          </Select>
-        </FormControl>
+        <SortSelector
+          sortOption={sortOption}
+          onSortChange={(option) => setSortOption(option)}
+        />
       </Box>
       <Grid
         container
