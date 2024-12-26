@@ -16,6 +16,7 @@ import { useState, useEffect } from 'react';
 import parse from 'html-react-parser';
 import { mockBooks } from '@components/FeedPage/mockPosts';
 import CommonBookCard from '@components/commons/CommonBookCard';
+import PostingShareDialog from '@components/PostDetailPage/PostingShareDialog';
 
 interface Posting {
   id: number;
@@ -42,6 +43,7 @@ const PostingDetailPage = () => {
   const [post, setPost] = useState<Posting | null>(null);
   const [isLiked, setIsLiked] = useState(false);
   const currentUserId = 1; // TODO: 실제 로그인 유저 ID로 대체
+  const [openShareDialog, setOpenShareDialog] = useState(false);
 
   // Mock 데이터 생성 > 추후 API 요청 작성
   useEffect(() => {
@@ -118,7 +120,7 @@ const PostingDetailPage = () => {
           <IconButton onClick={() => setIsLiked(!isLiked)}>
             {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => setOpenShareDialog(true)}>
             <ShareIcon />
           </IconButton>
           {post.userId === currentUserId && (
@@ -188,6 +190,10 @@ const PostingDetailPage = () => {
       </Stack>
       {/* 추후 해당 사용자의 다른 글 표시 */}
       {/* 추후 같은 책에 대한 다른 포스팅 */}
+      <PostingShareDialog
+        open={openShareDialog}
+        handleClose={setOpenShareDialog}
+      />
     </Container>
   );
 };
