@@ -6,6 +6,7 @@ import mockPost from '@components/PostDetailPage/mockPosting';
 import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostDetailPage/PostingContent';
 import PostingHeader from '@components/PostDetailPage/PostingHeader';
+import UserOtherPosts from '@components/PostDetailPage/UserOtherPosting';
 
 // 추후 타입 정리 필요
 interface Posting {
@@ -88,6 +89,7 @@ const PostingDetailPage = () => {
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />
       </Stack>
+      <UserOtherPosts />
       {/* 추후 해당 사용자의 다른 글 표시 */}
       {/* 추후 같은 책에 대한 다른 포스팅 */}
       <PostingShareDialog
