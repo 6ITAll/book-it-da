@@ -1,24 +1,13 @@
-import {
-  Box,
-  IconButton,
-  Typography,
-  Avatar,
-  Button,
-  Stack,
-  Container,
-} from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ShareIcon from '@mui/icons-material/Share';
-import EditIcon from '@mui/icons-material/Edit';
+import { Stack, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import parse from 'html-react-parser';
-import CommonBookCard from '@components/commons/CommonBookCard';
 import PostingShareDialog from '@components/PostDetailPage/PostingShareDialog';
 import mockPost from '@components/PostDetailPage/mockPosting';
-import { mockBooks } from '@components/FeedPage/mockPosts';
+import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
+import PostingContent from '@components/PostDetailPage/PostingContent';
+import PostingHeader from '@components/PostDetailPage/PostingHeader';
 
+// 추후 타입 정리 필요
 interface Posting {
   id: number;
   title: string;
@@ -66,39 +55,14 @@ const PostingDetailPage = () => {
       }}
     >
       {/* 포스팅 헤더 */}
-      <Box
-        sx={{
-          width: '100%',
-          position: 'sticky',
-          opacity: '0.9',
-          top: 0,
-          bgcolor: 'white',
-          zIndex: 1000,
-          borderBottom: '1px solid #eee',
-          py: 2,
-          px: 3,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h5" sx={{ fontWeight: 900 }}>
-          {post.title}
-        </Typography>
-        <Stack direction="row" spacing={1}>
-          <IconButton onClick={() => setIsLiked(!isLiked)}>
-            {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-          </IconButton>
-          <IconButton onClick={() => setOpenShareDialog(true)}>
-            <ShareIcon />
-          </IconButton>
-          {post.userId === currentUserId && (
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-          )}
-        </Stack>
-      </Box>
+      <PostingHeader
+        title={post.title}
+        isLiked={isLiked}
+        setIsLiked={setIsLiked}
+        setOpenShareDialog={setOpenShareDialog}
+        userId={post.userId}
+        currentUserId={currentUserId}
+      />
       {/* 포스팅 정보 */}
       <Stack
         sx={{
@@ -116,46 +80,13 @@ const PostingDetailPage = () => {
         }}
       >
         {/* 유저 정보 */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            p: 1,
-            mb: 3,
-            width: '100%',
-            borderBottom: '1px solid #eee',
-          }}
-        >
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar src={post.user.avatarUrl} />
-            <Stack>
-              <Typography>{post.user.name}</Typography>
-              <Typography variant="caption" color="text.secondary">
-                {new Date(post.createdAt).toISOString().split('T')[0]}
-              </Typography>
-            </Stack>
-          </Stack>
-          {post.userId !== currentUserId && (
-            <Button variant="outlined" size="small">
-              팔로우
-            </Button>
-          )}
-        </Box>
-        {/* 책 정보 */}
-        {post.book && (
-          <CommonBookCard
-            image={mockBooks[0].imageUrl}
-            title={post.book?.title}
-            author={post.book?.author}
-            sx={{ width: '100%', justifyContent: 'center' }}
-          />
-        )}
-
-        {/* 포스팅 내용 */}
-        <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-          {parse(post.content)}
-        </Typography>
+        <PostingUserInfo
+          user={post.user}
+          createdAt={post.createdAt}
+          currentUserId={currentUserId}
+        />
+        {/* 포스팅 정보 */}
+        <PostingContent content={post.content} book={post.book} />
       </Stack>
       {/* 추후 해당 사용자의 다른 글 표시 */}
       {/* 추후 같은 책에 대한 다른 포스팅 */}
