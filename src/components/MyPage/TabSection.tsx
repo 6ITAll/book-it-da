@@ -1,5 +1,5 @@
-import { Stack, Tab, Tabs } from '@mui/material';
-import { Fragment, useState } from 'react';
+import { Box, Stack, Tab, Tabs } from '@mui/material';
+import { useState } from 'react';
 import LibraryTabPanel from './Library/LibraryTabPanel';
 
 interface TabSectionProps {
@@ -25,7 +25,11 @@ const TabSection = ({ userId }: TabSectionProps): JSX.Element => {
       </Tabs>
       {tabs.map(
         ({ id, component }, index) =>
-          tab === index && <Fragment key={id}>{component}</Fragment>,
+          tab === index && (
+            <Box paddingY={4} key={id}>
+              {component}
+            </Box>
+          ),
       )}
     </Stack>
   );
