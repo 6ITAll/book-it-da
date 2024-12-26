@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import PostCard from '@components/commons/DetailPagePostCard';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
@@ -38,7 +38,7 @@ const PostMorePage = (): JSX.Element => {
   return (
     <Box sx={{ padding: '1rem', maxWidth: '1200px', margin: 'auto' }}>
       <Typography variant="h5" fontWeight="bold" sx={{ marginBottom: '1rem' }}>
-        총 포스트: {allMockPosts.length}개
+        총 포스트 {allMockPosts.length}
       </Typography>
       <InfiniteScrollComponent
         items={posts}
