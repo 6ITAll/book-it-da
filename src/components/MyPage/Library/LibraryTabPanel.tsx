@@ -1,9 +1,16 @@
-import { Bookshelf } from '@shared/types/type';
 import BookshelfCard from './BookshelfCard';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import { useGetLibraryQuery } from '@features/MyPage/api';
 
-const LibraryTabPanel = () => {
-  const bookShelves: Bookshelf[] = [];
+interface LibraryTabPanelProps {
+  userId: string;
+}
+
+const LibraryTabPanel = ({ userId }: LibraryTabPanelProps) => {
+  const { data: bookShelves, error, isLoading } = useGetLibraryQuery(userId);
+
+  if (isLoading) return <Typography>로딩 중...</Typography>;
+  if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;
 
   return (
     <Stack
@@ -13,7 +20,7 @@ const LibraryTabPanel = () => {
       justifyContent="flex-start"
       spacing={3}
     >
-      {bookShelves.map((shelf) => (
+      {bookShelves?.map((shelf) => (
         <BookshelfCard key={shelf.id} shelf={shelf} />
       ))}
     </Stack>

@@ -9,7 +9,7 @@ interface TabSectionProps {
 const TabSection = ({ userId }: TabSectionProps): JSX.Element => {
   /* TODO 탭 콘텐츠 제작 완료 후 userId 넘겨주기  */
   const tabs = [
-    { id: 1, label: '내 서재', component: <LibraryTabPanel /> },
+    { id: 1, label: '내 서재', component: <LibraryTabPanel userId={userId} /> },
     { id: 2, label: '내 피드', component: <>{userId}</> },
     { id: 3, label: '북마크', component: <>{userId}</> },
   ];
