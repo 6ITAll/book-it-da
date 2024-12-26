@@ -5,12 +5,15 @@ import StarIcon from '@mui/icons-material/Star';
 import Grid from '@mui/material/Grid2';
 import ReviewCard from '@components/commons/DetailPageReviewCard';
 import PostCard from '@components/commons/DetailPagePostCard';
+import { useNavigate } from 'react-router-dom';
+
 // 리뷰 데이터 타입
 interface Review {
   username: string;
   date: string;
   content: string;
   likes: number;
+  rating: number;
 }
 
 // 포스트 데이터 타입
@@ -28,18 +31,21 @@ const reviews: Review[] = [
     date: '2024.08.01',
     content: '새롭네요!',
     likes: 1,
+    rating: 4, // 별점 추가
   },
   {
     username: '독서왕난이',
     date: '2024.02.27',
     content: '도슨트북 새롭고 재미있어요',
     likes: 1,
+    rating: 5, // 별점 추가
   },
   {
     username: '다비다나고양이',
     date: '2024.10.16',
     content: '책에 더 흥미를 갖게 도와주는 것 같아요',
     likes: 1,
+    rating: 3, // 별점 추가
   },
 ];
 
@@ -67,13 +73,26 @@ const posts: Post[] = [
   },
 ];
 
-const BookReviewsTab = (): JSX.Element => {
+interface BookReviewTabProps {
+  itemId?: string;
+}
+
+type MoreType = 'posts' | 'reviews';
+
+const BookReviewsTab = ({ itemId }: BookReviewTabProps): JSX.Element => {
   const [rating, setRating] = useState<number>(0); // 선택된 별점 상태
+  const navigate = useNavigate();
 
   const handleStarClick = (index: number) => {
     setRating(index + 1); // 클릭한 별까지 선택
   };
 
+  // 포스트, 리뷰 상세 페이지로 이동
+  const handleSeeMoreClick = (type: MoreType) => {
+    if (itemId) {
+      navigate(`/bookDetail/${itemId}/${type}`); // type에 따라 경로 설정
+    }
+  };
   return (
     <Box sx={{ padding: '1rem 1rem' }}>
       {/* 리뷰 섹션 */}
@@ -92,6 +111,7 @@ const BookReviewsTab = (): JSX.Element => {
           <Button
             size="small"
             variant="text"
+            onClick={() => handleSeeMoreClick('reviews')}
             sx={{ color: '#333', fontWeight: 'bold' }}
           >
             더보기
@@ -147,6 +167,7 @@ const BookReviewsTab = (): JSX.Element => {
                 date={review.date}
                 content={review.content}
                 likes={review.likes}
+                rating={review.rating}
               />
             </Grid>
           ))}
@@ -166,6 +187,14 @@ const BookReviewsTab = (): JSX.Element => {
           <Typography variant="h6" fontWeight="bold">
             이 책의 포스트 {posts.length}
           </Typography>
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => handleSeeMoreClick('posts')}
+            sx={{ color: '#333', fontWeight: 'bold' }}
+          >
+            더보기
+          </Button>
         </Box>
         <Grid container spacing={2}>
           {posts.map((post, index) => (
