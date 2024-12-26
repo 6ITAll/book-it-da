@@ -1,13 +1,6 @@
 import { useState } from 'react';
-import {
-  Box,
-  Typography,
-  ToggleButton,
-  ToggleButtonGroup,
-  Button,
-} from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { ViewModule, ViewList } from '@mui/icons-material';
 import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookCard';
 import {
   mockBooks,
@@ -17,9 +10,10 @@ import HybridDialog from '@components/commons/HybridDialog';
 import SortSelector from '@components/BookShelvesPage/SortSelector';
 import { SortOption } from '@components/BookShelvesPage/SortSelector';
 import { sortBooks } from '@components/BookShelvesPage/sortBooks';
+import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
 
 const BookShelvesPage = () => {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortOption, setSortOption] = useState<SortOption>('recent');
   const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
@@ -44,20 +38,7 @@ const BookShelvesPage = () => {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h4">{mockBookshelf.name}</Typography>
-        <Box>
-          <ToggleButtonGroup
-            value={viewMode}
-            exclusive
-            onChange={(_, value) => value && setViewMode(value)}
-          >
-            <ToggleButton value="grid">
-              <ViewModule />
-            </ToggleButton>
-            <ToggleButton value="list">
-              <ViewList />
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
+        <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
