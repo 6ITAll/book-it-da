@@ -91,8 +91,6 @@ const PostingDetailPage = () => {
         <UserOtherPosts />
         <BookOtherPosts />
       </Stack>
-      {/* 추후 해당 사용자의 다른 글 표시 */}
-      {/* 추후 같은 책에 대한 다른 포스팅 */}
       <PostingShareDialog
         open={openShareDialog}
         handleClose={setOpenShareDialog}
