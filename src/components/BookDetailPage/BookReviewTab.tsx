@@ -3,8 +3,8 @@ import { Box, Typography, Button, Stack } from '@mui/material';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 import Grid from '@mui/material/Grid2';
-import ReviewCard from '@components/BookDetailPage/ReviewCard';
-import PostCard from '@components/BookDetailPage/PostCard';
+import ReviewCard from '@components/commons/DetailPageReviewCard';
+import PostCard from '@components/commons/DetailPagePostCard';
 // 리뷰 데이터 타입
 interface Review {
   username: string;
