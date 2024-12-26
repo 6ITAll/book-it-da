@@ -21,14 +21,13 @@ const BookshelfCard = ({ shelf }: { shelf: Bookshelf }) => {
             <Grid2
               key={book.itemId}
               size={shelf.books.length === 1 ? 12 : 6} // 1권이면 전체, 그 외 반반
+              height={shelf.books.length > 2 ? '50%' : '100%'}
             >
               <CardMedia
                 key={book.itemId}
                 component="img"
                 image={book.imageUrl}
                 alt={`${book.bookTitle} cover`}
-                width="100%"
-                height="100%"
               />
             </Grid2>
           ))}
