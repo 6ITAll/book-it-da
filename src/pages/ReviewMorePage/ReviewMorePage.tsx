@@ -42,15 +42,6 @@ const ReviewMorePage = (): JSX.Element => {
     }, 1000);
   };
 
-  // 좋아요 버튼 처리
-  const handleLike = (index: number) => {
-    setReviews((prevReviews) => {
-      const updatedReviews = [...prevReviews];
-      updatedReviews[index].likes += 1;
-      return updatedReviews;
-    });
-  };
-
   // 정렬 변경 처리
   const handleSortChange = (option: string) => {
     setSortOption(option);
@@ -89,7 +80,7 @@ const ReviewMorePage = (): JSX.Element => {
           fontWeight="bold"
           sx={{ marginBottom: '1rem' }}
         >
-          한 줄 리뷰
+          한 줄 리뷰 {allMockReviews.length}
         </Typography>
         <ReviewSortOptions value={sortOption} onChange={handleSortChange} />
       </Stack>
