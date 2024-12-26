@@ -1,4 +1,3 @@
-// pages/BookShelvesPage.tsx
 import { useState } from 'react';
 import {
   Box,
@@ -17,6 +16,7 @@ import {
 import HybridDialog from '@components/commons/HybridDialog';
 import SortSelector from '@components/BookShelvesPage/SortSelector';
 import { SortOption } from '@components/BookShelvesPage/SortSelector';
+import { sortBooks } from '@components/BookShelvesPage/sortBooks';
 
 const BookShelvesPage = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -38,18 +38,7 @@ const BookShelvesPage = () => {
     setSelectedBookId(null);
   };
 
-  const sortedBooks = [...mockBooks].sort((a, b) => {
-    switch (sortOption) {
-      case 'recent':
-        return new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime();
-      case 'title':
-        return a.bookTitle.localeCompare(b.bookTitle);
-      case 'author':
-        return a.author.localeCompare(b.author);
-      default:
-        return 0;
-    }
-  });
+  const sortedBooks = sortBooks(mockBooks, sortOption);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -82,7 +71,7 @@ const BookShelvesPage = () => {
         spacing={4}
         sx={{
           alignItems: 'flex-end',
-          mt: 2, // 상단 여백 추가
+          mt: 2,
         }}
       >
         {sortedBooks.map((book, index) => (

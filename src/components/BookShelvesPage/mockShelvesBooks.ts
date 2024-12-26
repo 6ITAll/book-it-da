@@ -4,6 +4,7 @@ export const mockBooks = [
     bookTitle: '소설의 첫 만남',
     author: '김작가',
     imageUrl: '/src/assets/images/sample1.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-01T10:00:00Z',
   },
   {
@@ -11,6 +12,7 @@ export const mockBooks = [
     bookTitle: '시간의 흐름',
     author: '이시인',
     imageUrl: '/src/assets/images/sample2.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-02T11:00:00Z',
   },
   {
@@ -18,6 +20,7 @@ export const mockBooks = [
     bookTitle: '철학의 즐거움',
     author: '박철학',
     imageUrl: '/src/assets/images/sample3.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-03T12:00:00Z',
   },
   {
@@ -25,6 +28,7 @@ export const mockBooks = [
     bookTitle: '과학의 세계',
     author: '정과학',
     imageUrl: '/src/assets/images/sample4.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-04T13:00:00Z',
   },
   {
@@ -32,6 +36,7 @@ export const mockBooks = [
     bookTitle: '가을의 정원',
     author: '박정원',
     imageUrl: '/src/assets/images/sample5.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-05T14:00:00Z',
   },
   {
@@ -39,6 +44,7 @@ export const mockBooks = [
     bookTitle: '디자인의 기초',
     author: '이디자인',
     imageUrl: '/src/assets/images/sample6.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-06T15:00:00Z',
   },
   {
@@ -46,6 +52,7 @@ export const mockBooks = [
     bookTitle: '바다의 노래',
     author: '김해양',
     imageUrl: '/src/assets/images/sample7.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-07T16:00:00Z',
   },
   {
@@ -53,6 +60,7 @@ export const mockBooks = [
     bookTitle: '역사의 비밀',
     author: '정역사',
     imageUrl: '/src/assets/images/sample8.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-08T17:00:00Z',
   },
   {
@@ -60,6 +68,7 @@ export const mockBooks = [
     bookTitle: '음악의 세계',
     author: '김음악',
     imageUrl: '/src/assets/images/sample9.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-09T18:00:00Z',
   },
   {
@@ -67,6 +76,7 @@ export const mockBooks = [
     bookTitle: '미술의 이해',
     author: '이미술',
     imageUrl: '/src/assets/images/sample10.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-10T19:00:00Z',
   },
   {
@@ -74,6 +84,7 @@ export const mockBooks = [
     bookTitle: '건축의 아름다움',
     author: '최건축',
     imageUrl: '/src/assets/images/sample1.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-11T20:00:00Z',
   },
   {
@@ -81,6 +92,7 @@ export const mockBooks = [
     bookTitle: '요리의 즐거움',
     author: '박요리',
     imageUrl: '/src/assets/images/sample2.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-12T21:00:00Z',
   },
   {
@@ -88,6 +100,7 @@ export const mockBooks = [
     bookTitle: '춤추는 별들',
     author: '김우주',
     imageUrl: '/src/assets/images/sample3.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-13T22:00:00Z',
   },
   {
@@ -95,6 +108,7 @@ export const mockBooks = [
     bookTitle: '마음의 지도',
     author: '정심리',
     imageUrl: '/src/assets/images/sample4.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-14T23:00:00Z',
   },
   {
@@ -102,6 +116,7 @@ export const mockBooks = [
     bookTitle: '꿈의 해석',
     author: '이정신',
     imageUrl: '/src/assets/images/sample5.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-15T00:00:00Z',
   },
   {
@@ -109,6 +124,7 @@ export const mockBooks = [
     bookTitle: '숲의 속삭임',
     author: '박자연',
     imageUrl: '/src/assets/images/sample6.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-16T01:00:00Z',
   },
   {
@@ -116,6 +132,7 @@ export const mockBooks = [
     bookTitle: '도시의 밤',
     author: '김도시',
     imageUrl: '/src/assets/images/sample7.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-17T02:00:00Z',
   },
   {
@@ -123,6 +140,7 @@ export const mockBooks = [
     bookTitle: '언어의 마법',
     author: '최언어',
     imageUrl: '/src/assets/images/sample8.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-18T03:00:00Z',
   },
   {
@@ -130,6 +148,7 @@ export const mockBooks = [
     bookTitle: '빛의 물리학',
     author: '정물리',
     imageUrl: '/src/assets/images/sample9.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-19T04:00:00Z',
   },
   {
@@ -137,13 +156,14 @@ export const mockBooks = [
     bookTitle: '아침의 기적',
     author: '이새벽',
     imageUrl: '/src/assets/images/sample10.jpg',
+    bookshelfId: 1,
     savedAt: '2024-12-20T05:00:00Z',
   },
 ];
 
 export const mockBookshelf = {
   id: 1,
-  name: '나의 첫 번째 책장',
+  name: '내 책장',
   createdAt: '2024-12-01T00:00:00Z',
   updatedAt: '2024-12-01T00:00:00Z',
   bookCount: 20,

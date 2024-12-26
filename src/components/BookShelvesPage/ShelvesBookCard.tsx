@@ -8,7 +8,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-import { formatDate } from 'src/utils/dateutils';
+import { formatDate } from 'src/utils/dateUtils';
 
 interface BookCardProps {
   book: {
@@ -95,14 +95,6 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               image={book.imageUrl}
               alt={book.bookTitle}
             />
-            <IconButton
-              className="kebab-menu"
-              size="small"
-              onClick={(e) => onMenuOpen(e, book.id)}
-              sx={{ backgroundColor: 'transparent' }}
-            >
-              <MoreVert />
-            </IconButton>
             <BookActions className="book-actions">
               <Button variant="contained" fullWidth sx={{ mb: 1 }}>
                 바로 읽기
@@ -117,9 +109,24 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             </BookActions>
           </Box>
           <Box sx={{ mt: 1 }}>
-            <Typography variant="subtitle1" noWrap>
-              {book.bookTitle}
-            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+              }}
+            >
+              <Typography variant="subtitle1" noWrap sx={{ flex: 1 }}>
+                {book.bookTitle}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={(e) => onMenuOpen(e, book.id)}
+                sx={{ ml: 1 }}
+              >
+                <MoreVert />
+              </IconButton>
+            </Box>
             <Typography variant="body2" color="text.secondary">
               {book.author}
             </Typography>
