@@ -26,3 +26,19 @@ export interface Book {
   imageUrl: string;
   itemId?: number;
 }
+
+// 저장된 책 interface
+export interface SavedBook extends Book {
+  id: number; // 저장된 책의 고유 ID
+  bookshelfId: number; // 책장 ID
+  savedAt: string; // 책장에 저장된 시간
+}
+
+// 책장 interface
+export interface Bookshelf {
+  id: number;
+  name: string; // 사용자가 지정한 책장 이름
+  createdAt: string;
+  updatedAt: string;
+  bookCount: number; // 책장에 저장된 책 수
+}

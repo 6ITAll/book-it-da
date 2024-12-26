@@ -4,6 +4,7 @@ import FeedPage from './pages/MainPage/Main';
 import BookSearchPage from './pages/BookSearchPage/BookSearch';
 import MyPage from './pages/MyPage/MyPage';
 import './App.css';
+import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
 
 const App: React.FC = () => {
   return (
@@ -44,6 +45,11 @@ const App: React.FC = () => {
               <Route path="/search" element={<BookSearchPage />} />
               <Route path="/my-page/:userId?" element={<MyPage />} />
               <Route path="/" element={<FeedPage />} />
+              {/* 추후 변경 */}
+              <Route
+                path="/my-page/bookshelves"
+                element={<BookShelvesPage />}
+              />
             </Routes>
           </main>
         </div>
