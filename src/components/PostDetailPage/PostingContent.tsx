@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import parse from 'html-react-parser';
 import CommonBookCard from '@components/commons/CommonBookCard';
 import { mockBooks } from '@components/FeedPage/mockPosts';
@@ -26,9 +26,7 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
         />
       )}
       {/* 포스팅 내용 */}
-      <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-        {parse(content)}
-      </Typography>
+      <Box sx={{ whiteSpace: 'pre-wrap' }}>{parse(content)}</Box>
     </>
   );
 };
