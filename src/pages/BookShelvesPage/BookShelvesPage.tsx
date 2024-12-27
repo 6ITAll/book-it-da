@@ -1,51 +1,66 @@
 import { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookCard';
 import {
   mockBooks,
   mockBookshelf,
 } from '@components/BookShelvesPage/mockShelvesBooks';
-import HybridDialog from '@components/commons/HybridDialog';
 import SortSelector from '@components/BookShelvesPage/SortSelector';
 import { SortOption } from '@components/BookShelvesPage/SortSelector';
 import { sortBooks } from '@components/BookShelvesPage/sortBooks';
 import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
+import BookShelvesDetailDialog from '@components/BookShelvesPage/BookShelvesDetailDialog';
+import { Book } from '@shared/types/type';
 
 const BookShelvesPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortOption, setSortOption] = useState<SortOption>('recent');
-  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
     bookId: number,
   ) => {
     event.stopPropagation();
-    setSelectedBookId(bookId);
+    const book = mockBooks.find((book) => book.id === bookId);
+    setSelectedBook(book || null);
     setOpenDialog(true);
   };
 
   const handleDeleteBook = () => {
     setOpenDialog(false);
-    setSelectedBookId(null);
   };
 
   const sortedBooks = sortBooks(mockBooks, sortOption);
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          mb: 3,
+          gap: '5px',
+        }}
+      >
         <Typography variant="h4">{mockBookshelf.name}</Typography>
-        <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
+        <Typography variant="body2" color="text.secondary">
+          {mockBookshelf.bookCount}권
+        </Typography>
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+      <Box
+        sx={{ display: 'flex', gap: 2, mb: 3, justifyContent: 'space-between' }}
+      >
         <SortSelector
           sortOption={sortOption}
           onSortChange={(option) => setSortOption(option)}
         />
+        <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
       </Box>
       <Grid
         container
@@ -74,22 +89,11 @@ const BookShelvesPage = () => {
         ))}
       </Grid>
 
-      <HybridDialog
-        open={openDialog}
-        setOpen={setOpenDialog}
-        title="책 관리"
-        contentNode={
-          <Box sx={{ width: '100%' }}>
-            <Button
-              fullWidth
-              color="error"
-              onClick={handleDeleteBook}
-              sx={{ mt: 1 }}
-            >
-              삭제
-            </Button>
-          </Box>
-        }
+      <BookShelvesDetailDialog
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        handleDeleteBook={handleDeleteBook}
+        book={selectedBook}
       />
     </Box>
   );

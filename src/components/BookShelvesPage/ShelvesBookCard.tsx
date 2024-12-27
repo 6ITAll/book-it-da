@@ -8,7 +8,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-import { formatDate } from 'src/utils/dateUtils';
+// import { formatDate } from 'src/utils/dateUtils';
 
 interface BookCardProps {
   book: {
@@ -72,19 +72,8 @@ const BookCard = styled(Card)<{ view: 'grid' | 'list' }>(({ view }) => ({
   }),
 }));
 
-const BookActions = styled(Box)({
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  background: 'rgba(0,0,0,0.7)',
-  padding: '8px',
-  opacity: 0,
-  transition: 'opacity 0.3s ease-in-out',
-});
-
 const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
-  const formattedDate = formatDate(book.savedAt);
+  // const formattedDate = formatDate(book.savedAt);
   return (
     <BookCard view={view}>
       {view === 'grid' ? (
@@ -95,18 +84,6 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               image={book.imageUrl}
               alt={book.bookTitle}
             />
-            <BookActions className="book-actions">
-              <Button variant="contained" fullWidth sx={{ mb: 1 }}>
-                바로 읽기
-              </Button>
-              <Button
-                variant="outlined"
-                fullWidth
-                sx={{ color: 'white', borderColor: 'white' }}
-              >
-                더보기
-              </Button>
-            </BookActions>
           </Box>
           <Box sx={{ mt: 1 }}>
             <Box
@@ -130,13 +107,13 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             <Typography variant="body2" color="text.secondary">
               {book.author}
             </Typography>
-            <Typography
+            {/* <Typography
               variant="caption"
               color="text.secondary"
               display="block"
             >
               {formattedDate}
-            </Typography>
+            </Typography> */}
           </Box>
         </>
       ) : (
