@@ -6,8 +6,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
+import {
+  BookResponse,
+  useSearchBooksQuery,
+} from '@features/BookSearchPage/api/bookSearchApi';
 import { Book } from '@shared/types/type';
+import { useEffect, useState } from 'react';
 
 interface BookSearchAutoCompleteProps {
   searchQuery: string;
@@ -21,10 +25,13 @@ const BookSearchAutoComplete = ({
   setSearchQuery,
   setSelectedBook,
 }: BookSearchAutoCompleteProps) => {
+  const [page, setPage] = useState(1);
+  const [allItems, setAllItems] = useState<BookResponse['item']>([]);
+
   const { data: searchResults, isLoading } = useSearchBooksQuery(
     {
       query: searchQuery,
-      page: 1,
+      page,
       sort: 'Accuracy',
     },
     {
@@ -32,73 +39,148 @@ const BookSearchAutoComplete = ({
     },
   );
 
+  useEffect(() => {
+    setPage(1);
+    setAllItems([]);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (searchResults?.item) {
+      if (page === 1) {
+        setAllItems(searchResults.item);
+        setPage(2);
+      } else {
+        setAllItems((prev) => [...prev, ...searchResults.item]);
+      }
+    }
+    // 의존성 배열 경고 메시지 무시
+    // eslint-disable-next-line
+  }, [searchResults]);
+
   return (
-    <>
-      <Autocomplete
-        fullWidth
-        loading={isLoading}
-        loadingText="Loading..."
-        noOptionsText="검색 결과가 없습니다"
-        options={searchResults?.item || []}
-        getOptionLabel={(option) => option.title}
-        onChange={(_, newValue) => {
-          if (newValue) {
-            const selectedBook: Book = {
-              bookTitle: newValue.title,
-              author: newValue.author,
-              imageUrl: newValue.cover,
-              itemId: newValue.itemId,
-            };
-            setSelectedBook(selectedBook);
-          } else {
-            setSelectedBook(null);
-          }
-        }}
-        renderOption={(props, option) => (
-          <Box component="li" {...props}>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <img
-                src={option.cover}
-                alt={option.title}
-                style={{ width: 40, height: 60 }}
-              />
-              <Stack>
-                <Typography variant="body1">{option.title}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {option.author}
-                </Typography>
-              </Stack>
+    <Autocomplete
+      fullWidth
+      size="small"
+      loading={isLoading}
+      loadingText="Loading..."
+      noOptionsText="검색 결과가 없습니다"
+      options={allItems}
+      getOptionLabel={(option) => option.title}
+      getOptionKey={(option) => `${option.itemId}-${option.title}`}
+      onChange={(_, newValue) => {
+        if (newValue) {
+          const selectedBook: Book = {
+            bookTitle: newValue.title,
+            author: newValue.author,
+            imageUrl: newValue.cover,
+            itemId: newValue.itemId,
+          };
+          setSelectedBook(selectedBook);
+        } else {
+          setSelectedBook(null);
+        }
+      }}
+      slotProps={{
+        listbox: {
+          onScroll: (event: React.UIEvent<HTMLUListElement>) => {
+            const listboxNode = event.currentTarget;
+            if (
+              listboxNode.scrollTop + listboxNode.clientHeight >=
+                listboxNode.scrollHeight - 20 &&
+              searchResults?.item.length === 4 &&
+              !isLoading
+            ) {
+              setPage((prev) => prev + 1);
+            }
+          },
+          sx: {
+            maxHeight: '300px',
+          },
+        },
+      }}
+      renderOption={(props, option) => (
+        <Box
+          component="li"
+          {...props}
+          sx={{
+            padding: '5px 10px !important',
+            borderBottom: '1px solid #ccc',
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            sx={{ width: '100%', height: '100%' }}
+          >
+            <img
+              src={option.cover}
+              alt={option.title}
+              style={{ width: 40, height: 60 }}
+            />
+            <Stack>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: '14px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxWidth: {
+                    xs: '150px',
+                    md: '200px',
+                  },
+                }}
+              >
+                {option.title}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontSize: '11px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxWidth: {
+                    xs: '150px',
+                    md: '200px',
+                  },
+                }}
+              >
+                {option.author}
+              </Typography>
             </Stack>
-          </Box>
-        )}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="책 검색"
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="책 제목을 입력하세요"
-            slotProps={{
-              input: {
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {isLoading ? (
-                      <CircularProgress color="inherit" size={20} />
-                    ) : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
-              },
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '8px',
-              },
-            }}
-          />
-        )}
-      />
-    </>
+          </Stack>
+        </Box>
+      )}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="책 검색"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="책 제목을 입력하세요"
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {isLoading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            },
+          }}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '8px',
+            },
+          }}
+        />
+      )}
+    />
   );
 };
 

@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Divider,
+  Popover,
   Stack,
   TextField,
   Typography,
@@ -28,6 +29,17 @@ const PostingDialog = ({
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  // 글감 버튼 클릭 시 책 검색 메뉴 열림
+  const handleMaterialClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // 책 검색 메뉴 닫힘
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // 다이얼로그 닫히면 책 검색 결과 초기화
   useEffect(() => {
@@ -118,7 +130,7 @@ const PostingDialog = ({
         {/* 글감 버튼 */}
         <Button
           size="small"
-          onClick={() => {}}
+          onClick={handleMaterialClick}
           sx={{
             fontSize: '11px',
             backgroundColor: '#ddd',
@@ -130,6 +142,36 @@ const PostingDialog = ({
         >
           글감
         </Button>
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          <Box
+            sx={{
+              p: 2,
+              width: {
+                xs: '250px',
+                md: '300px',
+              },
+            }}
+          >
+            <BookSearchAutoComplete
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedBook={selectedBook}
+              setSelectedBook={setSelectedBook}
+            />
+          </Box>
+        </Popover>
       </Stack>
       <Stack
         sx={{
@@ -158,14 +200,8 @@ const PostingDialog = ({
             flex: '1 1 auto',
           }}
         >
-          {/* <BookSearchAutoComplete
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedBook={selectedBook}
-            setSelectedBook={setSelectedBook}
-          /> */}
           {/* 선택한 책 정보 추후 고유 id 뺼 예정 */}
-          {/* {selectedBook && (
+          {selectedBook && (
             <Box sx={{ mb: 2 }}>
               <Stack direction="row" spacing={2} alignItems="center">
                 <img
@@ -180,7 +216,7 @@ const PostingDialog = ({
                 </Stack>
               </Stack>
             </Box>
-          )} */}
+          )}
           {/* 포스팅 제목 입력창 */}
           <Stack flex="0 0 auto">
             <TextField
