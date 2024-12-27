@@ -1,4 +1,11 @@
-import { Autocomplete, Box, Stack, TextField, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  CircularProgress,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
 import { Book } from '@shared/types/type';
 
@@ -14,7 +21,7 @@ const BookSearchAutoComplete = ({
   setSearchQuery,
   setSelectedBook,
 }: BookSearchAutoCompleteProps) => {
-  const { data: searchResults } = useSearchBooksQuery(
+  const { data: searchResults, isLoading } = useSearchBooksQuery(
     {
       query: searchQuery,
       page: 1,
@@ -29,6 +36,9 @@ const BookSearchAutoComplete = ({
     <>
       <Autocomplete
         fullWidth
+        loading={isLoading}
+        loadingText="Loading..."
+        noOptionsText="검색 결과가 없습니다"
         options={searchResults?.item || []}
         getOptionLabel={(option) => option.title}
         onChange={(_, newValue) => {
@@ -67,6 +77,19 @@ const BookSearchAutoComplete = ({
             label="책 검색"
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="책 제목을 입력하세요"
+            slotProps={{
+              input: {
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {isLoading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              },
+            }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 borderRadius: '8px',
