@@ -18,7 +18,7 @@ import {
   getRandomBook,
 } from '@components/FeedPage/mockPosts';
 
-import PostCard from '@components/commons/PostCard';
+import PostCard from '@components/FeedPage/PostCard';
 import ScrollToTop from '@components/commons/ScrollToTop';
 import { FeedTypeFilter } from '@components/FeedPage/FeedTypeFilter';
 import { PostTypeFilter } from '@components/FeedPage/PostTypeFilter';
@@ -37,8 +37,6 @@ const Main = (): JSX.Element => {
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [filterKey, setFilterKey] = useState(0);
   const [writeDialogOpen, setWriteDialogOpen] = useState(false);
-  // 카드 표시 모드 설정
-  const isDetail: boolean = true;
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
   const handlePostTypeChange = (
@@ -230,7 +228,6 @@ const Main = (): JSX.Element => {
                 feedType={post.feedType}
                 bookTitle={post.bookTitle}
                 bookAuthor={post.bookAuthor}
-                isDetail={isDetail}
               />
             </Box>
           ))}
