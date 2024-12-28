@@ -1,18 +1,11 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Popover,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Divider, Popover, Stack, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { PostType } from './WriteDialog';
 import TextEditor from '@components/commons/TextEditor';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
 import HybridDialog from '@components/commons/HybridDialog';
+import CommonBookCard from '@components/commons/CommonBookCard';
 
 interface PostingDialogProps {
   handleBack: () => void;
@@ -43,7 +36,7 @@ const PostingDialog = ({
 
   // 다이얼로그 닫히면 책 검색 결과 초기화
   useEffect(() => {
-    if (selectedType !== 'review') {
+    if (selectedType !== 'post') {
       setSelectedBook(null);
       setSearchQuery('');
     }
@@ -197,26 +190,38 @@ const PostingDialog = ({
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
             flex: '1 1 auto',
           }}
         >
-          {/* 선택한 책 정보 추후 고유 id 뺼 예정 */}
+          {/* 글감 선택 시 */}
           {selectedBook && (
-            <Box sx={{ mb: 2 }}>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <img
-                  src={selectedBook.imageUrl}
-                  alt={selectedBook.bookTitle}
-                  style={{ width: 60, height: 90 }}
-                />
-                <Stack>
-                  <Typography>{selectedBook.bookTitle}</Typography>
-                  <Typography variant="body2">{selectedBook.author}</Typography>
-                  <Typography>{selectedBook.itemId}</Typography>
-                </Stack>
-              </Stack>
+            <Box sx={{ width: '60%', height: '250' }}>
+              <CommonBookCard
+                image={selectedBook.imageUrl}
+                title={selectedBook.bookTitle}
+                author={selectedBook.author}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  my: 1,
+                  // '& .card-media': {
+                  //   backgroundColor: '#d0d0d0',
+                  //   padding: '1rem 0',
+                  // },
+                  // '& .card-content': {
+                  //   display: 'flex',
+                  //   flexDirection: 'column',
+                  //   justifyContent: 'center',
+                  //   alignItems: 'center',
+                  // },
+                }}
+              />
             </Box>
           )}
+
           {/* 포스팅 제목 입력창 */}
           <Stack flex="0 0 auto">
             <TextField
