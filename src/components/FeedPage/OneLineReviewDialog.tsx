@@ -97,25 +97,43 @@ const OneLineReviewDialog = ({
       {/* 별점 기능 */}
       <StarRating rating={rating} onRatingChange={setRating} isDialog={true} />
       {/* 한줄평 작성 영역 */}
-      <TextField
-        fullWidth
-        multiline
-        label="한줄평"
-        variant="outlined"
-        placeholder="한줄평을 입력하세요"
-        value={review}
-        onChange={(e) => setReview(e.target.value)}
-        minRows={12}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '8px',
-            height: '200px',
-            '& textarea': {
-              height: '100% !important',
+      <Box position="relative">
+        <TextField
+          fullWidth
+          multiline
+          label="한줄평"
+          variant="outlined"
+          placeholder="한줄평을 입력하세요"
+          value={review}
+          onChange={(e) => {
+            // 50자 제한
+            if (e.target.value.length <= 50) {
+              setReview(e.target.value);
+            }
+          }}
+          minRows={12}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '8px',
+              height: '200px',
+              '& textarea': {
+                height: '100% !important',
+              },
             },
-          },
-        }}
-      />
+          }}
+        />
+        <Typography
+          variant="caption"
+          sx={{
+            position: 'absolute',
+            bottom: '8px',
+            right: '14px',
+            color: 'text.secondary',
+          }}
+        >
+          {review.length}/50
+        </Typography>
+      </Box>
     </Stack>
   );
 
