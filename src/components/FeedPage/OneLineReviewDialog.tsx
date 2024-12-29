@@ -5,6 +5,7 @@ import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
 import HybridDialog from '@components/commons/HybridDialog';
 import StarRating from '@components/commons/StarRating';
+import CommonBookCard from '@components/commons/CommonBookCard';
 
 interface OneLineReviewDialogProps {
   // 포스팅 타입 선택 다이얼로그에서 오는 Props
@@ -32,9 +33,10 @@ const OneLineReviewDialog = ({
     receivedBook || null,
   );
   const [review, setReview] = useState('');
-  const [rating, setRating] = useState<number>(receivedRating || 0);
+  const [starRating, setStarRating] = useState<number>(receivedRating || 0);
 
   const dialogOpen = selectedType ? selectedType === 'review' : !!isOpen;
+
   // 다이얼로그 닫히면 책 검색 결과 초기화
   useEffect(() => {
     if (!receivedBook && selectedType !== 'review') {
@@ -43,10 +45,11 @@ const OneLineReviewDialog = ({
       setReview('');
     }
   }, [selectedType, receivedBook]);
+
   // 상세 페이지에서 가져온 별점 적용
   useEffect(() => {
     if (receivedRating) {
-      setRating(receivedRating);
+      setStarRating(receivedRating);
     }
   }, [receivedRating]);
 
@@ -68,7 +71,14 @@ const OneLineReviewDialog = ({
   };
 
   const contentNode = (
-    <Stack sx={{ gap: '20px' }}>
+    <Stack
+      sx={{
+        gap: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       {/* 상세 페이지에서 넘어갈 시 책 검색 기능 표시하지 않음 */}
       {!receivedBook && (
         <BookSearchAutoComplete
@@ -80,24 +90,58 @@ const OneLineReviewDialog = ({
       )}
       {/* 한줄평 하고 있는 책 < 책 검색 or 책 상세 페이지 */}
       {selectedBook && (
-        <Box>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <img
-              src={selectedBook.imageUrl}
-              alt={selectedBook.bookTitle}
-              style={{ width: 60, height: 90 }}
-            />
-            <Stack>
-              <Typography>{selectedBook.bookTitle}</Typography>
-              <Typography variant="body2">{selectedBook.author}</Typography>
-            </Stack>
-          </Stack>
+        <Box
+          sx={{
+            width: '100%',
+            height: '180px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CommonBookCard
+            image={selectedBook.imageUrl}
+            title={selectedBook.bookTitle}
+            author={selectedBook.author}
+            sx={{
+              width: '80%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              my: 1,
+              '& .MuiCardMedia-root': {
+                height: '100px',
+                boxSizing: 'border-box',
+                padding: '1rem',
+              },
+              '& .MuiTypography-body1': {
+                fontSize: '14px', // 타이틀 크기 조절
+              },
+              '& .MuiTypography-body2': {
+                fontSize: '11px', // 저자 크기 조절
+              },
+              // '& .card-media': {
+              //   backgroundColor: '#d0d0d0',
+              //   padding: '1rem 0',
+              // },
+              // '& .card-content': {
+              //   display: 'flex',
+              //   flexDirection: 'column',
+              //   justifyContent: 'center',
+              //   alignItems: 'center',
+              // },
+            }}
+          />
         </Box>
       )}
       {/* 별점 기능 */}
-      <StarRating rating={rating} onRatingChange={setRating} isDialog={true} />
+      <StarRating
+        rating={starRating}
+        onRatingChange={setStarRating}
+        isDialog={true}
+      />
       {/* 한줄평 작성 영역 */}
-      <Box position="relative">
+      <Box position="relative" sx={{ width: '100%' }}>
         <TextField
           fullWidth
           multiline
