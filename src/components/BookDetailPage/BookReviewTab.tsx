@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { Box, Typography, Button, Stack } from '@mui/material';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
-import StarIcon from '@mui/icons-material/Star';
 import Grid from '@mui/material/Grid2';
 import ReviewCard from '@components/commons/DetailPageReviewCard';
 import PostCard from '@components/commons/DetailPagePostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog';
+import StarRating from '@components/commons/StarRating';
 
 // 리뷰 데이터 타입
 interface Review {
@@ -94,12 +93,6 @@ const BookReviewsTab = ({
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
     useState<boolean>(false); // 모달 열림 상태
 
-  // 별점 클릭 핸들러
-  const handleStarClick = (index: number) => {
-    setRating(index + 1); // 클릭한 별까지 선택
-    setIsOneLineReviewModalOpen(true); // 모달 열기
-  };
-
   // 모달 닫기 핸들러
   const handleModalClose = () => {
     setIsOneLineReviewModalOpen(false);
@@ -108,7 +101,16 @@ const BookReviewsTab = ({
   // 포스트, 리뷰 상세 페이지로 이동
   const handleSeeMoreClick = (type: MoreType) => {
     if (itemId) {
-      navigate(`/bookDetail/${itemId}/${type}`); // type에 따라 경로 설정
+      navigate(`/bookDetail/${itemId}/${type}`, {
+        state: {
+          bookDetails: {
+            title,
+            imageUrl,
+            author,
+            itemId,
+          },
+        },
+      });
     }
   };
   return (
@@ -148,22 +150,12 @@ const BookReviewsTab = ({
           }}
         >
           <Stack direction="row" spacing={1}>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Box
-                key={index}
-                onClick={() => handleStarClick(index)}
-                sx={{
-                  cursor: 'pointer',
-                  color: index < rating ? 'gold' : '#ccc',
-                }}
-              >
-                {index < rating ? (
-                  <StarIcon fontSize="large" />
-                ) : (
-                  <StarOutlineIcon fontSize="large" />
-                )}
-              </Box>
-            ))}
+            <StarRating
+              rating={rating}
+              onRatingChange={setRating}
+              isDialog={false}
+              openDialog={setIsOneLineReviewModalOpen} // 모달 열기 설정
+            />
           </Stack>
           <Typography
             variant="body2"
