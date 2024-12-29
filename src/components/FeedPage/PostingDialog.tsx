@@ -223,7 +223,7 @@ const PostingDialog = ({
           )}
 
           {/* 포스팅 제목 입력창 */}
-          <Stack flex="0 0 auto">
+          <Stack flex="0 0 auto" sx={{ width: '100%' }}>
             <TextField
               fullWidth
               variant="outlined"
@@ -266,6 +266,7 @@ const PostingDialog = ({
               flex: '1 1 auto',
               display: 'flex',
               flexDirection: 'column',
+              width: '100%',
             }}
           >
             <TextEditor value={content} setValue={setContent} />
