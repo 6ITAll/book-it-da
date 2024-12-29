@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid2';
 import ReviewCard from '@components/commons/DetailPageReviewCard';
 import PostCard from '@components/commons/DetailPagePostCard';
 import { useNavigate } from 'react-router-dom';
+import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog';
 
 // 리뷰 데이터 타입
 interface Review {
@@ -74,17 +75,34 @@ const posts: Post[] = [
 ];
 
 interface BookReviewTabProps {
-  itemId?: string;
+  itemId?: number;
+  title?: string;
+  author?: string;
+  imageUrl?: string;
 }
 
 type MoreType = 'posts' | 'reviews';
 
-const BookReviewsTab = ({ itemId }: BookReviewTabProps): JSX.Element => {
+const BookReviewsTab = ({
+  itemId,
+  title,
+  author,
+  imageUrl,
+}: BookReviewTabProps): JSX.Element => {
   const [rating, setRating] = useState<number>(0); // 선택된 별점 상태
   const navigate = useNavigate();
+  const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
+    useState<boolean>(false); // 모달 열림 상태
 
+  // 별점 클릭 핸들러
   const handleStarClick = (index: number) => {
     setRating(index + 1); // 클릭한 별까지 선택
+    setIsOneLineReviewModalOpen(true); // 모달 열기
+  };
+
+  // 모달 닫기 핸들러
+  const handleModalClose = () => {
+    setIsOneLineReviewModalOpen(false);
   };
 
   // 포스트, 리뷰 상세 페이지로 이동
@@ -213,6 +231,18 @@ const BookReviewsTab = ({ itemId }: BookReviewTabProps): JSX.Element => {
           ))}
         </Grid>
       </Box>
+      {/* 한줄평 작성 모달 */}
+      <OneLineReviewDialog
+        isOpen={isOneLineReviewModalOpen}
+        onClose={handleModalClose}
+        receivedBook={{
+          bookTitle: title!,
+          imageUrl: imageUrl!,
+          author: author!,
+          itemId: itemId!,
+        }}
+        receivedRating={rating}
+      />
     </Box>
   );
 };

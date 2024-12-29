@@ -1,10 +1,12 @@
 import { Stack, Button } from '@mui/material';
-
+import { useState } from 'react';
+import AddToLibraryModal from './AddToLibraryDialog';
 interface FooterButtonsProps {
   link?: string;
 }
 
 const FooterButtons = ({ link }: FooterButtonsProps): JSX.Element => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const handleGoToBuy = () => {
     console.log(link);
     if (link) {
@@ -28,7 +30,16 @@ const FooterButtons = ({ link }: FooterButtonsProps): JSX.Element => {
       >
         사러 가기
       </Button>
-      <Button sx={{ flex: 1, borderRadius: '0 0 8px 0' }}>내서재에 담기</Button>
+      <Button
+        onClick={() => setIsModalOpen(true)}
+        sx={{ flex: 1, borderRadius: '0 0 8px 0' }}
+      >
+        내서재에 담기
+      </Button>
+      <AddToLibraryModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </Stack>
   );
 };

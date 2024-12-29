@@ -99,7 +99,14 @@ const BookDetailPage = (): JSX.Element => {
               <BookIntroduceTab description={data?.item[0].description} />
             )}
             {/* 리뷰 섹션 */}
-            {currentTab === 1 && <BookReviewTab itemId={itemId} />}
+            {currentTab === 1 && (
+              <BookReviewTab
+                itemId={itemId}
+                title={data.item[0].title}
+                author={data.item[0].author}
+                imageUrl={data.item[0].cover}
+              />
+            )}
           </Box>
         </Box>
       </Container>
