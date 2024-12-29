@@ -1,12 +1,9 @@
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import { FeedType } from '@shared/types/type';
 
 interface FeedTypeFilterProps {
   feedType: FeedType;
-  onFeedTypeChange: (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: FeedType | null,
-  ) => void;
+  onFeedTypeChange: (_: React.SyntheticEvent, newValue: FeedType) => void;
 }
 
 export const FeedTypeFilter = ({
@@ -14,25 +11,22 @@ export const FeedTypeFilter = ({
   onFeedTypeChange,
 }: FeedTypeFilterProps) => {
   return (
-    <ToggleButtonGroup value={feedType} exclusive onChange={onFeedTypeChange}>
-      <ToggleButton
-        value="추천"
-        sx={{ padding: '5px 10px', fontSize: '12px', minWidth: '80px' }}
-      >
-        추천
-      </ToggleButton>
-      <ToggleButton
-        value="팔로워"
-        sx={{ padding: '5px 10px', fontSize: '12px', minWidth: '80px' }}
-      >
-        팔로워
-      </ToggleButton>
-      <ToggleButton
-        value="팔로잉"
-        sx={{ padding: '5px 10px', fontSize: '12px', minWidth: '80px' }}
-      >
-        팔로잉
-      </ToggleButton>
-    </ToggleButtonGroup>
+    <Tabs
+      value={feedType}
+      onChange={onFeedTypeChange}
+      sx={{
+        minHeight: '36px',
+        '& .MuiTab-root': {
+          minHeight: '36px',
+          fontSize: '12px',
+          minWidth: '80px',
+          padding: '5px 10px',
+        },
+      }}
+    >
+      <Tab label="추천" value="추천" />
+      <Tab label="팔로워" value="팔로워" />
+      <Tab label="팔로잉" value="팔로잉" />
+    </Tabs>
   );
 };

@@ -51,10 +51,10 @@ const Main = (): JSX.Element => {
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링 > 추후 interface 확립 후 변경
   const handleFeedTypeChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newValue: FeedType | null,
+    _: React.SyntheticEvent,
+    newValue: FeedType,
   ) => {
-    setFeedType(newValue || '추천');
+    setFeedType(newValue);
     setHasMore(true);
     setFilterKey((prev) => prev + 1);
     window.scrollTo(0, 0);
@@ -127,11 +127,15 @@ const Main = (): JSX.Element => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'flex-end',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          mb: '2rem',
+          mb: '1rem',
         }}
       >
+        <FeedTypeFilter
+          feedType={feedType}
+          onFeedTypeChange={handleFeedTypeChange}
+        />
         <Button
           variant="outlined"
           onClick={() => setWriteDialogOpen(true)}
@@ -144,28 +148,26 @@ const Main = (): JSX.Element => {
           setWriteDialogOpen={setWriteDialogOpen}
         />
       </Stack>
+      <Divider
+        sx={{
+          mt: '0',
+          marginBottom: '1rem',
+        }}
+      />
       <Box
         sx={{
           padding: '0 1rem',
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: 'column',
           justifyContent: 'space-between',
+          gap: '10px',
         }}
       >
-        <FeedTypeFilter
-          feedType={feedType}
-          onFeedTypeChange={handleFeedTypeChange}
-        />
         <PostTypeFilter
           postType={postType}
           onPostTypeChange={handlePostTypeChange}
         />
       </Box>
-      <Divider
-        sx={{
-          margin: '1rem 0',
-        }}
-      />
       <InfiniteScroll
         key={filterKey}
         dataLength={posts.length}
