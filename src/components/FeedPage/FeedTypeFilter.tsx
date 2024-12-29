@@ -1,5 +1,7 @@
 import { Tab, Tabs } from '@mui/material';
 import { FeedType } from '@shared/types/type';
+import { FEED_TYPE_TABS } from 'src/constants';
+import { styles } from './FeedTypeFilter.styles';
 
 interface FeedTypeFilterProps {
   feedType: FeedType;
@@ -14,19 +16,11 @@ export const FeedTypeFilter = ({
     <Tabs
       value={feedType}
       onChange={onFeedTypeChange}
-      sx={{
-        minHeight: '36px',
-        '& .MuiTab-root': {
-          minHeight: '36px',
-          fontSize: '12px',
-          minWidth: '80px',
-          padding: '5px 10px',
-        },
-      }}
+      sx={styles.feedTypeFilter}
     >
-      <Tab label="추천" value="추천" />
-      <Tab label="팔로워" value="팔로워" />
-      <Tab label="팔로잉" value="팔로잉" />
+      {FEED_TYPE_TABS.map(({ label, value }) => (
+        <Tab key={value} label={label} value={value} />
+      ))}
     </Tabs>
   );
 };

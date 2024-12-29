@@ -1,5 +1,6 @@
 import { Button, Stack } from '@mui/material';
 import { PostType } from '@shared/types/type';
+import { styles } from './PostTypeFilter.styles';
 
 interface PostTypeFilterProps {
   postType: PostType | '';
@@ -9,42 +10,25 @@ interface PostTypeFilterProps {
   ) => void;
 }
 
+const POST_TYPES = ['한줄평', '포스팅'] as const;
+
 export const PostTypeFilter = ({
   postType,
   onPostTypeChange,
 }: PostTypeFilterProps) => {
   return (
     <Stack direction="row" spacing={1}>
-      <Button
-        variant={postType === '한줄평' ? 'contained' : 'outlined'}
-        size="small"
-        onClick={(e) =>
-          onPostTypeChange(e, postType === '한줄평' ? '' : '한줄평')
-        }
-        sx={{
-          fontSize: '12px',
-          padding: '5px 10px',
-          minWidth: '80px',
-          borderRadius: '20px',
-        }}
-      >
-        한줄평
-      </Button>
-      <Button
-        variant={postType === '포스팅' ? 'contained' : 'outlined'}
-        size="small"
-        onClick={(e) =>
-          onPostTypeChange(e, postType === '포스팅' ? '' : '포스팅')
-        }
-        sx={{
-          fontSize: '12px',
-          padding: '5px 10px',
-          minWidth: '80px',
-          borderRadius: '20px',
-        }}
-      >
-        포스팅
-      </Button>
+      {POST_TYPES.map((type) => (
+        <Button
+          key={type}
+          variant={postType === type ? 'contained' : 'outlined'}
+          size="small"
+          onClick={(e) => onPostTypeChange(e, postType === type ? '' : type)}
+          sx={styles.filterButton}
+        >
+          {type}
+        </Button>
+      ))}
     </Stack>
   );
 };
