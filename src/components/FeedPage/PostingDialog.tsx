@@ -197,26 +197,46 @@ const PostingDialog = ({
         >
           {/* 글감 선택 시 */}
           {selectedBook && (
-            <Box sx={{ width: '60%', height: '250' }}>
+            <Box
+              sx={{
+                width: '90%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mt: '1rem',
+                padding: '0',
+              }}
+            >
               <CommonBookCard
                 image={selectedBook.imageUrl}
                 title={selectedBook.bookTitle}
                 author={selectedBook.author}
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  my: 1,
-                  // '& .card-media': {
-                  //   backgroundColor: '#d0d0d0',
-                  //   padding: '1rem 0',
-                  // },
-                  // '& .card-content': {
-                  //   display: 'flex',
-                  //   flexDirection: 'column',
-                  //   justifyContent: 'center',
-                  //   alignItems: 'center',
-                  // },
+                  width: '100%',
+                  display: 'flex !important',
+                  flexDirection: 'row !important',
+                  backgroundColor: 'transparent',
+                  padding: '1rem',
+                  height: '60px',
+                  '& .MuiCardMedia-root': {
+                    width: '80px',
+                    height: '100%',
+                    padding: 'auto',
+                    borderRadius: '0',
+                  },
+                  '& .MuiCardContent-root': {
+                    flex: 1,
+                    padding: '0.5rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  },
+                  '& .MuiTypography-body1': {
+                    fontSize: '14px',
+                  },
+                  '& .MuiTypography-body2': {
+                    fontSize: '11px',
+                  },
                 }}
               />
             </Box>
