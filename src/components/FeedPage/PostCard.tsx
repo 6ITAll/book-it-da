@@ -266,13 +266,13 @@ const PostCard = ({
               variant="body2"
               fontSize="13px"
               sx={{
-                height: '80px',
+                height: 'auto',
                 padding: '0.25rem 0.5rem',
                 color: '#333',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 display: '-webkit-box',
-                WebkitLineClamp: 4,
+                WebkitLineClamp: 6,
                 WebkitBoxOrient: 'vertical',
                 wordBreak: 'break-all',
                 lineHeight: '20px',
