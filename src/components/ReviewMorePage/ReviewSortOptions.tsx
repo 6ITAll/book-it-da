@@ -1,5 +1,9 @@
-import React from 'react';
-import { FormControl, Select, MenuItem } from '@mui/material';
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
 
 interface ReviewSortOptionsProps {
   value: string;
@@ -10,10 +14,9 @@ const ReviewSortOptions = ({
   value,
   onChange,
 }: ReviewSortOptionsProps): JSX.Element => {
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     onChange(event.target.value as string);
   };
-
   return (
     <FormControl size="small" sx={{ minWidth: 150 }}>
       <Select labelId="sort-label" value={value} onChange={handleChange}>
