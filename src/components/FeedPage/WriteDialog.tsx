@@ -1,7 +1,7 @@
 import HybridDialog from '@components/commons/HybridDialog';
 import { Button, Stack } from '@mui/material';
 import { useState } from 'react';
-import PostingDialog from './PostingDialog';
+import PostingDialog from './PostingDialog/PostingDialog';
 import OneLineReviewDialog from './OneLineReviewDialog/OneLineReviewDialog';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
