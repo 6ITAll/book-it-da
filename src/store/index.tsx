@@ -2,10 +2,10 @@ import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import { bookSearchApi } from '@features/BookSearchPage/api/bookSearchApi';
 import { bestBookGetApi } from '@features/BookSearchPage/api/bestBookGetApi';
-import { libraryApi } from '@features/MyPage/api';
 import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
+import { libraryApi } from '@features/MyPage/api';
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +21,8 @@ export const store = configureStore({
     getDefaultMiddleware().concat([
       bookSearchApi.middleware,
       bestBookGetApi.middleware,
+      bookDetailApi.middleware,
+      libraryApi.middleware,
     ]),
 });
 
