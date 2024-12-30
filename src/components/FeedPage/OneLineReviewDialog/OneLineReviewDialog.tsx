@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { PostType } from '../WriteDialog';
+import { PostType } from '@shared/types/type';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
 import HybridDialog from '@components/commons/HybridDialog';
@@ -40,7 +40,7 @@ const OneLineReviewDialog = ({
     receivedRating || REVIEW_DIALOG.DEFAULT_STAR_RATING,
   );
 
-  const dialogOpen = selectedType ? selectedType === 'review' : !!isOpen;
+  const dialogOpen = selectedType ? selectedType === '한줄평' : !!isOpen;
 
   // 다이얼로그 초기화 함수
   const resetState = () => {
@@ -52,7 +52,7 @@ const OneLineReviewDialog = ({
 
   // 다이얼로그 닫히면 책 검색 결과 초기화
   useEffect(() => {
-    if (!receivedBook && selectedType !== 'review') {
+    if (!receivedBook && selectedType !== '한줄평') {
       resetState();
     }
   }, [selectedType, receivedBook]);

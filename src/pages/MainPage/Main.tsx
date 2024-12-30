@@ -28,7 +28,7 @@ import {
   generateRandomTimeAgo,
 } from '@components/FeedPage/mockPosts';
 import CreateIcon from '@mui/icons-material/Create';
-import WriteDialog from '@components/FeedPage/WriteDialog';
+import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
 
 const Main = (): JSX.Element => {
   const [posts, setPosts] = useState<Post[]>(mockPosts);
@@ -36,7 +36,7 @@ const Main = (): JSX.Element => {
   const [postType, setPostType] = useState<PostType | ''>('');
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [filterKey, setFilterKey] = useState(0);
-  const [writeDialogOpen, setWriteDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
   const handlePostTypeChange = (
@@ -138,14 +138,14 @@ const Main = (): JSX.Element => {
         />
         <Button
           variant="outlined"
-          onClick={() => setWriteDialogOpen(true)}
+          onClick={() => setDialogOpen(true)}
           endIcon={<CreateIcon />}
         >
           글쓰기
         </Button>
-        <WriteDialog
-          writeDialogOpen={writeDialogOpen}
-          setWriteDialogOpen={setWriteDialogOpen}
+        <PostTypeSelectDialog
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
         />
       </Stack>
       <Divider

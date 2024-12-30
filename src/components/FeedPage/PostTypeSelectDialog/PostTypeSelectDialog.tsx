@@ -1,33 +1,32 @@
 import HybridDialog from '@components/commons/HybridDialog';
 import { Button, Stack } from '@mui/material';
 import { useState } from 'react';
-import PostingDialog from './PostingDialog/PostingDialog';
-import OneLineReviewDialog from './OneLineReviewDialog/OneLineReviewDialog';
+import PostingDialog from '../PostingDialog/PostingDialog';
+import OneLineReviewDialog from '../OneLineReviewDialog/OneLineReviewDialog';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { PostType } from '@shared/types/type';
 
-export type PostType = 'post' | 'review' | null;
-
-interface WriteDialogProps {
-  writeDialogOpen: boolean;
-  setWriteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+interface PostTypeSelectDialogProps {
+  dialogOpen: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const WriteDialog = ({
-  writeDialogOpen,
-  setWriteDialogOpen,
-}: WriteDialogProps) => {
+const PostTypeSelectDialog = ({
+  dialogOpen,
+  setDialogOpen,
+}: PostTypeSelectDialogProps) => {
   const [selectedType, setSelectedType] = useState<PostType>(null);
 
   const handleTypeSelect = (type: PostType) => {
     setSelectedType(type);
-    setWriteDialogOpen(false); // 첫 번째 모달 닫기
+    setDialogOpen(false); // 첫 번째 모달 닫기
   };
 
   const handleBack = () => {
     setSelectedType(() => null);
-    setWriteDialogOpen(true);
+    setDialogOpen(true);
   };
 
   const contentNode = (
@@ -54,7 +53,7 @@ const WriteDialog = ({
         fullWidth
         startIcon={<PostAddIcon />}
         endIcon={<ChevronRightIcon />}
-        onClick={() => handleTypeSelect('post')}
+        onClick={() => handleTypeSelect('포스팅')}
       >
         포스팅 작성
       </Button>
@@ -63,7 +62,7 @@ const WriteDialog = ({
         fullWidth
         startIcon={<BorderColorIcon />}
         endIcon={<ChevronRightIcon />}
-        onClick={() => handleTypeSelect('review')}
+        onClick={() => handleTypeSelect('한줄평')}
       >
         한줄평 작성
       </Button>
@@ -73,8 +72,8 @@ const WriteDialog = ({
   return (
     <>
       <HybridDialog
-        open={writeDialogOpen}
-        setOpen={setWriteDialogOpen}
+        open={dialogOpen}
+        setOpen={setDialogOpen}
         title="포스트 타입"
         contentNode={contentNode}
         maxWidth="xs"
@@ -96,4 +95,4 @@ const WriteDialog = ({
   );
 };
 
-export default WriteDialog;
+export default PostTypeSelectDialog;

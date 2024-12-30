@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { PostType } from '../WriteDialog';
+import { PostType } from '@shared/types/type';
 import { Book } from '@shared/types/type';
 import HybridDialog from '@components/commons/HybridDialog';
 import { styles } from './PostingDialog.styles';
@@ -45,7 +45,7 @@ const PostingDialog = ({
 
   // 다이얼로그 닫히면 상태 초기화
   useEffect(() => {
-    if (selectedType !== 'post') {
+    if (selectedType !== '포스팅') {
       resetState();
     }
   }, [selectedType]);
@@ -76,7 +76,7 @@ const PostingDialog = ({
     <HybridDialog
       title="포스팅 작성"
       contentNode={contentNode}
-      open={selectedType === 'post'}
+      open={selectedType === '포스팅'}
       setOpen={() => setSelectedType(null)}
       onBack={handleBack}
       action="포스팅 작성"
