@@ -4,6 +4,7 @@ import SignupPage from './pages/LoginSignupPage/SignupPage';
 import FeedPage from './pages/MainPage/Main';
 import BookSearchPage from './pages/BookSearchPage/BookSearch';
 import MyPage from './pages/MyPage/MyPage';
+import PostingDetailPage from '@pages/PostDetailPage/PostingDetailPage';
 import './App.css';
 
 const App: React.FC = () => {
@@ -45,6 +46,10 @@ const App: React.FC = () => {
               <Route path="/feed" element={<FeedPage />} />
               <Route path="/search" element={<BookSearchPage />} />
               <Route path="/my-page/:userId?" element={<MyPage />} />
+              <Route
+                path="/posting/:postingId?"
+                element={<PostingDetailPage />}
+              />
               <Route path="/" element={<FeedPage />} />
             </Routes>
           </main>
