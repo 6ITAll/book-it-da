@@ -48,10 +48,10 @@ jobs:
         run: |
           echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
           echo "Cache key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}"
-      - name: Check node_modules
-        run: ls -la node_modules/.bin/
       - name: Check Playwright cache
         run: ls -la ~/.cache/ms-playwright || echo "Playwright cache not found"
+      - name: Check node_modules
+        run: ls -la node_modules/.bin/
       - name: Build Storybook
         run: npm run build-storybook --quiet
       - name: Serve Storybook and run tests
