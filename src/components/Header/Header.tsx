@@ -1,9 +1,11 @@
-import { useState, KeyboardEvent, useEffect } from 'react';
+import { useState, KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
 
 const HeaderContainer = styled('header')(({ theme }) => ({
   display: 'flex',
@@ -42,16 +44,14 @@ const IconWrapper = styled('div')({
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-  }, []);
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
+    if (showSearchBar) {
+      setSearchQuery('');
+    }
   };
 
   const handleSearch = () => {
@@ -83,7 +83,7 @@ const Header = (): JSX.Element => {
               placeholder="책 검색..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyPress={handleKeyPress} // 엔터 키 이벤트 처리
             />
           )}
           <IconWrapper onClick={showSearchBar ? handleSearch : toggleSearchBar}>

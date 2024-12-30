@@ -1,6 +1,7 @@
 const RoutePaths = {
   MAIN: '/',
-  LOGIN_SIGNUP: '/login-signup',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
   FEED: '/feed',
   SEARCH: '/search',
   MY_PAGE: '/my-page',

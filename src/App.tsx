@@ -12,7 +12,7 @@ const App = (): JSX.Element => {
           <AppRouter />
         </main>
         <footer className="footer">
-          <p>&copy; 2024 육잇다 All rights reserved.</p>
+          <p>© 2024 육잇다 All rights reserved.</p>
         </footer>
       </div>
     </Router>
