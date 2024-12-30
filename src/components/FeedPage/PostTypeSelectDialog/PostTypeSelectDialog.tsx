@@ -1,12 +1,11 @@
 import HybridDialog from '@components/commons/HybridDialog';
-import { Button, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useState } from 'react';
 import PostingDialog from '../PostingDialog/PostingDialog';
 import OneLineReviewDialog from '../OneLineReviewDialog/OneLineReviewDialog';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { PostType } from '@shared/types/type';
+import { POST_TYPE_OPTIONS } from 'src/constants';
+import PostTypeButton from './PostTypeButton';
 
 interface PostTypeSelectDialogProps {
   dialogOpen: boolean;
@@ -30,42 +29,16 @@ const PostTypeSelectDialog = ({
   };
 
   const contentNode = (
-    <Stack
-      spacing={0}
-      sx={{
-        '& .MuiButton-root': {
-          py: 2,
-          justifyContent: 'space-between',
-          backgroundColor: 'transparent',
-          border: 'none',
-          '&:hover': {
-            backgroundColor: '#e0e0e0',
-            border: 'none',
-          },
-          '& .MuiButton-startIcon': {
-            marginRight: 1, // 아이콘과 텍스트 사이 간격 줄임
-          },
-        },
-      }}
-    >
-      <Button
-        variant="outlined"
-        fullWidth
-        startIcon={<PostAddIcon />}
-        endIcon={<ChevronRightIcon />}
-        onClick={() => handleTypeSelect('포스팅')}
-      >
-        포스팅 작성
-      </Button>
-      <Button
-        variant="outlined"
-        fullWidth
-        startIcon={<BorderColorIcon />}
-        endIcon={<ChevronRightIcon />}
-        onClick={() => handleTypeSelect('한줄평')}
-      >
-        한줄평 작성
-      </Button>
+    <Stack spacing={0}>
+      {POST_TYPE_OPTIONS.map(({ type, label, icon }) => (
+        <PostTypeButton
+          key={type}
+          type={type}
+          label={label}
+          icon={icon}
+          onSelect={handleTypeSelect}
+        />
+      ))}
     </Stack>
   );
 
