@@ -28,6 +28,10 @@ jobs:
         run: npm install
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
+      - name: Check cache status
+        run: |
+          echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
+          echo "Cache key: ${{ runner.os }}-npm-v1-${{ hashFiles('**/package-lock.json') }}"
       - name: Check node_modules
         run: ls -la node_modules/.bin/
 
@@ -40,6 +44,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Check cache status
+        run: |
+          echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
+          echo "Cache key: ${{ runner.os }}-npm-v1-${{ hashFiles('**/package-lock.json') }}"
       - name: Check node_modules
         run: ls -la node_modules/.bin/
       - name: Build Storybook
