@@ -28,6 +28,8 @@ jobs:
         run: npm install
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
+      - name: Check node_modules
+        run: ls -la node_modules/.bin/
 
   # Run interaction and accessibility tests
   interaction-and-accessibility:
@@ -38,6 +40,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Check node_modules
+        run: ls -la node_modules/.bin/
       - name: Build Storybook
         run: npm run build-storybook --quiet
       - name: Serve Storybook and run tests
