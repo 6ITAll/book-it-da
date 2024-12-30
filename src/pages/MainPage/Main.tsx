@@ -20,8 +20,8 @@ import {
 
 import PostCard from '@components/FeedPage/PostCard/PostCard';
 import ScrollToTop from '@components/commons/ScrollToTop';
-import { FeedTypeFilter } from '@components/FeedPage/FeedTypeFilter';
-import { PostTypeFilter } from '@components/FeedPage/PostTypeFilter';
+import { FeedTypeFilter } from '@components/FeedPage/Filters/FeedTypeFilter';
+import { PostTypeFilter } from '@components/FeedPage/Filters/PostTypeFilter';
 import { Post, PostType, FeedType } from '@shared/types/type';
 import {
   generateRandomPostType,
