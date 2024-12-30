@@ -31,17 +31,6 @@ jobs:
       - name: Save cache after installation
         if: steps.npm-cache.outputs.cache-hit != 'true'
         uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/ms-playwright
-            node_modules
-          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
-      - name: Check cache status
-        run: |
-          echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
-          echo "Cache key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}"
-      - name: Check Playwright cache
-        run: ls -la ~/.cache/ms-playwright || echo "Playwright cache not found"
 
   # Run interaction and accessibility tests
   interaction-and-accessibility:
@@ -52,14 +41,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check cache status
-        run: |
-          echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
-          echo "Cache key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}"
-      - name: Check Playwright cache
-        run: ls -la ~/.cache/ms-playwright || echo "Playwright cache not found"
-      - name: Check node_modules
-        run: ls -la node_modules/.bin/
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
       - name: Build Storybook
         run: npm run build-storybook --quiet
       - name: Serve Storybook and run tests
@@ -77,6 +68,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
       - name: Publish to Chromatic
         uses: chromaui/action@latest
         with:
@@ -91,6 +92,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
       - name: Start the development server
         run: npm run dev &
       - name: Check for Playwright tests
@@ -113,6 +124,16 @@ jobs:
     steps:
       - name: Checkout Commit
         uses: actions/checkout@v4
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
       - name: Build Storybook
         run: npm run build-storybook
       - name: Run Storybook tests with coverage
