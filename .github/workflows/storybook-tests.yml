@@ -32,8 +32,8 @@ jobs:
         run: |
           echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
           echo "Cache key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}"
-      - name: Check node_modules
-        run: ls -la node_modules/.bin/
+      - name: Check Playwright Caching Path
+        run: echo $(npx playwright install --dry-run)
 
   # Run interaction and accessibility tests
   interaction-and-accessibility:
