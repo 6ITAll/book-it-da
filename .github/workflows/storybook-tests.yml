@@ -18,7 +18,7 @@ jobs:
         id: npm-cache
         with:
           path: |
-            ~/.cache/Playwright
+            ~/.cache/ms-playwright
             node_modules
           key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
@@ -32,8 +32,6 @@ jobs:
         run: |
           echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
           echo "Cache key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}"
-      - name: Check Playwright Caching Path
-        run: echo $(npx playwright install --dry-run)
 
   # Run interaction and accessibility tests
   interaction-and-accessibility:
