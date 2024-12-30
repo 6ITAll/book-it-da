@@ -10,23 +10,25 @@ interface PostingUserInfoProps {
   currentUserId: number;
 }
 
+const styles = {
+  userInfoBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    p: 1,
+    mb: 3,
+    width: '100%',
+    borderBottom: '1px solid #eee',
+  },
+};
+
 const PostingUserInfo = ({
   user,
   createdAt,
   currentUserId,
 }: PostingUserInfoProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        p: 1,
-        mb: 3,
-        width: '100%',
-        borderBottom: '1px solid #eee',
-      }}
-    >
+    <Box sx={styles.userInfoBox}>
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar src={user.avatarUrl} />
         <Stack>

@@ -6,8 +6,11 @@ import mockPost from '@components/PostDetailPage/mockPosting';
 import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostDetailPage/PostingContent';
 import PostingHeader from '@components/PostDetailPage/PostingHeader';
-import UserOtherPosts from '@components/PostDetailPage/UserOtherPosting';
-import BookOtherPosts from '@components/PostDetailPage/BookOtherPosting';
+import OtherPostingGrid from '@components/PostDetailPage/OtherPostingGrid';
+import {
+  mockBookOtherPosting,
+  mockUserOtherPosting,
+} from '@components/PostDetailPage/mockOtherPosting';
 
 // 추후 타입 정리 필요
 interface Posting {
@@ -92,8 +95,14 @@ const PostingDetailPage = () => {
         <PostingContent content={post.content} book={post.book} />
       </Stack>
       <Stack>
-        <UserOtherPosts />
-        <BookOtherPosts />
+        <OtherPostingGrid
+          title="이 책의 다른 포스팅"
+          posts={mockBookOtherPosting}
+        />
+        <OtherPostingGrid
+          title="사용자의 다른 포스팅"
+          posts={mockUserOtherPosting}
+        />
       </Stack>
       <PostingShareDialog
         open={openShareDialog}
