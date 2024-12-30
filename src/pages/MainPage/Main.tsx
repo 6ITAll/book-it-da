@@ -18,7 +18,7 @@ import {
   getRandomBook,
 } from '@components/FeedPage/mockPosts';
 
-import PostCard from '@components/FeedPage/PostCard';
+import PostCard from '@components/FeedPage/PostCard/PostCard';
 import ScrollToTop from '@components/commons/ScrollToTop';
 import { FeedTypeFilter } from '@components/FeedPage/FeedTypeFilter';
 import { PostTypeFilter } from '@components/FeedPage/PostTypeFilter';
