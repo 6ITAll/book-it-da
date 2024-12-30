@@ -1,92 +1,106 @@
-import { Box, Typography, Card, CardContent, Stack } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Stack,
+  Button,
+  Avatar,
+} from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { mockUserOtherPosting } from './mockUserOtherPosting';
-import Carousel from '@components/commons/Carousel';
 
 const UserOtherPosts = () => {
-  const carouselSettings = {
-    slidesToShow: 3,
-    dots: true,
-    infinite: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          arrows: false,
-          dots: false,
-          infinite: true,
-        },
-      },
-    ],
-  };
-
   return (
-    <Box sx={{ width: '100%', my: 5, px: 4 }}>
+    <Box
+      sx={{
+        width: '100%',
+        my: 5,
+        px: 4,
+        boxSizing: 'border-box',
+      }}
+    >
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
         사용자의 다른 포스팅
       </Typography>
-      <Carousel settings={carouselSettings}>
-        {/* 포스트 카드 공통 컴포넌트로 교체 */}
-        {mockUserOtherPosting.map((post) => (
-          <Box key={post.id} sx={{ px: 1 }}>
+      <Grid container spacing={2}>
+        {mockUserOtherPosting.map((post, index) => (
+          <Grid
+            key={index}
+            size={{ xs: 12, md: 4 }}
+            sx={{ display: 'flex', flexDirection: 'column' }}
+          >
             <Card
               sx={{
-                height: '200px',
-                transition: 'box-shadow 0.3s ease-in-out',
-                '&:hover': {
-                  boxShadow: 3,
-                },
-                padding: '1rem',
-                backgroundColor: '#fafafa',
+                borderRadius: '12px',
+                boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e7e8e9',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
               }}
             >
+              <CardContent sx={{ flex: 1 }}>
+                <Typography
+                  variant="body1"
+                  fontWeight="bold"
+                  gutterBottom
+                  sx={{ marginBottom: '1rem' }}
+                >
+                  {post.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    marginBottom: '1rem',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 4,
+                    overflow: 'hidden',
+                  }}
+                >
+                  {post.content}
+                </Typography>
+              </CardContent>
               <CardContent>
-                <Stack spacing={2}>
-                  <Box
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                  sx={{ borderTop: '1px solid #e7e8e9', paddingTop: '1rem' }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Avatar
+                      src={post.user.avatarUrl}
+                      alt={post.user.name}
+                      sx={{ width: 40, height: 40 }}
+                    />
+                    <Typography variant="body2" fontWeight="bold">
+                      {post.book.author}
+                    </Typography>
+                  </Stack>
+                  <Button
+                    size="small"
+                    variant="contained"
                     sx={{
-                      height: '120px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      overflow: 'hidden',
-                      '& img': {
-                        height: '100%',
-                        objectFit: 'contain',
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      borderRadius: '16px',
+                      '&:hover': {
+                        backgroundColor: '#555',
                       },
                     }}
                   >
-                    <img src={post.book.imageUrl} alt={post.book.title} />
-                  </Box>
-                  <Stack spacing={1}>
-                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
-                      {post.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {post.book.title} - {post.book.author}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                      }}
-                    >
-                      {post.content}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </Typography>
-                  </Stack>
+                    팔로우
+                  </Button>
                 </Stack>
               </CardContent>
             </Card>
-          </Box>
+          </Grid>
         ))}
-      </Carousel>
+      </Grid>
     </Box>
   );
 };

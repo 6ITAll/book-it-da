@@ -5,114 +5,95 @@ import {
   CardContent,
   Stack,
   Avatar,
+  Button,
 } from '@mui/material';
 import { mockBookOtherPosting } from './mockBookOtherPosting';
-import Carousel from '@components/commons/Carousel';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import Grid from '@mui/material/Grid2';
 
 const BookOtherPosts = () => {
-  const carouselSettings = {
-    slidesToShow: 3,
-    dots: true,
-    infinite: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          arrows: false,
-          dots: false,
-          infinite: true,
-        },
-      },
-    ],
-  };
-
   return (
-    <Box sx={{ width: '100%', my: 5, px: 4 }}>
+    <Box sx={{ width: '100%', my: 5, px: 4, boxSizing: 'border-box' }}>
       <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
         이 책의 다른 포스팅
       </Typography>
-      <Carousel settings={carouselSettings}>
-        {mockBookOtherPosting.map((post) => (
-          <Box key={post.id} sx={{ px: 1 }}>
+      <Grid container spacing={2}>
+        {mockBookOtherPosting.map((post, index) => (
+          <Grid
+            key={index}
+            size={{ xs: 12, md: 4 }}
+            sx={{ display: 'flex', flexDirection: 'column' }}
+          >
             <Card
               sx={{
-                height: '200px',
-                transition: 'all 0.3s ease-in-out',
-                '&:hover': {
-                  boxShadow: 3,
-                  transform: 'scale(1.05)',
-                },
-                padding: '1rem',
-                backgroundColor: '#fafafa',
+                borderRadius: '12px',
+                boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)',
+                border: '1px solid #e7e8e9',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
               }}
             >
+              <CardContent sx={{ flex: 1 }}>
+                <Typography
+                  variant="body1"
+                  fontWeight="bold"
+                  gutterBottom
+                  sx={{ marginBottom: '1rem' }}
+                >
+                  {post.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    marginBottom: '1rem',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 4,
+                    overflow: 'hidden',
+                  }}
+                >
+                  {post.content}
+                </Typography>
+              </CardContent>
               <CardContent>
-                <Stack spacing={2}>
-                  <Stack direction="row" spacing={1} alignItems="center">
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                  sx={{ borderTop: '1px solid #e7e8e9', paddingTop: '1rem' }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={2}>
                     <Avatar
                       src={post.user.avatarUrl}
-                      sx={{ width: 32, height: 32 }}
+                      alt={post.user.name}
+                      sx={{ width: 40, height: 40 }}
                     />
-                    <Typography variant="body2" fontWeight="medium">
+                    <Typography variant="body2" fontWeight="bold">
                       {post.user.name}
                     </Typography>
                   </Stack>
-                  <Stack spacing={1}>
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="bold"
-                      sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {post.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        height: '40px',
-                      }}
-                    >
-                      {post.content}
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
+                  <Button
+                    size="small"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#333',
+                      color: '#fff',
+                      borderRadius: '16px',
+                      '&:hover': {
+                        backgroundColor: '#555',
+                      },
+                    }}
                   >
-                    <Typography variant="caption" color="text.secondary">
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </Typography>
-                    <Stack direction="row" spacing={0.5} alignItems="center">
-                      <FavoriteIcon
-                        sx={{
-                          fontSize: 16,
-                          color: 'error.main',
-                        }}
-                      />
-                      <Typography variant="caption" color="text.secondary">
-                        {post.likeCount}
-                      </Typography>
-                    </Stack>
-                  </Stack>
+                    팔로우
+                  </Button>
                 </Stack>
               </CardContent>
             </Card>
-          </Box>
+          </Grid>
         ))}
-      </Carousel>
+      </Grid>
     </Box>
   );
 };

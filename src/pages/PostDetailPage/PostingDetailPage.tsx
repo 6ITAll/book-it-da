@@ -52,8 +52,9 @@ const PostingDetailPage = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '0',
+        px: '0',
         backgroundColor: '#f0f0f0',
+        boxSizing: 'border-box',
       }}
     >
       {/* 포스팅 헤더 */}
@@ -70,7 +71,10 @@ const PostingDetailPage = () => {
         sx={{
           px: 4,
           pt: 3,
-          width: '60%',
+          width: {
+            xs: '100%',
+            md: '50%',
+          },
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',

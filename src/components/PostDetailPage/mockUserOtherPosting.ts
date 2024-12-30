@@ -18,6 +18,11 @@ export const mockUserOtherPosting = [
       author: '무라카미 하루키',
       imageUrl: IMAGES.sample1,
     },
+    user: {
+      id: 1,
+      name: 'John Doe',
+      avatarUrl: IMAGES.sample4,
+    },
   },
   {
     id: 3,
@@ -30,6 +35,11 @@ export const mockUserOtherPosting = [
       author: '무라카미 하루키',
       imageUrl: IMAGES.sample2,
     },
+    user: {
+      id: 1,
+      name: 'John Doe',
+      avatarUrl: IMAGES.sample4,
+    },
   },
   {
     id: 4,
@@ -41,6 +51,11 @@ export const mockUserOtherPosting = [
       title: '상실의 시대',
       author: '무라카미 하루키',
       imageUrl: IMAGES.sample3,
+    },
+    user: {
+      id: 1,
+      name: 'John Doe',
+      avatarUrl: IMAGES.sample4,
     },
   },
 ];
