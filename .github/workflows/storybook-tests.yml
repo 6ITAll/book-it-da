@@ -71,7 +71,17 @@ jobs:
           fetch-depth: 0
       - name: Start the development server
         run: npm run dev &
+      - name: Check for Playwright tests
+        id: check-tests
+        run: |
+          if [ -z "$(find tests -name '*.spec.ts' -or -name '*.spec.js')" ]; then
+            echo "No Playwright tests found"
+            echo "TESTS_FOUND=false" >> $GITHUB_ENV
+          else
+            echo "TESTS_FOUND=true" >> $GITHUB_ENV
+          fi
       - name: Run Playwright tests
+        if: env.TESTS_FOUND == 'true'
         run: npx playwright test
 
   # Generate and upload code coverage report from Storybook tests
