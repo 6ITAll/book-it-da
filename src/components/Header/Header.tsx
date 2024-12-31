@@ -3,9 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import { styled } from '@mui/material/styles';
-import { Button } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { Button, Menu, MenuItem } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
+import { logoutSuccess } from '@store/userSlice/userSlice';
 
 const HeaderContainer = styled('header')(({ theme }) => ({
   display: 'flex',
@@ -44,8 +45,12 @@ const IconWrapper = styled('div')({
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const open = Boolean(anchorEl);
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
@@ -71,6 +76,29 @@ const Header = (): JSX.Element => {
   const handleLoginClick = () => {
     navigate('/login');
   };
+  const handleProfileClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutSuccess());
+    handleClose();
+    navigate('/');
+  };
+
+  const handleMyPage = () => {
+    navigate('/my-page');
+    handleClose();
+  };
+
+  const handleEditProfile = () => {
+    navigate('/edit-profile');
+    handleClose();
+  };
 
   return (
     <HeaderContainer>
@@ -83,7 +111,7 @@ const Header = (): JSX.Element => {
               placeholder="책 검색..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleKeyPress} // 엔터 키 이벤트 처리
+              onKeyPress={handleKeyPress}
             />
           )}
           <IconWrapper onClick={showSearchBar ? handleSearch : toggleSearchBar}>
@@ -91,17 +119,24 @@ const Header = (): JSX.Element => {
           </IconWrapper>
         </SearchContainer>
         {isLoggedIn ? (
-          <IconWrapper>
-            <Link
-              to="/my-page"
-              style={{
-                color: 'inherit',
-                textDecoration: 'none',
+          <div>
+            <IconWrapper onClick={handleProfileClick}>
+              <PersonIcon />
+            </IconWrapper>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
               }}
             >
-              <PersonIcon />
-            </Link>
-          </IconWrapper>
+              <MenuItem onClick={handleMyPage}>마이페이지</MenuItem>
+              <MenuItem onClick={handleEditProfile}>프로필 편집</MenuItem>
+              <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
+            </Menu>
+          </div>
         ) : (
           <Button onClick={handleLoginClick} variant="outlined" color="primary">
             로그인
