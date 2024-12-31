@@ -1,4 +1,4 @@
-import HybridDialog from '@components/commons/HybridDialog';
+import NonTitleDialog from '@components/commons/NonTitleDialog';
 import { Button, Stack } from '@mui/material';
 import { useState } from 'react';
 import PostingDialog from './PostingDialog';
@@ -30,7 +30,7 @@ const WriteDialog = ({
   };
 
   const contentNode = (
-    <Stack spacing={2}>
+    <Stack spacing={2} paddingY={2}>
       <Button
         variant="outlined"
         fullWidth
@@ -52,10 +52,9 @@ const WriteDialog = ({
 
   return (
     <>
-      <HybridDialog
+      <NonTitleDialog
         open={writeDialogOpen}
         setOpen={setWriteDialogOpen}
-        title="포스트 타입"
         contentNode={contentNode}
         maxWidth="xs"
       />
