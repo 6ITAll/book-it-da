@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookCard';
+import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookcard/ShelvesBookCard';
 import {
   mockBooks,
   mockBookshelf,
@@ -10,8 +10,9 @@ import SortSelector from '@components/BookShelvesPage/SortSelector';
 import { SortOption } from '@components/BookShelvesPage/SortSelector';
 import { sortBooks } from '@components/BookShelvesPage/sortBooks';
 import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
-import BookShelvesDetailDialog from '@components/BookShelvesPage/BookShelvesDetailDialog';
+import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog.tsx/BookDetailDialog';
 import { Book } from '@shared/types/type';
+import BookshelfHeader from '@components/BookShelvesPage/BookShelvesHeader';
 
 const BookShelvesPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -37,21 +38,11 @@ const BookShelvesPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          mb: 3,
-          gap: '5px',
-        }}
-      >
-        <Typography variant="h4">{mockBookshelf.name}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {mockBookshelf.bookCount}권
-        </Typography>
-      </Box>
+      {/* 책장 정보 */}
+      <BookshelfHeader
+        name={mockBookshelf.name}
+        bookCount={mockBookshelf.bookCount}
+      />
 
       <Box
         sx={{ display: 'flex', gap: 2, mb: 3, justifyContent: 'space-between' }}
@@ -62,6 +53,7 @@ const BookShelvesPage = () => {
         />
         <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
       </Box>
+      {/* 책장 */}
       <Grid
         container
         spacing={4}
