@@ -15,7 +15,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ReactNode, useEffect } from 'react';
 
 interface BaseDialogProps extends DialogProps {
-  title: string;
+  title?: string;
   contentNode: ReactNode;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onBack?: () => void;
@@ -82,26 +82,28 @@ const HybridDialog = ({
         },
       }}
     >
-      <DialogTitle sx={{ padding: '0.5rem' }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          {onBack ? (
-            <IconButton onClick={onBack}>
-              <ArrowBackIcon />
+      {title && (
+        <DialogTitle sx={{ padding: '0.5rem' }}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            {onBack ? (
+              <IconButton onClick={onBack}>
+                <ArrowBackIcon />
+              </IconButton>
+            ) : (
+              // 뒤로가기 버튼만큼의 여백 > 타이틀 중앙에 오도록
+              <Box sx={{ width: 30 }} />
+            )}
+            <Typography sx={{ textAlign: 'center' }}>{title}</Typography>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
             </IconButton>
-          ) : (
-            // 뒤로가기 버튼만큼의 여백 > 타이틀 중앙에 오도록
-            <Box sx={{ width: 30 }} />
-          )}
-          <Typography sx={{ textAlign: 'center' }}>{title}</Typography>
-          <IconButton onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </Stack>
-      </DialogTitle>
+          </Stack>
+        </DialogTitle>
+      )}
       <DialogContent
         sx={{
           display: 'flex',
