@@ -1,21 +1,28 @@
 import CommonBookCard from '@components/commons/CommonBookCard';
-
+import { navigateToDetailPage } from '@shared/utils/navigation';
+import { useNavigate } from 'react-router-dom';
 interface BestBookCardProps {
+  itemId: number;
   image: string;
   title?: string;
-  onClick?: () => void;
 }
 
 const BestBookCard = ({
+  itemId,
   image,
   title,
-  onClick,
 }: BestBookCardProps): JSX.Element => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigateToDetailPage(navigate, itemId);
+  };
+
   return (
     <CommonBookCard
       image={image}
       title={title}
-      onClick={onClick}
+      onClick={handleCardClick}
       sx={{
         borderRadius: 0,
         boxShadow: 'none',
