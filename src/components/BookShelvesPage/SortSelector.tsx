@@ -16,12 +16,18 @@ interface SortSelectorProps {
 const SortSelector = ({ sortOption, onSortChange }: SortSelectorProps) => {
   return (
     <FormControl sx={{ minWidth: 100 }}>
-      {/* <InputLabel>정렬</InputLabel> */}
       <Select
         value={sortOption}
-        // label="정렬"
+        size="small"
         onChange={(e) => onSortChange(e.target.value as SortOption)}
-        sx={{ fontSize: '12px', padding: '0px' }}
+        sx={{
+          backgroundColor: '#fafafa',
+          color: '#333',
+          borderRadius: '16px',
+          '&:hover': {
+            backgroundColor: '#f0f0f0',
+          },
+        }}
       >
         <MenuItem value="recent" sx={{ fontSize: '12px' }}>
           최신순

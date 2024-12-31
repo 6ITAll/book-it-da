@@ -3,12 +3,11 @@ import {
   Typography,
   Card,
   CardMedia,
-  Button,
   styled,
   IconButton,
 } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-// import { formatDate } from 'src/utils/dateUtils';
+import { formatDate } from 'src/utils/dateUtils';
 
 interface BookCardProps {
   book: {
@@ -28,30 +27,39 @@ const BookCard = styled(Card)<{ view: 'grid' | 'list' }>(({ view }) => ({
   boxShadow: 'none',
   '&:hover .book-actions': {
     opacity: 1,
+    border: '1px solid red',
   },
+  // 리스트일 때
   ...(view === 'list' && {
     display: 'flex',
-    height: '200px',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    height: 'auto',
     marginBottom: '16px',
+    gap: '10px',
     '& .MuiCardMedia-root': {
       width: '133px',
       position: 'relative',
+      border: '1px solid #ccc',
+      borderRadius: '8px',
     },
     '& .book-info': {
-      flex: 1,
-      padding: '24px',
+      width: '60%',
+      padding: '1rem',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
     },
   }),
+  // 그리드일 때
   ...(view === 'grid' && {
     display: 'flex',
     flexDirection: 'column',
     '& .book-cover': {
       position: 'relative',
-      aspectRatio: '2/3',
       marginBottom: '12px',
+      border: '1px solid #ccc',
+      borderRadius: '8px',
       '& .MuiCardMedia-root': {
         width: '100%',
         height: '100%',
@@ -73,7 +81,7 @@ const BookCard = styled(Card)<{ view: 'grid' | 'list' }>(({ view }) => ({
 }));
 
 const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
-  // const formattedDate = formatDate(book.savedAt);
+  const formattedDate = formatDate(book.savedAt);
   return (
     <BookCard view={view}>
       {view === 'grid' ? (
@@ -107,13 +115,13 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             <Typography variant="body2" color="text.secondary">
               {book.author}
             </Typography>
-            {/* <Typography
+            <Typography
               variant="caption"
               color="text.secondary"
               display="block"
             >
               {formattedDate}
-            </Typography> */}
+            </Typography>
           </Box>
         </>
       ) : (
@@ -143,7 +151,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
                   color="text.secondary"
                   display="block"
                 >
-                  저장: {new Date(book.savedAt).toLocaleDateString()}
+                  {formattedDate}
                 </Typography>
               </Box>
               <IconButton
@@ -153,10 +161,6 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               >
                 <MoreVert />
               </IconButton>
-            </Box>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button variant="contained">바로 읽기</Button>
-              <Button variant="outlined">더보기</Button>
             </Box>
           </Box>
         </>

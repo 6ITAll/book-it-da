@@ -74,7 +74,7 @@ const BookShelvesPage = () => {
           <Grid
             key={index}
             size={
-              viewMode === 'grid' ? { xs: 6, sm: 4, md: 3, lg: 3, xl: 2 } : 12
+              viewMode === 'grid' ? { xs: 6, sm: 3, md: 2, lg: 2, xl: 1.5 } : 12
             }
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
