@@ -3,7 +3,6 @@ import HybridDialog from '@components/commons/HybridDialog';
 import { Box, Button, Stack } from '@mui/material';
 import { Book } from '@shared/types/type';
 import { useState } from 'react';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -74,13 +73,6 @@ const BookShelvesDetailDialog = ({
           readingStatus={readingStatus}
           handleReadingStatus={handleReadingStatus}
         />
-        <Button
-          fullWidth
-          startIcon={<FavoriteBorderIcon />}
-          sx={styles.subButtons}
-        >
-          좋아요
-        </Button>
         <Button
           fullWidth
           startIcon={<BookmarkBorderIcon />}
