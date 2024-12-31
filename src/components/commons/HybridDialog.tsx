@@ -85,7 +85,7 @@ const HybridDialog = ({
       }}
     >
       {title && (
-        <DialogTitle sx={{ padding: '0.5rem' }}>
+        <DialogTitle>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -106,34 +106,15 @@ const HybridDialog = ({
           </Stack>
         </DialogTitle>
       )}
-      <DialogContent
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          '&.MuiDialogContent-root': {
-            padding: '1rem',
-          },
-        }}
-      >
-        {contentNode}
-      </DialogContent>
+      <DialogContent>{contentNode}</DialogContent>
       {action && (
-        <DialogActions
-          sx={{
-            justifyContent: 'center',
-            padding: '0',
-          }}
-        >
+        <DialogActions sx={{ padding: 0 }}>
           {/* 하단 전체를 차지하는 버튼 (1개의 Action) */}
           <Button
             variant="contained"
             onClick={handleAction}
-            sx={{
-              margin: '0',
-              width: '100%',
-              padding: '0.5rem',
-              borderRadius: fullScreen ? '0px' : '0px 0px 10px 10px',
-            }}
+            fullWidth
+            sx={{ borderRadius: 0 }}
           >
             {action}
           </Button>
