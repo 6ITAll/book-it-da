@@ -4,12 +4,14 @@ import ActionButtons from './ActionButtons';
 import FooterButtons from './FooterButtons';
 
 interface RightBookBoxProps {
-  title?: string;
-  subTitle?: string;
-  author?: string;
-  categoryName?: string;
-  pubDate?: string;
-  link?: string;
+  title: string;
+  subTitle: string;
+  author: string;
+  categoryName: string;
+  pubDate: string;
+  link: string;
+  customerReviewRank: number;
+  ratingCount: number;
 }
 
 const RightBookBoxDetailBox = ({
@@ -19,6 +21,8 @@ const RightBookBoxDetailBox = ({
   categoryName,
   pubDate,
   link,
+  customerReviewRank,
+  ratingCount,
 }: RightBookBoxProps): JSX.Element => {
   return (
     <Box
@@ -58,13 +62,15 @@ const RightBookBoxDetailBox = ({
             author={author}
             categoryName={categoryName}
             pubDate={pubDate}
+            customerReviewRank={customerReviewRank}
+            ratingCount={ratingCount}
           />
           <Box
             sx={{
               display: 'flex',
               flexDirection: 'row',
               borderTop: '1px solid #e7e8e9',
-              padding: '1rem 0 0 0',
+              padding: '1rem 0 1rem 0',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}

@@ -74,10 +74,10 @@ const posts: Post[] = [
 ];
 
 interface BookReviewTabProps {
-  itemId?: number;
-  title?: string;
-  author?: string;
-  imageUrl?: string;
+  itemId: number;
+  title: string;
+  author: string;
+  imageUrl: string;
 }
 
 type MoreType = 'posts' | 'reviews';

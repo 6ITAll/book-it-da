@@ -74,12 +74,14 @@ const BookDetailPage = (): JSX.Element => {
           />
           {/* 오른쪽 박스 (책 정보) */}
           <RightBookDetailBox
-            title={data?.item[0].title}
-            subTitle={data?.item[0].subInfo?.subTitle}
-            author={data?.item[0].author}
-            categoryName={data?.item[0].categoryName}
-            pubDate={data?.item[0].pubDate}
-            link={data?.item[0].link}
+            title={data?.item[0].title || '제목 없음'}
+            subTitle={data?.item[0].subInfo?.subTitle || '부제 없음'}
+            author={data?.item[0].author || '저자 정보 없음'}
+            categoryName={data?.item[0].categoryName || '카테고리 없음'}
+            pubDate={data?.item[0].pubDate || '출간일 정보 없음'}
+            link={data?.item[0].link || ''}
+            customerReviewRank={data?.item[0].customerReviewRank || 0} // 추가
+            ratingCount={data?.item[0].subInfo?.ratingInfo?.ratingCount || 0} // 추가
           />
         </Box>
         {/* 책 소개 및 리뷰 부분*/}
@@ -102,9 +104,9 @@ const BookDetailPage = (): JSX.Element => {
             {currentTab === 1 && (
               <BookReviewTab
                 itemId={numericItemId}
-                title={data?.item[0].title}
-                author={data?.item[0].author}
-                imageUrl={data?.item[0].cover}
+                title={data?.item[0].title || ''}
+                author={data?.item[0].author || ''}
+                imageUrl={data?.item[0].cover || ''}
               />
             )}
           </Box>
