@@ -21,7 +21,7 @@ const SnackBar = (): JSX.Element | null => {
       open={!!message}
       autoHideDuration={3000}
       onClose={handleClose}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
       <Alert onClose={handleClose} severity={severity}>
         {message}
