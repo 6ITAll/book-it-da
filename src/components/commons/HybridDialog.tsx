@@ -27,12 +27,14 @@ interface DialogWithActionProps extends BaseDialogProps {
   onActionClick: () => void;
 }
 
-interface DialogWithOutActionProps extends BaseDialogProps {
+export interface DialogWithOutActionProps extends BaseDialogProps {
   action?: undefined;
   onActionClick?: never;
 }
 
-type HybridDialogProps = DialogWithActionProps | DialogWithOutActionProps;
+export type HybridDialogProps =
+  | DialogWithActionProps
+  | DialogWithOutActionProps;
 
 const HybridDialog = ({
   title,
