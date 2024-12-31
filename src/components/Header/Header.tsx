@@ -76,6 +76,7 @@ const Header = (): JSX.Element => {
   const handleLoginClick = () => {
     navigate('/login');
   };
+
   const handleProfileClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
