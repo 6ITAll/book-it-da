@@ -61,7 +61,7 @@ const App: React.FC = () => {
               />
               {/* 추후 변경 */}
               <Route
-                path="/my-page/bookshelves"
+                path="/my-page/:userId/bookshelves/:bookshelfId"
                 element={<BookShelvesPage />}
               />
             </Routes>

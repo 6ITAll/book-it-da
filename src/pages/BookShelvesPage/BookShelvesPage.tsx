@@ -1,31 +1,45 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookcard/ShelvesBookCard';
-import {
-  mockBooks,
-  mockBookshelf,
-} from '@components/BookShelvesPage/mockShelvesBooks';
-import SortSelector from '@components/BookShelvesPage/SortSelector';
-import { SortOption } from '@components/BookShelvesPage/SortSelector';
+import SortSelector, {
+  SortOption,
+} from '@components/BookShelvesPage/SortSelector';
 import { sortBooks } from '@components/BookShelvesPage/sortBooks';
 import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
 import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog.tsx/BookDetailDialog';
-import { Book } from '@shared/types/type';
+import { SavedBook } from '@shared/types/type';
 import BookshelfHeader from '@components/BookShelvesPage/BookShelvesHeader';
+import { useGetBookshelfQuery } from '@features/BookShelvesPage/api/bookShelvesApi';
+import {
+  setViewMode,
+  setSortOption,
+} from '@features/BookShelvesPage/slice/bookShelvesSlice';
+import type { RootState } from '@store/index';
+import { useParams } from 'react-router-dom';
 
 const BookShelvesPage = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [sortOption, setSortOption] = useState<SortOption>('recent');
+  const dispatch = useDispatch();
+  const { viewMode, sortOption } = useSelector(
+    (state: RootState) => state.bookshelves,
+  );
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [selectedBook, setSelectedBook] = useState<SavedBook | null>(null);
+
+  const { userId, bookshelfId } = useParams();
+
+  const { data, error, isLoading } = useGetBookshelfQuery({
+    userId: Number(userId),
+    bookshelfId: Number(bookshelfId),
+  });
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
     bookId: number,
   ) => {
     event.stopPropagation();
-    const book = mockBooks.find((book) => book.id === bookId);
+    const book = data?.books.find((book) => book.id === bookId);
     setSelectedBook(book || null);
     setOpenDialog(true);
   };
@@ -34,26 +48,34 @@ const BookShelvesPage = () => {
     setOpenDialog(false);
   };
 
-  const sortedBooks = sortBooks(mockBooks, sortOption);
+  const handleViewModeChange = (mode: ViewMode) => {
+    dispatch(setViewMode(mode));
+  };
+
+  const handleSortOptionChange = (option: SortOption) => {
+    dispatch(setSortOption(option));
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading bookshelf</div>;
+  if (!data) return null;
+
+  const sortedBooks = sortBooks(data.books, sortOption);
 
   return (
     <Box sx={{ p: 3 }}>
-      {/* 책장 정보 */}
-      <BookshelfHeader
-        name={mockBookshelf.name}
-        bookCount={mockBookshelf.bookCount}
-      />
+      <BookshelfHeader name={data.bookshelfName} bookCount={data.totalCount} />
 
       <Box
         sx={{ display: 'flex', gap: 2, mb: 3, justifyContent: 'space-between' }}
       >
         <SortSelector
           sortOption={sortOption}
-          onSortChange={(option) => setSortOption(option)}
+          onSortChange={handleSortOptionChange}
         />
-        <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
+        <ViewToggle viewMode={viewMode} onViewChange={handleViewModeChange} />
       </Box>
-      {/* 책장 */}
+
       <Grid
         container
         spacing={4}
@@ -62,9 +84,9 @@ const BookShelvesPage = () => {
           mt: 2,
         }}
       >
-        {sortedBooks.map((book, index) => (
+        {sortedBooks.map((book) => (
           <Grid
-            key={index}
+            key={book.id}
             size={
               viewMode === 'grid' ? { xs: 6, sm: 3, md: 2, lg: 2, xl: 1.5 } : 12
             }
