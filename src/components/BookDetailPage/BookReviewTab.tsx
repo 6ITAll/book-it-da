@@ -3,9 +3,9 @@ import { Box, Typography, Button, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ReviewCard from '@components/commons/DetailPageReviewCard';
 import PostCard from '@components/commons/DetailPagePostCard';
-import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
 import StarRating from '@components/commons/StarRating';
+import { useFeedMoreNavigation } from '@hooks/useFeedMoreNavigation';
 
 // 리뷰 데이터 타입
 interface Review {
@@ -73,14 +73,12 @@ const posts: Post[] = [
   },
 ];
 
-interface BookReviewTabProps {
+export interface BookReviewTabProps {
   itemId: number;
   title: string;
   author: string;
   imageUrl: string;
 }
-
-type MoreType = 'posts' | 'reviews';
 
 const BookReviewsTab = ({
   itemId,
@@ -89,7 +87,7 @@ const BookReviewsTab = ({
   imageUrl,
 }: BookReviewTabProps): JSX.Element => {
   const [rating, setRating] = useState<number>(0); // 선택된 별점 상태
-  const navigate = useNavigate();
+  const { handleSeeMore } = useFeedMoreNavigation();
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
     useState<boolean>(false); // 모달 열림 상태
 
@@ -98,21 +96,6 @@ const BookReviewsTab = ({
     setIsOneLineReviewModalOpen(false);
   };
 
-  // 포스트, 리뷰 상세 페이지로 이동
-  const handleSeeMoreClick = (type: MoreType) => {
-    if (itemId) {
-      navigate(`/bookDetail/${itemId}/${type}`, {
-        state: {
-          bookDetails: {
-            title,
-            imageUrl,
-            author,
-            itemId,
-          },
-        },
-      });
-    }
-  };
   return (
     <Box sx={{ padding: '1rem 1rem' }}>
       {/* 리뷰 섹션 */}
@@ -131,7 +114,9 @@ const BookReviewsTab = ({
           <Button
             size="small"
             variant="text"
-            onClick={() => handleSeeMoreClick('reviews')}
+            onClick={() =>
+              handleSeeMore('reviews', { title, imageUrl, author, itemId })
+            }
             sx={{ color: '#333', fontWeight: 'bold' }}
           >
             더보기
@@ -200,7 +185,9 @@ const BookReviewsTab = ({
           <Button
             size="small"
             variant="text"
-            onClick={() => handleSeeMoreClick('posts')}
+            onClick={() =>
+              handleSeeMore('posts', { title, imageUrl, author, itemId })
+            }
             sx={{ color: '#333', fontWeight: 'bold' }}
           >
             더보기
