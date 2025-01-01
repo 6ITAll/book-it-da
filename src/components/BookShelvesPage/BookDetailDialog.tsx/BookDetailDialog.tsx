@@ -12,6 +12,7 @@ import { styles } from './BookDetailDialog.styles';
 import ReadingStatus from './BookReadingStatus';
 import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
 import { ReadingStatusType } from '@shared/types/type';
+import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 interface BookShelvesDetailDialogProps {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,6 +29,7 @@ const BookShelvesDetailDialog = ({
   const [readingStatus, setReadingStatus] = useState<ReadingStatusType>(
     book?.readingStatus || null,
   );
+  const [openAddToLibrary, setOpenAddToLibrary] = useState(false);
   const [updateStatus] = useUpdateReadingStatusMutation();
 
   const handleReadingStatus = async (
@@ -47,6 +49,14 @@ const BookShelvesDetailDialog = ({
     } catch (error) {
       console.error('Failed to update reading status:', error);
     }
+  };
+
+  const handleAddToLibrary = () => {
+    setOpenAddToLibrary(true);
+  };
+
+  const handleCloseAddToLibrary = () => {
+    setOpenAddToLibrary(false);
   };
 
   const contentNode = (
@@ -94,6 +104,7 @@ const BookShelvesDetailDialog = ({
           fullWidth
           startIcon={<BookmarkBorderIcon />}
           sx={styles.subButtons}
+          onClick={handleAddToLibrary}
         >
           책장에 담기
         </Button>
@@ -119,6 +130,10 @@ const BookShelvesDetailDialog = ({
         setOpen={setOpenDialog}
         title="책 관리"
         contentNode={contentNode}
+      />
+      <AddToLibraryModal
+        open={openAddToLibrary}
+        onClose={handleCloseAddToLibrary}
       />
     </>
   );
