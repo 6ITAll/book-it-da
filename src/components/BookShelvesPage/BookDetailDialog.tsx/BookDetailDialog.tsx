@@ -13,6 +13,7 @@ import ReadingStatus from './BookReadingStatus';
 import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
 import { ReadingStatusType } from '@shared/types/type';
 import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
+import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
 interface BookShelvesDetailDialogProps {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,7 +30,8 @@ const BookShelvesDetailDialog = ({
   const [readingStatus, setReadingStatus] = useState<ReadingStatusType>(
     book?.readingStatus || null,
   );
-  const [openAddToLibrary, setOpenAddToLibrary] = useState(false);
+  const [openAddToLibraryDialog, setOpenAddToLibraryDialog] = useState(false);
+  const [openWriteDialog, setOpenWriteDialog] = useState(false);
   const [updateStatus] = useUpdateReadingStatusMutation();
 
   const handleReadingStatus = async (
@@ -51,12 +53,20 @@ const BookShelvesDetailDialog = ({
     }
   };
 
+  const handleWrite = () => {
+    setOpenWriteDialog(true);
+  };
+
+  const handleCloseWrite = () => {
+    setOpenWriteDialog(false);
+  };
+
   const handleAddToLibrary = () => {
-    setOpenAddToLibrary(true);
+    setOpenAddToLibraryDialog(true);
   };
 
   const handleCloseAddToLibrary = () => {
-    setOpenAddToLibrary(false);
+    setOpenAddToLibraryDialog(false);
   };
 
   const contentNode = (
@@ -84,6 +94,7 @@ const BookShelvesDetailDialog = ({
           variant="outlined"
           startIcon={<EditIcon />}
           sx={styles.mainButton}
+          onClick={handleWrite}
         >
           글쓰기
         </Button>
@@ -132,8 +143,12 @@ const BookShelvesDetailDialog = ({
         contentNode={contentNode}
       />
       <AddToLibraryModal
-        open={openAddToLibrary}
+        open={openAddToLibraryDialog}
         onClose={handleCloseAddToLibrary}
+      />
+      <PostTypeSelectDialog
+        dialogOpen={openWriteDialog}
+        setDialogOpen={handleCloseWrite}
       />
     </>
   );
