@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
+  DeleteBookFromShelfParams,
   GetBookshelfParams,
   GetBookshelfResponse,
   UpdateReadingStatusRequest,
@@ -23,8 +24,18 @@ export const bookShelvesApi = createApi({
       }),
       invalidatesTags: ['Bookshelf'],
     }),
+    deleteBookFromShelf: builder.mutation<void, DeleteBookFromShelfParams>({
+      query: ({ userId, bookshelfId, bookId }) => ({
+        url: `/users/${userId}/bookshelves/${bookshelfId}/books/${bookId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Bookshelf'],
+    }),
   }),
 });
 
-export const { useGetBookshelfQuery, useUpdateReadingStatusMutation } =
-  bookShelvesApi;
+export const {
+  useGetBookshelfQuery,
+  useUpdateReadingStatusMutation,
+  useDeleteBookFromShelfMutation,
+} = bookShelvesApi;

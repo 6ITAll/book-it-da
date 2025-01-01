@@ -259,4 +259,23 @@ export const bookshelvesHandlers = [
       });
     },
   ),
+
+  http.delete(
+    '/api/users/:userId/bookshelves/:bookshelfId/books/:bookId',
+    ({ params }) => {
+      const { bookId } = params;
+
+      // mock 데이터에서 해당 책 삭제
+      mockBookshelfData = {
+        ...mockBookshelfData,
+        books: mockBookshelfData.books.filter(
+          (book) => book.id !== Number(bookId),
+        ),
+      };
+
+      return HttpResponse.json({
+        message: 'Book deleted successfully',
+      });
+    },
+  ),
 ];

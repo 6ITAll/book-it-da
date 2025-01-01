@@ -24,3 +24,9 @@ export interface UpdateReadingStatusRequest {
   bookId: number;
   readingStatus: ReadingStatusType;
 }
+
+export interface DeleteBookFromShelfParams {
+  userId: number;
+  bookshelfId: number;
+  bookId: number;
+}

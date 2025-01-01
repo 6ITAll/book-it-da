@@ -11,7 +11,10 @@ import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
 import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog.tsx/BookDetailDialog';
 import { SavedBook } from '@shared/types/type';
 import BookshelfHeader from '@components/BookShelvesPage/BookShelvesHeader';
-import { useGetBookshelfQuery } from '@features/BookShelvesPage/api/bookShelvesApi';
+import {
+  useDeleteBookFromShelfMutation,
+  useGetBookshelfQuery,
+} from '@features/BookShelvesPage/api/bookShelvesApi';
 import {
   setViewMode,
   setSortOption,
@@ -26,6 +29,7 @@ const BookShelvesPage = () => {
   );
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedBook, setSelectedBook] = useState<SavedBook | null>(null);
+  const [deleteBook] = useDeleteBookFromShelfMutation();
 
   const { userId, bookshelfId } = useParams();
 
@@ -44,8 +48,20 @@ const BookShelvesPage = () => {
     setOpenDialog(true);
   };
 
-  const handleDeleteBook = () => {
-    setOpenDialog(false);
+  const handleDeleteBook = async () => {
+    if (!selectedBook) return;
+
+    try {
+      await deleteBook({
+        userId: 1, // TODO: 실제 사용자 ID로 변경
+        bookshelfId: selectedBook.bookshelfId,
+        bookId: selectedBook.id,
+      });
+      setOpenDialog(false);
+    } catch (error) {
+      console.error('Failed to delete book:', error);
+      // TODO: 에러 처리
+    }
   };
 
   const handleViewModeChange = (mode: ViewMode) => {
