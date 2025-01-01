@@ -1,4 +1,3 @@
-import HybridDialog from '@components/commons/HybridDialog';
 import { Stack } from '@mui/material';
 import { useState } from 'react';
 import PostingDialog from '../PostingDialog/PostingDialog';
@@ -6,6 +5,7 @@ import OneLineReviewDialog from '../OneLineReviewDialog/OneLineReviewDialog';
 import { PostType } from '@shared/types/type';
 import { POST_TYPE_OPTIONS } from 'src/constants';
 import PostTypeButton from './PostTypeButton';
+import NonTitleDialog from '@components/commons/NonTitleDialog';
 
 interface PostTypeSelectDialogProps {
   dialogOpen: boolean;
@@ -44,10 +44,9 @@ const PostTypeSelectDialog = ({
 
   return (
     <>
-      <HybridDialog
+      <NonTitleDialog
         open={dialogOpen}
         setOpen={setDialogOpen}
-        title="포스트 타입"
         contentNode={contentNode}
         maxWidth="xs"
       />
