@@ -9,6 +9,7 @@ export const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    p: '1rem 0',
   },
   bookPreviewBox: {
     width: '100%',
