@@ -36,8 +36,8 @@ const BestBookCarousel = (): JSX.Element => {
         {data?.item?.map((book) => (
           <BestBookCard
             key={book.itemId}
+            itemId={book.itemId}
             image={book.cover}
-            onClick={() => console.log('상세 페이지 이동')}
             title={book.title}
           />
         ))}
