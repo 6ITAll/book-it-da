@@ -1,7 +1,7 @@
 import CommonBookCard from '@components/commons/CommonBookCard';
 import HybridDialog from '@components/commons/HybridDialog';
 import { Box, Button, Stack } from '@mui/material';
-import { Book } from '@shared/types/type';
+import { SavedBook } from '@shared/types/type';
 import { useState } from 'react';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ShareIcon from '@mui/icons-material/Share';
@@ -10,11 +10,13 @@ import BookIcon from '@mui/icons-material/Book';
 import EditIcon from '@mui/icons-material/Edit';
 import { styles } from './BookDetailDialog.styles';
 import ReadingStatus from './BookReadingStatus';
+import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
+import { ReadingStatusType } from '@shared/types/type';
 interface BookShelvesDetailDialogProps {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
   handleDeleteBook: () => void;
-  book: Book | null;
+  book: SavedBook | null;
 }
 
 const BookShelvesDetailDialog = ({
@@ -23,13 +25,28 @@ const BookShelvesDetailDialog = ({
   handleDeleteBook,
   book,
 }: BookShelvesDetailDialogProps) => {
-  const [readingStatus, setReadingStatus] = useState<string | null>(null);
+  const [readingStatus, setReadingStatus] = useState<ReadingStatusType>(
+    book?.readingStatus || null,
+  );
+  const [updateStatus] = useUpdateReadingStatusMutation();
 
-  const handleReadingStatus = (
+  const handleReadingStatus = async (
     _: React.MouseEvent<HTMLElement>,
-    newStatus: string | null,
+    newStatus: ReadingStatusType,
   ) => {
-    setReadingStatus(newStatus);
+    if (!book) return;
+
+    try {
+      await updateStatus({
+        userId: 1,
+        bookshelfId: book.bookshelfId,
+        bookId: book.id,
+        readingStatus: newStatus,
+      });
+      setReadingStatus(newStatus);
+    } catch (error) {
+      console.error('Failed to update reading status:', error);
+    }
   };
 
   const contentNode = (

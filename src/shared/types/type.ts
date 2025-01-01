@@ -4,6 +4,8 @@
 export type PostType = '한줄평' | '포스팅' | null;
 // Feed Type
 export type FeedType = '추천' | '팔로워' | '팔로잉';
+// 독서 상태 타입
+export type ReadingStatusType = 'READING' | 'COMPLETED' | 'WISH' | null;
 
 // 게시물 interface
 export interface Post {
@@ -39,6 +41,7 @@ export interface SavedBook extends Book {
   id: number; // 저장된 책의 고유 ID
   bookshelfId: number; // 책장 ID
   savedAt: string; // 책장에 저장된 시간
+  readingStatus: ReadingStatusType; // 독서 상태
 }
 
 // 책장 interface

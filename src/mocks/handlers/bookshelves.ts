@@ -1,6 +1,11 @@
 import { http, HttpResponse } from 'msw';
+import { ReadingStatusType } from '@shared/types/type';
 
-const mockBookshelfData = {
+interface UpdateReadingStatusRequest {
+  readingStatus: ReadingStatusType;
+}
+
+let mockBookshelfData = {
   books: [
     {
       id: 1,
@@ -10,6 +15,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-01T10:00:00Z',
       itemId: 123456,
+      readingStatus: 'READING' as ReadingStatusType,
     },
     {
       id: 2,
@@ -19,6 +25,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-02T11:00:00Z',
       itemId: 123457,
+      readingStatus: null as ReadingStatusType,
     },
     {
       id: 3,
@@ -28,6 +35,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-03T12:00:00Z',
       itemId: 123458,
+      readingStatus: 'WISH' as ReadingStatusType,
     },
     {
       id: 4,
@@ -37,6 +45,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-04T13:00:00Z',
       itemId: 123459,
+      readingStatus: 'COMPLETED' as ReadingStatusType,
     },
     {
       id: 5,
@@ -46,6 +55,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-05T14:00:00Z',
       itemId: 123460,
+      readingStatus: null as ReadingStatusType,
     },
     {
       id: 6,
@@ -55,6 +65,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-06T15:00:00Z',
       itemId: 123461,
+      readingStatus: 'READING' as ReadingStatusType,
     },
     {
       id: 7,
@@ -64,6 +75,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-07T16:00:00Z',
       itemId: 123462,
+      readingStatus: null as ReadingStatusType,
     },
     {
       id: 8,
@@ -73,6 +85,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-08T17:00:00Z',
       itemId: 123463,
+      readingStatus: 'WISH' as ReadingStatusType,
     },
     {
       id: 9,
@@ -82,6 +95,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-09T18:00:00Z',
       itemId: 123464,
+      readingStatus: 'COMPLETED' as ReadingStatusType,
     },
     {
       id: 10,
@@ -91,6 +105,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-10T19:00:00Z',
       itemId: 123465,
+      readingStatus: null as ReadingStatusType,
     },
     {
       id: 11,
@@ -100,6 +115,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-11T20:00:00Z',
       itemId: 123466,
+      readingStatus: 'READING' as ReadingStatusType,
     },
     {
       id: 12,
@@ -109,6 +125,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-12T21:00:00Z',
       itemId: 123467,
+      readingStatus: 'WISH' as ReadingStatusType,
     },
     {
       id: 13,
@@ -118,6 +135,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-13T22:00:00Z',
       itemId: 123468,
+      readingStatus: null as ReadingStatusType,
     },
     {
       id: 14,
@@ -127,6 +145,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-14T23:00:00Z',
       itemId: 123469,
+      readingStatus: 'COMPLETED' as ReadingStatusType,
     },
     {
       id: 15,
@@ -136,6 +155,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-15T00:00:00Z',
       itemId: 123470,
+      readingStatus: 'READING' as ReadingStatusType,
     },
     {
       id: 16,
@@ -145,6 +165,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-16T01:00:00Z',
       itemId: 123471,
+      readingStatus: null as ReadingStatusType,
     },
     {
       id: 17,
@@ -154,6 +175,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-17T02:00:00Z',
       itemId: 123472,
+      readingStatus: 'WISH' as ReadingStatusType,
     },
     {
       id: 18,
@@ -163,6 +185,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-18T03:00:00Z',
       itemId: 123473,
+      readingStatus: 'COMPLETED' as ReadingStatusType,
     },
     {
       id: 19,
@@ -172,6 +195,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-19T04:00:00Z',
       itemId: 123474,
+      readingStatus: null as ReadingStatusType,
     },
     {
       id: 20,
@@ -181,6 +205,7 @@ const mockBookshelfData = {
       bookshelfId: 1,
       savedAt: '2024-01-20T05:00:00Z',
       itemId: 123475,
+      readingStatus: 'READING' as ReadingStatusType,
     },
   ],
   bookshelfName: '내 책장',
@@ -188,7 +213,33 @@ const mockBookshelfData = {
 };
 
 export const bookshelvesHandlers = [
+  // 책장 조회
   http.get('/api/users/:userId/bookshelves/:bookshelfId', () => {
-    return HttpResponse.json(mockBookshelfData, { status: 200 });
+    return HttpResponse.json(mockBookshelfData);
   }),
+
+  // 독서 상태 업데이트
+  http.patch(
+    '/api/users/:userId/bookshelves/:bookshelfId/books/:bookId/status',
+    async ({ params, request }) => {
+      const { bookId } = params;
+      const { readingStatus } =
+        (await request.json()) as UpdateReadingStatusRequest;
+
+      // mock 데이터 업데이트
+      mockBookshelfData = {
+        ...mockBookshelfData,
+        books: mockBookshelfData.books.map((book) =>
+          book.id === Number(bookId) ? { ...book, readingStatus } : book,
+        ),
+      };
+
+      return HttpResponse.json({
+        message: 'Reading status updated successfully',
+        book: mockBookshelfData.books.find(
+          (book) => book.id === Number(bookId),
+        ),
+      });
+    },
+  ),
 ];

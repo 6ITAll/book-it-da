@@ -11,12 +11,13 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DoneIcon from '@mui/icons-material/Done';
 import Zoom from '@mui/material/Zoom';
 import { styles } from './BookDetailDialog.styles';
+import { ReadingStatusType } from '@shared/types/type';
 
 interface ReadingStatusToggleProps {
   readingStatus: string | null;
   handleReadingStatus: (
     event: React.MouseEvent<HTMLElement>,
-    newStatus: string | null,
+    newStatus: ReadingStatusType,
   ) => void;
 }
 
