@@ -12,7 +12,7 @@ let mockBookshelfData = {
       bookTitle: '소설의 첫 만남',
       author: '김작가',
       imageUrl: '/src/assets/images/sample1.jpg',
-      bookshelfId: 1,
+      bookshelfId: 2,
       savedAt: '2024-01-01T10:00:00Z',
       itemId: 123456,
       readingStatus: 'READING' as ReadingStatusType,
@@ -22,7 +22,7 @@ let mockBookshelfData = {
       bookTitle: '시간의 흐름',
       author: '이시인',
       imageUrl: '/src/assets/images/sample2.jpg',
-      bookshelfId: 1,
+      bookshelfId: 2,
       savedAt: '2024-01-02T11:00:00Z',
       itemId: 123457,
       readingStatus: null as ReadingStatusType,
@@ -212,10 +212,27 @@ let mockBookshelfData = {
   totalCount: 20,
 };
 
+// 책장별 이름 매핑
+const bookshelfNames: Record<number, string> = {
+  1: '읽고 싶은 책',
+  2: '읽은 책',
+};
+
 export const bookshelvesHandlers = [
   // 책장 조회
-  http.get('/api/users/:userId/bookshelves/:bookshelfId', () => {
-    return HttpResponse.json(mockBookshelfData);
+  http.get('/api/users/:userId/bookshelves/:bookshelfId', ({ params }) => {
+    const { bookshelfId } = params;
+
+    // bookshelfId에 해당하는 책들만 필터링
+    const filteredBooks = mockBookshelfData.books.filter(
+      (book) => book.bookshelfId === Number(bookshelfId),
+    );
+
+    return HttpResponse.json({
+      books: filteredBooks,
+      bookshelfName: bookshelfNames[Number(bookshelfId)] || '내 책장',
+      totalCount: filteredBooks.length,
+    });
   }),
 
   // 독서 상태 업데이트
