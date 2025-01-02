@@ -12,7 +12,7 @@ import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialo
 import { SavedBook } from '@shared/types/type';
 import BookshelfHeader from '@components/BookShelvesPage/BookShelvesHeader';
 import {
-  useDeleteBookFromShelfMutation,
+  useDeleteBookMutation,
   useGetBookshelfQuery,
 } from '@features/BookShelvesPage/api/bookShelvesApi';
 import {
@@ -29,7 +29,7 @@ const BookShelvesPage = () => {
   );
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedBook, setSelectedBook] = useState<SavedBook | null>(null);
-  const [deleteBook] = useDeleteBookFromShelfMutation();
+  const [deleteBook] = useDeleteBookMutation();
 
   const { userId, bookshelfId } = useParams();
 
@@ -55,7 +55,7 @@ const BookShelvesPage = () => {
       await deleteBook({
         userId: 1, // TODO: 실제 사용자 ID로 변경
         bookshelfId: selectedBook.bookshelfId,
-        bookId: selectedBook.id,
+        itemId: selectedBook.id,
       });
       setOpenDialog(false);
     } catch (error) {

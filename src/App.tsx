@@ -26,22 +26,6 @@ const App: React.FC = () => {
         </header>
 
         <div className="main-content">
-          <aside className="sidebar">
-            <nav>
-              <ul>
-                <li>
-                  <Link to="/feed">홈</Link>
-                </li>
-                <li>
-                  <Link to="/search">책 검색</Link>
-                </li>
-                <li>
-                  <Link to="/my-page">마이페이지</Link>
-                </li>
-              </ul>
-            </nav>
-          </aside>
-
           <main className="content">
             <Routes>
               <Route path="/login-signup" element={<LoginSignup />} />

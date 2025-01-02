@@ -1,6 +1,6 @@
 import { SortOption } from '@components/BookShelvesPage/SortSelector';
 import { ViewMode } from '@components/BookShelvesPage/ViewToggle';
-import { ReadingStatusType } from '@shared/types/type';
+import { ReadingStatusType, SavedBook } from '@shared/types/type';
 
 export interface BookInfo {
   itemId: number;
@@ -18,8 +18,9 @@ export interface UserBookStatus {
 }
 
 export interface GetBookshelfResponse {
-  books: Array<BookInfo & UserBookStatus>;
+  bookshelfId: number;
   bookshelfName: string;
+  books: SavedBook[];
   totalCount: number;
 }
 

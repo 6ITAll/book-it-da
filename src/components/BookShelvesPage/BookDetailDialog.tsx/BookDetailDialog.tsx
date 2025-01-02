@@ -44,7 +44,7 @@ const BookShelvesDetailDialog = ({
       await updateStatus({
         userId: 1,
         bookshelfId: book.bookshelfId,
-        bookId: book.id,
+        itemId: book.id,
         readingStatus: newStatus,
       });
       setReadingStatus(newStatus);
