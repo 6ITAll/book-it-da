@@ -6,6 +6,9 @@ import BookSearchPage from './pages/BookSearchPage/BookSearch';
 import MyPage from './pages/MyPage/MyPage';
 import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
 import './App.css';
+import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
+import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
+import PostMorePage from '@pages/PostMorePage/PostMorePage';
 
 const App: React.FC = () => {
   return (
@@ -48,6 +51,15 @@ const App: React.FC = () => {
               <Route path="/my-page/:userId?" element={<MyPage />} />
               <Route path="/" element={<FeedPage />} />
               <Route path="/oauth/kakao" element={<KakaoCallback />} />
+              <Route path="/bookDetail/:itemId" element={<BookDetailPage />} />
+              <Route
+                path="/bookDetail/:itemId/reviews"
+                element={<ReviewMorePage />}
+              />
+              <Route
+                path="/bookDetail/:itemId/posts"
+                element={<PostMorePage />}
+              />
             </Routes>
           </main>
         </div>
