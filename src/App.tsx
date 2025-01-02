@@ -4,6 +4,7 @@ import SignupPage from './pages/LoginSignupPage/SignupPage';
 import FeedPage from './pages/MainPage/Main';
 import BookSearchPage from './pages/BookSearchPage/BookSearch';
 import MyPage from './pages/MyPage/MyPage';
+import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
 import './App.css';
 
 const App: React.FC = () => {
@@ -46,6 +47,7 @@ const App: React.FC = () => {
               <Route path="/search" element={<BookSearchPage />} />
               <Route path="/my-page/:userId?" element={<MyPage />} />
               <Route path="/" element={<FeedPage />} />
+              <Route path="/oauth/kakao" element={<KakaoCallback />} />
             </Routes>
           </main>
         </div>
