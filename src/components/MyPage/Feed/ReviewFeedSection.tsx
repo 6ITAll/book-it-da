@@ -39,6 +39,7 @@ const ReviewFeedSection = ({
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <ReviewCard
+              rating={review.rating}
               username={review.username}
               date={review.date}
               content={review.content}
