@@ -7,7 +7,7 @@ import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { libraryApi } from '@features/MyPage/api';
 import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
-import { postApi } from '@features/BookDetailPage/api/PostApi';
+import { postApi } from '@features/BookDetailPage/api/postApi';
 import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
 
 export const store = configureStore({
