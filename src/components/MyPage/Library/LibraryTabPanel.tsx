@@ -1,6 +1,6 @@
 import BookshelfCard from './BookshelfCard';
 import { Stack, Typography } from '@mui/material';
-import { useGetLibraryQuery } from '@features/MyPage/libraryApi';
+import { useGetLibraryQuery } from '@features/MyPage/api/libraryApi';
 
 interface LibraryTabPanelProps {
   userId: string;

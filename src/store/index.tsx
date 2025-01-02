@@ -11,8 +11,8 @@ import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
 import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
 import { postingApi } from '@features/PostDetailPage/api/postingApi';
 import snackbarReducer from '@features/Snackbar/snackbarSlice';
-import { libraryApi } from '@features/MyPage/libraryApi';
-import { userFeedsApi } from '@features/MyPage/userFeedsApi';
+import { libraryApi } from '@features/MyPage/api/libraryApi';
+import { userFeedsApi } from '@features/MyPage/api/userFeedsApi';
 
 export const store = configureStore({
   reducer: {

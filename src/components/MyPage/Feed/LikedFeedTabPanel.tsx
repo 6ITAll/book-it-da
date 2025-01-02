@@ -1,4 +1,4 @@
-import { useGetLikedFeedsQuery } from '@features/MyPage/userFeedsApi';
+import { useGetLikedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
 import Feed from './Feed';
 import { Typography } from '@mui/material';
 
