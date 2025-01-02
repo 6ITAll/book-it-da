@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import OtherPostingCard from './OtherPostingCard';
-import { OtherPost } from './mockOtherPosting';
+import { OtherPost } from '@features/PostDetailPage/types/types';
 
 interface OtherPostingGridProps {
   title: string;
-  posts: OtherPost[]; //추후 타입 정의
+  posts: OtherPost[];
 }
 
 const OtherPostingGrid = ({ title, posts }: OtherPostingGridProps) => (

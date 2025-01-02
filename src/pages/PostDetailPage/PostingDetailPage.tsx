@@ -7,14 +7,20 @@ import PostingContent from '@components/PostDetailPage/PostingContent';
 import PostingHeader from '@components/PostDetailPage/PostingHeader';
 import OtherPostingGrid from '@components/PostDetailPage/OtherPostingGrid';
 import {
-  mockBookOtherPosting,
-  mockUserOtherPosting,
-} from '@components/PostDetailPage/mockOtherPosting';
-import { useGetPostByIdQuery } from '@features/PostDetailPage/api/postingApi';
+  useGetBookOtherPostsQuery,
+  useGetPostByIdQuery,
+  useGetUserOtherPostsQuery,
+} from '@features/PostDetailPage/api/postingApi';
 
 const PostingDetailPage = () => {
   const { postingId } = useParams();
   const { data: post, isLoading, error } = useGetPostByIdQuery(postingId!);
+  const { data: bookOtherPosts } = useGetBookOtherPostsQuery(
+    post?.book?.itemId ?? 0,
+  );
+  const { data: userOtherPosts } = useGetUserOtherPostsQuery(
+    post?.user.id ?? 0,
+  );
   const [isLiked, setIsLiked] = useState(false);
   const currentUserId = 1; // TODO: 실제 로그인 유저 ID로 대체
   const [openShareDialog, setOpenShareDialog] = useState(false);
@@ -74,11 +80,11 @@ const PostingDetailPage = () => {
       <Stack>
         <OtherPostingGrid
           title="이 책의 다른 포스팅"
-          posts={mockBookOtherPosting}
+          posts={bookOtherPosts ?? []}
         />
         <OtherPostingGrid
           title="사용자의 다른 포스팅"
-          posts={mockUserOtherPosting}
+          posts={userOtherPosts ?? []}
         />
       </Stack>
       <PostingShareDialog

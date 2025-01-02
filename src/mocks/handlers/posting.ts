@@ -5,6 +5,12 @@ const CURRENT_USER = {
   name: 'Current User',
 };
 
+const IMAGES = {
+  sample1: new URL('../../assets/images/sample1.jpg', import.meta.url).href,
+  sample2: new URL('../../assets/images/sample2.jpg', import.meta.url).href,
+  sample3: new URL('../../assets/images/sample3.jpg', import.meta.url).href,
+};
+
 const mockPosts = [
   {
     id: 1,
@@ -40,6 +46,99 @@ const mockPosts = [
   },
 ];
 
+const mockOtherPosts = {
+  bookPosts: [
+    {
+      id: 3,
+      title: '금각사의 상징성에 대하여',
+      content:
+        '금각사가 상징하는 완벽한 아름다움과 주인공의 내면 세계가 충돌하는 방식이 인상적입니다.',
+      createdAt: '2024-01-19T09:00:00.000Z',
+      user: {
+        id: 3,
+        name: '김문학',
+        avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+      },
+      likeCount: 24,
+    },
+    {
+      id: 4,
+      title: '미시마 유키오의 섬세한 묘사',
+      content:
+        '불교 사찰을 배경으로 인간의 집착과 광기를 그려내는 작가의 필력이 돋보입니다.',
+      createdAt: '2024-01-17T09:00:00.000Z',
+      user: {
+        id: 4,
+        name: '박독서',
+        avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
+      },
+      likeCount: 18,
+    },
+    {
+      id: 5,
+      title: '금각사와 현대사회',
+      content: '현대 사회의 관점에서 금각사를 재해석해보았습니다.',
+      createdAt: '2024-01-16T09:00:00.000Z',
+      user: {
+        id: 5,
+        name: '이독자',
+        avatarUrl: 'https://mui.com/static/images/avatar/3.jpg',
+      },
+      likeCount: 15,
+    },
+  ],
+  userPosts: [
+    {
+      id: 101,
+      title: '노르웨이의 숲 리뷰',
+      content: '무라카미 하루키의 대표작을 읽고...',
+      createdAt: '2024-01-20T09:00:00.000Z',
+      user: {
+        id: 2, // 원글 작성자와 동일한 ID
+        name: 'John Doe', // 원글 작성자와 동일한 이름
+        avatarUrl: 'https://mui.com/static/images/avatar/1.jpg', // 원글 작성자와 동일한 아바타
+      },
+      book: {
+        title: '노르웨이의 숲',
+        author: '무라카미 하루키',
+        imageUrl: IMAGES.sample1,
+      },
+    },
+    {
+      id: 102,
+      title: '해변의 카프카 감상',
+      content: '카프카의 초현실적인 이야기...',
+      createdAt: '2024-01-18T09:00:00.000Z',
+      user: {
+        id: 2,
+        name: 'John Doe',
+        avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+      },
+      book: {
+        title: '해변의 카프카',
+        author: '무라카미 하루키',
+        imageUrl: IMAGES.sample2,
+      },
+    },
+    {
+      id: 103,
+      title: '상실의 시대를 읽고',
+      content: '젊은 시절의 방황과 성장...',
+      createdAt: '2024-01-16T09:00:00.000Z',
+      user: {
+        id: 2,
+        name: 'John Doe',
+        avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+      },
+      book: {
+        title: '상실의 시대',
+        author: '무라카미 하루키',
+        imageUrl: IMAGES.sample3,
+      },
+    },
+  ],
+};
+
 export const postingHandlers = [
   // 현재 유저 정보를 가져오는 핸들러
   http.get('/api/me', () => {
@@ -61,5 +160,13 @@ export const postingHandlers = [
       ...post,
       isCurrentUserAuthor: post.user.id === CURRENT_USER.id,
     });
+  }),
+
+  http.get('/api/books/:bookId/posts', () => {
+    return HttpResponse.json(mockOtherPosts.bookPosts);
+  }),
+
+  http.get('/api/users/:userId/posts', () => {
+    return HttpResponse.json(mockOtherPosts.userPosts);
   }),
 ];
