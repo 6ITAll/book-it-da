@@ -2,19 +2,32 @@ import { Box, CardContent, Typography } from '@mui/material';
 import { styles } from './PostCard.styles';
 import { PostType } from '@shared/types/type';
 
-interface PostCardContentProps {
-  type: PostType;
-  content: {
-    bookTitle?: string;
-    bookAuthor?: string;
-    title: string;
-    description: string;
-  };
+interface PostCardBaseContent {
+  bookTitle: string;
+  bookAuthor: string;
 }
 
-const PostCardContent = ({ type, content }: PostCardContentProps) => {
-  const { bookTitle, bookAuthor, title, description } = content;
+interface PostingContent extends PostCardBaseContent {
+  title: string;
+  description: string;
+  review?: never;
+}
 
+interface OneLineContent extends PostCardBaseContent {
+  review: string;
+  title?: never;
+  description?: never;
+}
+
+interface PostCardContentProps {
+  type: PostType;
+  content: PostingContent | OneLineContent;
+}
+
+const PostCardContent = ({
+  type,
+  content: { bookTitle, bookAuthor, title, description, review },
+}: PostCardContentProps) => {
   const getContent = () => {
     switch (type) {
       case '한줄평':
@@ -40,7 +53,7 @@ const PostCardContent = ({ type, content }: PostCardContentProps) => {
                 align="center"
                 sx={styles.cardSentence}
               >
-                {`"${title}"`}
+                {`"${review}"`}
               </Typography>
             </Box>
           </>

@@ -1,4 +1,4 @@
-import { Post, PostType, FeedType } from '@shared/types/type';
+import { PostType, FeedType, OneLinePost, Posting } from '@shared/types/type';
 
 export interface GetPostsParams {
   page: number;
@@ -8,7 +8,7 @@ export interface GetPostsParams {
 }
 
 export interface PostsResponse {
-  posts: Post[];
+  posts: (OneLinePost | Posting)[];
   hasMore: boolean;
   totalCount: number;
 }

@@ -15,20 +15,27 @@ export const feedApi = createApi({
           limit,
         },
       }),
-      serializeQueryArgs: ({ endpointName }) => {
-        return endpointName;
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        return `${endpointName}-${queryArgs.feedType}-${queryArgs.postType}`;
       },
-      merge: (currentCache, newItems) => {
-        if (currentCache && newItems) {
-          return {
-            ...newItems,
-            posts: [...currentCache.posts, ...newItems.posts],
-          };
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg.page === 1) {
+          return newItems;
         }
-        return newItems;
+        return {
+          ...currentCache,
+          posts: [...currentCache.posts, ...newItems.posts],
+          hasMore: newItems.hasMore,
+          totalCount: newItems.totalCount,
+        };
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.page !== previousArg?.page;
+        if (!previousArg) return true;
+        return (
+          currentArg?.page !== previousArg.page ||
+          currentArg?.feedType !== previousArg.feedType ||
+          currentArg?.postType !== previousArg.postType
+        );
       },
     }),
   }),

@@ -3,10 +3,10 @@ import { PostType } from '@shared/types/type';
 import { styles } from './PostTypeFilter.styles';
 
 interface PostTypeFilterProps {
-  postType: PostType | '';
+  postType: PostType | null;
   onPostTypeChange: (
     event: React.MouseEvent<HTMLElement>,
-    newValue: PostType | '',
+    newValue: PostType | null,
   ) => void;
 }
 
@@ -23,7 +23,7 @@ export const PostTypeFilter = ({
           key={type}
           variant={postType === type ? 'contained' : 'outlined'}
           size="small"
-          onClick={(e) => onPostTypeChange(e, postType === type ? '' : type)}
+          onClick={(e) => onPostTypeChange(e, postType === type ? null : type)}
           sx={styles.filterButton}
         >
           {type}

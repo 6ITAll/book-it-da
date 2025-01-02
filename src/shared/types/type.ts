@@ -1,22 +1,34 @@
 // 공통 Type 정의
 
 // Post Type
-export type PostType = '한줄평' | '포스팅' | null;
+export type PostType = '한줄평' | '포스팅';
 // Feed Type
 export type FeedType = '추천' | '팔로워' | '팔로잉';
 
 // 게시물 interface
 export interface Post {
   id: number;
-  title: string;
-  description: string;
   imageUrl: string;
   userName: string;
   timeAgo: string;
+  createdAt: string;
   postType: PostType;
   feedType: FeedType;
   bookTitle: string;
   bookAuthor: string;
+}
+
+// 한줄평 포스트
+export interface OneLinePost extends Post {
+  postType: '한줄평';
+  review: string;
+}
+
+// 일반 포스팅
+export interface Posting extends Post {
+  postType: '포스팅';
+  title: string;
+  description: string;
 }
 
 // 책 interface

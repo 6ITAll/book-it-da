@@ -14,14 +14,14 @@ import PostCard from '@components/FeedPage/PostCard/PostCard';
 import ScrollToTop from '@components/commons/ScrollToTop';
 import { FeedTypeFilter } from '@components/FeedPage/Filters/FeedTypeFilter';
 import { PostTypeFilter } from '@components/FeedPage/Filters/PostTypeFilter';
-import { PostType, FeedType } from '@shared/types/type';
+import { PostType, FeedType, OneLinePost, Posting } from '@shared/types/type';
 import CreateIcon from '@mui/icons-material/Create';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
 import { useGetPostsQuery } from '@features/FeedPage/api/feedApi';
 
 const Main = (): JSX.Element => {
   const [page, setPage] = useState(1);
-  const [postType, setPostType] = useState<PostType | ''>('');
+  const [postType, setPostType] = useState<PostType | null>(null);
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -33,7 +33,7 @@ const Main = (): JSX.Element => {
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
-    (_event: React.MouseEvent<HTMLElement>, newValue: PostType | '') => {
+    (_event: React.MouseEvent<HTMLElement>, newValue: PostType | null) => {
       setPostType(newValue);
       setPage(1);
       window.scrollTo(0, 0);
@@ -52,10 +52,10 @@ const Main = (): JSX.Element => {
   );
 
   const fetchMoreData = useCallback(() => {
-    if (!isFetching && data?.hasMore) {
+    if (!isFetching && data?.hasMore && data.posts.length > 0) {
       setPage((prev) => prev + 1);
     }
-  }, [isFetching, data?.hasMore]);
+  }, [isFetching, data?.hasMore, data?.posts.length]);
 
   if (isLoading) {
     return (
@@ -129,6 +129,7 @@ const Main = (): JSX.Element => {
         dataLength={data?.posts.length ?? 0}
         next={fetchMoreData}
         hasMore={data?.hasMore ?? false}
+        scrollThreshold={0.99}
         loader={
           <Box
             sx={{
@@ -179,21 +180,40 @@ const Main = (): JSX.Element => {
               overflowX: 'hidden',
             }}
           >
-            {data.posts.map((post) => (
-              <Box key={post.id}>
-                <PostCard
-                  title={post.title}
-                  description={post.description}
-                  imageUrl={post.imageUrl}
-                  userName={post.userName}
-                  timeAgo={post.timeAgo}
-                  postType={post.postType}
-                  feedType={post.feedType}
-                  bookTitle={post.bookTitle}
-                  bookAuthor={post.bookAuthor}
-                />
-              </Box>
-            ))}
+            {data.posts.map((post: OneLinePost | Posting) => {
+              if ('title' in post && 'description' in post) {
+                return (
+                  <Box key={post.id}>
+                    <PostCard
+                      imageUrl={post.imageUrl}
+                      userName={post.userName}
+                      timeAgo={post.timeAgo}
+                      postType="포스팅"
+                      feedType={post.feedType}
+                      bookTitle={post.bookTitle}
+                      bookAuthor={post.bookAuthor}
+                      title={post.title}
+                      description={post.description}
+                    />
+                  </Box>
+                );
+              } else {
+                return (
+                  <Box key={post.id}>
+                    <PostCard
+                      imageUrl={post.imageUrl}
+                      userName={post.userName}
+                      timeAgo={post.timeAgo}
+                      postType="한줄평"
+                      feedType={post.feedType}
+                      bookTitle={post.bookTitle}
+                      bookAuthor={post.bookAuthor}
+                      review={post.review}
+                    />
+                  </Box>
+                );
+              }
+            })}
           </Masonry>
         )}
       </InfiniteScroll>
