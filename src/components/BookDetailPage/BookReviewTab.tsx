@@ -6,72 +6,8 @@ import PostCard from '@components/commons/DetailPagePostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog';
 import StarRating from '@components/commons/StarRating';
-
-// 리뷰 데이터 타입
-interface Review {
-  username: string;
-  date: string;
-  content: string;
-  likes: number;
-  rating: number;
-}
-
-// 포스트 데이터 타입
-interface Post {
-  title: string;
-  content: string;
-  author: string;
-  avatar: string; // 유저 아바타
-}
-
-// 더미 데이터: 리뷰
-const reviews: Review[] = [
-  {
-    username: 'Lovely ChaeChae',
-    date: '2024.08.01',
-    content: '새롭네요!',
-    likes: 1,
-    rating: 4, // 별점 추가
-  },
-  {
-    username: '독서왕난이',
-    date: '2024.02.27',
-    content: '도슨트북 새롭고 재미있어요',
-    likes: 1,
-    rating: 5, // 별점 추가
-  },
-  {
-    username: '다비다나고양이',
-    date: '2024.10.16',
-    content: '책에 더 흥미를 갖게 도와주는 것 같아요',
-    likes: 1,
-    rating: 3, // 별점 추가
-  },
-];
-
-// 더미 데이터: 포스트
-const posts: Post[] = [
-  {
-    title: '2월은 결심하기 좋은 자기계발의 달!',
-    content:
-      '2024년에도 어김없이 결심의 시즌이 돌아왔습니다! 여러분을 위한 특별한 추천 도서를 소개합니다.',
-    author: 'MILLIE 밀리',
-    avatar: '/path/to/avatar1.jpg',
-  },
-  {
-    title: '✨ 2024 상반기 결산 - 책복/도슨트북',
-    content:
-      '밀리에서 전자책 외에다양한 독서 콘텐츠를 빼놓을 수 없죠! 😉밀리는 회원들의 일상생활에 독서가 1밀리 더스며들 수 있도록 다양한 도전을 이어가고 있어요. 챗북부터 도슨트북, 오브제북, 영상 콘텐츠까지!2024년 상반기에도 책을 쉽고, 재밌고, 풍성하게접할 수 있는 새로운 콘텐츠들이 쏟아졌는데요.과연 그중 어떤 콘텐츠가 주목받았는지함께 확인해 볼까요? 2024년의 상반기, 밀리 회원들이 좋아한 콘텐츠 랭킹을 보면 인간관계에 대한 관심이 높아진 것',
-    author: '밀리 독서연구소',
-    avatar: '/path/to/avatar2.jpg',
-  },
-  {
-    title: '좋아하는 것들',
-    content: '나만의 취향을 담은 독서 추천, 여러분과 함께 하고 싶어요.',
-    author: '16층 노예',
-    avatar: '/path/to/avatar3.jpg',
-  },
-];
+import { useGetPostsQuery } from '@features/BookDetailPage/api/PostApi';
+import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 
 interface BookReviewTabProps {
   itemId: number;
@@ -92,6 +28,14 @@ const BookReviewsTab = ({
   const navigate = useNavigate();
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
     useState<boolean>(false); // 모달 열림 상태
+
+  // API 데이터 가져오기
+  const { data: postData = [] } = useGetPostsQuery(itemId);
+  const { data: reviewData = [] } = useGetReviewsQuery(itemId);
+
+  // 포스트, 리뷰 총 개수 계산
+  const postTotal = postData.length;
+  const reviewTotal = reviewData.length;
 
   // 모달 닫기 핸들러
   const handleModalClose = () => {
@@ -126,7 +70,7 @@ const BookReviewsTab = ({
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            한 줄 리뷰 {reviews.length}
+            한 줄 리뷰 {reviewTotal}
           </Typography>
           <Button
             size="small"
@@ -166,7 +110,7 @@ const BookReviewsTab = ({
           </Typography>
         </Box>
         <Grid container spacing={2}>
-          {reviews.map((review, index) => (
+          {reviewData?.map((review, index) => (
             <Grid
               key={index}
               size={{ xs: 12, md: 4 }}
@@ -195,7 +139,7 @@ const BookReviewsTab = ({
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            이 책의 포스트 {posts.length}
+            이 책의 포스트 {postTotal}
           </Typography>
           <Button
             size="small"
@@ -207,7 +151,7 @@ const BookReviewsTab = ({
           </Button>
         </Box>
         <Grid container spacing={2}>
-          {posts.map((post, index) => (
+          {postData?.map((post, index) => (
             <Grid
               key={index}
               size={{ xs: 12, md: 4 }}
@@ -215,8 +159,8 @@ const BookReviewsTab = ({
             >
               <PostCard
                 title={post.title}
-                content={post.content}
-                author={post.author}
+                description={post.description}
+                userName={post.userName}
                 avatar={post.avatar}
               />
             </Grid>
