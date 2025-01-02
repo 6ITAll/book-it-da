@@ -9,14 +9,14 @@ import {
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
 import React, { useState } from 'react';
-import HybridDialog from '@components/commons/HybridDialog';
+import NonTitleDialog from '@components/commons/NonTitleDialog';
 
-interface PostingShareDialogProps {
+interface URLShareDialogProps {
   open: boolean;
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PostingShareDialog = ({ open, handleClose }: PostingShareDialogProps) => {
+const URLShareDialog = ({ open, handleClose }: URLShareDialogProps) => {
   const [copied, setCopied] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -76,10 +76,9 @@ const PostingShareDialog = ({ open, handleClose }: PostingShareDialogProps) => {
 
   return (
     <>
-      <HybridDialog
+      <NonTitleDialog
         open={open}
         setOpen={handleClose}
-        title="포스팅 공유하기"
         contentNode={shareDialogContent}
       />
       {/* 추후 공통 스낵바로 교체 */}
@@ -101,4 +100,4 @@ const PostingShareDialog = ({ open, handleClose }: PostingShareDialogProps) => {
   );
 };
 
-export default PostingShareDialog;
+export default URLShareDialog;

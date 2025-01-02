@@ -1,7 +1,7 @@
 import { Stack, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-import PostingShareDialog from '@components/PostDetailPage/PostingShareDialog/PostingShareDialog';
+import URLShareDialog from '@components/PostDetailPage/PostingShareDialog/PostingShareDialog';
 import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostDetailPage/PostingContent';
 import PostingHeader from '@components/PostDetailPage/PostingHeader';
@@ -90,10 +90,7 @@ const PostingDetailPage = () => {
           posts={userOtherPosts ?? []}
         />
       </Stack>
-      <PostingShareDialog
-        open={openShareDialog}
-        handleClose={setOpenShareDialog}
-      />
+      <URLShareDialog open={openShareDialog} handleClose={setOpenShareDialog} />
     </Container>
   );
 };
