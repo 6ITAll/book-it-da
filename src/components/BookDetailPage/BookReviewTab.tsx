@@ -6,7 +6,7 @@ import PostCard from '@components/commons/DetailPagePostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
 import StarRating from '@components/commons/StarRating';
-import { useGetPostsQuery } from '@features/BookDetailPage/api/PostApi';
+import { useGetPostsQuery } from '@features/BookDetailPage/api/postApi';
 import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 
 interface BookReviewTabProps {
