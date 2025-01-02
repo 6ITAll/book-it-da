@@ -10,7 +10,7 @@ import { Review } from '@shared/types/type';
 
 /* TODO - @shared/types/type와 네이밍 통일 필요 */
 // 포스트 데이터 타입
-interface Post {
+export interface Post {
   title: string;
   content: string;
   author: string;
