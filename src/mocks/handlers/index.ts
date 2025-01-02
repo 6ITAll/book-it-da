@@ -1,3 +1,4 @@
 import { libraryHandlers } from './library';
+import { postingHandlers } from './posting';
 
-export const handlers = [...libraryHandlers];
+export const handlers = [...libraryHandlers, ...postingHandlers];

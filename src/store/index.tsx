@@ -6,6 +6,7 @@ import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { libraryApi } from '@features/MyPage/api';
+import { postingApi } from '@features/PostDetailPage/api/postingApi';
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
+    [postingApi.reducerPath]: postingApi.reducer,
     counter: counterReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -23,6 +25,7 @@ export const store = configureStore({
       bestBookGetApi.middleware,
       bookDetailApi.middleware,
       libraryApi.middleware,
+      postingApi.middleware,
     ]),
 });
 
