@@ -9,8 +9,8 @@ const generateMockPosts = () => {
   for (let i = 1; i <= 50; i++) {
     mockData.push({
       title: `트렌드 코리아 ${i}`,
-      content: `트렌드 코리아 ${i}의 내용을 간략하게 소개합니다. 트렌드는 언제나 새롭고 흥미로운 주제를 다룹니다.`,
-      author: `Author${i}`,
+      description: `트렌드 코리아 ${i}의 내용을 간략하게 소개합니다. 트렌드는 언제나 새롭고 흥미로운 주제를 다룹니다.`,
+      userName: `userName${i}`,
       avatar: `https://via.placeholder.com/40?text=A${i}`,
     });
   }
