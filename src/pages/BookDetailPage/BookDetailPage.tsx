@@ -9,6 +9,7 @@ import LeftBookDetailBox from '@components/BookDetailPage/LeftBookDetailBox';
 import RightBookDetailBox from '@components/BookDetailPage/RightBookDetailBox';
 import BookIntroduceTab from '@components/BookDetailPage/BookIntroduceTab';
 import BookReviewTab from '@components/BookDetailPage/BookReviewTab';
+
 const BookDetailPage = (): JSX.Element => {
   const { itemId } = useParams<{ itemId: string }>();
   const [currentTab, setCurrentTab] = useState(0);
@@ -30,7 +31,7 @@ const BookDetailPage = (): JSX.Element => {
         setBookDetail({
           itemId: item.itemId,
           title: item.title,
-          description: item.description,
+          description: item.description, // 책소개(설명)
           author: item.author,
           categoryName: item.categoryName,
           pubDate: item.pubDate,
@@ -98,7 +99,10 @@ const BookDetailPage = (): JSX.Element => {
             <BookDetailNavBar onTabChange={handleTabChange} />
             {/* 성별, 연령별 인기 분포 섹션 */}
             {currentTab === 0 && (
-              <BookIntroduceTab description={data?.item[0].description} />
+              <BookIntroduceTab
+                itemId={numericItemId}
+                description={data?.item[0].description || ''}
+              />
             )}
             {/* 리뷰 섹션 */}
             {currentTab === 1 && (
