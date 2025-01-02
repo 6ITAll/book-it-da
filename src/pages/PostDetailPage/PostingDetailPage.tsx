@@ -50,6 +50,7 @@ const PostingDetailPage = () => {
         isLiked={isLiked}
         setIsLiked={setIsLiked}
         setOpenShareDialog={setOpenShareDialog}
+        postingId={post.id}
         userId={post.user.id}
         currentUserId={currentUser.id}
         likeCount={post.likeCount}

@@ -170,4 +170,24 @@ export const postingHandlers = [
   http.get('/api/users/:userId/posts', () => {
     return HttpResponse.json(mockOtherPosts.userPosts);
   }),
+
+  http.post('/api/posts/:postId/like', ({ params }) => {
+    const postId = Number(params.postId);
+    const post = mockPosts.find((p) => p.id === postId);
+
+    if (!post) {
+      return HttpResponse.json(
+        { message: '포스팅을 찾을 수 없습니다.' },
+        { status: 404 },
+      );
+    }
+
+    post.isLiked = !post.isLiked;
+    post.likeCount += post.isLiked ? 1 : -1;
+
+    return HttpResponse.json({
+      isLiked: post.isLiked,
+      likeCount: post.likeCount,
+    });
+  }),
 ];
