@@ -43,6 +43,7 @@ const mockPosts = [
       avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
     },
     isLiked: false,
+    likeCount: 81,
   },
 ];
 

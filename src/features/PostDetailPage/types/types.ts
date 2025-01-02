@@ -16,6 +16,7 @@ export interface Posting {
     avatarUrl: string;
   };
   isLiked: boolean;
+  likeCount: number;
 }
 
 export interface User {

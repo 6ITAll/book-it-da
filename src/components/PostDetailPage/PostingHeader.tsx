@@ -3,6 +3,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
+import { formatCount } from '@shared/utils/formatCount';
 
 interface PostingHeaderProps {
   title: string;
@@ -11,6 +12,7 @@ interface PostingHeaderProps {
   setOpenShareDialog: (value: boolean) => void;
   userId: number;
   currentUserId: number;
+  likeCount: number;
 }
 
 const styles = {
@@ -37,17 +39,33 @@ const PostingHeader = ({
   setOpenShareDialog,
   userId,
   currentUserId,
+  likeCount,
 }: PostingHeaderProps) => {
   return (
     <Box sx={styles.postingHeader}>
       <Typography variant="h5" sx={{ fontWeight: 900 }}>
         {title}
       </Typography>
-      <Stack direction="row" spacing={1}>
+      <Stack direction="row" spacing={1} alignItems="center">
         {/* 좋아요 버튼 */}
-        <IconButton onClick={() => setIsLiked(!isLiked)}>
-          {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-        </IconButton>
+        <Box sx={{ position: 'relative' }}>
+          <IconButton onClick={() => setIsLiked(!isLiked)}>
+            {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+          </IconButton>
+          <Typography
+            variant="caption"
+            sx={{
+              position: 'absolute',
+              bottom: -10,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              fontSize: '0.75rem',
+              color: 'text.secondary',
+            }}
+          >
+            {formatCount(likeCount)}
+          </Typography>
+        </Box>
         {/* 공유 버튼 */}
         <IconButton onClick={() => setOpenShareDialog(true)}>
           <ShareIcon />

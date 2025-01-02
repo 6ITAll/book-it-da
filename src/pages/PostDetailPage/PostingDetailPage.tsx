@@ -52,6 +52,7 @@ const PostingDetailPage = () => {
         setOpenShareDialog={setOpenShareDialog}
         userId={post.user.id}
         currentUserId={currentUser.id}
+        likeCount={post.likeCount}
       />
       {/* 포스팅 정보 */}
       <Stack
