@@ -17,6 +17,7 @@ export interface Post {
   feedType: FeedType;
   bookTitle: string;
   bookAuthor: string;
+  avatar: string;
 }
 
 // 책 interface
@@ -32,4 +33,20 @@ export interface Bookshelf {
   name: string; // 책장 이름
   bookCount: number; // 책 개수
   books: Book[]; // 책 목록
+}
+
+// 리뷰 데이터 타입
+export interface Review {
+  username: string;
+  date: string;
+  content: string;
+  likes: number;
+  rating: number;
+}
+
+// 책 상세페이지 성별 및 연령 데이터 타입
+export interface GenderAge {
+  age: string;
+  male: number;
+  female: number;
 }
