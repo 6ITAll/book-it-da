@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -30,6 +30,22 @@ const Main = (): JSX.Element => {
     postType: postType || undefined,
     feedType,
   });
+
+  const filteredPosts = useMemo(() => {
+    if (!data?.posts) return [];
+
+    return data.posts.filter((post) => {
+      switch (feedType) {
+        case '팔로잉':
+          return post.isFollowing;
+        case '팔로워':
+          return post.isFollower;
+        case '추천':
+        default:
+          return true;
+      }
+    });
+  }, [data?.posts, feedType]);
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
@@ -126,7 +142,7 @@ const Main = (): JSX.Element => {
         />
       </Box>
       <InfiniteScroll
-        dataLength={data?.posts.length ?? 0}
+        dataLength={filteredPosts.length ?? 0}
         next={fetchMoreData}
         hasMore={data?.hasMore ?? false}
         scrollThreshold={0.99}
@@ -180,7 +196,7 @@ const Main = (): JSX.Element => {
               overflowX: 'hidden',
             }}
           >
-            {data.posts.map((post: OneLinePost | Posting) => {
+            {filteredPosts.map((post: OneLinePost | Posting) => {
               if ('title' in post && 'description' in post) {
                 return (
                   <Box key={post.id}>
@@ -189,11 +205,11 @@ const Main = (): JSX.Element => {
                       userName={post.userName}
                       timeAgo={post.timeAgo}
                       postType="포스팅"
-                      feedType={post.feedType}
                       bookTitle={post.bookTitle}
                       bookAuthor={post.bookAuthor}
                       title={post.title}
                       description={post.description}
+                      isFollowing={post.isFollowing}
                     />
                   </Box>
                 );
@@ -205,10 +221,10 @@ const Main = (): JSX.Element => {
                       userName={post.userName}
                       timeAgo={post.timeAgo}
                       postType="한줄평"
-                      feedType={post.feedType}
                       bookTitle={post.bookTitle}
                       bookAuthor={post.bookAuthor}
                       review={post.review}
+                      isFollowing={post.isFollowing}
                     />
                   </Box>
                 );

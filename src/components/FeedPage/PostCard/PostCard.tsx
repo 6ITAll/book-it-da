@@ -1,5 +1,5 @@
 import { Card } from '@mui/material';
-import { FeedType, PostType } from '@shared/types/type';
+import { PostType } from '@shared/types/type';
 import { styles } from './PostCard.styles';
 import PostCardContent from './PostCardContent';
 import BookImage from './PostCardImage';
@@ -11,9 +11,9 @@ interface PostCardBaseProps {
   userName: string;
   timeAgo: string;
   postType: PostType;
-  feedType: FeedType;
   bookTitle: string;
   bookAuthor: string;
+  isFollowing: boolean;
 }
 
 interface PostingCardProps extends PostCardBaseProps {
@@ -37,12 +37,12 @@ const PostCard = ({
   userName,
   timeAgo,
   postType,
-  feedType,
   bookTitle,
   bookAuthor,
   title,
   description,
   review,
+  isFollowing,
 }: PostCardProps): JSX.Element => {
   return (
     <Card sx={styles.card}>
@@ -50,7 +50,7 @@ const PostCard = ({
         userName={userName}
         postType={postType}
         timeAgo={timeAgo}
-        feedType={feedType}
+        isFollowing={isFollowing}
       />
       {/* 책 사진 */}
       <BookImage imageUrl={imageUrl} title={bookTitle} />

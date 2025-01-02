@@ -1,22 +1,20 @@
 import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
 import { styles } from './PostCard.styles';
-import { FeedType, PostType } from '@shared/types/type';
+import { PostType } from '@shared/types/type';
 
 interface PostCardHeaderProps {
   userName: string;
   postType: PostType;
   timeAgo: string;
-  feedType: FeedType;
+  isFollowing: boolean;
 }
 
 const PostCardHeader = ({
   userName,
   postType,
   timeAgo,
-  feedType,
+  isFollowing,
 }: PostCardHeaderProps) => {
-  const isFollowing = feedType === '팔로잉';
-
   return (
     <CardHeader
       sx={styles.cardHeader}

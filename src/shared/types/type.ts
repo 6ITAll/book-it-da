@@ -13,7 +13,8 @@ export interface Post {
   timeAgo: string;
   createdAt: string;
   postType: PostType;
-  feedType: FeedType;
+  isFollowing: boolean;
+  isFollower: boolean;
   bookTitle: string;
   bookAuthor: string;
 }
