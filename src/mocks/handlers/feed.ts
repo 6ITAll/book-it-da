@@ -382,8 +382,6 @@ const mockPosts: (OneLinePost | Posting)[] = [
     isLiked: true,
     review: '이 책은 정말 흥미롭습니다. 리뷰 35',
   },
-
-  // ... 나머지 포스트들
 ].map((post) => ({
   ...post,
   timeAgo: formatTimeAgo(post.createdAt),
@@ -398,7 +396,7 @@ export const feedHandlers = [
 
     let filteredPosts = [...mockPosts];
 
-    // postType 필터링 (선택된 경우에만)
+    // postType 필터링
     if (postType) {
       filteredPosts = filteredPosts.filter(
         (post) => post.postType === postType,
@@ -419,5 +417,16 @@ export const feedHandlers = [
     };
 
     return HttpResponse.json(response);
+  }),
+  http.post('/api/follow', async ({ request }) => {
+    const body = (await request.json()) as {
+      userName: string;
+      isFollowing: boolean;
+    };
+    const { userName, isFollowing } = body;
+
+    console.log(`User ${userName} follow status changed to ${isFollowing}`);
+
+    return HttpResponse.json({ success: true }, { status: 200 });
   }),
 ];

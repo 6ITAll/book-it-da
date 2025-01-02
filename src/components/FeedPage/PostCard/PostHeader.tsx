@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
 import { styles } from './PostCard.styles';
 import { PostType } from '@shared/types/type';
+import { useToggleFollowMutation } from '@features/FeedPage/api/feedApi';
 
 interface PostCardHeaderProps {
   userName: string;
@@ -15,6 +16,18 @@ const PostCardHeader = ({
   timeAgo,
   isFollowing,
 }: PostCardHeaderProps) => {
+  const [toggleFollow] = useToggleFollowMutation();
+
+  const handleFollowClick = async () => {
+    try {
+      await toggleFollow({
+        userName,
+        isFollowing: !isFollowing,
+      }).unwrap();
+    } catch (error) {
+      console.error('팔로우 / 언팔로우 실패:', error);
+    }
+  };
   return (
     <CardHeader
       sx={styles.cardHeader}
@@ -24,6 +37,7 @@ const PostCardHeader = ({
           variant="outlined"
           size="small"
           sx={styles.followButton(isFollowing)}
+          onClick={handleFollowClick}
         >
           {isFollowing ? '팔로잉' : '팔로우'}
         </Button>
