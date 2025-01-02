@@ -8,6 +8,7 @@ import PostingHeader from '@components/PostDetailPage/PostingHeader';
 import OtherPostingGrid from '@components/PostDetailPage/OtherPostingGrid';
 import {
   useGetBookOtherPostsQuery,
+  useGetCurrentUserQuery,
   useGetPostByIdQuery,
   useGetUserOtherPostsQuery,
 } from '@features/PostDetailPage/api/postingApi';
@@ -22,12 +23,12 @@ const PostingDetailPage = () => {
     post?.user.id ?? 0,
   );
   const [isLiked, setIsLiked] = useState(false);
-  const currentUserId = 1; // TODO: 실제 로그인 유저 ID로 대체
+  const { data: currentUser } = useGetCurrentUserQuery();
   const [openShareDialog, setOpenShareDialog] = useState(false);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
-  if (!post) return null;
+  if (!post || !currentUser) return null;
   if (!postingId) return <div>잘못된 접근입니다.</div>;
 
   return (
@@ -49,8 +50,8 @@ const PostingDetailPage = () => {
         isLiked={isLiked}
         setIsLiked={setIsLiked}
         setOpenShareDialog={setOpenShareDialog}
-        userId={post.userId}
-        currentUserId={currentUserId}
+        userId={post.user.id}
+        currentUserId={currentUser.id}
       />
       {/* 포스팅 정보 */}
       <Stack
@@ -72,7 +73,7 @@ const PostingDetailPage = () => {
         <PostingUserInfo
           user={post.user}
           createdAt={post.createdAt}
-          currentUserId={currentUserId}
+          currentUserId={currentUser.id}
         />
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />

@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 const CURRENT_USER = {
-  id: 1,
+  id: 2,
   name: 'Current User',
 };
 
