@@ -43,7 +43,7 @@ const ReadingStatus = ({
           placement="bottom"
           slots={{ transition: Zoom }}
         >
-          <ToggleButton value="want" aria-label="읽고 싶은 책">
+          <ToggleButton value="WISH" aria-label="읽고 싶은 책">
             <BookmarkIcon sx={{ fontSize: '1.2rem' }} />
           </ToggleButton>
         </Tooltip>
@@ -52,7 +52,7 @@ const ReadingStatus = ({
           placement="bottom"
           slots={{ transition: Zoom }}
         >
-          <ToggleButton value="reading" aria-label="읽고 있는 책">
+          <ToggleButton value="READING" aria-label="읽고 있는 책">
             <MenuBookIcon sx={{ fontSize: '1.2rem' }} />
           </ToggleButton>
         </Tooltip>
@@ -61,7 +61,7 @@ const ReadingStatus = ({
           placement="bottom"
           slots={{ transition: Zoom }}
         >
-          <ToggleButton value="done" aria-label="완독한 책">
+          <ToggleButton value="COMPLETED" aria-label="완독한 책">
             <DoneIcon sx={{ fontSize: '1.2rem' }} />
           </ToggleButton>
         </Tooltip>

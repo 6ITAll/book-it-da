@@ -118,6 +118,7 @@ const BookShelvesPage = () => {
       </Grid>
 
       <BookShelvesDetailDialog
+        key={`${userId}-${selectedBook?.id}`}
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         handleDeleteBook={handleDeleteBook}

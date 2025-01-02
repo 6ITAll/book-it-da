@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
-  DeleteBookFromShelfParams,
-  GetBookshelfParams,
   GetBookshelfResponse,
+  GetBookshelfParams,
   UpdateReadingStatusRequest,
+  DeleteBookFromShelfParams,
 } from '../types/types';
 
 export const bookShelvesApi = createApi({
