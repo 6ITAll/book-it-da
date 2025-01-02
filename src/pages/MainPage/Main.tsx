@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Box,
   Button,
@@ -10,110 +10,67 @@ import {
 } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {
-  generateRandomDescription,
-  generateRandomFeedType,
-  generateRandomTitle,
-  mockPosts,
-  getRandomBook,
-} from '@components/FeedPage/mockPosts';
-
 import PostCard from '@components/FeedPage/PostCard/PostCard';
 import ScrollToTop from '@components/commons/ScrollToTop';
 import { FeedTypeFilter } from '@components/FeedPage/Filters/FeedTypeFilter';
 import { PostTypeFilter } from '@components/FeedPage/Filters/PostTypeFilter';
-import { Post, PostType, FeedType } from '@shared/types/type';
-import {
-  generateRandomPostType,
-  generateRandomTimeAgo,
-} from '@components/FeedPage/mockPosts';
+import { PostType, FeedType } from '@shared/types/type';
 import CreateIcon from '@mui/icons-material/Create';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
+import { useGetPostsQuery } from '@features/FeedPage/api/feedApi';
 
 const Main = (): JSX.Element => {
-  const [posts, setPosts] = useState<Post[]>(mockPosts);
-  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const [postType, setPostType] = useState<PostType | ''>('');
   const [feedType, setFeedType] = useState<FeedType>('추천');
-  const [filterKey, setFilterKey] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
-  const handlePostTypeChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newValue: PostType | '',
-  ) => {
-    setPostType(newValue);
-    setHasMore(true);
-    setFilterKey((prev) => prev + 1);
-    window.scrollTo(0, 0);
-  };
+  const { data, isLoading, isFetching } = useGetPostsQuery({
+    page,
+    postType: postType || undefined,
+    feedType,
+  });
 
-  // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링 > 추후 interface 확립 후 변경
-  const handleFeedTypeChange = (
-    _: React.SyntheticEvent,
-    newValue: FeedType,
-  ) => {
-    setFeedType(newValue);
-    setHasMore(true);
-    setFilterKey((prev) => prev + 1);
-    window.scrollTo(0, 0);
-  };
-
-  // mock post 생성 > 추후 API 요청으로 변경
-  const getFilteredPosts = useCallback(
-    (count: number, startId: number): Post[] => {
-      return Array.from({ length: count }, (_, i) => {
-        const book = getRandomBook();
-        return {
-          id: startId + i,
-          title: generateRandomTitle(),
-          description: generateRandomDescription(),
-          imageUrl: book.imageUrl,
-          userName: `user${startId + i}`,
-          timeAgo: generateRandomTimeAgo(),
-          postType: (postType || generateRandomPostType()) as PostType,
-          feedType: (feedType || generateRandomFeedType()) as FeedType,
-          bookTitle: book.bookTitle,
-          bookAuthor: book.author,
-        };
-      }).filter((post) => {
-        const postTypeMatch = !postType || post.postType === postType;
-        const feedTypeMatch =
-          !feedType ||
-          (feedType === '추천'
-            ? post.feedType === '추천'
-            : feedType === post.feedType);
-        return postTypeMatch && feedTypeMatch;
-      });
+  // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
+  const handlePostTypeChange = useCallback(
+    (_event: React.MouseEvent<HTMLElement>, newValue: PostType | '') => {
+      setPostType(newValue);
+      setPage(1);
+      window.scrollTo(0, 0);
     },
-    [postType, feedType],
+    [],
   );
 
-  // Infinite Scroll 시 데이터 요청 > 추후 API 요청으로 변경
-  const fetchMoreData = () => {
-    if (posts.length >= 100) {
-      setHasMore(false);
-      return;
+  // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링
+  const handleFeedTypeChange = useCallback(
+    (_: React.SyntheticEvent, newValue: FeedType) => {
+      setFeedType(newValue);
+      setPage(1);
+      window.scrollTo(0, 0);
+    },
+    [],
+  );
+
+  const fetchMoreData = useCallback(() => {
+    if (!isFetching && data?.hasMore) {
+      setPage((prev) => prev + 1);
     }
+  }, [isFetching, data?.hasMore]);
 
-    setTimeout(() => {
-      const newPosts: Post[] = getFilteredPosts(10, posts.length + 1);
-
-      if (newPosts.length === 0) {
-        setHasMore(false);
-        return;
-      }
-
-      setPosts((prev) => [...prev, ...newPosts]);
-    }, 1000);
-  };
-
-  // 필터링 타입 변경 시 리렌더링 (초기 10개의 Mock Post 요청)
-  useEffect(() => {
-    const initialPosts: Post[] = getFilteredPosts(10, 1);
-    setPosts(initialPosts);
-  }, [postType, feedType, getFilteredPosts]);
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Container
@@ -169,13 +126,12 @@ const Main = (): JSX.Element => {
         />
       </Box>
       <InfiniteScroll
-        key={filterKey}
-        dataLength={posts.length}
+        dataLength={data?.posts.length ?? 0}
         next={fetchMoreData}
-        hasMore={hasMore}
+        hasMore={data?.hasMore ?? false}
         loader={
           <Box
-            style={{
+            sx={{
               width: '100%',
               display: 'flex',
               justifyContent: 'center',
@@ -183,12 +139,12 @@ const Main = (): JSX.Element => {
               padding: '2rem 1rem',
             }}
           >
-            <CircularProgress color="primary" value={25} />
+            <CircularProgress />
           </Box>
         }
         endMessage={
           <Box
-            style={{
+            sx={{
               width: '100%',
               display: 'flex',
               justifyContent: 'center',
@@ -209,31 +165,37 @@ const Main = (): JSX.Element => {
           overflowX: 'hidden',
         }}
       >
-        <Masonry
-          columns={{ xs: 1, sm: 2, md: 4 }}
-          spacing={4}
-          sx={{
-            width: '100%',
-            boxSizing: 'border-box',
-            overflowX: 'hidden',
-          }}
-        >
-          {posts.map((post) => (
-            <Box key={post.id}>
-              <PostCard
-                title={post.title}
-                description={post.description}
-                imageUrl={post.imageUrl}
-                userName={post.userName}
-                timeAgo={post.timeAgo}
-                postType={post.postType}
-                feedType={post.feedType}
-                bookTitle={post.bookTitle}
-                bookAuthor={post.bookAuthor}
-              />
-            </Box>
-          ))}
-        </Masonry>
+        {isLoading || !data ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Masonry
+            columns={{ xs: 1, sm: 2, md: 4 }}
+            spacing={4}
+            sx={{
+              width: '100%',
+              boxSizing: 'border-box',
+              overflowX: 'hidden',
+            }}
+          >
+            {data.posts.map((post) => (
+              <Box key={post.id}>
+                <PostCard
+                  title={post.title}
+                  description={post.description}
+                  imageUrl={post.imageUrl}
+                  userName={post.userName}
+                  timeAgo={post.timeAgo}
+                  postType={post.postType}
+                  feedType={post.feedType}
+                  bookTitle={post.bookTitle}
+                  bookAuthor={post.bookAuthor}
+                />
+              </Box>
+            ))}
+          </Masonry>
+        )}
       </InfiniteScroll>
       <ScrollToTop />
     </Container>
