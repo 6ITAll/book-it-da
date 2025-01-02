@@ -18,17 +18,17 @@ import {
   getRandomBook,
 } from '@components/FeedPage/mockPosts';
 
-import PostCard from '@components/commons/PostCard';
+import PostCard from '@components/FeedPage/PostCard/PostCard';
 import ScrollToTop from '@components/commons/ScrollToTop';
-import { FeedTypeFilter } from '@components/FeedPage/FeedTypeFilter';
-import { PostTypeFilter } from '@components/FeedPage/PostTypeFilter';
+import { FeedTypeFilter } from '@components/FeedPage/Filters/FeedTypeFilter';
+import { PostTypeFilter } from '@components/FeedPage/Filters/PostTypeFilter';
 import { Post, PostType, FeedType } from '@shared/types/type';
 import {
   generateRandomPostType,
   generateRandomTimeAgo,
 } from '@components/FeedPage/mockPosts';
 import CreateIcon from '@mui/icons-material/Create';
-import WriteDialog from '@components/FeedPage/WriteDialog';
+import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
 
 const Main = (): JSX.Element => {
   const [posts, setPosts] = useState<Post[]>(mockPosts);
@@ -36,9 +36,7 @@ const Main = (): JSX.Element => {
   const [postType, setPostType] = useState<PostType | ''>('');
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [filterKey, setFilterKey] = useState(0);
-  const [writeDialogOpen, setWriteDialogOpen] = useState(false);
-  // 카드 표시 모드 설정
-  const isDetail: boolean = true;
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정 > 추후 interface 확립 후 변경
   const handlePostTypeChange = (
@@ -53,10 +51,10 @@ const Main = (): JSX.Element => {
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링 > 추후 interface 확립 후 변경
   const handleFeedTypeChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newValue: FeedType | null,
+    _: React.SyntheticEvent,
+    newValue: FeedType,
   ) => {
-    setFeedType(newValue || '추천');
+    setFeedType(newValue);
     setHasMore(true);
     setFilterKey((prev) => prev + 1);
     window.scrollTo(0, 0);
@@ -129,45 +127,47 @@ const Main = (): JSX.Element => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          mb: '2rem',
-        }}
-      >
-        <Button
-          variant="outlined"
-          onClick={() => setWriteDialogOpen(true)}
-          endIcon={<CreateIcon />}
-        >
-          글쓰기
-        </Button>
-        <WriteDialog
-          writeDialogOpen={writeDialogOpen}
-          setWriteDialogOpen={setWriteDialogOpen}
-        />
-      </Stack>
-      <Box
-        sx={{
-          padding: '0 1rem',
-          display: 'flex',
-          flexDirection: 'row',
           justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: '1rem',
         }}
       >
         <FeedTypeFilter
           feedType={feedType}
           onFeedTypeChange={handleFeedTypeChange}
         />
+        <Button
+          variant="outlined"
+          onClick={() => setDialogOpen(true)}
+          endIcon={<CreateIcon />}
+        >
+          글쓰기
+        </Button>
+        <PostTypeSelectDialog
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+        />
+      </Stack>
+      <Divider
+        sx={{
+          mt: '0',
+          marginBottom: '1rem',
+        }}
+      />
+      <Box
+        sx={{
+          padding: '0 1rem',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          gap: '10px',
+        }}
+      >
         <PostTypeFilter
           postType={postType}
           onPostTypeChange={handlePostTypeChange}
         />
       </Box>
-      <Divider
-        sx={{
-          margin: '1rem 0',
-        }}
-      />
       <InfiniteScroll
         key={filterKey}
         dataLength={posts.length}
@@ -230,7 +230,6 @@ const Main = (): JSX.Element => {
                 feedType={post.feedType}
                 bookTitle={post.bookTitle}
                 bookAuthor={post.bookAuthor}
-                isDetail={isDetail}
               />
             </Box>
           ))}

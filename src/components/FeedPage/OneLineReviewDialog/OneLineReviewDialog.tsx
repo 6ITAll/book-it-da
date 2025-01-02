@@ -1,10 +1,14 @@
-import { Box, Stack, TextField, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { PostType } from './WriteDialog';
+import { PostType } from '@shared/types/type';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
 import HybridDialog from '@components/commons/HybridDialog';
 import StarRating from '@components/commons/StarRating';
+import { BookPreviewSection } from './OneLineReviewBookPreview';
+import { ReviewTextField } from './OneLineReviewTextField';
+import { styles } from './OneLineReviewDialog.styles';
+import { REVIEW_DIALOG } from 'src/constants';
 
 interface OneLineReviewDialogProps {
   // 포스팅 타입 선택 다이얼로그에서 오는 Props
@@ -32,43 +36,53 @@ const OneLineReviewDialog = ({
     receivedBook || null,
   );
   const [review, setReview] = useState('');
-  const [rating, setRating] = useState<number>(receivedRating || 0);
+  const [starRating, setStarRating] = useState<number>(
+    receivedRating || REVIEW_DIALOG.DEFAULT_STAR_RATING,
+  );
 
-  const dialogOpen = selectedType ? selectedType === 'review' : !!isOpen;
+  const dialogOpen = selectedType ? selectedType === '한줄평' : !!isOpen;
+
+  // 다이얼로그 초기화 함수
+  const resetState = () => {
+    setSelectedBook(null);
+    setSearchQuery('');
+    setReview('');
+    setStarRating(REVIEW_DIALOG.DEFAULT_STAR_RATING);
+  };
+
   // 다이얼로그 닫히면 책 검색 결과 초기화
   useEffect(() => {
-    if (!receivedBook && selectedType !== 'review') {
-      setSelectedBook(null);
-      setSearchQuery('');
-      setReview('');
+    if (!receivedBook && selectedType !== '한줄평') {
+      resetState();
     }
   }, [selectedType, receivedBook]);
+
   // 상세 페이지에서 가져온 별점 적용
   useEffect(() => {
     if (receivedRating) {
-      setRating(receivedRating);
+      setStarRating(receivedRating);
     }
   }, [receivedRating]);
 
   const handleSubmit = () => {
-    // 한줄평 제출 로직 구현
-    console.log('한줄평 제출:', { selectedBook, review });
+    if (!selectedBook || !review.trim() || starRating === 0) {
+      return;
+    }
+    console.log('한줄평 제출:', { selectedBook, review, starRating });
+    resetState();
+    handleDialogClose();
   };
 
-  const handleDialogClose: React.Dispatch<
-    React.SetStateAction<boolean>
-  > = () => {
+  const handleDialogClose = () => {
     if (selectedType) {
-      // 포스팅 타입 선택 다이얼로그에서 연 경우
       setSelectedType?.(null);
     } else {
-      // 다른 경로로 다이얼로그를 연 경우
       onClose?.();
     }
   };
 
   const contentNode = (
-    <Stack sx={{ gap: '20px' }}>
+    <Stack sx={styles.contentStack}>
       {/* 상세 페이지에서 넘어갈 시 책 검색 기능 표시하지 않음 */}
       {!receivedBook && (
         <BookSearchAutoComplete
@@ -78,44 +92,16 @@ const OneLineReviewDialog = ({
           setSelectedBook={setSelectedBook}
         />
       )}
-      {/* 한줄평 하고 있는 책 < 책 검색 or 책 상세 페이지 */}
-      {selectedBook && (
-        <Box>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <img
-              src={selectedBook.imageUrl}
-              alt={selectedBook.bookTitle}
-              style={{ width: 60, height: 90 }}
-            />
-            <Stack>
-              <Typography>{selectedBook.bookTitle}</Typography>
-              <Typography variant="body2">{selectedBook.author}</Typography>
-            </Stack>
-          </Stack>
-        </Box>
-      )}
+      {/* 한줄평 하고 있는 책 <= 책 검색 or 책 상세 페이지 */}
+      {selectedBook && <BookPreviewSection book={selectedBook} />}
       {/* 별점 기능 */}
-      <StarRating rating={rating} onRatingChange={setRating} isDialog={true} />
-      {/* 한줄평 작성 영역 */}
-      <TextField
-        fullWidth
-        multiline
-        label="한줄평"
-        variant="outlined"
-        placeholder="한줄평을 입력하세요"
-        value={review}
-        onChange={(e) => setReview(e.target.value)}
-        minRows={12}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '8px',
-            height: '200px',
-            '& textarea': {
-              height: '100% !important',
-            },
-          },
-        }}
+      <StarRating
+        rating={starRating}
+        onRatingChange={setStarRating}
+        isDialog={true}
       />
+      {/* 한줄평 작성 영역 */}
+      <ReviewTextField review={review} setReview={setReview} />
     </Stack>
   );
 

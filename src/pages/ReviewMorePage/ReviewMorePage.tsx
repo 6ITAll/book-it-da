@@ -4,7 +4,7 @@ import ReviewCard from '@components/commons/DetailPageReviewCard';
 import { useState } from 'react';
 import ReviewSortOptions from '@components/ReviewMorePage/ReviewSortOptions';
 import StarRating from '@components/commons/StarRating';
-import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog';
+import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
 import { useLocation } from 'react-router-dom';
 // Mock Data 생성
 const generateMockReviews = () => {
