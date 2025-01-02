@@ -1,3 +1,10 @@
 import { libraryHandlers } from './library';
-
-export const handlers = [...libraryHandlers];
+import { genderAgeHandlers } from './genderAge';
+import { reviewHandlers } from './DetailPageReview';
+import { postHandlers } from './DetailPagePost';
+export const handlers = [
+  ...libraryHandlers,
+  ...genderAgeHandlers,
+  ...reviewHandlers,
+  ...postHandlers,
+];
