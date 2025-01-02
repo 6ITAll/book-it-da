@@ -9,15 +9,15 @@ import {
 
 interface PostCardProps {
   title: string;
-  content: string;
-  author: string;
+  description: string;
+  userName: string;
   avatar: string;
 }
 
 const PostCard = ({
   title,
-  content,
-  author,
+  description,
+  userName,
   avatar,
 }: PostCardProps): JSX.Element => {
   return (
@@ -51,7 +51,7 @@ const PostCard = ({
             overflow: 'hidden',
           }}
         >
-          {content}
+          {description}
         </Typography>
       </CardContent>
       <CardContent>
@@ -63,9 +63,13 @@ const PostCard = ({
           sx={{ borderTop: '1px solid #e7e8e9', paddingTop: '1rem' }}
         >
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar src={avatar} alt={author} sx={{ width: 40, height: 40 }} />
+            <Avatar
+              src={avatar}
+              alt={userName}
+              sx={{ width: 40, height: 40 }}
+            />
             <Typography variant="body2" fontWeight="bold">
-              {author}
+              {userName}
             </Typography>
           </Stack>
           <Button
