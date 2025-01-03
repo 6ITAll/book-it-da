@@ -8,6 +8,7 @@ import {
   PostType,
 } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
+import { OneLineReviewRequest } from '@features/OneLineReviewDialog/types/types';
 
 const bookData: Book[] = [
   {
@@ -126,7 +127,7 @@ const generateMockPosts = (): (OneLinePost | Posting)[] => {
   return posts;
 };
 
-const mockPosts: (OneLinePost | Posting)[] = generateMockPosts();
+export const mockPosts: (OneLinePost | Posting)[] = generateMockPosts();
 
 export const feedHandlers = [
   http.get('/api/posts', ({ request }) => {
@@ -181,7 +182,6 @@ export const feedHandlers = [
       }
     });
 
-    console.log(`User ${userName} follow status changed to ${isFollowing}`);
     return HttpResponse.json({ success: true }, { status: 200 });
   }),
   http.post('/api/like', async ({ request }) => {
@@ -203,5 +203,30 @@ export const feedHandlers = [
     });
 
     return HttpResponse.json({ success: true }, { status: 200 });
+  }),
+  http.post('/api/posts/one-line-review', async ({ request }) => {
+    const body = (await request.json()) as OneLineReviewRequest;
+    const { book, rating, review } = body;
+
+    const newPost = {
+      id: mockPosts.length + 1,
+      imageUrl: book.imageUrl,
+      userName: 'currentUser',
+      createdAt: new Date().toISOString(),
+      timeAgo: '방금 전',
+      postType: '한줄평' as const,
+      isFollowing: false,
+      isFollower: false,
+      bookTitle: book.bookTitle,
+      bookAuthor: book.author,
+      likeCount: 0,
+      isLiked: false,
+      review,
+      rating,
+    };
+
+    mockPosts.unshift(newPost);
+
+    return HttpResponse.json({ success: true, post: newPost }, { status: 201 });
   }),
 ];

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Box,
   Button,
@@ -37,22 +37,6 @@ const Main = (): JSX.Element => {
     postType: postType || undefined,
     feedType,
   });
-
-  const filteredPosts = useMemo(() => {
-    if (!data?.posts) return [];
-
-    return data.posts.filter((post) => {
-      switch (feedType) {
-        case '팔로잉':
-          return post.isFollowing;
-        case '팔로워':
-          return post.isFollower;
-        case '추천':
-        default:
-          return true;
-      }
-    });
-  }, [data?.posts, feedType]);
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
@@ -171,7 +155,7 @@ const Main = (): JSX.Element => {
         />
       </Box>
       <InfiniteScroll
-        dataLength={filteredPosts.length ?? 0}
+        dataLength={data?.posts?.length ?? 0}
         next={fetchMoreData}
         hasMore={data?.hasMore ?? false}
         scrollThreshold={0.99}
@@ -225,7 +209,7 @@ const Main = (): JSX.Element => {
               overflowX: 'hidden',
             }}
           >
-            {filteredPosts.map((post: OneLinePost | Posting) => {
+            {data?.posts?.map((post: OneLinePost | Posting) => {
               if ('title' in post && 'description' in post) {
                 return (
                   <Box key={post.id}>
