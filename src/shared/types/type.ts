@@ -1,7 +1,7 @@
 // 공통 Type 정의
 
 // Post Type
-export type PostType = '한줄평' | '포스팅';
+export type PostType = '한줄평' | '포스팅' | null;
 // Feed Type
 export type FeedType = '추천' | '팔로워' | '팔로잉';
 
