@@ -105,3 +105,14 @@ export const WithAction: Story = {
   },
 };
 
+export const FullScreen: Story = {
+  args: {
+    title: 'FullScreen Dialog',
+    contentNode: <Typography>FullScreen mode is enabled.</Typography>,
+    fullScreen: true,
+  },
+  play: async ({ context }) => {
+    if (!Default.play) throw new DefaultPlayNotFoundError();
+    await Default.play(context);
+  },
+};
