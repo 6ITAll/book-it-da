@@ -6,7 +6,6 @@ import {
   Container,
   Divider,
   Stack,
-  Typography,
 } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -199,7 +198,7 @@ const Main = (): JSX.Element => {
               padding: '2rem 1rem',
             }}
           >
-            <Typography>더이상 표시할 것이 없습니다.</Typography>
+            <></>
           </Box>
         }
         style={{

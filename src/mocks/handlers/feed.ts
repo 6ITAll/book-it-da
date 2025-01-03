@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { OneLinePost, Posting, PostType } from '@shared/types/type';
+import { FeedType, OneLinePost, Posting, PostType } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 
 const mockPosts: (OneLinePost | Posting)[] = [
@@ -393,9 +393,24 @@ export const feedHandlers = [
     const page = Number(url.searchParams.get('page')) || 1;
     const limit = Number(url.searchParams.get('limit')) || 10;
     const postType = url.searchParams.get('postType') as PostType | undefined;
+    const feedType = url.searchParams.get('feedType') as FeedType;
 
     let filteredPosts = [...mockPosts];
 
+    // 피드 타입에 따른 필터링
+    switch (feedType) {
+      case '팔로잉':
+        filteredPosts = filteredPosts.filter((post) => post.isFollowing);
+        break;
+      case '팔로워':
+        filteredPosts = filteredPosts.filter((post) => post.isFollower);
+        break;
+      case '추천':
+      default:
+        break;
+    }
+
+    // 포스트 타입 필터링
     if (postType) {
       filteredPosts = filteredPosts.filter(
         (post) => post.postType === postType,
