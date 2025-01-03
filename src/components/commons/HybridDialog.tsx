@@ -115,6 +115,7 @@ const HybridDialog = ({
             onClick={handleAction}
             fullWidth
             sx={{ borderRadius: 0 }}
+            aria-label="action"
           >
             {action}
           </Button>

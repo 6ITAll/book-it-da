@@ -85,3 +85,23 @@ export const WithBackButton: Story = {
     await expect(backButton).toBeInTheDocument();
   },
 };
+
+export const WithAction: Story = {
+  args: {
+    title: 'Dialog with Action',
+    contentNode: <Typography>This dialog has a Action.</Typography>,
+    action: 'Action',
+    onActionClick: () => console.log('Action button clicked'),
+  },
+  play: async ({ context }) => {
+    if (!Default.play) throw new DefaultPlayNotFoundError();
+    await Default.play(context);
+
+    const dialog = context.dialog;
+    const actionButton = within(dialog).getByRole('button', {
+      name: /action/i,
+    });
+    await expect(actionButton).toBeInTheDocument();
+  },
+};
+
