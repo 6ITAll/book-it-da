@@ -6,6 +6,7 @@ import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { libraryApi } from '@features/MyPage/api';
+import userReducer from './userSlice/userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
     counter: counterReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
