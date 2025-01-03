@@ -73,10 +73,6 @@ const Header = (): JSX.Element => {
     }
   };
 
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
   const handleProfileClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -85,20 +81,15 @@ const Header = (): JSX.Element => {
     setAnchorEl(null);
   };
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    handleClose();
+  };
+
   const handleLogout = () => {
     dispatch(logoutSuccess());
     handleClose();
     navigate('/');
-  };
-
-  const handleMyPage = () => {
-    navigate('/my-page');
-    handleClose();
-  };
-
-  const handleEditProfile = () => {
-    navigate('/edit-profile');
-    handleClose();
   };
 
   return (
@@ -133,13 +124,21 @@ const Header = (): JSX.Element => {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleMyPage}>마이페이지</MenuItem>
-              <MenuItem onClick={handleEditProfile}>프로필 편집</MenuItem>
+              <MenuItem onClick={() => handleNavigation('/my-page')}>
+                마이페이지
+              </MenuItem>
+              <MenuItem onClick={() => handleNavigation('/edit-profile')}>
+                프로필 편집
+              </MenuItem>
               <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
             </Menu>
           </div>
         ) : (
-          <Button onClick={handleLoginClick} variant="outlined" color="primary">
+          <Button
+            onClick={() => handleNavigation('/login')}
+            variant="outlined"
+            color="primary"
+          >
             로그인
           </Button>
         )}
