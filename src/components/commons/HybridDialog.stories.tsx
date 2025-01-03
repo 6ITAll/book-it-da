@@ -40,6 +40,13 @@ const meta = {
 
 export default meta;
 
+class DefaultPlayNotFoundError extends Error {
+  constructor() {
+    super('Default 스토리의 play 함수가 존재하지 않습니다.');
+    this.name = 'DefaultPlayNotFoundError';
+  }
+}
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
@@ -48,7 +55,7 @@ export const Default: Story = {
     contentNode: <Typography>This is the content of the dialog.</Typography>,
     fullScreen: false,
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ context, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button'));
 
@@ -56,5 +63,25 @@ export const Default: Story = {
       'dialog',
     );
     await expect(dialog).toBeInTheDocument();
+
+    context.dialog = dialog;
+  },
+};
+
+export const WithBackButton: Story = {
+  args: {
+    title: 'Dialog with Back Button',
+    contentNode: <Typography>This dialog has a back button.</Typography>,
+    onBack: () => console.log('Back button clicked'),
+  },
+  play: async ({ context }) => {
+    if (!Default.play) throw new DefaultPlayNotFoundError();
+    await Default.play(context);
+
+    const dialog = context.dialog;
+    const backButton = within(dialog).getByRole('button', {
+      name: /back/i,
+    });
+    await expect(backButton).toBeInTheDocument();
   },
 };

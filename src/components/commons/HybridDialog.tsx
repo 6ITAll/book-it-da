@@ -92,7 +92,7 @@ const HybridDialog = ({
             alignItems="center"
           >
             {onBack ? (
-              <IconButton onClick={onBack}>
+              <IconButton onClick={onBack} aria-label="back">
                 <ArrowBackIcon />
               </IconButton>
             ) : (
