@@ -51,7 +51,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 4,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user354',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: true,
@@ -65,7 +65,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 5,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user31',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: true,
@@ -80,7 +80,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 6,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user352',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -94,7 +94,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 7,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user323',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -109,7 +109,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 8,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user3521',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -123,7 +123,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 9,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user312',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -138,7 +138,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 10,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user3545',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -152,7 +152,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 11,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user3256',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -167,7 +167,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 12,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user351s',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -181,7 +181,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 13,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user233',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -196,7 +196,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 14,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user115',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -210,7 +210,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 15,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user3325',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: true,
@@ -225,7 +225,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 16,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user7325',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -239,7 +239,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 17,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user23',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -254,7 +254,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 18,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user5235',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: true,
@@ -268,7 +268,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 19,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user1563',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -283,7 +283,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 20,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user3125',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -297,7 +297,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 21,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user1253',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -312,7 +312,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 22,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user3125',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -326,7 +326,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 23,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user1253',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -341,7 +341,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 24,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user3515',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -355,7 +355,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 25,
     imageUrl: '/src/assets/images/sample3.jpg',
-    userName: 'user3',
+    userName: 'user153',
     createdAt: '2025-01-02T11:04:08.842579',
     postType: '포스팅' as const,
     isFollowing: false,
@@ -371,7 +371,7 @@ const mockPosts: (OneLinePost | Posting)[] = [
   {
     id: 26,
     imageUrl: '/src/assets/images/sample5.jpg',
-    userName: 'user35',
+    userName: 'user35145',
     createdAt: '2025-01-01T19:40:36.434789',
     postType: '한줄평' as const,
     isFollowing: false,
@@ -396,14 +396,12 @@ export const feedHandlers = [
 
     let filteredPosts = [...mockPosts];
 
-    // postType 필터링
     if (postType) {
       filteredPosts = filteredPosts.filter(
         (post) => post.postType === postType,
       );
     }
 
-    // 페이지네이션 적용
     const startIndex = (page - 1) * limit;
     const paginatedPosts = filteredPosts.slice(startIndex, startIndex + limit);
 
@@ -425,8 +423,17 @@ export const feedHandlers = [
     };
     const { userName, isFollowing } = body;
 
-    console.log(`User ${userName} follow status changed to ${isFollowing}`);
+    // mockPosts 배열의 실제 데이터 업데이트
+    mockPosts.forEach((post, index) => {
+      if (post.userName === userName) {
+        mockPosts[index] = {
+          ...post,
+          isFollowing,
+        };
+      }
+    });
 
+    console.log(`User ${userName} follow status changed to ${isFollowing}`);
     return HttpResponse.json({ success: true }, { status: 200 });
   }),
 ];
