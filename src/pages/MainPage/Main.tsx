@@ -227,6 +227,7 @@ const Main = (): JSX.Element => {
                       onFollowChange={handleFollowChange}
                       likeCount={post.likeCount}
                       isLiked={post.isLiked}
+                      itemId={post.itemId}
                     />
                   </Box>
                 );
@@ -246,6 +247,7 @@ const Main = (): JSX.Element => {
                       onFollowChange={handleFollowChange}
                       likeCount={post.likeCount}
                       isLiked={post.isLiked}
+                      itemId={post.itemId}
                     />
                   </Box>
                 );

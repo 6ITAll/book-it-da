@@ -19,6 +19,7 @@ export interface Post {
   bookAuthor: string;
   likeCount: number;
   isLiked: boolean;
+  itemId: number;
 }
 
 // 한줄평 포스트

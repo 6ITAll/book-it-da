@@ -18,6 +18,7 @@ interface PostCardBaseProps {
   isFollowing: boolean;
   likeCount: number;
   isLiked: boolean;
+  itemId: number;
   onFollowChange: (userName: string, isFollowing: boolean) => void;
 }
 
@@ -51,6 +52,7 @@ const PostCard = ({
   isFollowing,
   likeCount,
   isLiked,
+  itemId,
   onFollowChange,
 }: PostCardProps): JSX.Element => {
   const [toggleLike] = useToggleLikeMutation();
@@ -97,7 +99,7 @@ const PostCard = ({
         likeCount={likeCount}
         isLiked={isLiked}
         handleLikeClick={handleLikeClick}
-        onBookClick={() => {}}
+        itemId={itemId}
       />
     </Card>
   );

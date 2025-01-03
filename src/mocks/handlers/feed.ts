@@ -106,6 +106,7 @@ const generateMockPosts = (): (OneLinePost | Posting)[] => {
       bookAuthor: book.author,
       likeCount: Math.floor(Math.random() * 1000),
       isLiked: false,
+      itemId: book.itemId,
     };
 
     if (basePost.postType === '포스팅') {
@@ -223,6 +224,7 @@ export const feedHandlers = [
       isLiked: false,
       review,
       rating,
+      itemId: book.itemId,
     };
 
     mockPosts.unshift(newPost);
