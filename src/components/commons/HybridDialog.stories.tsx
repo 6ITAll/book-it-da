@@ -33,6 +33,7 @@ const meta = {
   component: HybridDialogStoryWrapper,
   argTypes: {
     maxWidth: {
+      control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
   },
