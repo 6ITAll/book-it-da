@@ -239,6 +239,7 @@ const Main = (): JSX.Element => {
                       title={post.title}
                       description={post.description}
                       isFollowing={post.isFollowing}
+                      likeCount={post.likeCount}
                       onFollowChange={handleFollowChange}
                     />
                   </Box>
@@ -247,6 +248,7 @@ const Main = (): JSX.Element => {
                 return (
                   <Box key={post.id}>
                     <PostCard
+                      postId={post.id}
                       imageUrl={post.imageUrl}
                       userName={post.userName}
                       timeAgo={post.timeAgo}
@@ -256,6 +258,8 @@ const Main = (): JSX.Element => {
                       review={post.review}
                       isFollowing={post.isFollowing}
                       onFollowChange={handleFollowChange}
+                      likeCount={post.likeCount}
+                      isLiked={post.isLiked}
                     />
                   </Box>
                 );

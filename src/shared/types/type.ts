@@ -17,6 +17,8 @@ export interface Post {
   isFollower: boolean;
   bookTitle: string;
   bookAuthor: string;
+  likeCount: number;
+  isLiked: boolean;
 }
 
 // 한줄평 포스트

@@ -5,8 +5,10 @@ import PostCardContent from './PostCardContent';
 import BookImage from './PostCardImage';
 import PostCardHeader from './PostHeader';
 import PostCardFooter from './PostCardFooter';
+import { useToggleLikeMutation } from '@features/FeedPage/api/feedApi';
 
 interface PostCardBaseProps {
+  postId: number;
   imageUrl: string;
   userName: string;
   timeAgo: string;
@@ -14,6 +16,8 @@ interface PostCardBaseProps {
   bookTitle: string;
   bookAuthor: string;
   isFollowing: boolean;
+  likeCount: number;
+  isLiked: boolean;
   onFollowChange: (userName: string, isFollowing: boolean) => void;
 }
 
@@ -34,6 +38,7 @@ interface OneLineCardProps extends PostCardBaseProps {
 type PostCardProps = PostingCardProps | OneLineCardProps;
 
 const PostCard = ({
+  postId,
   imageUrl,
   userName,
   timeAgo,
@@ -44,8 +49,20 @@ const PostCard = ({
   description,
   review,
   isFollowing,
+  likeCount,
+  isLiked,
   onFollowChange,
 }: PostCardProps): JSX.Element => {
+  const [toggleLike] = useToggleLikeMutation();
+
+  const handleLikeClick = async (postId: number, isLiked: boolean) => {
+    try {
+      await toggleLike({ postId, isLiked }).unwrap();
+    } catch (error) {
+      console.error('좋아요 토글 실패:', error);
+    }
+  };
+
   return (
     <Card sx={styles.card}>
       <PostCardHeader
@@ -75,7 +92,13 @@ const PostCard = ({
               }
         }
       />
-      <PostCardFooter onLikeClick={() => {}} onBookClick={() => {}} />
+      <PostCardFooter
+        postId={postId}
+        likeCount={likeCount}
+        isLiked={isLiked}
+        handleLikeClick={handleLikeClick}
+        onBookClick={() => {}}
+      />
     </Card>
   );
 };

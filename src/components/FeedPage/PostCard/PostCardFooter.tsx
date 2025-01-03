@@ -1,22 +1,34 @@
 import { Button, CardActions } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { styles } from './PostCard.styles';
 
 interface PostCardFooterProps {
-  onLikeClick?: () => void;
+  postId: number;
+  likeCount: number;
+  isLiked: boolean;
+  handleLikeClick: (postId: number, isLiked: boolean) => void;
   onBookClick?: () => void;
 }
 
-const PostCardFooter = ({ onLikeClick, onBookClick }: PostCardFooterProps) => (
+const PostCardFooter = ({
+  postId,
+  likeCount,
+  isLiked,
+  handleLikeClick,
+  onBookClick,
+}: PostCardFooterProps) => (
   <CardActions disableSpacing sx={styles.cardFooter}>
     <Button
       fullWidth
-      startIcon={<FavoriteBorderIcon />}
+      startIcon={
+        isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />
+      }
       sx={styles.cardFooterButton(true)}
-      onClick={onLikeClick}
+      onClick={() => handleLikeClick(postId, !isLiked)}
     >
-      좋아요
+      {likeCount}
     </Button>
     <Button
       fullWidth

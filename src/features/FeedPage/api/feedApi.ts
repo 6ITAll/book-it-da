@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { FollowRequest, GetPostsParams, PostsResponse } from '../types/types';
+import {
+  FollowRequest,
+  GetPostsParams,
+  LikeRequest,
+  PostsResponse,
+} from '../types/types';
 
 export const feedApi = createApi({
   reducerPath: 'feedApi',
@@ -87,7 +92,59 @@ export const feedApi = createApi({
         }
       },
     }),
+    toggleLike: builder.mutation<{ success: boolean }, LikeRequest>({
+      query: ({ postId, isLiked }) => ({
+        url: '/like',
+        method: 'POST',
+        body: { postId, isLiked },
+      }),
+      async onQueryStarted({ postId, isLiked }, { dispatch, queryFulfilled }) {
+        const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
+
+        const patchResults = feedTypes.map((feedType) =>
+          dispatch(
+            feedApi.util.updateQueryData(
+              'getPosts',
+              {
+                page: 1,
+                feedType,
+                postType: undefined,
+                limit: 10,
+              } as GetPostsParams,
+              (draft) => {
+                draft.posts = draft.posts.map((post) => {
+                  if (post.id === postId) {
+                    return {
+                      ...post,
+                      isLiked,
+                      likeCount: isLiked
+                        ? post.likeCount + 1
+                        : post.likeCount - 1,
+                    };
+                  }
+                  return post;
+                });
+                return draft;
+              },
+            ),
+          ),
+        );
+
+        try {
+          const result = await queryFulfilled;
+          if (!result.data.success) {
+            patchResults.forEach((patchResult) => patchResult.undo());
+          }
+        } catch {
+          patchResults.forEach((patchResult) => patchResult.undo());
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetPostsQuery, useToggleFollowMutation } = feedApi;
+export const {
+  useGetPostsQuery,
+  useToggleFollowMutation,
+  useToggleLikeMutation,
+} = feedApi;

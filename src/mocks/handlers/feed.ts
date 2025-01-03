@@ -103,6 +103,8 @@ const generateMockPosts = (): (OneLinePost | Posting)[] => {
       isFollower: Math.random() < 0.5,
       bookTitle: book.bookTitle,
       bookAuthor: book.author,
+      likeCount: Math.floor(Math.random() * 1000),
+      isLiked: false,
     };
 
     if (basePost.postType === '포스팅') {
@@ -125,13 +127,6 @@ const generateMockPosts = (): (OneLinePost | Posting)[] => {
 };
 
 const mockPosts: (OneLinePost | Posting)[] = generateMockPosts();
-
-// const mockPosts: (OneLinePost | Posting)[] = [
-//  // 데이터
-// ].map((post) => ({
-//   ...post,
-//   timeAgo: formatTimeAgo(post.createdAt),
-// }));
 
 export const feedHandlers = [
   http.get('/api/posts', ({ request }) => {
@@ -187,6 +182,26 @@ export const feedHandlers = [
     });
 
     console.log(`User ${userName} follow status changed to ${isFollowing}`);
+    return HttpResponse.json({ success: true }, { status: 200 });
+  }),
+  http.post('/api/like', async ({ request }) => {
+    const body = (await request.json()) as {
+      postId: number;
+      isLiked: boolean;
+    };
+    const { postId, isLiked } = body;
+
+    // mockPosts 배열의 실제 데이터 업데이트
+    mockPosts.forEach((post, index) => {
+      if (post.id === postId) {
+        mockPosts[index] = {
+          ...post,
+          isLiked,
+          likeCount: isLiked ? post.likeCount + 1 : post.likeCount - 1,
+        };
+      }
+    });
+
     return HttpResponse.json({ success: true }, { status: 200 });
   }),
 ];

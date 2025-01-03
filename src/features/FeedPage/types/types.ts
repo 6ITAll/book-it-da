@@ -17,3 +17,8 @@ export interface FollowRequest {
   userName: string;
   isFollowing: boolean;
 }
+
+export interface LikeRequest {
+  postId: number;
+  isLiked: boolean;
+}
