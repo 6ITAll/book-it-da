@@ -22,7 +22,7 @@ interface BaseDialogProps extends DialogProps {
   fullScreen?: boolean;
 }
 
-interface DialogWithActionProps extends BaseDialogProps {
+export interface DialogWithActionProps extends BaseDialogProps {
   action: string;
   onActionClick: () => void;
 }
