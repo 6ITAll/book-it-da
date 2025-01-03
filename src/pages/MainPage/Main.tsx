@@ -17,13 +17,21 @@ import { PostTypeFilter } from '@components/FeedPage/Filters/PostTypeFilter';
 import { PostType, FeedType, OneLinePost, Posting } from '@shared/types/type';
 import CreateIcon from '@mui/icons-material/Create';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
-import { useGetPostsQuery } from '@features/FeedPage/api/feedApi';
+import {
+  useGetPostsQuery,
+  useToggleFollowMutation,
+} from '@features/FeedPage/api/feedApi';
 
 const Main = (): JSX.Element => {
   const [page, setPage] = useState(1);
   const [postType, setPostType] = useState<PostType | null>(null);
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const [localFollowChanges, setLocalFollowChanges] = useState<
+    Array<{ userName: string; isFollowing: boolean }>
+  >([]);
+  const [toggleFollow] = useToggleFollowMutation();
 
   const { data, isLoading, isFetching } = useGetPostsQuery({
     page,
@@ -59,10 +67,32 @@ const Main = (): JSX.Element => {
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링
   const handleFeedTypeChange = useCallback(
-    (_: React.SyntheticEvent, newValue: FeedType) => {
+    async (_: React.SyntheticEvent, newValue: FeedType) => {
+      // 저장된 팔로우 변경사항이 있다면 탭 전환시 API 요청
+      if (localFollowChanges.length > 0) {
+        try {
+          await Promise.all(
+            localFollowChanges.map(({ userName, isFollowing }) =>
+              toggleFollow({ userName, isFollowing }).unwrap(),
+            ),
+          );
+          // 변경사항 초기화
+          setLocalFollowChanges([]);
+        } catch (error) {
+          console.error('팔로우/언팔로우 실패:', error);
+        }
+      }
+
       setFeedType(newValue);
       setPage(1);
       window.scrollTo(0, 0);
+    },
+    [localFollowChanges, toggleFollow],
+  );
+
+  const handleFollowChange = useCallback(
+    (userName: string, isFollowing: boolean) => {
+      setLocalFollowChanges((prev) => [...prev, { userName, isFollowing }]);
     },
     [],
   );
@@ -210,6 +240,7 @@ const Main = (): JSX.Element => {
                       title={post.title}
                       description={post.description}
                       isFollowing={post.isFollowing}
+                      onFollowChange={handleFollowChange}
                     />
                   </Box>
                 );
@@ -225,6 +256,7 @@ const Main = (): JSX.Element => {
                       bookAuthor={post.bookAuthor}
                       review={post.review}
                       isFollowing={post.isFollowing}
+                      onFollowChange={handleFollowChange}
                     />
                   </Box>
                 );

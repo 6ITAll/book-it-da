@@ -14,6 +14,7 @@ interface PostCardBaseProps {
   bookTitle: string;
   bookAuthor: string;
   isFollowing: boolean;
+  onFollowChange: (userName: string, isFollowing: boolean) => void;
 }
 
 interface PostingCardProps extends PostCardBaseProps {
@@ -43,6 +44,7 @@ const PostCard = ({
   description,
   review,
   isFollowing,
+  onFollowChange,
 }: PostCardProps): JSX.Element => {
   return (
     <Card sx={styles.card}>
@@ -51,6 +53,7 @@ const PostCard = ({
         postType={postType}
         timeAgo={timeAgo}
         isFollowing={isFollowing}
+        onFollowChange={onFollowChange}
       />
       {/* 책 사진 */}
       <BookImage imageUrl={imageUrl} title={bookTitle} />

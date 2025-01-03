@@ -1,13 +1,14 @@
 import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
 import { styles } from './PostCard.styles';
 import { PostType } from '@shared/types/type';
-import { useToggleFollowMutation } from '@features/FeedPage/api/feedApi';
+import { useEffect, useState } from 'react';
 
 interface PostCardHeaderProps {
   userName: string;
   postType: PostType;
   timeAgo: string;
   isFollowing: boolean;
+  onFollowChange: (userName: string, isFollowing: boolean) => void;
 }
 
 const PostCardHeader = ({
@@ -15,19 +16,19 @@ const PostCardHeader = ({
   postType,
   timeAgo,
   isFollowing,
+  onFollowChange,
 }: PostCardHeaderProps) => {
-  const [toggleFollow] = useToggleFollowMutation();
+  const [localFollowState, setLocalFollowState] = useState(isFollowing);
 
-  const handleFollowClick = async () => {
-    try {
-      await toggleFollow({
-        userName,
-        isFollowing: !isFollowing,
-      }).unwrap();
-    } catch (error) {
-      console.error('팔로우 / 언팔로우 실패:', error);
-    }
+  const handleFollowClick = () => {
+    const newState = !localFollowState;
+    setLocalFollowState(newState);
+    onFollowChange(userName, newState);
   };
+
+  useEffect(() => {
+    setLocalFollowState(isFollowing);
+  }, [isFollowing]);
   return (
     <CardHeader
       sx={styles.cardHeader}
@@ -36,10 +37,10 @@ const PostCardHeader = ({
         <Button
           variant="outlined"
           size="small"
-          sx={styles.followButton(isFollowing)}
+          sx={styles.followButton(localFollowState)}
           onClick={handleFollowClick}
         >
-          {isFollowing ? '팔로잉' : '팔로우'}
+          {localFollowState ? '팔로잉' : '팔로우'}
         </Button>
       }
       title={
