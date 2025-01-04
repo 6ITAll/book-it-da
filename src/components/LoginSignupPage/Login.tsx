@@ -84,11 +84,23 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
     [userId, password, rememberMe, autoLogin, onLogin, navigate],
   );
 
+  const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setRememberMe(isChecked);
+    if (isChecked) {
+      localStorage.setItem('savedUserId', userId);
+    } else {
+      localStorage.removeItem('savedUserId');
+    }
+  };
+
   useEffect(() => {
     const savedUserId = localStorage.getItem('savedUserId');
     if (savedUserId) {
       setUserId(savedUserId);
       setRememberMe(true);
+    } else {
+      setRememberMe(false);
     }
 
     const autoLoginData = localStorage.getItem('autoLogin');
@@ -133,7 +145,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
             control={
               <Checkbox
                 checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+                onChange={handleRememberMeChange}
               />
             }
             label="아이디 저장"
