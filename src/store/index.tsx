@@ -9,6 +9,7 @@ import { libraryApi } from '@features/MyPage/api';
 import userReducer from './userSlice/userSlice';
 import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
 import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
+import { postingApi } from '@features/PostDetailPage/api/postingApi';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { oneLineReviewApi } from '@features/OneLineReviewDialog/api/oneLineReviewApi';
 
@@ -22,6 +23,7 @@ export const store = configureStore({
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
+    [postingApi.reducerPath]: postingApi.reducer,
     [feedApi.reducerPath]: feedApi.reducer,
     [oneLineReviewApi.reducerPath]: oneLineReviewApi.reducer,
     counter: counterReducer,
@@ -34,6 +36,7 @@ export const store = configureStore({
       bookDetailApi.middleware,
       libraryApi.middleware,
       bookShelvesApi.middleware,
+      postingApi.middleware,
       feedApi.middleware,
       oneLineReviewApi.middleware,
     ]),
