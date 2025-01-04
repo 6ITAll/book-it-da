@@ -34,12 +34,16 @@ const PostingDetailPage = () => {
   return (
     // 포스팅 상세 페이지에서는 기본 레이아웃 뺄 예정
     <Container
+      maxWidth={false}
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        px: '0',
+        minHeight: '100vh',
+        width: '100%',
+        padding: '0 !important',
+        margin: '0 !important',
         backgroundColor: '#f0f0f0',
         boxSizing: 'border-box',
       }}
@@ -80,7 +84,7 @@ const PostingDetailPage = () => {
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />
       </Stack>
-      <Stack>
+      <Stack sx={{ width: '80%', mt: '1rem', boxSizing: 'border-box' }}>
         <OtherPostingGrid
           title="이 책의 다른 포스팅"
           posts={bookOtherPosts ?? []}
