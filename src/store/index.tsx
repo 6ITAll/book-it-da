@@ -10,15 +10,21 @@ import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
 import { postApi } from '@features/BookDetailPage/api/postApi';
 import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
 import userReducer from './userSlice/userSlice';
+import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
+import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
+import { postingApi } from '@features/PostDetailPage/api/postingApi';
 
 export const store = configureStore({
   reducer: {
     bookSearch: bookSearchReducer,
     bookDetail: bookDetailReducer,
+    bookshelves: bookShelvesReducer,
     [bookSearchApi.reducerPath]: bookSearchApi.reducer,
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
+    [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
+    [postingApi.reducerPath]: postingApi.reducer,
     [genderAgeApi.reducerPath]: genderAgeApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
@@ -31,6 +37,8 @@ export const store = configureStore({
       bestBookGetApi.middleware,
       bookDetailApi.middleware,
       libraryApi.middleware,
+      bookShelvesApi.middleware,
+      postingApi.middleware,
       genderAgeApi.middleware,
       postApi.middleware,
       reviewApi.middleware,

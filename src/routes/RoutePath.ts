@@ -5,7 +5,9 @@ const RoutePaths = {
   FEED: '/feed',
   SEARCH: '/search',
   MY_PAGE: '/my-page',
-  BOOK_DETAIL: 'bookDetail',
+  BOOKSHELVES: '/bookshelves',
+  POSTING: '/posting',
+  BOOKDETAIL: '/bookDetail',
   REVIEWS: 'reviews',
   POSTS: 'posts',
   // 추가시
