@@ -4,12 +4,22 @@ import ShareIcon from '@mui/icons-material/Share';
 import { PostType } from '@shared/types/type';
 import PostingDialog from '@components/FeedPage/PostingDialog/PostingDialog';
 import { useState } from 'react';
+import URLShareDialog from '@components/commons/URLShareDialog';
 
 const ActionButtons = (): JSX.Element => {
   const [selectedType, setSelectedType] = useState<PostType>(null);
+  const [openShareDialog, setOpenShareDialog] = useState<boolean>(false); // 공유 모달 상태 추가
 
   const handleEditClick = (type: PostType) => {
     setSelectedType(type);
+  };
+
+  const handleShareClick = () => {
+    setOpenShareDialog(true); // 공유 모달 열기
+  };
+
+  const handleCloseShareDialog = () => {
+    setOpenShareDialog(false); // 공유 모달 닫기
   };
 
   const handleCloseDialog = () => {
@@ -33,6 +43,7 @@ const ActionButtons = (): JSX.Element => {
           <EditIcon sx={{ width: 18, height: 18 }} />
         </Button>
         <Button
+          onClick={handleShareClick} // 공유 모달 열기
           sx={{
             borderRadius: '50%',
             minWidth: 0,
@@ -50,6 +61,11 @@ const ActionButtons = (): JSX.Element => {
         selectedType={selectedType}
         setSelectedType={setSelectedType}
         handleBack={handleCloseDialog}
+      />
+      {/* 공유 모달 */}
+      <URLShareDialog
+        open={openShareDialog}
+        handleClose={handleCloseShareDialog}
       />
     </>
   );
