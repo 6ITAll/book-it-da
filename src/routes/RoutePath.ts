@@ -10,6 +10,8 @@ const RoutePaths = {
   POSTING_WRITE: '/posting/write',
   EDIT: 'EDIT',
   BOOKDETAIL: '/bookDetail',
+  REVIEWS: 'reviews',
+  POSTS: 'posts',
   // 추가시
   // ABOUT: '/about', 식으로 가능
 };

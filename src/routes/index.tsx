@@ -9,6 +9,8 @@ import RoutePaths from './RoutePath';
 import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
 import PostingDetailPage from '@pages/PostingDetailPage/PostingDetailPage';
 import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
+import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
+import PostMorePage from '@pages/PostMorePage/PostMorePage';
 import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
 
 const AppRouter = () => {
@@ -23,6 +25,14 @@ const AppRouter = () => {
       <Route
         path={`${RoutePaths.BOOKDETAIL}/:itemId`}
         element={<BookDetailPage />}
+      />
+      <Route
+        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.REVIEWS}`}
+        element={<ReviewMorePage />}
+      />
+      <Route
+        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.POSTS}`}
+        element={<PostMorePage />}
       />
       <Route
         path={`${RoutePaths.MY_PAGE}/:userId?${RoutePaths.BOOKSHELVES}/:bookShelvesId?`}
