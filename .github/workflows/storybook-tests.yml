@@ -1,0 +1,175 @@
+name: Storybook Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  # Install and cache npm dependencies
+  install-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Commit
+        uses: actions/checkout@v4
+      - name: Cache NPM dependencies and Playwright
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
+      - name: Install dependencies if cache invalid
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+  # Run interaction and accessibility tests
+  interaction-and-accessibility:
+    runs-on: ubuntu-latest
+    needs: install-cache
+    steps:
+      - name: Checkout Commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
+      - name: Check for Storybook stories
+        id: check-stories
+        run: |
+          if [ -z "$(find src -name '*.stories.*')" ]; then
+            echo "No Storybook stories found"
+            echo "STORIES_FOUND=false" >> $GITHUB_ENV
+          else
+            echo "STORIES_FOUND=true" >> $GITHUB_ENV
+          fi
+      - name: Build Storybook
+        if: env.STORIES_FOUND == 'true'
+        run: npm run build-storybook --quiet
+      - name: Serve Storybook and run tests
+        if: env.STORIES_FOUND == 'true'
+        run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && npm run test-storybook"
+
+  # Run visual and composition tests with Chromatic
+  visual-and-composition:
+    runs-on: ubuntu-latest
+    needs: install-cache
+    steps:
+      - name: Checkout Commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
+      - name: Check for Storybook stories
+        id: check-stories
+        run: |
+          if [ -z "$(find src -name '*.stories.*')" ]; then
+            echo "No Storybook stories found"
+            echo "STORIES_FOUND=false" >> $GITHUB_ENV
+          else
+            echo "STORIES_FOUND=true" >> $GITHUB_ENV
+          fi
+      - name: Publish to Chromatic
+        if: env.STORIES_FOUND == 'true'
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+  # Run user flow tests with Playwright
+  user-flow:
+    runs-on: ubuntu-latest
+    needs: install-cache
+    steps:
+      - name: Checkout Commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
+      - name: Start the development server
+        run: npm run dev &
+      - name: Check for Playwright tests
+        id: check-tests
+        run: |
+          if [ -z "$(find tests -name '*.spec.ts' -or -name '*.spec.js')" ]; then
+            echo "No Playwright tests found"
+            echo "TESTS_FOUND=false" >> $GITHUB_ENV
+          else
+            echo "TESTS_FOUND=true" >> $GITHUB_ENV
+          fi
+      - name: Run Playwright tests
+        if: env.TESTS_FOUND == 'true'
+        run: npx playwright test
+
+  # Generate and upload code coverage report from Storybook tests
+  storybook-coverage:
+    runs-on: ubuntu-latest
+    needs: install-cache
+    steps:
+      - name: Checkout Commit
+        uses: actions/checkout@v4
+      - name: Restore NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            node_modules
+          key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v2
+      - name: Check for Storybook stories
+        id: check-stories
+        run: |
+          if [ -z "$(find src -name '*.stories.*')" ]; then
+            echo "No Storybook stories found"
+            echo "STORIES_FOUND=false" >> $GITHUB_ENV
+          else
+            echo "STORIES_FOUND=true" >> $GITHUB_ENV
+          fi
+      - name: Build Storybook
+        if: env.STORIES_FOUND == 'true'
+        run: npm run build-storybook
+      - name: Run Storybook tests with coverage
+        if: env.STORIES_FOUND == 'true'
+        run: npm run test-storybook -- --coverage
+      - name: Upload coverage report
+        if: env.STORIES_FOUND == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: storybook-coverage
+          path: coverage
