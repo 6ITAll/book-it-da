@@ -2,6 +2,8 @@ import { Box } from '@mui/material';
 import parse from 'html-react-parser';
 import CommonBookCard from '@components/commons/CommonBookCard';
 import { mockBooks } from '@components/FeedPage/mockPosts';
+import { useNavigate } from 'react-router-dom';
+import { navigateToDetailPage } from '@shared/utils/navigation';
 
 interface PostingContentProps {
   content: string;
@@ -53,10 +55,17 @@ const styles = {
 };
 
 const PostingContent = ({ content, book }: PostingContentProps) => {
+  const navigate = useNavigate();
+
+  const handleBookClick = () => {
+    if (book?.itemId) {
+      navigateToDetailPage(navigate, book.itemId);
+    }
+  };
   return (
     <>
       {/* 책 정보 */}
-      <Box sx={styles.bookPreviewBox}>
+      <Box sx={styles.bookPreviewBox} onClick={handleBookClick}>
         {book && (
           <CommonBookCard
             image={mockBooks[0].imageUrl}

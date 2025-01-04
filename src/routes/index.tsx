@@ -8,6 +8,7 @@ import NotFoundPage from '@pages/NotFoundPage/NotFound';
 import RoutePaths from './RoutePath';
 import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
 import PostingDetailPage from '@pages/PostDetailPage/PostingDetailPage';
+import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,10 @@ const AppRouter = () => {
       <Route path={RoutePaths.FEED} element={<FeedPage />} />
       <Route path={RoutePaths.SEARCH} element={<BookSearchPage />} />
       <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
+      <Route
+        path={`${RoutePaths.BOOKDETAIL}/:itemId`}
+        element={<BookDetailPage />}
+      />
       <Route
         path={`${RoutePaths.MY_PAGE}/:userId?${RoutePaths.BOOKSHELVES}/:bookShelvesId?`}
         element={<BookShelvesPage />}
