@@ -68,11 +68,13 @@ const PostingDetailPage = () => {
             xs: '100%',
             md: '50%',
           },
+          border: '1px solid red',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: '#fafafa',
+          boxSizing: 'border-box',
         }}
       >
         {/* 유저 정보 */}

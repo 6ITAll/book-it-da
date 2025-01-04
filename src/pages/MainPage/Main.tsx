@@ -103,6 +103,7 @@ const Main = (): JSX.Element => {
 
   return (
     <Container
+      maxWidth={false}
       sx={{
         width: '100%',
         padding: '1rem',

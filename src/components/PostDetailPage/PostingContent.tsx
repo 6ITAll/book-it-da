@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import parse from 'html-react-parser';
 import CommonBookCard from '@components/commons/CommonBookCard';
-import { mockBooks } from '@components/FeedPage/mockPosts';
+import { bookData } from 'src/mocks/handlers/feed';
 import { useNavigate } from 'react-router-dom';
 import { navigateToDetailPage } from '@shared/utils/navigation';
 
@@ -68,7 +68,7 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
       <Box sx={styles.bookPreviewBox} onClick={handleBookClick}>
         {book && (
           <CommonBookCard
-            image={mockBooks[0].imageUrl}
+            image={bookData[0].imageUrl}
             title={book.title}
             author={book.author}
             sx={styles.bookCard}

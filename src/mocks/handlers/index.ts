@@ -5,9 +5,7 @@ import { postingHandlers } from './posting';
 
 export const handlers = [
   ...libraryHandlers,
-
   ...feedHandlers,
   ...bookshelvesHandlers,
   ...postingHandlers,
-  ,
 ];

@@ -10,7 +10,7 @@ import {
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 import { OneLineReviewRequest } from '@features/OneLineReviewDialog/types/types';
 
-const bookData: Book[] = [
+export const bookData: Book[] = [
   {
     bookTitle: '금각사',
     author: '미시마 유키오',
