@@ -1,18 +1,47 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainPage from '../pages/MainPage/Main';
-import NotFoundPage from '../pages/NotFoundPage/NotFound';
+import { Routes, Route } from 'react-router-dom';
+import LoginSignup from '@pages/LoginSignupPage/LoginPage';
+import SignupPage from '@pages/LoginSignupPage/SignupPage';
+import FeedPage from '@pages/MainPage/Main';
+import BookSearchPage from '@pages/BookSearchPage/BookSearch';
+import MyPage from '@pages/MyPage/MyPage';
+import NotFoundPage from '@pages/NotFoundPage/NotFound';
 import RoutePaths from './RoutePath';
-
+import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
+import PostingDetailPage from '@pages/PostDetailPage/PostingDetailPage';
+import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
+import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
+import PostMorePage from '@pages/PostMorePage/PostMorePage';
 const AppRouter = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path={RoutePaths.MAIN} element={<MainPage />} />
-
-        {/* 404 페이지 */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path={RoutePaths.MAIN} element={<FeedPage />} />
+      <Route path={RoutePaths.LOGIN} element={<LoginSignup />} />
+      <Route path={RoutePaths.SIGNUP} element={<SignupPage />} />
+      <Route path={RoutePaths.FEED} element={<FeedPage />} />
+      <Route path={RoutePaths.SEARCH} element={<BookSearchPage />} />
+      <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
+      <Route
+        path={`${RoutePaths.BOOKDETAIL}/:itemId`}
+        element={<BookDetailPage />}
+      />
+      <Route
+        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.REVIEWS}`}
+        element={<ReviewMorePage />}
+      />
+      <Route
+        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.POSTS}`}
+        element={<PostMorePage />}
+      />
+      <Route
+        path={`${RoutePaths.MY_PAGE}/:userId?${RoutePaths.BOOKSHELVES}/:bookShelvesId?`}
+        element={<BookShelvesPage />}
+      />
+      <Route
+        path={`${RoutePaths.POSTING}/:postingId?`}
+        element={<PostingDetailPage />}
+      />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 };
 

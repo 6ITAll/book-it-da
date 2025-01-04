@@ -7,17 +7,25 @@ import { kakaoApi } from '@features/SNSLogin/api/Kakaoapi';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { libraryApi } from '@features/MyPage/api';
+import userReducer from './userSlice/userSlice';
+import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
+import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
+import { postingApi } from '@features/PostDetailPage/api/postingApi';
 
 export const store = configureStore({
   reducer: {
     bookSearch: bookSearchReducer,
     bookDetail: bookDetailReducer,
+    bookshelves: bookShelvesReducer,
     [bookSearchApi.reducerPath]: bookSearchApi.reducer,
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [kakaoApi.reducerPath]: kakaoApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
+    [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
+    [postingApi.reducerPath]: postingApi.reducer,
     counter: counterReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -26,6 +34,8 @@ export const store = configureStore({
       kakaoApi.middleware,
       bookDetailApi.middleware,
       libraryApi.middleware,
+      bookShelvesApi.middleware,
+      postingApi.middleware,
     ]),
 });
 
