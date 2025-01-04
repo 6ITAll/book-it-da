@@ -1,7 +1,7 @@
 import { Stack, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-import URLShareDialog from '@components/PostDetailPage/PostingShareDialog/PostingShareDialog';
+import URLShareDialog from '@components/commons/URLShareDialog';
 import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostDetailPage/PostingContent';
 import PostingHeader from '@components/PostDetailPage/PostingHeader';
