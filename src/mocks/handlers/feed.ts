@@ -9,6 +9,7 @@ import {
 } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 import { OneLineReviewRequest } from '@features/OneLineReviewDialog/types/types';
+import { PostingRequest } from '@features/PostingWritePage/types/types';
 
 export const bookData: Book[] = [
   {
@@ -114,7 +115,12 @@ const generateMockPosts = (): (OneLinePost | Posting)[] => {
         ...basePost,
         postType: '포스팅',
         title: `포스팅 제목 ${i}`,
-        description: `포스팅 내용 ${i}입니다. 이 책은 정말 흥미롭습니다.`,
+        description: `
+        <h2>책 리뷰</h2>
+        <p>포스팅 내용 ${i}입니다. 이 책은 정말 흥미롭습니다.</p>
+        <blockquote>인상 깊은 구절이 많았습니다.</blockquote>
+        <p><strong>특히 이 부분이 좋았습니다.</strong></p>
+      `,
       } as Posting);
     } else {
       posts.push({
@@ -230,5 +236,34 @@ export const feedHandlers = [
     mockPosts.unshift(newPost);
 
     return HttpResponse.json({ success: true, post: newPost }, { status: 201 });
+  }),
+  http.post('/api/posts/posting', async ({ request }) => {
+    const body = (await request.json()) as PostingRequest;
+    const { book, title, content } = body;
+
+    const newPost: Posting = {
+      id: mockPosts.length + 1,
+      imageUrl: book.imageUrl,
+      userName: 'currentUser',
+      createdAt: new Date().toISOString(),
+      timeAgo: '방금 전',
+      postType: '포스팅',
+      isFollowing: false,
+      isFollower: false,
+      bookTitle: book.bookTitle,
+      bookAuthor: book.author,
+      likeCount: 0,
+      isLiked: false,
+      itemId: book.itemId,
+      title,
+      description: content,
+    };
+
+    mockPosts.unshift(newPost);
+
+    return HttpResponse.json(
+      { success: true, message: '포스팅이 작성되었습니다.', post: newPost },
+      { status: 201 },
+    );
   }),
 ];

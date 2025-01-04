@@ -1,6 +1,7 @@
 import { Box, CardContent, Typography } from '@mui/material';
 import { styles } from './PostCard.styles';
 import { PostType } from '@shared/types/type';
+import { stripHtml } from 'string-strip-html';
 
 interface PostCardBaseContent {
   bookTitle: string;
@@ -28,6 +29,8 @@ const PostCardContent = ({
   type,
   content: { bookTitle, bookAuthor, title, description, review },
 }: PostCardContentProps) => {
+  // html 태그를 제거한 순수 텍스트
+  const plainText = stripHtml(description ?? '').result;
   const getContent = () => {
     switch (type) {
       case '한줄평':
@@ -73,7 +76,7 @@ const PostCardContent = ({
                 fontSize="13px"
                 sx={styles.postingDescription}
               >
-                {description}
+                {plainText}
               </Typography>
             </Box>
           </>

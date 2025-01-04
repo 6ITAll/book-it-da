@@ -12,6 +12,7 @@ import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice
 import { postingApi } from '@features/PostDetailPage/api/postingApi';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { oneLineReviewApi } from '@features/OneLineReviewDialog/api/oneLineReviewApi';
+import { postingWriteApi } from '@features/PostingWritePage/api/postingWriteApi';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     [postingApi.reducerPath]: postingApi.reducer,
     [feedApi.reducerPath]: feedApi.reducer,
     [oneLineReviewApi.reducerPath]: oneLineReviewApi.reducer,
+    [postingWriteApi.reducerPath]: postingWriteApi.reducer,
     counter: counterReducer,
     user: userReducer,
   },
@@ -39,6 +41,7 @@ export const store = configureStore({
       postingApi.middleware,
       feedApi.middleware,
       oneLineReviewApi.middleware,
+      postingWriteApi.middleware,
     ]),
 });
 

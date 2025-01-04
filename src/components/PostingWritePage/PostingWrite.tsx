@@ -26,7 +26,11 @@ const PostingWrite = () => {
 
   return (
     <Stack sx={{ width: '100%', minHeight: '100vh', boxSizing: 'border-box' }}>
-      <PostingWriteHeader />
+      <PostingWriteHeader
+        title={title}
+        content={content}
+        selectedBook={selectedBook}
+      />
       <Stack sx={styles.Content}>
         <PostingToolbar handleMaterialClick={handleMaterialClick} />
         <BookSearchPopover

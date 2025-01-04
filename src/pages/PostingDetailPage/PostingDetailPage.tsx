@@ -68,7 +68,6 @@ const PostingDetailPage = () => {
             xs: '100%',
             md: '50%',
           },
-          border: '1px solid red',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
