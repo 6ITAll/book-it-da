@@ -30,6 +30,11 @@ declare module '@mui/material/styles' {
       hover: string;
     };
   }
+  interface Shape {
+    buttonRadius: number;
+    boxRadius: number;
+    iconRadius: string;
+  }
 }
 
 // 공통 팔레트
@@ -140,11 +145,20 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       },
     },
     components: {
+      // 버튼 BorderRadius
       MuiButton: {
         styleOverrides: {
           root: {
             textTransform: 'none',
-            borderRadius: 8,
+            borderRadius: 16,
+          },
+        },
+      },
+      // 아이콘 버튼 BorderRadius
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: '50%',
           },
         },
       },
