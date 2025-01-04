@@ -1,5 +1,5 @@
 import CommonBookCard from '@components/commons/CommonBookCard';
-import { navigateToDetailPage } from '@shared/utils/navigation';
+import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 interface BestBookCardProps {
   itemId: number;
@@ -15,7 +15,7 @@ const BestBookCard = ({
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigateToDetailPage(navigate, itemId);
+    navigateToBookDetailPage(navigate, itemId);
   };
 
   return (

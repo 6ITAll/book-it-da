@@ -20,7 +20,7 @@ const PostingDetailPage = () => {
     post?.book?.itemId ?? 0,
   );
   const { data: userOtherPosts } = useGetUserOtherPostsQuery(
-    post?.user.id ?? 0,
+    post?.user.userId ?? 0,
   );
   const [isLiked, setIsLiked] = useState(false);
   const { data: currentUser } = useGetCurrentUserQuery();
@@ -55,8 +55,8 @@ const PostingDetailPage = () => {
         setIsLiked={setIsLiked}
         setOpenShareDialog={setOpenShareDialog}
         postingId={post.id}
-        userId={post.user.id}
-        currentUserId={currentUser.id}
+        userId={post.user.userId}
+        currentUserId={currentUser.userId}
         likeCount={post.likeCount}
       />
       {/* 포스팅 정보 */}
@@ -80,7 +80,7 @@ const PostingDetailPage = () => {
         <PostingUserInfo
           user={post.user}
           createdAt={post.createdAt}
-          currentUserId={currentUser.id}
+          currentUserId={currentUser.userId}
         />
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />

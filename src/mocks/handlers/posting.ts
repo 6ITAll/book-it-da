@@ -1,8 +1,9 @@
 import { http, HttpResponse } from 'msw';
+import { mockPosts } from './feed';
 
 const CURRENT_USER = {
-  id: 2,
-  name: 'Current User',
+  userId: 2,
+  userName: 'Current User',
 };
 
 const IMAGES = {
@@ -10,42 +11,6 @@ const IMAGES = {
   sample2: new URL('../../assets/images/sample2.jpg', import.meta.url).href,
   sample3: new URL('../../assets/images/sample3.jpg', import.meta.url).href,
 };
-
-const mockPosts = [
-  {
-    id: 1,
-    title: '포스팅 제목',
-    content: `
-    <p><strong>이 책을 처음 접했을 때의 느낌은 아직도 생생합니다.</strong></p>
-    <h2>인상 깊었던 구절</h2>
-    <blockquote>"가장 행복한 사람은 다른 사람의 행복을 위해 무언가를 하는 사람이다." - p.123</blockquote>
-    <h2>책의 매력적인 부분</h2>
-    <p>작가는 섬세한 묘사로 독자들을 이야기 속으로 끌어들입니다. 특히 다음과 같은 장면들이 인상적이었습니다:</p>
-    <ul>
-      <li>주인공의 내적 성장 과정</li>
-      <li>갈등 해결 방식의 현실성</li>
-      <li>감정 선의 자연스러운 흐름</li>
-    </ul>
-    <h2>개인적인 소감</h2>
-    <p><span style="color: rgb(102, 102, 102);">이 책은 단순한 소설이 아닌, 삶의 진정한 의미를 되새기게 하는 거울과도 같았습니다.</span></p>
-    <p><em>이 책을 읽으면서 느낀 감동을 오래도록 간직하고 싶습니다.</em></p>
-    `,
-    createdAt: '2024-01-15T09:00:00.000Z',
-    book: {
-      title: '금각사',
-      author: '미시마 유키오',
-      itemId: 107413605,
-      imageUrl: '/src/assets/images/sample1.jpg',
-    },
-    user: {
-      id: 2,
-      name: 'John Doe',
-      avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
-    },
-    isLiked: false,
-    likeCount: 81,
-  },
-];
 
 const mockOtherPosts = {
   bookPosts: [
@@ -56,9 +21,11 @@ const mockOtherPosts = {
         '금각사가 상징하는 완벽한 아름다움과 주인공의 내면 세계가 충돌하는 방식이 인상적입니다.',
       createdAt: '2024-01-19T09:00:00.000Z',
       user: {
-        id: 3,
-        name: '김문학',
+        userId: 3,
+        userName: '김문학',
         avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+        isFollowing: false,
+        isFollower: false,
       },
       likeCount: 24,
     },
@@ -69,9 +36,11 @@ const mockOtherPosts = {
         '불교 사찰을 배경으로 인간의 집착과 광기를 그려내는 작가의 필력이 돋보입니다.',
       createdAt: '2024-01-17T09:00:00.000Z',
       user: {
-        id: 4,
-        name: '박독서',
+        userId: 4,
+        userName: '박독서',
         avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
+        isFollowing: true,
+        isFollower: false,
       },
       likeCount: 18,
     },
@@ -81,9 +50,11 @@ const mockOtherPosts = {
       content: '현대 사회의 관점에서 금각사를 재해석해보았습니다.',
       createdAt: '2024-01-16T09:00:00.000Z',
       user: {
-        id: 5,
-        name: '이독자',
+        userId: 5,
+        userName: '이독자',
         avatarUrl: 'https://mui.com/static/images/avatar/3.jpg',
+        isFollowing: true,
+        isFollower: false,
       },
       likeCount: 15,
     },
@@ -95,14 +66,16 @@ const mockOtherPosts = {
       content: '무라카미 하루키의 대표작을 읽고...',
       createdAt: '2024-01-20T09:00:00.000Z',
       user: {
-        id: 2, // 원글 작성자와 동일한 ID
-        name: 'John Doe', // 원글 작성자와 동일한 이름
+        userId: 2, // 원글 작성자와 동일한 ID
+        userName: 'John Doe', // 원글 작성자와 동일한 이름
         avatarUrl: 'https://mui.com/static/images/avatar/1.jpg', // 원글 작성자와 동일한 아바타
       },
       book: {
         title: '노르웨이의 숲',
         author: '무라카미 하루키',
         imageUrl: IMAGES.sample1,
+        isFollowing: false,
+        isFollower: false,
       },
     },
     {
@@ -111,9 +84,11 @@ const mockOtherPosts = {
       content: '카프카의 초현실적인 이야기...',
       createdAt: '2024-01-18T09:00:00.000Z',
       user: {
-        id: 2,
-        name: 'John Doe',
+        userId: 2,
+        userName: 'John Doe',
         avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+        isFollowing: true,
+        isFollower: false,
       },
       book: {
         title: '해변의 카프카',
@@ -127,9 +102,11 @@ const mockOtherPosts = {
       content: '젊은 시절의 방황과 성장...',
       createdAt: '2024-01-16T09:00:00.000Z',
       user: {
-        id: 2,
-        name: 'John Doe',
+        userId: 2,
+        userName: 'John Doe',
         avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+        isFollowing: false,
+        isFollower: false,
       },
       book: {
         title: '상실의 시대',
@@ -159,7 +136,7 @@ export const postingHandlers = [
 
     return HttpResponse.json({
       ...post,
-      isCurrentUserAuthor: post.user.id === CURRENT_USER.id,
+      isCurrentUserAuthor: post.user.userId === CURRENT_USER.userId,
     });
   }),
 

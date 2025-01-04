@@ -1,4 +1,4 @@
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { Book, PostType, User } from '@shared/types/type';
 import { styles } from './PostCard.styles';
 import PostCardContent from './PostCardContent';
@@ -6,6 +6,8 @@ import BookImage from './PostCardImage';
 import PostCardHeader from './PostHeader';
 import PostCardFooter from './PostCardFooter';
 import { useToggleLikeMutation } from '@features/FeedPage/api/feedApi';
+import { navigateToPostingDetailPage } from '@shared/utils/navigation';
+import { useNavigate } from 'react-router-dom';
 
 interface PostCardBaseProps {
   postId: number;
@@ -47,6 +49,7 @@ const PostCard = ({
   isLiked,
   onFollowChange,
 }: PostCardProps): JSX.Element => {
+  const navigate = useNavigate();
   const [toggleLike] = useToggleLikeMutation();
 
   const handleLikeClick = async (postId: number, isLiked: boolean) => {
@@ -54,6 +57,12 @@ const PostCard = ({
       await toggleLike({ postId, isLiked }).unwrap();
     } catch (error) {
       console.error('좋아요 토글 실패:', error);
+    }
+  };
+
+  const handleCardClick = (postId: number) => {
+    if (postType === '포스팅') {
+      navigateToPostingDetailPage(navigate, postId);
     }
   };
 
@@ -66,23 +75,25 @@ const PostCard = ({
         onFollowChange={onFollowChange}
       />
       {/* 책 사진 */}
-      <BookImage imageUrl={book.imageUrl} title={book.bookTitle} />
-      {/* 포스팅 내용 */}
-      <PostCardContent
-        type={postType}
-        content={
-          postType === '포스팅'
-            ? {
-                book,
-                title,
-                content,
-              }
-            : {
-                book,
-                review,
-              }
-        }
-      />
+      <Box onClick={() => handleCardClick(postId)}>
+        <BookImage imageUrl={book.imageUrl} title={book.bookTitle} />
+        {/* 포스팅 내용 */}
+        <PostCardContent
+          type={postType}
+          content={
+            postType === '포스팅'
+              ? {
+                  book,
+                  title,
+                  content,
+                }
+              : {
+                  book,
+                  review,
+                }
+          }
+        />
+      </Box>
       <PostCardFooter
         postId={postId}
         likeCount={likeCount}

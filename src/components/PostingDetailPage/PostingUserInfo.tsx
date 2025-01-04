@@ -1,11 +1,8 @@
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
+import { User } from '@shared/types/type';
 
 interface PostingUserInfoProps {
-  user: {
-    id: number;
-    name: string;
-    avatarUrl: string;
-  };
+  user: User;
   createdAt: string;
   currentUserId: number;
 }
@@ -32,13 +29,13 @@ const PostingUserInfo = ({
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar src={user.avatarUrl} />
         <Stack>
-          <Typography>{user.name}</Typography>
+          <Typography>{user.userName}</Typography>
           <Typography variant="caption" color="text.secondary">
             {new Date(createdAt).toISOString().split('T')[0]}
           </Typography>
         </Stack>
       </Stack>
-      {user.id !== currentUserId && (
+      {user.userId !== currentUserId && (
         <Button variant="outlined" size="small">
           팔로우
         </Button>

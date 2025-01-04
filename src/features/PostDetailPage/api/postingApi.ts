@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { OtherPost, Posting, User } from '../types/types';
+import { OtherPost } from '../types/types';
+import { Posting, User } from '@shared/types/type';
 
 export const postingApi = createApi({
   reducerPath: 'postingApi',

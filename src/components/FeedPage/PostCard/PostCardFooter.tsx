@@ -3,7 +3,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { styles } from './PostCard.styles';
-import { navigateToDetailPage } from '@shared/utils/navigation';
+import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 
 interface PostCardFooterProps {
@@ -39,7 +39,7 @@ const PostCardFooter = ({
         fullWidth
         startIcon={<MenuBookIcon />}
         sx={styles.cardFooterButton(false)}
-        onClick={() => navigateToDetailPage(navigate, itemId)}
+        onClick={() => navigateToBookDetailPage(navigate, itemId)}
       >
         책 보러가기
       </Button>
