@@ -26,9 +26,12 @@ const AppContent = (): JSX.Element => {
 
 const App = (): JSX.Element => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ThemeProvider theme={muiTheme}>
+      <CssBaseline />
+      <Router>
+        <AppContent />
+      </Router>
+    </ThemeProvider>
   );
 };
 
