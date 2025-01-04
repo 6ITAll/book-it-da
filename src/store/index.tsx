@@ -9,6 +9,7 @@ import { libraryApi } from '@features/MyPage/api';
 import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
 import { postApi } from '@features/BookDetailPage/api/postApi';
 import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
+import userReducer from './userSlice/userSlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     [postApi.reducerPath]: postApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
     counter: counterReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
