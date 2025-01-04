@@ -10,6 +10,8 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '@store/userSlice/userSlice';
 
 interface LoginProps {
   onLogin: (userId: string) => void;
@@ -31,7 +33,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleLogin = useCallback(
     (
       e: React.FormEvent<HTMLFormElement> | null,
@@ -55,6 +57,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
 
         if (user) {
           onLogin(loginUserId);
+          dispatch(loginSuccess());
           if (rememberMe) {
             localStorage.setItem('savedUserId', loginUserId);
           } else {
@@ -82,7 +85,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         });
       }
     },
-    [userId, password, rememberMe, autoLogin, onLogin, navigate],
+    [userId, password, rememberMe, autoLogin, onLogin, navigate, dispatch],
   );
 
   useEffect(() => {
