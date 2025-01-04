@@ -36,8 +36,16 @@ const PostingUserInfo = ({
         </Stack>
       </Stack>
       {user.userId !== currentUserId && (
-        <Button variant="outlined" size="small">
-          팔로우
+        <Button
+          variant="outlined"
+          size="small"
+          sx={{
+            color: user.isFollowing ? 'black' : 'primary.main',
+            borderColor: user.isFollowing ? 'black' : 'primary.main',
+            mb: '0',
+          }}
+        >
+          {user.isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       )}
     </Box>
