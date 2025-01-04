@@ -7,6 +7,8 @@ interface PasswordInputProps {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: boolean;
+  helperText?: string;
 }
 
 const StyledTextField = styled(TextField)({
@@ -17,6 +19,8 @@ const PasswordInput = ({
   label,
   value,
   onChange,
+  error,
+  helperText,
 }: PasswordInputProps): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -30,6 +34,10 @@ const PasswordInput = ({
       type={showPassword ? 'text' : 'password'}
       value={value}
       onChange={onChange}
+      error={error}
+      helperText={helperText}
+      fullWidth
+      margin="normal"
       InputProps={{
         endAdornment: (
           <IconButton onClick={handleTogglePasswordVisibility}>
