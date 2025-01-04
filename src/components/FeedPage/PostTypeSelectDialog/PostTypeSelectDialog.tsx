@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
-import PostingDialog from '../PostingDialog/PostingDialog';
 import OneLineReviewDialog from '../OneLineReviewDialog/OneLineReviewDialog';
 import { PostType } from '@shared/types/type';
 import { POST_TYPE_OPTIONS } from 'src/constants';
@@ -49,12 +48,6 @@ const PostTypeSelectDialog = ({
         setOpen={setDialogOpen}
         contentNode={contentNode}
         maxWidth="xs"
-      />
-      {/* 포스팅 작성 모달 */}
-      <PostingDialog
-        handleBack={handleBack}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
       />
 
       {/* 한줄평 작성 모달 */}

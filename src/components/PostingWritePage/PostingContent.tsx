@@ -1,5 +1,5 @@
 import { Box, Stack, TextField } from '@mui/material';
-import { styles } from './PostingDialog.styles';
+import { styles } from './PostingWrite.styles';
 import { BookPreviewSection } from './PostingBookPreview';
 import TextEditor from '@components/commons/TextEditor';
 import { Book } from '@shared/types/type';

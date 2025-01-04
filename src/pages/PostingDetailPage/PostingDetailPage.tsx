@@ -2,10 +2,10 @@ import { Stack, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import URLShareDialog from '@components/commons/URLShareDialog';
-import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
-import PostingContent from '@components/PostDetailPage/PostingContent';
-import PostingHeader from '@components/PostDetailPage/PostingHeader';
-import OtherPostingGrid from '@components/PostDetailPage/OtherPostingGrid';
+import PostingUserInfo from '@components/PostingDetailPage/PostingUserInfo';
+import PostingContent from '@components/PostingDetailPage/PostingContent';
+import PostingHeader from '@components/PostingDetailPage/PostingHeader';
+import OtherPostingGrid from '@components/PostingDetailPage/OtherPostingGrid';
 import {
   useGetBookOtherPostsQuery,
   useGetCurrentUserQuery,
