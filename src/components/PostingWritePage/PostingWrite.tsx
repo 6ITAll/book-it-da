@@ -6,10 +6,15 @@ import PostingContent from './PostingContent';
 import { useState } from 'react';
 import { Book } from '@shared/types/type';
 import PostingWriteHeader from './PostingWriteHeader';
+import { useLocation } from 'react-router-dom';
 
 const PostingWrite = () => {
+  const location = useLocation();
+  const bookFromDetail = location.state?.book as Book;
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(
+    bookFromDetail || null,
+  );
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

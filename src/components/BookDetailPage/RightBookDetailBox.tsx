@@ -12,6 +12,8 @@ interface RightBookBoxProps {
   link: string;
   customerReviewRank: number;
   ratingCount: number;
+  imageUrl: string;
+  itemId: number;
 }
 
 const RightBookBoxDetailBox = ({
@@ -23,6 +25,8 @@ const RightBookBoxDetailBox = ({
   link,
   customerReviewRank,
   ratingCount,
+  imageUrl,
+  itemId,
 }: RightBookBoxProps): JSX.Element => {
   return (
     <Box
@@ -85,7 +89,14 @@ const RightBookBoxDetailBox = ({
             >
               이 책이 담긴 서재 <strong>8.2만+</strong>
             </Typography>
-            <ActionButtons />
+            <ActionButtons
+              book={{
+                bookTitle: title,
+                author: author,
+                imageUrl: imageUrl,
+                itemId: itemId,
+              }}
+            />
           </Box>
         </Stack>
       </Box>
