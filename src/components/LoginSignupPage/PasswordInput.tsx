@@ -1,14 +1,17 @@
-/** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 import { TextField, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { css } from '@emotion/react';
+import { styled } from '@mui/material/styles';
 
 interface PasswordInputProps {
   label: string;
-  value: string; // value 추가
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // onChange 추가
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+const StyledTextField = styled(TextField)({
+  marginBottom: '16px',
+});
 
 const PasswordInput = ({
   label,
@@ -22,11 +25,11 @@ const PasswordInput = ({
   };
 
   return (
-    <TextField
+    <StyledTextField
       label={label}
       type={showPassword ? 'text' : 'password'}
-      value={value} // value prop 사용
-      onChange={onChange} // onChange prop 사용
+      value={value}
+      onChange={onChange}
       InputProps={{
         endAdornment: (
           <IconButton onClick={handleTogglePasswordVisibility}>
@@ -34,9 +37,6 @@ const PasswordInput = ({
           </IconButton>
         ),
       }}
-      css={css`
-        margin-bottom: 16px;
-      `}
     />
   );
 };
