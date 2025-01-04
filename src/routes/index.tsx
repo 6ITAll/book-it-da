@@ -6,6 +6,9 @@ import BookSearchPage from '@pages/BookSearchPage/BookSearch';
 import MyPage from '@pages/MyPage/MyPage';
 import NotFoundPage from '@pages/NotFoundPage/NotFound';
 import RoutePaths from './RoutePath';
+import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
+import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
+import PostMorePage from '@pages/PostMorePage/PostMorePage';
 
 const AppRouter = () => {
   return (
@@ -16,6 +19,18 @@ const AppRouter = () => {
       <Route path={RoutePaths.FEED} element={<FeedPage />} />
       <Route path={RoutePaths.SEARCH} element={<BookSearchPage />} />
       <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
+      <Route
+        path={`${RoutePaths.BOOK_DETAIL}/:itemId`}
+        element={<BookDetailPage />}
+      />
+      <Route
+        path={`${RoutePaths.BOOK_DETAIL}/:itemId/${RoutePaths.REVIEWS}`}
+        element={<ReviewMorePage />}
+      />
+      <Route
+        path={`${RoutePaths.BOOK_DETAIL}/:itemId/${RoutePaths.POSTS}`}
+        element={<PostMorePage />}
+      />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
