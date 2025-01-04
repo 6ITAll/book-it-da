@@ -7,7 +7,6 @@ import {
   Posting,
   PostType,
 } from '@shared/types/type';
-import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 import { OneLineReviewRequest } from '@features/OneLineReviewDialog/types/types';
 import { PostingRequest } from '@features/PostingWritePage/types/types';
 
@@ -75,7 +74,6 @@ export const bookData: Book[] = [
 ];
 
 const generateMockPosts = (): (OneLinePost | Posting)[] => {
-  const usedUsernames = new Set<string>();
   const posts: (OneLinePost | Posting)[] = [];
 
   for (let i = 1; i <= 100; i++) {
@@ -88,45 +86,46 @@ const generateMockPosts = (): (OneLinePost | Posting)[] => {
       Math.floor(Math.random() * 60),
     ).toISOString();
 
-    let userName: string;
-    do {
-      userName = `user${Math.floor(Math.random() * 10000)}`;
-    } while (usedUsernames.has(userName));
-    usedUsernames.add(userName);
+    const userId = Math.floor(Math.random() * 10000);
 
     const basePost: Post = {
       id: i,
-      imageUrl: book.imageUrl,
-      userName,
       createdAt: randomDate,
-      timeAgo: formatTimeAgo(randomDate),
-      postType: Math.random() < 0.5 ? '포스팅' : '한줄평',
-      isFollowing: Math.random() < 0.5,
-      isFollower: Math.random() < 0.5,
-      bookTitle: book.bookTitle,
-      bookAuthor: book.author,
+      user: {
+        userId: userId,
+        userName: `user${userId}`,
+        avatarUrl: `https://mui.com/static/images/avatar/${Math.floor(Math.random() * 3) + 1}.jpg`,
+        isFollowing: Math.random() < 0.5,
+        isFollower: Math.random() < 0.5,
+      },
+      book: {
+        bookTitle: book.bookTitle,
+        author: book.author,
+        imageUrl: book.imageUrl,
+        itemId: book.itemId,
+      },
       likeCount: Math.floor(Math.random() * 1000),
       isLiked: false,
-      itemId: book.itemId,
     };
 
-    if (basePost.postType === '포스팅') {
+    if (Math.random() < 0.5) {
       posts.push({
         ...basePost,
         postType: '포스팅',
         title: `포스팅 제목 ${i}`,
-        description: `
-        <h2>책 리뷰</h2>
-        <p>포스팅 내용 ${i}입니다. 이 책은 정말 흥미롭습니다.</p>
-        <blockquote>인상 깊은 구절이 많았습니다.</blockquote>
-        <p><strong>특히 이 부분이 좋았습니다.</strong></p>
-      `,
+        content: `
+          <h2>책 리뷰</h2>
+          <p>포스팅 내용 ${i}입니다. 이 책은 정말 흥미롭습니다.</p>
+          <blockquote>인상 깊은 구절이 많았습니다.</blockquote>
+          <p><strong>특히 이 부분이 좋았습니다.</strong></p>
+        `,
       } as Posting);
     } else {
       posts.push({
         ...basePost,
         postType: '한줄평',
         review: `이 책은 정말 흥미롭습니다. 리뷰 ${i}`,
+        rating: Math.floor(Math.random() * 5) + 1,
       } as OneLinePost);
     }
   }
@@ -149,10 +148,10 @@ export const feedHandlers = [
     // 피드 타입에 따른 필터링
     switch (feedType) {
       case '팔로잉':
-        filteredPosts = filteredPosts.filter((post) => post.isFollowing);
+        filteredPosts = filteredPosts.filter((post) => post.user.isFollowing);
         break;
       case '팔로워':
-        filteredPosts = filteredPosts.filter((post) => post.isFollower);
+        filteredPosts = filteredPosts.filter((post) => post.user.isFollower);
         break;
     }
 
@@ -181,10 +180,13 @@ export const feedHandlers = [
 
     // mockPosts 배열의 실제 데이터 업데이트
     mockPosts.forEach((post, index) => {
-      if (post.userName === userName) {
+      if (post.user.userName === userName) {
         mockPosts[index] = {
           ...post,
-          isFollowing,
+          user: {
+            ...post.user,
+            isFollowing,
+          },
         };
       }
     });
@@ -215,26 +217,30 @@ export const feedHandlers = [
     const body = (await request.json()) as OneLineReviewRequest;
     const { book, rating, review } = body;
 
-    const newPost = {
+    const newPost: OneLinePost = {
       id: mockPosts.length + 1,
-      imageUrl: book.imageUrl,
-      userName: 'currentUser',
       createdAt: new Date().toISOString(),
-      timeAgo: '방금 전',
-      postType: '한줄평' as const,
-      isFollowing: false,
-      isFollower: false,
-      bookTitle: book.bookTitle,
-      bookAuthor: book.author,
+      user: {
+        userId: 1,
+        userName: 'currentUser',
+        avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+        isFollower: false,
+        isFollowing: false,
+      },
+      book: {
+        bookTitle: book.bookTitle,
+        author: book.author,
+        imageUrl: book.imageUrl,
+        itemId: book.itemId,
+      },
+      postType: '한줄평',
       likeCount: 0,
       isLiked: false,
       review,
       rating,
-      itemId: book.itemId,
     };
 
     mockPosts.unshift(newPost);
-
     return HttpResponse.json({ success: true, post: newPost }, { status: 201 });
   }),
   http.post('/api/posts/posting', async ({ request }) => {
@@ -243,24 +249,28 @@ export const feedHandlers = [
 
     const newPost: Posting = {
       id: mockPosts.length + 1,
-      imageUrl: book.imageUrl,
-      userName: 'currentUser',
       createdAt: new Date().toISOString(),
-      timeAgo: '방금 전',
+      user: {
+        userId: 1,
+        userName: 'currentUser',
+        avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+        isFollower: false,
+        isFollowing: false,
+      },
+      book: {
+        bookTitle: book.bookTitle,
+        author: book.author,
+        imageUrl: book.imageUrl,
+        itemId: book.itemId,
+      },
       postType: '포스팅',
-      isFollowing: false,
-      isFollower: false,
-      bookTitle: book.bookTitle,
-      bookAuthor: book.author,
       likeCount: 0,
       isLiked: false,
-      itemId: book.itemId,
       title,
-      description: content,
+      content,
     };
 
     mockPosts.unshift(newPost);
-
     return HttpResponse.json(
       { success: true, message: '포스팅이 작성되었습니다.', post: newPost },
       { status: 201 },

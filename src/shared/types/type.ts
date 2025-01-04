@@ -7,34 +7,37 @@ export type FeedType = '추천' | '팔로워' | '팔로잉';
 // 독서 상태 타입
 export type ReadingStatusType = 'READING' | 'COMPLETED' | 'WISH' | null;
 
+// 유저 인터페이스
+export interface User {
+  userId: number;
+  userName: string;
+  avatarUrl: string;
+  isFollowing: boolean;
+  isFollower: boolean;
+}
+
 // 게시물 interface
 export interface Post {
   id: number;
-  imageUrl: string;
-  userName: string;
-  timeAgo: string;
   createdAt: string;
-  postType: PostType;
-  isFollowing: boolean;
-  isFollower: boolean;
-  bookTitle: string;
-  bookAuthor: string;
+  user: User;
+  book: Book;
   likeCount: number;
   isLiked: boolean;
-  itemId: number;
 }
 
 // 한줄평 포스트
 export interface OneLinePost extends Post {
   postType: '한줄평';
   review: string;
+  rating?: number;
 }
 
 // 일반 포스팅
 export interface Posting extends Post {
   postType: '포스팅';
   title: string;
-  description: string;
+  content: string;
 }
 
 // 책 interface

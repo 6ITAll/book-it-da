@@ -1,38 +1,38 @@
 import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
 import { styles } from './PostCard.styles';
-import { PostType } from '@shared/types/type';
+import { PostType, User } from '@shared/types/type';
 import { useEffect, useState } from 'react';
+import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 
 interface PostCardHeaderProps {
-  userName: string;
+  user: User;
+  createdAt: string;
   postType: PostType;
-  timeAgo: string;
-  isFollowing: boolean;
-  onFollowChange: (userName: string, isFollowing: boolean) => void;
+  onFollowChange: (userId: number, isFollowing: boolean) => void;
 }
 
 const PostCardHeader = ({
-  userName,
+  user,
+  createdAt,
   postType,
-  timeAgo,
-  isFollowing,
   onFollowChange,
 }: PostCardHeaderProps) => {
-  const [localFollowState, setLocalFollowState] = useState(isFollowing);
+  const [localFollowState, setLocalFollowState] = useState(user.isFollowing);
 
   const handleFollowClick = () => {
     const newState = !localFollowState;
     setLocalFollowState(newState);
-    onFollowChange(userName, newState);
+    onFollowChange(user.userId, newState);
   };
 
   useEffect(() => {
-    setLocalFollowState(isFollowing);
-  }, [isFollowing]);
+    setLocalFollowState(user.isFollowing);
+  }, [user.isFollowing]);
+
   return (
     <CardHeader
       sx={styles.cardHeader}
-      avatar={<Avatar />}
+      avatar={<Avatar src={user.avatarUrl} alt={user.userName} />}
       action={
         <Button
           variant="outlined"
@@ -45,7 +45,7 @@ const PostCardHeader = ({
       }
       title={
         <Typography variant="body2" fontWeight="bold">
-          {userName}
+          {user.userName}
         </Typography>
       }
       subheader={
@@ -57,7 +57,7 @@ const PostCardHeader = ({
             •
           </Typography>
           <Typography variant="caption" sx={{ fontSize: '11px' }}>
-            {timeAgo}
+            {formatTimeAgo(createdAt)}
           </Typography>
         </Box>
       }

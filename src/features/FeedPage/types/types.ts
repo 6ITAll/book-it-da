@@ -14,7 +14,7 @@ export interface PostsResponse {
 }
 
 export interface FollowRequest {
-  userName: string;
+  userId: number;
   isFollowing: boolean;
 }
 

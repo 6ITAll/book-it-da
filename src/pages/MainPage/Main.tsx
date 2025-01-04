@@ -28,7 +28,7 @@ const Main = (): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const [localFollowChanges, setLocalFollowChanges] = useState<
-    Array<{ userName: string; isFollowing: boolean }>
+    Array<{ userId: number; isFollowing: boolean }>
   >([]);
   const [toggleFollow] = useToggleFollowMutation();
 
@@ -55,8 +55,8 @@ const Main = (): JSX.Element => {
       if (localFollowChanges.length > 0) {
         try {
           await Promise.all(
-            localFollowChanges.map(({ userName, isFollowing }) =>
-              toggleFollow({ userName, isFollowing }).unwrap(),
+            localFollowChanges.map(({ userId, isFollowing }) =>
+              toggleFollow({ userId, isFollowing }).unwrap(),
             ),
           );
           // 변경사항 초기화
@@ -74,8 +74,8 @@ const Main = (): JSX.Element => {
   );
 
   const handleFollowChange = useCallback(
-    (userName: string, isFollowing: boolean) => {
-      setLocalFollowChanges((prev) => [...prev, { userName, isFollowing }]);
+    (userId: number, isFollowing: boolean) => {
+      setLocalFollowChanges((prev) => [...prev, { userId, isFollowing }]);
     },
     [],
   );
@@ -211,24 +211,22 @@ const Main = (): JSX.Element => {
             }}
           >
             {data?.posts?.map((post: OneLinePost | Posting) => {
-              if ('title' in post && 'description' in post) {
+              if ('title' in post && 'content' in post) {
                 return (
                   <Box key={post.id}>
                     <PostCard
                       postId={post.id}
-                      imageUrl={post.imageUrl}
-                      userName={post.userName}
-                      timeAgo={post.timeAgo}
+                      createdAt={post.createdAt}
+                      user={post.user}
+                      book={post.book}
                       postType="포스팅"
-                      bookTitle={post.bookTitle}
-                      bookAuthor={post.bookAuthor}
                       title={post.title}
-                      description={post.description}
-                      isFollowing={post.isFollowing}
-                      onFollowChange={handleFollowChange}
+                      content={post.content}
+                      onFollowChange={(userId: number, isFollowing: boolean) =>
+                        handleFollowChange(userId, isFollowing)
+                      }
                       likeCount={post.likeCount}
                       isLiked={post.isLiked}
-                      itemId={post.itemId}
                     />
                   </Box>
                 );
@@ -237,18 +235,16 @@ const Main = (): JSX.Element => {
                   <Box key={post.id}>
                     <PostCard
                       postId={post.id}
-                      imageUrl={post.imageUrl}
-                      userName={post.userName}
-                      timeAgo={post.timeAgo}
+                      createdAt={post.createdAt}
+                      user={post.user}
+                      book={post.book}
                       postType="한줄평"
-                      bookTitle={post.bookTitle}
-                      bookAuthor={post.bookAuthor}
                       review={post.review}
-                      isFollowing={post.isFollowing}
-                      onFollowChange={handleFollowChange}
+                      onFollowChange={(userId: number, isFollowing: boolean) =>
+                        handleFollowChange(userId, isFollowing)
+                      }
                       likeCount={post.likeCount}
                       isLiked={post.isLiked}
-                      itemId={post.itemId}
                     />
                   </Box>
                 );

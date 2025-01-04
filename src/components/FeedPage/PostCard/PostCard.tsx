@@ -1,5 +1,5 @@
 import { Card } from '@mui/material';
-import { PostType } from '@shared/types/type';
+import { Book, PostType, User } from '@shared/types/type';
 import { styles } from './PostCard.styles';
 import PostCardContent from './PostCardContent';
 import BookImage from './PostCardImage';
@@ -9,23 +9,19 @@ import { useToggleLikeMutation } from '@features/FeedPage/api/feedApi';
 
 interface PostCardBaseProps {
   postId: number;
-  imageUrl: string;
-  userName: string;
-  timeAgo: string;
+  createdAt: string;
+  user: User;
+  book: Book;
   postType: PostType;
-  bookTitle: string;
-  bookAuthor: string;
-  isFollowing: boolean;
   likeCount: number;
   isLiked: boolean;
-  itemId: number;
-  onFollowChange: (userName: string, isFollowing: boolean) => void;
+  onFollowChange: (userId: number, isFollowing: boolean) => void;
 }
 
 interface PostingCardProps extends PostCardBaseProps {
   postType: '포스팅';
   title: string;
-  description: string;
+  content: string;
   review?: never;
 }
 
@@ -33,26 +29,22 @@ interface OneLineCardProps extends PostCardBaseProps {
   postType: '한줄평';
   review: string;
   title?: never;
-  description?: never;
+  content?: never;
 }
 
 type PostCardProps = PostingCardProps | OneLineCardProps;
 
 const PostCard = ({
   postId,
-  imageUrl,
-  userName,
-  timeAgo,
+  createdAt,
+  user,
+  book,
   postType,
-  bookTitle,
-  bookAuthor,
   title,
-  description,
+  content,
   review,
-  isFollowing,
   likeCount,
   isLiked,
-  itemId,
   onFollowChange,
 }: PostCardProps): JSX.Element => {
   const [toggleLike] = useToggleLikeMutation();
@@ -68,28 +60,25 @@ const PostCard = ({
   return (
     <Card sx={styles.card}>
       <PostCardHeader
-        userName={userName}
+        user={user}
+        createdAt={createdAt}
         postType={postType}
-        timeAgo={timeAgo}
-        isFollowing={isFollowing}
         onFollowChange={onFollowChange}
       />
       {/* 책 사진 */}
-      <BookImage imageUrl={imageUrl} title={bookTitle} />
+      <BookImage imageUrl={book.imageUrl} title={book.bookTitle} />
       {/* 포스팅 내용 */}
       <PostCardContent
         type={postType}
         content={
           postType === '포스팅'
             ? {
-                bookTitle,
-                bookAuthor,
+                book,
                 title,
-                description,
+                content,
               }
             : {
-                bookTitle,
-                bookAuthor,
+                book,
                 review,
               }
         }
@@ -99,7 +88,7 @@ const PostCard = ({
         likeCount={likeCount}
         isLiked={isLiked}
         handleLikeClick={handleLikeClick}
-        itemId={itemId}
+        itemId={book.itemId}
       />
     </Card>
   );

@@ -46,15 +46,15 @@ export const feedApi = createApi({
       providesTags: ['Posts'],
     }),
     toggleFollow: builder.mutation<{ success: boolean }, FollowRequest>({
-      query: ({ userName, isFollowing }) => ({
+      query: ({ userId, isFollowing }) => ({
         url: '/follow',
         method: 'POST',
-        body: { userName, isFollowing },
+        body: { userId, isFollowing },
       }),
       // 팔로우/언팔로우 시 Posts 태그를 무효화하여 다음 탭 전환 시 새로운 데이터를 가져오도록 함
       invalidatesTags: ['Posts'],
       async onQueryStarted(
-        { userName, isFollowing },
+        { userId, isFollowing },
         { dispatch, queryFulfilled },
       ) {
         const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
@@ -71,7 +71,7 @@ export const feedApi = createApi({
               } as GetPostsParams,
               (draft) => {
                 draft.posts = draft.posts.map((post) => {
-                  if (post.userName === userName) {
+                  if (post.user.userId === userId) {
                     return { ...post, isFollowing };
                   }
                   return post;
