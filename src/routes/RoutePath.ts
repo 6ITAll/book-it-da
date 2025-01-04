@@ -8,6 +8,8 @@ const RoutePaths = {
   BOOKSHELVES: '/bookshelves',
   POSTING: '/posting',
   BOOKDETAIL: '/bookDetail',
+  REVIEWS: 'reviews',
+  POSTS: 'posts',
   // 추가시
   // ABOUT: '/about', 식으로 가능
 };
