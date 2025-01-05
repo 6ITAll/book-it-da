@@ -11,6 +11,7 @@ import PostingDetailPage from '@pages/PostDetailPage/PostingDetailPage';
 import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
 import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
 import PostMorePage from '@pages/PostMorePage/PostMorePage';
+import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
 const AppRouter = () => {
   return (
     <Routes>
@@ -20,6 +21,7 @@ const AppRouter = () => {
       <Route path={RoutePaths.FEED} element={<FeedPage />} />
       <Route path={RoutePaths.SEARCH} element={<BookSearchPage />} />
       <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
+      <Route path="/oauth/kakao" element={<KakaoCallback />} />
       <Route
         path={`${RoutePaths.BOOKDETAIL}/:itemId`}
         element={<BookDetailPage />}
