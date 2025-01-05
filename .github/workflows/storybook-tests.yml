@@ -10,6 +10,9 @@ jobs:
   # Install and cache npm dependencies
   install-cache:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     steps:
       - name: Checkout Commit
         uses: actions/checkout@v4
@@ -32,6 +35,9 @@ jobs:
   # Run interaction and accessibility tests
   interaction-and-accessibility:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
@@ -70,6 +76,9 @@ jobs:
   # Run visual and composition tests with Chromatic
   visual-and-composition:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
@@ -104,6 +113,9 @@ jobs:
   # Run user flow tests with Playwright
   user-flow:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
@@ -138,6 +150,9 @@ jobs:
   # Generate and upload code coverage report from Storybook tests
   storybook-coverage:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
