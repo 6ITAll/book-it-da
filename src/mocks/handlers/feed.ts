@@ -173,14 +173,14 @@ export const feedHandlers = [
   }),
   http.post('/api/follow', async ({ request }) => {
     const body = (await request.json()) as {
-      userName: string;
+      userId: number;
       isFollowing: boolean;
     };
-    const { userName, isFollowing } = body;
+    const { userId, isFollowing } = body;
 
     // mockPosts 배열의 실제 데이터 업데이트
     mockPosts.forEach((post, index) => {
-      if (post.user.userName === userName) {
+      if (post.user.userId === userId) {
         mockPosts[index] = {
           ...post,
           user: {
