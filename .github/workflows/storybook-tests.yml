@@ -54,6 +54,11 @@ jobs:
           key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-v2
+      - name: Update Node.js dependencies
+        run: |
+          npm update
+          echo "Updated packages:"
+          npm list --depth=0
       - name: Check for Storybook stories
         id: check-stories
         run: |
@@ -167,6 +172,11 @@ jobs:
           key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-v2
+      - name: Update Node.js dependencies
+        run: |
+          npm update
+          echo "Updated packages:"
+          npm list --depth=0
       - name: Check for Storybook stories
         id: check-stories
         run: |
@@ -179,9 +189,12 @@ jobs:
       - name: Build Storybook
         if: env.STORIES_FOUND == 'true'
         run: npm run build-storybook
-      - name: Run Storybook tests with coverage
+      - name: Serve Storybook and run tests with coverage
         if: env.STORIES_FOUND == 'true'
-        run: npm run test-storybook -- --coverage
+        run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && npm run test-storybook -- --coverage"
       - name: Upload coverage report
         if: env.STORIES_FOUND == 'true'
         uses: actions/upload-artifact@v3
