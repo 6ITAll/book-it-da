@@ -7,10 +7,11 @@ import { kakaoApi } from '@features/SNSLogin/api/Kakaoapi';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { libraryApi } from '@features/MyPage/api';
-import userReducer from './userSlice/userSlice';
+import userReducer from '@features/user/userSlice';
 import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
 import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
 import { postingApi } from '@features/PostDetailPage/api/postingApi';
+import snackbarReducer from '@features/Snackbar/snackbarSlice';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     [postingApi.reducerPath]: postingApi.reducer,
     counter: counterReducer,
     user: userReducer,
+    snackbar: snackbarReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
