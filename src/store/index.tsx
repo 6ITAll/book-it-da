@@ -3,6 +3,7 @@ import counterReducer from '../features/counter/counterSlice';
 import { bookSearchApi } from '@features/BookSearchPage/api/bookSearchApi';
 import { bestBookGetApi } from '@features/BookSearchPage/api/bestBookGetApi';
 import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
+import { kakaoApi } from '@features/SNSLogin/api/Kakaoapi';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { libraryApi } from '@features/MyPage/api';
@@ -18,6 +19,7 @@ export const store = configureStore({
     bookshelves: bookShelvesReducer,
     [bookSearchApi.reducerPath]: bookSearchApi.reducer,
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
+    [kakaoApi.reducerPath]: kakaoApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
@@ -29,6 +31,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat([
       bookSearchApi.middleware,
       bestBookGetApi.middleware,
+      kakaoApi.middleware,
       bookDetailApi.middleware,
       libraryApi.middleware,
       bookShelvesApi.middleware,
