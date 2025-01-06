@@ -11,25 +11,21 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from './PasswordInput';
-
-interface LoginProps {
-  onLogin: (userId: string) => void;
-}
-
-interface LoginMessage {
-  content: string;
-  isError: boolean;
-}
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '@features/user/userSlice';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}&response_type=code`;
 
-const Login = ({ onLogin }: LoginProps): JSX.Element => {
+const Login = (): JSX.Element => {
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loginMessage, setLoginMessage] = useState<LoginMessage>({
+  const [loginMessage, setLoginMessage] = useState<{
+    content: string;
+    isError: boolean;
+  }>({
     content: '',
     isError: false,
   });
@@ -37,6 +33,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = useCallback(
     (e: React.FormEvent<HTMLFormElement> | null) => {
@@ -53,7 +50,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         );
 
         if (user) {
-          onLogin(userId);
+          dispatch(loginSuccess());
           if (rememberMe) {
             localStorage.setItem('savedUserId', userId);
           } else {
@@ -81,7 +78,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         });
       }
     },
-    [userId, password, rememberMe, autoLogin, onLogin, navigate],
+    [userId, password, rememberMe, autoLogin, navigate, dispatch],
   );
 
   const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {

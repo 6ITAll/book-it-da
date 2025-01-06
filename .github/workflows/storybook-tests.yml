@@ -10,6 +10,9 @@ jobs:
   # Install and cache npm dependencies
   install-cache:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     steps:
       - name: Checkout Commit
         uses: actions/checkout@v4
@@ -32,6 +35,9 @@ jobs:
   # Run interaction and accessibility tests
   interaction-and-accessibility:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
@@ -48,6 +54,11 @@ jobs:
           key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-v2
+      - name: Update Node.js dependencies
+        run: |
+          npm update
+          echo "Updated packages:"
+          npm list --depth=0
       - name: Check for Storybook stories
         id: check-stories
         run: |
@@ -70,6 +81,9 @@ jobs:
   # Run visual and composition tests with Chromatic
   visual-and-composition:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
@@ -104,6 +118,9 @@ jobs:
   # Run user flow tests with Playwright
   user-flow:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
@@ -138,6 +155,9 @@ jobs:
   # Generate and upload code coverage report from Storybook tests
   storybook-coverage:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
     needs: install-cache
     steps:
       - name: Checkout Commit
@@ -152,6 +172,11 @@ jobs:
           key: ${{ runner.os }}-npm-v2-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-v2
+      - name: Update Node.js dependencies
+        run: |
+          npm update
+          echo "Updated packages:"
+          npm list --depth=0
       - name: Check for Storybook stories
         id: check-stories
         run: |
@@ -164,9 +189,12 @@ jobs:
       - name: Build Storybook
         if: env.STORIES_FOUND == 'true'
         run: npm run build-storybook
-      - name: Run Storybook tests with coverage
+      - name: Serve Storybook and run tests with coverage
         if: env.STORIES_FOUND == 'true'
-        run: npm run test-storybook -- --coverage
+        run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && npm run test-storybook -- --coverage"
       - name: Upload coverage report
         if: env.STORIES_FOUND == 'true'
         uses: actions/upload-artifact@v3

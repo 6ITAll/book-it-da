@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import { Snackbar as MuiSnackbar, Alert } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideSnackbar } from '@features/Snackbar/SnackbarSlice';
+import { hideSnackbar } from '@features/Snackbar/snackbarSlice';
 import { RootState } from '@store/store';
 
 const SnackBar = (): JSX.Element | null => {
