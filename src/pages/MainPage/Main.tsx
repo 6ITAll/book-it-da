@@ -27,16 +27,18 @@ const Main = (): JSX.Element => {
   const [feedType, setFeedType] = useState<FeedType>('추천');
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [localFollowChanges, setLocalFollowChanges] = useState<
-    Array<{ userId: number; isFollowing: boolean }>
-  >([]);
   const [toggleFollow] = useToggleFollowMutation();
 
-  const { data, isLoading, isFetching } = useGetPostsQuery({
-    page,
-    postType: postType || undefined,
-    feedType,
-  });
+  const { data, isLoading, isFetching, refetch } = useGetPostsQuery(
+    {
+      page,
+      postType: postType || undefined,
+      feedType,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
@@ -44,40 +46,32 @@ const Main = (): JSX.Element => {
       setPostType(newValue);
       setPage(1);
       window.scrollTo(0, 0);
+      refetch();
     },
-    [],
+    [refetch],
   );
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링
   const handleFeedTypeChange = useCallback(
-    async (_: React.SyntheticEvent, newValue: FeedType) => {
-      // 저장된 팔로우 변경사항이 있다면 탭 전환시 API 요청
-      if (localFollowChanges.length > 0) {
-        try {
-          await Promise.all(
-            localFollowChanges.map(({ userId, isFollowing }) =>
-              toggleFollow({ userId, isFollowing }).unwrap(),
-            ),
-          );
-          // 변경사항 초기화
-          setLocalFollowChanges([]);
-        } catch (error) {
-          console.error('팔로우/언팔로우 실패:', error);
-        }
-      }
-
+    (_: React.SyntheticEvent, newValue: FeedType) => {
       setFeedType(newValue);
       setPage(1);
       window.scrollTo(0, 0);
+      refetch();
     },
-    [localFollowChanges, toggleFollow],
+    [refetch],
   );
 
   const handleFollowChange = useCallback(
-    (userId: number, isFollowing: boolean) => {
-      setLocalFollowChanges((prev) => [...prev, { userId, isFollowing }]);
+    async (userId: number, isFollowing: boolean) => {
+      try {
+        // 팔로우 상태 변경 즉시 API 요청
+        await toggleFollow({ userId, isFollowing }).unwrap();
+      } catch (error) {
+        console.error('팔로우/언팔로우 실패:', error);
+      }
     },
-    [],
+    [toggleFollow],
   );
 
   const fetchMoreData = useCallback(() => {

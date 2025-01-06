@@ -24,6 +24,7 @@ export const feedApi = createApi({
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
         return `${endpointName}-${queryArgs.feedType}-${queryArgs.postType}`;
       },
+      // infinite scroll 위한 기존 데이터 + 새 데이터 병합
       merge: (currentCache, newItems, { arg }) => {
         if (arg.page === 1) {
           return newItems;
@@ -35,6 +36,7 @@ export const feedApi = createApi({
           totalCount: newItems.totalCount,
         };
       },
+      // 페이지 전환, 피드 필터 변화가 있으면 리패치
       forceRefetch({ currentArg, previousArg }) {
         if (!previousArg) return true;
         return (
@@ -51,8 +53,7 @@ export const feedApi = createApi({
         method: 'POST',
         body: { userId, isFollowing },
       }),
-      // 팔로우/언팔로우 시 Posts 태그를 무효화하여 다음 탭 전환 시 새로운 데이터를 가져오도록 함
-      invalidatesTags: ['Posts'],
+      invalidatesTags: [],
       async onQueryStarted(
         { userId, isFollowing },
         { dispatch, queryFulfilled },
@@ -72,7 +73,13 @@ export const feedApi = createApi({
               (draft) => {
                 draft.posts = draft.posts.map((post) => {
                   if (post.user.userId === userId) {
-                    return { ...post, isFollowing };
+                    return {
+                      ...post,
+                      user: {
+                        ...post.user,
+                        isFollowing,
+                      },
+                    };
                   }
                   return post;
                 });
@@ -81,7 +88,7 @@ export const feedApi = createApi({
             ),
           ),
         );
-
+        // 쿼리가 성공하면 캐시 업데이트 유지, 실패하면 undo
         try {
           const result = await queryFulfilled;
           if (!result.data.success) {

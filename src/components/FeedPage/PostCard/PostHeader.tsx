@@ -1,7 +1,6 @@
 import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
 import { styles } from './PostCard.styles';
 import { PostType, User } from '@shared/types/type';
-import { useEffect, useState } from 'react';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 
 interface PostCardHeaderProps {
@@ -17,17 +16,9 @@ const PostCardHeader = ({
   postType,
   onFollowChange,
 }: PostCardHeaderProps) => {
-  const [localFollowState, setLocalFollowState] = useState(user.isFollowing);
-
   const handleFollowClick = () => {
-    const newState = !localFollowState;
-    setLocalFollowState(newState);
-    onFollowChange(user.userId, newState);
+    onFollowChange(user.userId, !user.isFollowing);
   };
-
-  useEffect(() => {
-    setLocalFollowState(user.isFollowing);
-  }, [user.isFollowing]);
 
   return (
     <CardHeader
@@ -37,10 +28,10 @@ const PostCardHeader = ({
         <Button
           variant="outlined"
           size="small"
-          sx={styles.followButton(localFollowState)}
+          sx={styles.followButton(user.isFollowing)}
           onClick={handleFollowClick}
         >
-          {localFollowState ? '팔로잉' : '팔로우'}
+          {user.isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       }
       title={
