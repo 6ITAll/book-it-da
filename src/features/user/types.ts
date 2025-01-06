@@ -7,3 +7,5 @@ export interface User {
   age: number;
   avatarUrl: string;
 }
+
+export type Account = Omit<User, 'gender' | 'age'>;

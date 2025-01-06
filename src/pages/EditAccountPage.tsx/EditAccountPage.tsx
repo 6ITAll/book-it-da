@@ -12,9 +12,15 @@ import {
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '@store/index';
-import { User } from '@features/user/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@store/index';
+import { Account } from '@features/user/types';
+import {
+  useGetUserInfoQuery,
+  useUpdateUserInfoMutation,
+} from '@features/user/userApi';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -28,14 +34,14 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-type ACCOUNT = Omit<User, 'gender' | 'age'>;
-
 const EditAccountPage = (): JSX.Element => {
-  const [userInfo, setUserInfo] = useState<ACCOUNT>({
-    name: '김구름',
-    userId: 'publ***',
-    phone: '010****4561',
+  const mockUserId = 'user';
+
+  const [userInfoState, setUserInfoState] = useState<Account>({
+    userId: '',
     password: '',
+    name: '',
+    phone: '',
     avatarUrl: '',
   });
 
@@ -45,24 +51,53 @@ const EditAccountPage = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const { data: userInfo } = useGetUserInfoQuery(mockUserId);
+  const [updateUserInfo] = useUpdateUserInfoMutation();
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     if (!checkedPassword) navigate('/edit-account/passwordChk');
   }, [checkedPassword, navigate]);
 
+  useEffect(() => {
+    if (userInfo) {
+      setUserInfoState({ ...userInfo, password: '' });
+    }
+  }, [userInfo]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserInfo((prev) => ({ ...prev, [name]: value }));
+    setUserInfoState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (field: string) => {
-    console.log(field);
+  const handleSubmit = async (field: string) => {
+    try {
+      const result = await updateUserInfo({
+        userId: mockUserId,
+        field,
+        value: userInfoState[field as keyof typeof userInfoState],
+      }).unwrap();
+      dispatch(showSnackbar({ message: result.message, severity: 'success' }));
+      if (field === '비밀번호') {
+        setUserInfoState((prev) => ({ ...prev, password: '' }));
+      }
+    } catch (err) {
+      const error = err as FetchBaseQueryError;
+
+      dispatch(
+        showSnackbar({
+          message: (error.data as { message: string }).message,
+          severity: 'error',
+        }),
+      );
+    }
   };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
       <Stack alignItems="center" spacing={1} mb={4}>
         <Avatar
-          src={userInfo.avatarUrl}
+          src={userInfoState.avatarUrl}
           alt="avatar"
           sx={{
             width: 96,
@@ -92,8 +127,8 @@ const EditAccountPage = (): JSX.Element => {
           <TextField
             fullWidth
             label="이름"
-            name="nickname"
-            value={userInfo.name}
+            name="name"
+            value={userInfoState.name}
             onChange={handleChange}
           />
           <Button
@@ -111,7 +146,7 @@ const EditAccountPage = (): JSX.Element => {
             fullWidth
             label="휴대폰 번호"
             name="phone"
-            value={userInfo.phone}
+            value={userInfoState.phone}
             onChange={handleChange}
           />
           <Button
@@ -133,7 +168,7 @@ const EditAccountPage = (): JSX.Element => {
           fullWidth
           label="아이디"
           name="userId"
-          value={userInfo.userId}
+          value={userInfoState.userId}
           disabled
         />
 
@@ -143,7 +178,7 @@ const EditAccountPage = (): JSX.Element => {
             type="password"
             label="비밀번호"
             name="password"
-            value={userInfo.password}
+            value={userInfoState.password}
             onChange={handleChange}
           />
           <Button

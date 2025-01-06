@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Account } from './types';
 
 export const userApi = createApi({
   reducerPath: 'userApi',
@@ -14,7 +15,26 @@ export const userApi = createApi({
         body: { password },
       }),
     }),
+
+    getUserInfo: builder.query<Account, string>({
+      query: (userId) => `user/${userId}`,
+    }),
+
+    updateUserInfo: builder.mutation<
+      { success: boolean; message: string },
+      { userId: string; field: string; value: string }
+    >({
+      query: ({ userId, field, value }) => ({
+        url: `user/${userId}`,
+        method: 'PUT',
+        body: { [field]: value },
+      }),
+    }),
   }),
 });
 
-export const { usePasswordCheckMutation } = userApi;
+export const {
+  usePasswordCheckMutation,
+  useGetUserInfoQuery,
+  useUpdateUserInfoMutation,
+} = userApi;
