@@ -1,5 +1,5 @@
 import { Box, CardContent, Typography } from '@mui/material';
-import { styles } from './PostCard.styles';
+import styles from './PostCard.styles';
 import { Book, PostType } from '@shared/types/type';
 import { stripHtml } from 'string-strip-html';
 
@@ -27,7 +27,7 @@ interface PostCardContentProps {
 const PostCardContent = ({
   type,
   content: { book, title, content, review },
-}: PostCardContentProps) => {
+}: PostCardContentProps): JSX.Element => {
   // html 태그를 제거한 순수 텍스트
   const plainText = stripHtml(content ?? '').result;
   const getContent = () => {

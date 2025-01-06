@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
-import { styles } from './PostCard.styles';
+import styles from './PostCard.styles';
 import { PostType, User } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 
@@ -15,7 +15,7 @@ const PostCardHeader = ({
   createdAt,
   postType,
   onFollowChange,
-}: PostCardHeaderProps) => {
+}: PostCardHeaderProps): JSX.Element => {
   const handleFollowClick = () => {
     onFollowChange(user.userId, !user.isFollowing);
   };

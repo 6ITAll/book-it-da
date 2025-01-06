@@ -1,6 +1,6 @@
 import { Box, Card } from '@mui/material';
 import { Book, PostType, User } from '@shared/types/type';
-import { styles } from './PostCard.styles';
+import styles from './PostCard.styles';
 import PostCardContent from './PostCardContent';
 import BookImage from './PostCardImage';
 import PostCardHeader from './PostHeader';

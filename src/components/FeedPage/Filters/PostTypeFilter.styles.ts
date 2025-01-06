@@ -1,4 +1,4 @@
-export const styles = {
+const styles = {
   filterButton: {
     fontSize: '12px',
     padding: '5px 10px',
@@ -6,3 +6,5 @@ export const styles = {
     borderRadius: '20px',
   },
 };
+
+export default styles;

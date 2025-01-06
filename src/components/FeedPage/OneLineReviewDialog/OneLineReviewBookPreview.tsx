@@ -1,13 +1,13 @@
 import { Box } from '@mui/material';
 import CommonBookCard from '@components/commons/CommonBookCard';
 import { Book } from '@shared/types/type';
-import { styles } from './OneLineReviewDialog.styles';
+import styles from './OneLineReviewDialog.styles';
 
 interface BookPreviewSectionProps {
   book: Book;
 }
 
-export const BookPreviewSection = ({ book }: BookPreviewSectionProps) => (
+const BookPreviewSection = ({ book }: BookPreviewSectionProps): JSX.Element => (
   <Box sx={styles.bookPreviewBox}>
     <CommonBookCard
       image={book.imageUrl}
@@ -17,3 +17,5 @@ export const BookPreviewSection = ({ book }: BookPreviewSectionProps) => (
     />
   </Box>
 );
+
+export default BookPreviewSection;

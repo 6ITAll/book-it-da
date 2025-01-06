@@ -2,7 +2,7 @@ import { Button, CardActions } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { styles } from './PostCard.styles';
+import styles from './PostCard.styles';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const PostCardFooter = ({
   isLiked,
   itemId,
   handleLikeClick,
-}: PostCardFooterProps) => {
+}: PostCardFooterProps): JSX.Element => {
   const navigate = useNavigate();
 
   return (

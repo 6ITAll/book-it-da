@@ -14,7 +14,7 @@ interface PostTypeSelectDialogProps {
 const PostTypeSelectDialog = ({
   dialogOpen,
   setDialogOpen,
-}: PostTypeSelectDialogProps) => {
+}: PostTypeSelectDialogProps): JSX.Element => {
   const [selectedType, setSelectedType] = useState<PostType>(null);
 
   const handleTypeSelect = (type: PostType) => {

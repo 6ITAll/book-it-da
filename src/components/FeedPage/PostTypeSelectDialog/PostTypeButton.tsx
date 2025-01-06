@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { styles } from './PostTypeSelectDialog.styles';
+import styles from './PostTypeSelectDialog.styles';
 import { PostType } from '@shared/types/type';
 import { POST_TYPE_OPTIONS } from 'src/constants';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ const PostTypeButton = ({
   label,
   type,
   onSelect,
-}: PostTypeButtonProps) => {
+}: PostTypeButtonProps): JSX.Element => {
   const navigate = useNavigate();
 
   const handleClick = () => {

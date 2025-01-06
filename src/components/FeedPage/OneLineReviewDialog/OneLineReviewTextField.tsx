@@ -6,10 +6,10 @@ interface ReviewTextFieldProps {
   setReview: (value: string) => void;
 }
 
-export const ReviewTextField = ({
+const ReviewTextField = ({
   review,
   setReview,
-}: ReviewTextFieldProps) => (
+}: ReviewTextFieldProps): JSX.Element => (
   <Box position="relative" sx={{ width: '100%' }}>
     <TextField
       fullWidth
@@ -47,3 +47,5 @@ export const ReviewTextField = ({
     </Typography>
   </Box>
 );
+
+export default ReviewTextField;

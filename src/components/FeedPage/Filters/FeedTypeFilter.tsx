@@ -1,17 +1,17 @@
 import { Tab, Tabs } from '@mui/material';
 import { FeedType } from '@shared/types/type';
 import { FEED_TYPE_TABS } from 'src/constants';
-import { styles } from './FeedTypeFilter.styles';
+import styles from './FeedTypeFilter.styles';
 
 interface FeedTypeFilterProps {
   feedType: FeedType;
   onFeedTypeChange: (_: React.SyntheticEvent, newValue: FeedType) => void;
 }
 
-export const FeedTypeFilter = ({
+const FeedTypeFilter = ({
   feedType,
   onFeedTypeChange,
-}: FeedTypeFilterProps) => {
+}: FeedTypeFilterProps): JSX.Element => {
   return (
     <Tabs
       value={feedType}
@@ -24,3 +24,5 @@ export const FeedTypeFilter = ({
     </Tabs>
   );
 };
+
+export default FeedTypeFilter;

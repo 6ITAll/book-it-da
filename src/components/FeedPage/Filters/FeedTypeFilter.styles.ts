@@ -1,4 +1,4 @@
-export const styles = {
+const styles = {
   feedTypeFilter: {
     minHeight: '36px',
     '& .MuiTab-root': {
@@ -9,3 +9,5 @@ export const styles = {
     },
   },
 };
+
+export default styles;

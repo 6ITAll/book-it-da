@@ -1,4 +1,4 @@
-export const styles = {
+const styles = {
   postTypeButton: {
     py: 2,
     justifyContent: 'space-between',
@@ -13,3 +13,5 @@ export const styles = {
     },
   },
 } as const;
+
+export default styles;
