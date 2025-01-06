@@ -1,5 +1,5 @@
 import CommonBookCard from '@components/commons/CommonBookCard';
-import HybridDialog from '@components/commons/HybridDialog';
+import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
 import { Box, Button, Stack } from '@mui/material';
 import { SavedBook } from '@shared/types/type';
 import { useState } from 'react';

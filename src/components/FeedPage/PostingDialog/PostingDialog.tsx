@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { PostType } from '@shared/types/type';
 import { Book } from '@shared/types/type';
-import HybridDialog from '@components/commons/HybridDialog';
+import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
 import { styles } from './PostingDialog.styles';
 import BookSearchPopover from './BookSearchPopover';
 import PostingContent from './PostingContent';

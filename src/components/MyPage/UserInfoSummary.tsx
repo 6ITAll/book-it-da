@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material';
-import HybridDialog from '../commons/HybridDialog';
+import HybridDialog from '../commons/HybridDialog/HybridDialog';
 import { useState } from 'react';
 import FollowList from './FollowList';
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { PostType } from '@shared/types/type';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
-import HybridDialog from '@components/commons/HybridDialog';
+import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
 import StarRating from '@components/commons/StarRating';
 import { BookPreviewSection } from './OneLineReviewBookPreview';
 import { ReviewTextField } from './OneLineReviewTextField';
