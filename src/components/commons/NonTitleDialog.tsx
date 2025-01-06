@@ -1,4 +1,6 @@
-import HybridDialog, { DialogWithOutActionProps } from './HybridDialog';
+import HybridDialog, {
+  DialogWithOutActionProps,
+} from './HybridDialog/HybridDialog';
 
 interface NonTitleDialogProps extends Omit<DialogWithOutActionProps, 'title'> {
   title?: never;
