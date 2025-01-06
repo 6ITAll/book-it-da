@@ -11,6 +11,7 @@ import PostingDetailPage from '@pages/PostingDetailPage/PostingDetailPage';
 import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
 import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
 import PostMorePage from '@pages/PostMorePage/PostMorePage';
+import EditAccountPage from '@pages/EditAccountPage.tsx/EditAccountPage';
 import PasswordChkPage from '@pages/PasswordChkPage/PasswordChkPage';
 import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
 import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
@@ -27,6 +28,10 @@ const AppRouter = () => {
       <Route
         path={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`}
         element={<PasswordChkPage />}
+      />
+      <Route
+        path={`${RoutePaths.EDIT_ACCOUNT}`}
+        element={<EditAccountPage />}
       />
       <Route
         path={`${RoutePaths.BOOKDETAIL}/:itemId`}

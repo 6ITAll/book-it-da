@@ -8,9 +8,15 @@ import {
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@store/index';
+import { setCheckedPassword } from '@features/user/userSlice';
 
 const PasswordChkPage = () => {
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -18,6 +24,10 @@ const PasswordChkPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    /* TODO API 연결 */
+    dispatch(setCheckedPassword(true));
+    navigate('/edit-account');
   };
 
   return (
