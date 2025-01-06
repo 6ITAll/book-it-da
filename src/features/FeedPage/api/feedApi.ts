@@ -59,36 +59,39 @@ export const feedApi = createApi({
         { dispatch, queryFulfilled },
       ) {
         const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
+        const postTypes = ['한줄평', '포스팅', '선택안함'] as const;
 
-        const patchResults = feedTypes.map((feedType) =>
-          dispatch(
-            feedApi.util.updateQueryData(
-              'getPosts',
-              {
-                page: 1,
-                feedType,
-                postType: undefined,
-                limit: 10,
-              } as GetPostsParams,
-              (draft) => {
-                draft.posts = draft.posts.map((post) => {
-                  if (post.user.userId === userId) {
-                    return {
-                      ...post,
-                      user: {
-                        ...post.user,
-                        isFollowing,
-                      },
-                    };
-                  }
-                  return post;
-                });
-                return draft;
-              },
+        const patchResults = feedTypes.flatMap((feedType) =>
+          postTypes.map((postType) =>
+            dispatch(
+              feedApi.util.updateQueryData(
+                'getPosts',
+                {
+                  page: 1,
+                  feedType,
+                  postType: postType === '선택안함' ? undefined : postType,
+                  limit: 10,
+                } as GetPostsParams,
+                (draft) => {
+                  draft.posts = draft.posts.map((post) => {
+                    if (post.user.userId === userId) {
+                      return {
+                        ...post,
+                        user: {
+                          ...post.user,
+                          isFollowing,
+                        },
+                      };
+                    }
+                    return post;
+                  });
+                  return draft;
+                },
+              ),
             ),
           ),
         );
-        // 쿼리가 성공하면 캐시 업데이트 유지, 실패하면 undo
+
         try {
           const result = await queryFulfilled;
           if (!result.data.success) {

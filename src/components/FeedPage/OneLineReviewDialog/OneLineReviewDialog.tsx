@@ -96,7 +96,7 @@ const OneLineReviewDialog = ({
 
   const handleDialogClose = () => {
     if (selectedType) {
-      setSelectedType?.(null);
+      setSelectedType?.('선택안함');
     } else {
       onClose?.();
     }

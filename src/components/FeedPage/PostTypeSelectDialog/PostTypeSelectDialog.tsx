@@ -15,7 +15,7 @@ const PostTypeSelectDialog = ({
   dialogOpen,
   setDialogOpen,
 }: PostTypeSelectDialogProps): JSX.Element => {
-  const [selectedType, setSelectedType] = useState<PostType>(null);
+  const [selectedType, setSelectedType] = useState<PostType>('선택안함');
 
   const handleTypeSelect = (type: PostType) => {
     setSelectedType(type);
@@ -23,7 +23,7 @@ const PostTypeSelectDialog = ({
   };
 
   const handleBack = () => {
-    setSelectedType(() => null);
+    setSelectedType(() => '선택안함');
     setDialogOpen(true);
   };
 
