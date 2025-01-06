@@ -60,10 +60,17 @@ const Header = (): JSX.Element => {
   };
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery('');
-      setShowSearchBar(false);
+    const trimmedQuery = searchQuery.trim(); // 공백 제거
+
+    if (trimmedQuery) {
+      // 검색어가 있을 경우 query 파라미터 추가 후 이동
+      navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
+      setSearchQuery(''); // 검색어 초기화
+      setShowSearchBar(false); // 검색창 닫기
+    } else {
+      // 검색어가 없을 경우 검색 페이지로 이동
+      navigate('/search');
+      setShowSearchBar(false); // 검색창 닫기
     }
   };
 
