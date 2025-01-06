@@ -25,6 +25,7 @@ const AppRouter = () => {
       <Route path={RoutePaths.FEED} element={<FeedPage />} />
       <Route path={RoutePaths.SEARCH} element={<BookSearchPage />} />
       <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
+      <Route path="/oauth/kakao" element={<KakaoCallback />} />
       <Route
         path={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`}
         element={<PasswordChkPage />}
