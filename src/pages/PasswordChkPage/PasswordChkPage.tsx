@@ -20,13 +20,7 @@ const PasswordChkPage = () => {
   const [passwordCheck] = usePasswordCheckMutation();
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handlePasswordCheck = async () => {
     try {
       const result = await passwordCheck({
         userId: 'user123',
@@ -41,6 +35,21 @@ const PasswordChkPage = () => {
     } catch {
       console.error('비밀번호 확인 중 오류가 발생했습니다.');
     }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handlePasswordCheck();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handlePasswordCheck();
   };
 
   return (
@@ -72,6 +81,7 @@ const PasswordChkPage = () => {
           name="password"
           value={password}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           variant="outlined"
           sx={{ mb: 3 }}
         />
