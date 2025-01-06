@@ -91,21 +91,42 @@ const reviews = [
   },
 ];
 export const reviewHandlers = [
-  http.get('/api/reviews/:itemId', ({ params }) => {
+  // 최상위 3개 리뷰 반환
+  http.get('/api/reviews/top/:itemId', ({ params }) => {
     const { itemId } = params;
+    const filteredReviews = reviews.filter(
+      (review) => review.itemId === itemId,
+    );
+    const totalReviews = filteredReviews.length;
+    if (filteredReviews.length === 0) {
+      return HttpResponse.json([], { status: 200 });
+    }
+    const topReviews = filteredReviews
+      .sort((a, b) => b.likes - a.likes)
+      .slice(0, 3);
+    return HttpResponse.json({ totalReviews, topReviews }, { status: 200 });
+  }),
+
+  // 페이지네이션 기반 모든 리뷰
+  http.get('/api/reviews/:itemId', ({ params, request }) => {
+    const { itemId } = params;
+    const url = new URL(request.url); // 문자열 URL을 URL 객체로 변환
+    const page = parseInt(url.searchParams.get('page') || '1', 10);
+    const limit = 5; // 한 페이지당 리뷰 수
 
     const filteredReviews = reviews.filter(
       (review) => review.itemId === itemId,
     );
+    const totalReviews = filteredReviews.length;
+    const startIndex = (page - 1) * limit;
+    const paginatedReviews = filteredReviews.slice(
+      startIndex,
+      startIndex + limit,
+    );
 
-    if (filteredReviews.length === 0) {
-      return HttpResponse.json([], { status: 200 });
-    }
-
-    const topReviews = filteredReviews
-      .sort((a, b) => b.likes - a.likes)
-      .slice(0, 3);
-
-    return HttpResponse.json(topReviews, { status: 200 });
+    return HttpResponse.json(
+      { reviews: paginatedReviews, totalReviews },
+      { status: 200 },
+    );
   }),
 ];

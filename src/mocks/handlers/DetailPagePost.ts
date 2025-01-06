@@ -100,7 +100,7 @@ const posts = [
 ];
 
 export const postHandlers = [
-  http.get('/api/posts/:itemId', ({ params }) => {
+  http.get('/api/posts/book/top/:itemId', ({ params }) => {
     const { itemId } = params;
     const filteredPosts = posts.filter((post) => post.itemId === itemId);
 
@@ -116,6 +116,26 @@ export const postHandlers = [
       )
       .slice(0, 3);
 
-    return HttpResponse.json(recentPosts, { status: 200 });
+    return HttpResponse.json(
+      { totalPosts: filteredPosts.length, topPosts: recentPosts },
+      { status: 200 },
+    );
+  }),
+
+  // 페이지네이션 기반 모든 포스트 반환
+  http.get('/api/posts/book/:itemId', ({ request, params }) => {
+    const { itemId } = params;
+    const url = new URL(request.url);
+    const page = Number(url.searchParams.get('page')) || 1;
+    const pageSize = 10;
+
+    const filteredPosts = posts.filter((post) => post.itemId === itemId);
+    const start = (page - 1) * pageSize;
+    const paginatedPosts = filteredPosts.slice(start, start + pageSize);
+
+    return HttpResponse.json(
+      { posts: paginatedPosts, totalPosts: filteredPosts.length },
+      { status: 200 },
+    );
   }),
 ];

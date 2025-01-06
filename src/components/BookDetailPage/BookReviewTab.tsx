@@ -30,13 +30,19 @@ const BookReviewsTab = ({
     useState<boolean>(false); // 모달 열림 상태
 
   // API 데이터 가져오기
-  const { data: postData = [] } = useGetPostsQuery(itemId);
-  const { data: reviewData = [] } = useGetReviewsQuery(itemId);
+  const { data: postData = { totalPosts: 0, topPosts: [] } } =
+    useGetPostsQuery(itemId);
+  const { data: reviewData = { totalReviews: 0, topReviews: [] } } =
+    useGetReviewsQuery(itemId);
+  console.log(postData.topPosts);
+  // 리뷰 총 개수 계산
+  const reviews = reviewData?.topReviews || []; // 상위 3개 리뷰
+  const totalReviews = reviewData?.totalReviews || 0; // 총 리뷰 개수
 
-  // 포스트, 리뷰 총 개수 계산
-  const postTotal = postData.length;
-  const reviewTotal = reviewData.length;
-
+  // 포스트 총 개수 계산
+  const totalPosts = postData?.totalPosts || 0;
+  const topPosts = postData?.topPosts || [];
+  console.log('topPosts:', topPosts);
   // 모달 닫기 핸들러
   const handleModalClose = () => {
     setIsOneLineReviewModalOpen(false);
@@ -70,7 +76,7 @@ const BookReviewsTab = ({
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            한 줄 리뷰 {reviewTotal}
+            한 줄 리뷰 {totalReviews}
           </Typography>
           <Button
             size="small"
@@ -110,7 +116,7 @@ const BookReviewsTab = ({
           </Typography>
         </Box>
         <Grid container spacing={2}>
-          {reviewData?.map((review, index) => (
+          {reviews?.map((review, index) => (
             <Grid
               key={index}
               size={{ xs: 12, md: 4 }}
@@ -139,7 +145,7 @@ const BookReviewsTab = ({
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            이 책의 포스트 {postTotal}
+            이 책의 포스트 {totalPosts}
           </Typography>
           <Button
             size="small"
@@ -151,7 +157,7 @@ const BookReviewsTab = ({
           </Button>
         </Box>
         <Grid container spacing={2}>
-          {postData?.map((post, index) => (
+          {topPosts?.map((post, index) => (
             <Grid
               key={index}
               size={{ xs: 12, md: 4 }}
