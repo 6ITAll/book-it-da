@@ -5,6 +5,17 @@ import {
   LikeRequest,
   PostsResponse,
 } from '../types/types';
+import { RootState } from '@store/index';
+import { PostType } from '@shared/types/type';
+
+const postTypes = ['한줄평', '포스팅', '선택안함'] as const;
+const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
+
+const isValidPostType = (
+  postType: PostType | undefined,
+): postType is PostType => {
+  return postType !== undefined && postTypes.includes(postType);
+};
 
 export const feedApi = createApi({
   reducerPath: 'feedApi',
@@ -24,7 +35,7 @@ export const feedApi = createApi({
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
         return `${endpointName}-${queryArgs.feedType}-${queryArgs.postType}`;
       },
-      // infinite scroll 위한 기존 데이터 + 새 데이터 병합
+      // infinite 스크롤시 기존 데이터와 추가 데이터를 합침
       merge: (currentCache, newItems, { arg }) => {
         if (arg.page === 1) {
           return newItems;
@@ -36,7 +47,7 @@ export const feedApi = createApi({
           totalCount: newItems.totalCount,
         };
       },
-      // 페이지 전환, 피드 필터 변화가 있으면 리패치
+      // 페이지 이동, 탭 전환시 데이터 강제 리페치
       forceRefetch({ currentArg, previousArg }) {
         if (!previousArg) return true;
         return (
@@ -56,40 +67,39 @@ export const feedApi = createApi({
       invalidatesTags: [],
       async onQueryStarted(
         { userId, isFollowing },
-        { dispatch, queryFulfilled },
+        { dispatch, queryFulfilled, getState },
       ) {
-        const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
-        const postTypes = ['한줄평', '포스팅', '선택안함'] as const;
+        const state = getState() as RootState;
+        const currentQueries = feedApi.util.selectInvalidatedBy(state, [
+          'Posts',
+        ]);
 
-        const patchResults = feedTypes.flatMap((feedType) =>
-          postTypes.map((postType) =>
-            dispatch(
-              feedApi.util.updateQueryData(
-                'getPosts',
-                {
-                  page: 1,
-                  feedType,
-                  postType: postType === '선택안함' ? undefined : postType,
-                  limit: 10,
-                } as GetPostsParams,
-                (draft) => {
-                  draft.posts = draft.posts.map((post) => {
-                    if (post.user.userId === userId) {
-                      return {
-                        ...post,
-                        user: {
-                          ...post.user,
-                          isFollowing,
-                        },
-                      };
-                    }
-                    return post;
-                  });
-                  return draft;
-                },
-              ),
-            ),
-          ),
+        const patchResults = currentQueries.flatMap(
+          ({ endpointName, originalArgs }) => {
+            if (endpointName === 'getPosts') {
+              const typedArgs = originalArgs as GetPostsParams;
+              if (
+                feedTypes.includes(typedArgs.feedType) &&
+                (isValidPostType(typedArgs.postType) ||
+                  typedArgs.postType === undefined)
+              ) {
+                return dispatch(
+                  feedApi.util.updateQueryData(
+                    'getPosts',
+                    typedArgs,
+                    (draft) => {
+                      draft.posts.forEach((post) => {
+                        if (post.user.userId === userId) {
+                          post.user.isFollowing = isFollowing;
+                        }
+                      });
+                    },
+                  ),
+                );
+              }
+            }
+            return [];
+          },
         );
 
         try {
@@ -108,46 +118,41 @@ export const feedApi = createApi({
         method: 'POST',
         body: { postId, isLiked },
       }),
-      invalidatesTags: ['Posts'],
-      async onQueryStarted({ postId, isLiked }, { dispatch, queryFulfilled }) {
-        const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
+      async onQueryStarted(
+        { postId, isLiked },
+        { dispatch, queryFulfilled, getState },
+      ) {
+        const state = getState() as RootState;
+        const currentQueries = feedApi.util.selectInvalidatedBy(state, [
+          'Posts',
+        ]);
 
-        const patchResults = feedTypes.map((feedType) =>
-          dispatch(
-            feedApi.util.updateQueryData(
-              'getPosts',
-              {
-                page: 1,
-                feedType,
-                postType: undefined,
-                limit: 10,
-              } as GetPostsParams,
-              (draft) => {
-                draft.posts = draft.posts.map((post) => {
-                  if (post.id === postId) {
-                    return {
-                      ...post,
-                      isLiked,
-                      likeCount: isLiked
-                        ? post.likeCount + 1
-                        : post.likeCount - 1,
-                    };
+        const patchResults = currentQueries
+          .map(({ endpointName, originalArgs }) => {
+            if (endpointName === 'getPosts') {
+              const typedArgs = originalArgs as GetPostsParams;
+              return dispatch(
+                feedApi.util.updateQueryData('getPosts', typedArgs, (draft) => {
+                  const postToUpdate = draft.posts.find(
+                    (post) => post.id === postId,
+                  );
+                  if (postToUpdate) {
+                    postToUpdate.isLiked = isLiked;
+                    postToUpdate.likeCount = isLiked
+                      ? postToUpdate.likeCount + 1
+                      : postToUpdate.likeCount - 1;
                   }
-                  return post;
-                });
-                return draft;
-              },
-            ),
-          ),
-        );
+                }),
+              );
+            }
+            return null;
+          })
+          .filter(Boolean);
 
         try {
-          const result = await queryFulfilled;
-          if (!result.data.success) {
-            patchResults.forEach((patchResult) => patchResult.undo());
-          }
+          await queryFulfilled;
         } catch {
-          patchResults.forEach((patchResult) => patchResult.undo());
+          patchResults.forEach((patchResult) => patchResult?.undo());
         }
       },
     }),
