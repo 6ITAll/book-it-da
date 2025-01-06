@@ -160,4 +160,40 @@ export const userHandlers = [
       { status: 200 },
     );
   }),
+
+  http.post('/api/user/:userId/avatar', async ({ params, request }) => {
+    const { userId } = params;
+
+    const formData = await request.formData();
+    const file = formData.get('avatar');
+
+    if (!file || !(file instanceof File)) {
+      return HttpResponse.json(
+        {
+          success: false,
+          message: '올바른 이미지를 업로드해주세요.',
+        },
+        { status: 400 },
+      );
+    }
+
+    return HttpResponse.json(
+      {
+        success: true,
+        message: '성공적으로 업로드되었습니다.',
+        avatarUrl: mockUser.avatarUrl,
+      },
+      { status: 200 },
+    );
+  }),
+
+  http.delete('/api/user/:userId/avatar', async () => {
+    return HttpResponse.json(
+      {
+        success: true,
+        message: '성공적으로 삭제되었습니다.',
+      },
+      { status: 200 },
+    );
+  }),
 ];

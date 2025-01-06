@@ -16,8 +16,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@store/index';
 import { Account } from '@features/user/types';
 import {
+  useDeleteAvatarMutation,
   useGetUserInfoQuery,
   useUpdateUserInfoMutation,
+  useUploadAvatarMutation,
 } from '@features/user/userApi';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
@@ -53,6 +55,8 @@ const EditAccountPage = (): JSX.Element => {
 
   const { data: userInfo } = useGetUserInfoQuery(mockUserId);
   const [updateUserInfo] = useUpdateUserInfoMutation();
+  const [uploadAvatar] = useUploadAvatarMutation();
+  const [deleteAvatar] = useDeleteAvatarMutation();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -72,18 +76,66 @@ const EditAccountPage = (): JSX.Element => {
 
   const handleSubmit = async (field: string) => {
     try {
-      const result = await updateUserInfo({
+      const response = await updateUserInfo({
         userId: mockUserId,
         field,
         value: userInfoState[field as keyof typeof userInfoState],
       }).unwrap();
-      dispatch(showSnackbar({ message: result.message, severity: 'success' }));
+      dispatch(
+        showSnackbar({ message: response.message, severity: 'success' }),
+      );
       if (field === '비밀번호') {
         setUserInfoState((prev) => ({ ...prev, password: '' }));
       }
     } catch (err) {
       const error = err as FetchBaseQueryError;
 
+      dispatch(
+        showSnackbar({
+          message: (error.data as { message: string }).message,
+          severity: 'error',
+        }),
+      );
+    }
+  };
+
+  const handleAvatarUpload = async (file: File) => {
+    try {
+      const response = await uploadAvatar({
+        userId: mockUserId,
+        file,
+      }).unwrap();
+
+      setUserInfoState((prev) => ({ ...prev, avatarUrl: response.avatarUrl }));
+      dispatch(
+        showSnackbar({
+          message: response.message,
+          severity: 'success',
+        }),
+      );
+    } catch (err) {
+      const error = err as FetchBaseQueryError;
+      dispatch(
+        showSnackbar({
+          message: (error.data as { message: string }).message,
+          severity: 'error',
+        }),
+      );
+    }
+  };
+
+  const handleAvatarDelete = async () => {
+    try {
+      const response = await deleteAvatar(mockUserId).unwrap();
+      setUserInfoState((prev) => ({ ...prev, avatarUrl: '' }));
+      dispatch(
+        showSnackbar({
+          message: response.message,
+          severity: 'success',
+        }),
+      );
+    } catch (err) {
+      const error = err as FetchBaseQueryError;
       dispatch(
         showSnackbar({
           message: (error.data as { message: string }).message,
@@ -109,10 +161,14 @@ const EditAccountPage = (): JSX.Element => {
             <CameraAltIcon />
             <VisuallyHiddenInput
               type="file"
-              onChange={(event) => console.log(event.target.files)}
+              onChange={(event) => {
+                if (event.target.files) {
+                  handleAvatarUpload(event.target.files[0]);
+                }
+              }}
             />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={handleAvatarDelete}>
             <DeleteIcon />
           </IconButton>
         </Stack>

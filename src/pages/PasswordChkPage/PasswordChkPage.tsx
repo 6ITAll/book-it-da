@@ -24,15 +24,17 @@ const PasswordChkPage = () => {
 
   const handlePasswordCheck = async () => {
     try {
-      const result = await passwordCheck({
+      const response = await passwordCheck({
         userId: 'user123',
         password,
       }).unwrap();
-      if (result.success) {
+      if (response.success) {
         dispatch(setCheckedPassword(true));
         navigate('/edit-account');
       } else {
-        dispatch(showSnackbar({ message: result.message, severity: 'error' }));
+        dispatch(
+          showSnackbar({ message: response.message, severity: 'error' }),
+        );
       }
     } catch (err) {
       const error = err as FetchBaseQueryError;

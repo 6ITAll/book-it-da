@@ -30,6 +30,32 @@ export const userApi = createApi({
         body: { [field]: value },
       }),
     }),
+
+    uploadAvatar: builder.mutation<
+      { success: boolean; message: string; avatarUrl: string },
+      { userId: string; file: File }
+    >({
+      query: ({ userId, file }) => {
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        return {
+          url: `user/${userId}/avatar`,
+          method: 'POST',
+          body: formData,
+        };
+      },
+    }),
+
+    deleteAvatar: builder.mutation<
+      { success: boolean; message: string },
+      string
+    >({
+      query: (userId) => ({
+        url: `user/${userId}/avatar`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -37,4 +63,6 @@ export const {
   usePasswordCheckMutation,
   useGetUserInfoQuery,
   useUpdateUserInfoMutation,
+  useUploadAvatarMutation,
+  useDeleteAvatarMutation,
 } = userApi;
