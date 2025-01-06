@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import { Button, Menu, MenuItem } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
-import { logoutSuccess } from '@store/userSlice/userSlice';
+import { logoutSuccess } from '@features/user/userSlice';
 
 const HeaderContainer = styled('header')(({ theme }) => ({
   display: 'flex',
@@ -46,7 +46,7 @@ const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const user = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -110,7 +110,7 @@ const Header = (): JSX.Element => {
             <SearchIcon />
           </IconWrapper>
         </SearchContainer>
-        {isLoggedIn ? (
+        {user.isLoggedIn ? (
           <div>
             <IconWrapper onClick={handleProfileClick}>
               <PersonIcon />
