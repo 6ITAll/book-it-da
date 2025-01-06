@@ -60,7 +60,6 @@ const OneLineReviewDialog = ({
     if (!receivedBook && selectedType !== '한줄평') {
       resetState();
     }
-    console.log(selectedBook);
   }, [selectedType, receivedBook, selectedBook]);
 
   // 상세 페이지에서 가져온 별점 적용
