@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import AppRouter from './routes/index';
 import Header from '@components/Header/Header';
 import SnackBar from './components/Snackbar/SnackBar';
-import store from './store/store';
+import { store } from '@store/index';
 import './App.css';
 
 const AppContent = (): JSX.Element => {

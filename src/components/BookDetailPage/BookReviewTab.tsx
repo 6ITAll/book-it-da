@@ -6,18 +6,11 @@ import PostCard from '@components/commons/DetailPagePostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
 import StarRating from '@components/commons/StarRating';
+import { Review } from '@shared/types/type';
 
-// 리뷰 데이터 타입
-interface Review {
-  username: string;
-  date: string;
-  content: string;
-  likes: number;
-  rating: number;
-}
-
+/* TODO - @shared/types/type와 네이밍 통일 필요 */
 // 포스트 데이터 타입
-interface Post {
+export interface Post {
   title: string;
   content: string;
   author: string;
@@ -113,6 +106,7 @@ const BookReviewsTab = ({
       });
     }
   };
+
   return (
     <Box sx={{ padding: '1rem 1rem' }}>
       {/* 리뷰 섹션 */}

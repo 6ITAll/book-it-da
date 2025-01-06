@@ -40,6 +40,14 @@ export interface Posting extends Post {
   content: string;
 }
 
+export interface Review {
+  username: string;
+  date: string;
+  content: string;
+  likes: number;
+  rating: number;
+}
+
 // 책 interface
 export interface Book {
   bookTitle: string;
