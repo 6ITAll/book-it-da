@@ -1,10 +1,8 @@
-/** @jsxImportSource @emotion/react */
 import { Container, Box, Typography } from '@mui/material';
 import SearchBookCard from '@components/BookSearchPage/SearchBookCard';
 import Pagination from '@components/BookSearchPage/Pagination';
 import BookSearchBar from '@components/BookSearchPage/BookSearchBar';
 import BestBookCarousel from '@components/BookSearchPage/BestBookCarousel';
-import { css } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
@@ -17,6 +15,8 @@ import { useState } from 'react';
 import { SelectChangeEvent } from '@mui/material';
 import SortSelector from '@components/BookSearchPage/SortSelector';
 import { SortOption } from '@features/BookSearchPage/Slice/bookSearchSlice';
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [
@@ -29,9 +29,19 @@ const sortOptions: Array<{ value: SortOption; label: string }> = [
 const BookSearchPage = (): JSX.Element => {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
   const { searchQuery, currentPage, sortOption } = useSelector(
     (state: RootState) => state.bookSearch,
   );
+
+  // URL에서 검색어를 Redux와 inputValue로 동기화
+  useEffect(() => {
+    const query = searchParams.get('query');
+    if (query) {
+      dispatch(setSearchQuery(query));
+      setInputValue(query);
+    }
+  }, [dispatch, searchParams]);
 
   // 정렬 옵션 변경 함수
   const handleSortChange = (event: SelectChangeEvent) => {
@@ -43,10 +53,12 @@ const BookSearchPage = (): JSX.Element => {
     setInputValue(e.target.value);
   };
 
+  // 검색 실행 함수
   const handleSearch = () => {
-    if (inputValue.trim()) {
-      dispatch(setSearchQuery(inputValue.trim()));
-    }
+    const trimmedInput = inputValue.trim(); // 공백 제거
+    setSearchParams(trimmedInput ? { query: trimmedInput } : {}); // URL 업데이트
+    dispatch(setSearchQuery(trimmedInput)); // Redux 상태 업데이트
+    setInputValue(''); // 검색 후 input 값 초기화
   };
 
   // 페이지네이션 처리 함수
@@ -55,24 +67,16 @@ const BookSearchPage = (): JSX.Element => {
   };
 
   // API 호출
-  const { data, isLoading, error } = useSearchBooksQuery({
+  const { data } = useSearchBooksQuery({
     query: searchQuery,
     page: currentPage,
     sort: sortOption,
   });
 
-  // 로딩 및 에러 처리
-  if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;
-
   return (
     <Container
-      maxWidth="md"
-      css={css`
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      `}
+      maxWidth="lg"
+      sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
     >
       {/* 검색 바 섹션 */}
       <Box sx={{ marginBottom: 5 }}>
