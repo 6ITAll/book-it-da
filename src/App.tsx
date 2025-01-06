@@ -32,12 +32,12 @@ const App = (): JSX.Element => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={muiTheme}>
-      <CssBaseline />
-      <Router>
+        <CssBaseline />
+        <Router>
           <AppContent />
         </Router>
+      </ThemeProvider>
     </Provider>
-    </ThemeProvider>
   );
 };
 
