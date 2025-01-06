@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import AppRouter from './routes/index';
 import Header from '@components/Header/Header';
+import SnackBar from './components/Snackbar/SnackBar';
+import { store } from '@store/index';
 import './App.css';
 
 const AppContent = (): JSX.Element => {
@@ -18,15 +21,18 @@ const AppContent = (): JSX.Element => {
           <p>© 2024 육잇다 All rights reserved.</p>
         </footer>
       )}
+      <SnackBar />
     </div>
   );
 };
 
 const App = (): JSX.Element => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <AppContent />
+      </Router>
+    </Provider>
   );
 };
 

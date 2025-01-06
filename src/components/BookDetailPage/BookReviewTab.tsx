@@ -63,6 +63,7 @@ const BookReviewsTab = ({
       });
     }
   };
+
   return (
     <Box sx={{ padding: '1rem 1rem' }}>
       {/* 리뷰 섹션 */}

@@ -1,31 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Typography,
-  Link,
   Button,
   TextField,
   Container,
   Stack,
   Checkbox,
   FormControlLabel,
+  Divider,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import PasswordInput from './PasswordInput';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '@store/userSlice/userSlice';
+import { loginSuccess } from '@features/user/userSlice';
 
-interface LoginProps {
-  onLogin: (userId: string) => void;
-}
+const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
+const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
-interface LoginMessage {
-  content: string;
-  isError: boolean; //에러메시지 속성
-}
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}&response_type=code`;
 
-const Login = ({ onLogin }: LoginProps): JSX.Element => {
+const Login = (): JSX.Element => {
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loginMessage, setLoginMessage] = useState<LoginMessage>({
+  const [loginMessage, setLoginMessage] = useState<{
+    content: string;
+    isError: boolean;
+  }>({
     content: '',
     isError: false,
   });
@@ -34,17 +34,11 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleLogin = useCallback(
-    (
-      e: React.FormEvent<HTMLFormElement> | null,
-      userIdParam?: string,
-      passwordParam?: string,
-    ) => {
+    (e: React.FormEvent<HTMLFormElement> | null) => {
       if (e) e.preventDefault();
       setLoginMessage({ content: '', isError: false });
-
-      const loginUserId = userIdParam || userId;
-      const loginPassword = passwordParam || password;
 
       const storedUserInfo = localStorage.getItem('userInfo');
 
@@ -52,21 +46,20 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         const users = JSON.parse(storedUserInfo);
         const user = users.find(
           (user: { userId: string; password: string }) =>
-            user.userId === loginUserId && user.password === loginPassword,
+            user.userId === userId && user.password === password,
         );
 
         if (user) {
-          onLogin(loginUserId);
           dispatch(loginSuccess());
           if (rememberMe) {
-            localStorage.setItem('savedUserId', loginUserId);
+            localStorage.setItem('savedUserId', userId);
           } else {
             localStorage.removeItem('savedUserId');
           }
           if (autoLogin) {
             localStorage.setItem(
               'autoLogin',
-              JSON.stringify({ userId: loginUserId, password: loginPassword }),
+              JSON.stringify({ userId, password }),
             );
           } else {
             localStorage.removeItem('autoLogin');
@@ -85,14 +78,26 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         });
       }
     },
-    [userId, password, rememberMe, autoLogin, onLogin, navigate, dispatch],
+    [userId, password, rememberMe, autoLogin, navigate, dispatch],
   );
+
+  const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setRememberMe(isChecked);
+    if (isChecked) {
+      localStorage.setItem('savedUserId', userId);
+    } else {
+      localStorage.removeItem('savedUserId');
+    }
+  };
 
   useEffect(() => {
     const savedUserId = localStorage.getItem('savedUserId');
     if (savedUserId) {
       setUserId(savedUserId);
       setRememberMe(true);
+    } else {
+      setRememberMe(false);
     }
 
     const autoLoginData = localStorage.getItem('autoLogin');
@@ -101,9 +106,13 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
       setUserId(userId);
       setPassword(password);
       setAutoLogin(true);
-      handleLogin(null, userId, password); // 자동 로그인 시도
+      handleLogin(null);
     }
   }, [handleLogin]);
+
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
 
   return (
     <Container maxWidth="sm">
@@ -119,12 +128,8 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
         />
-        <TextField
+        <PasswordInput
           label="비밀번호"
-          type="password"
-          variant="outlined"
-          fullWidth
-          margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -132,14 +137,12 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          spacing={2}
-          mb={2}
         >
           <FormControlLabel
             control={
               <Checkbox
                 checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+                onChange={handleRememberMeChange}
               />
             }
             label="아이디 저장"
@@ -157,26 +160,46 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         <Button type="submit" variant="contained" fullWidth>
           로그인
         </Button>
-      </Stack>
-      <Stack direction="row" justifyContent="space-between" mt={2}>
-        <Link href="/find-username" variant="body2">
-          아이디 찾기
-        </Link>
-        <Link href="/find-password" variant="body2">
-          비밀번호 찾기
-        </Link>
-        <Link href="/signup" variant="body2">
-          회원가입
-        </Link>
-      </Stack>
-      {loginMessage.content && (
-        <Typography
-          color={loginMessage.isError ? 'error' : 'primary'}
-          sx={{ mt: 2 }}
+
+        <Divider sx={{ my: 3 }}>또는</Divider>
+
+        <Button
+          onClick={handleKakaoLogin}
+          sx={{
+            padding: 0,
+            minWidth: 'auto',
+            '&:hover': {
+              opacity: 0.8,
+            },
+          }}
         >
-          {loginMessage.content}
+          <img
+            src="./src/components/LoginSignupPage/kakao_login.png"
+            alt="카카오톡 로그인"
+            style={{ width: '50%', height: 'auto' }}
+          />
+        </Button>
+
+        <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+          계정이 없으신가요?{' '}
+          <Typography
+            component="span"
+            sx={{ color: 'primary.main', cursor: 'pointer' }}
+            onClick={() => navigate('/signup')}
+          >
+            회원가입
+          </Typography>
         </Typography>
-      )}
+
+        {loginMessage.content && (
+          <Typography
+            color={loginMessage.isError ? 'error' : 'primary'}
+            sx={{ mt: 2 }}
+          >
+            {loginMessage.content}
+          </Typography>
+        )}
+      </Stack>
     </Container>
   );
 };
