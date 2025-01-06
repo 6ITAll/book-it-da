@@ -40,9 +40,16 @@ export const feedApi = createApi({
         if (arg.page === 1) {
           return newItems;
         }
+        const uniquePosts = [
+          ...currentCache.posts,
+          ...newItems.posts.filter(
+            (newPost) =>
+              !currentCache.posts.some((post) => post.id === newPost.id),
+          ),
+        ];
         return {
           ...currentCache,
-          posts: [...currentCache.posts, ...newItems.posts],
+          posts: uniquePosts,
           hasMore: newItems.hasMore,
           totalCount: newItems.totalCount,
         };
