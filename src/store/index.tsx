@@ -6,7 +6,6 @@ import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { kakaoApi } from '@features/SNSLogin/api/Kakaoapi';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
-import { libraryApi } from '@features/MyPage/api';
 import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
 import { postApi } from '@features/BookDetailPage/api/postApi';
 import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
