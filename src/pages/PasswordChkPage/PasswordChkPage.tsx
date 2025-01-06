@@ -13,6 +13,8 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@store/index';
 import { setCheckedPassword } from '@features/user/userSlice';
 import { usePasswordCheckMutation } from '@features/user/userApi';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
 const PasswordChkPage = () => {
   const [password, setPassword] = useState('');
@@ -30,10 +32,17 @@ const PasswordChkPage = () => {
         dispatch(setCheckedPassword(true));
         navigate('/edit-account');
       } else {
-        console.error(result.message);
+        dispatch(showSnackbar({ message: result.message, severity: 'error' }));
       }
-    } catch {
-      console.error('비밀번호 확인 중 오류가 발생했습니다.');
+    } catch (err) {
+      const error = err as FetchBaseQueryError;
+
+      dispatch(
+        showSnackbar({
+          message: (error.data as { message: string }).message,
+          severity: 'error',
+        }),
+      );
     }
   };
 
