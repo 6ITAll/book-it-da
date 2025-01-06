@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { SelectChangeEvent } from '@mui/material';
 import SortSelector from '@components/BookSearchPage/SortSelector';
 import { SortOption } from '@features/BookSearchPage/Slice/bookSearchSlice';
+import { useEffect } from 'react';
 
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [
@@ -32,6 +33,15 @@ const BookSearchPage = (): JSX.Element => {
   const { searchQuery, currentPage, sortOption } = useSelector(
     (state: RootState) => state.bookSearch,
   );
+
+  // URL 쿼리 파라미터에서 검색어 추출하고, 검색 결과가 바로 나오도록 함
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const query = params.get('query');
+    if (query) {
+      dispatch(setSearchQuery(query)); // Redux 상태에 저장
+    }
+  }, [dispatch]);
 
   // 정렬 옵션 변경 함수
   const handleSortChange = (event: SelectChangeEvent) => {
