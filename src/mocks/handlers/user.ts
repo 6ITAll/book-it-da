@@ -99,4 +99,27 @@ export const userHandlers = [
       ],
     });
   }),
+  http.post('/api/user/:userId/password-check', async ({ request }) => {
+    const { password } = (await request.json()) as { password: string };
+
+    const isPasswordCorrect = password === 'P@ssw0rd1!';
+
+    if (isPasswordCorrect) {
+      return HttpResponse.json(
+        {
+          success: true,
+          message: '비밀번호 확인 완료',
+        },
+        { status: 200 },
+      );
+    }
+
+    return HttpResponse.json(
+      {
+        success: false,
+        message: '비밀번호가 일치하지 않습니다.',
+      },
+      { status: 401 },
+    );
+  }),
 ];

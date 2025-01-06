@@ -19,6 +19,7 @@ import { userFeedsApi } from '@features/MyPage/api/userFeedsApi';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { oneLineReviewApi } from '@features/OneLineReviewDialog/api/oneLineReviewApi';
 import { postingWriteApi } from '@features/PostingWritePage/api/postingWriteApi';
+import { userApi } from '@features/user/userApi';
 
 import { addToLibraryApi } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShelfCountApi';
@@ -40,9 +41,10 @@ export const store = configureStore({
     [reviewApi.reducerPath]: reviewApi.reducer,
     [addToLibraryApi.reducerPath]: addToLibraryApi.reducer,
     [bookUserShelfCountApi.reducerPath]: bookUserShelfCountApi.reducer,
-    [feedApi.reducerPath]: feedApi.reducer,
     [oneLineReviewApi.reducerPath]: oneLineReviewApi.reducer,
+    [feedApi.reducerPath]: feedApi.reducer,
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
     counter: counterReducer,
     user: userReducer,
     snackbar: snackbarReducer,
@@ -65,6 +67,7 @@ export const store = configureStore({
       feedApi.middleware,
       oneLineReviewApi.middleware,
       postingWriteApi.middleware,
+      userApi.middleware,
     ]),
 });
 

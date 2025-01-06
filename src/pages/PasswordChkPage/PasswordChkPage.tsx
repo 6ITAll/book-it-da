@@ -12,22 +12,35 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@store/index';
 import { setCheckedPassword } from '@features/user/userSlice';
+import { usePasswordCheckMutation } from '@features/user/userApi';
 
 const PasswordChkPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [passwordCheck] = usePasswordCheckMutation();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    /* TODO API 연결 */
-    dispatch(setCheckedPassword(true));
-    navigate('/edit-account');
+    try {
+      const result = await passwordCheck({
+        userId: 'user123',
+        password,
+      }).unwrap();
+      if (result.success) {
+        dispatch(setCheckedPassword(true));
+        navigate('/edit-account');
+      } else {
+        console.error(result.message);
+      }
+    } catch {
+      console.error('비밀번호 확인 중 오류가 발생했습니다.');
+    }
   };
 
   return (
