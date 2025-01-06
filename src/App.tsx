@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import AppRouter from './routes/index';
 import Header from '@components/Header/Header';
+import SnackBar from './components/Snackbar/SnackBar';
+import { store } from '@store/index';
 import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { muiTheme } from '@styles/theme';
@@ -20,17 +23,20 @@ const AppContent = (): JSX.Element => {
           <p>© 2024 육잇다 All rights reserved.</p>
         </footer>
       )}
+      <SnackBar />
     </div>
   );
 };
 
 const App = (): JSX.Element => {
   return (
-    <ThemeProvider theme={muiTheme}>
+    <Provider store={store}>
+      <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <Router>
-        <AppContent />
-      </Router>
+          <AppContent />
+        </Router>
+    </Provider>
     </ThemeProvider>
   );
 };
