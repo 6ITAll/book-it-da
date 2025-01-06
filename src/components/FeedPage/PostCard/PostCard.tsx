@@ -54,7 +54,10 @@ const PostCard = ({
 
   const handleLikeClick = async (postId: number, isLiked: boolean) => {
     try {
-      await toggleLike({ postId, isLiked }).unwrap();
+      const result = await toggleLike({ postId, isLiked }).unwrap();
+      if (!result.success) {
+        console.error('좋아요 처리 실패');
+      }
     } catch (error) {
       console.error('좋아요 토글 실패:', error);
     }

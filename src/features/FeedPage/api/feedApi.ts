@@ -98,6 +98,7 @@ export const feedApi = createApi({
         method: 'POST',
         body: { postId, isLiked },
       }),
+      invalidatesTags: ['Posts'],
       async onQueryStarted({ postId, isLiked }, { dispatch, queryFulfilled }) {
         const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
 
