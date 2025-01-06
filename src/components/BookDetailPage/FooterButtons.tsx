@@ -2,10 +2,20 @@ import { Stack, Button } from '@mui/material';
 import { useState } from 'react';
 import AddToLibraryModal from './AddToLibraryDialog';
 interface FooterButtonsProps {
+  itemId: number;
+  title: string;
+  author: string;
+  imageUrl: string;
   link?: string;
 }
 
-const FooterButtons = ({ link }: FooterButtonsProps): JSX.Element => {
+const FooterButtons = ({
+  itemId,
+  title,
+  author,
+  imageUrl,
+  link,
+}: FooterButtonsProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const handleGoToBuy = () => {
     console.log(link);
@@ -37,6 +47,10 @@ const FooterButtons = ({ link }: FooterButtonsProps): JSX.Element => {
         내서재에 담기
       </Button>
       <AddToLibraryModal
+        title={title}
+        itemId={itemId}
+        author={author}
+        imageUrl={imageUrl}
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
