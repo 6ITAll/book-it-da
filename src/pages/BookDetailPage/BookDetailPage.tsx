@@ -9,7 +9,7 @@ import LeftBookDetailBox from '@components/BookDetailPage/LeftBookDetailBox';
 import RightBookDetailBox from '@components/BookDetailPage/RightBookDetailBox';
 import BookIntroduceTab from '@components/BookDetailPage/BookIntroduceTab';
 import BookReviewTab from '@components/BookDetailPage/BookReviewTab';
-
+import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 const BookDetailPage = (): JSX.Element => {
   const { itemId } = useParams<{ itemId: string }>();
   const [currentTab, setCurrentTab] = useState(0);
@@ -18,6 +18,10 @@ const BookDetailPage = (): JSX.Element => {
     itemId: numericItemId,
   });
   const dispatch = useDispatch();
+
+  // 리뷰 데이터 가져오기
+  const { data: reviewData } = useGetReviewsQuery(numericItemId);
+  const totalReviews = reviewData?.totalReviews || 0;
 
   const handleTabChange = (tabIndex: number) => {
     setCurrentTab(tabIndex);
@@ -75,11 +79,13 @@ const BookDetailPage = (): JSX.Element => {
           />
           {/* 오른쪽 박스 (책 정보) */}
           <RightBookDetailBox
+            itemId={numericItemId}
             title={data?.item[0].title || '제목 없음'}
             subTitle={data?.item[0].subInfo?.subTitle || '부제 없음'}
             author={data?.item[0].author || '저자 정보 없음'}
             categoryName={data?.item[0].categoryName || '카테고리 없음'}
             pubDate={data?.item[0].pubDate || '출간일 정보 없음'}
+            imageUrl={data?.item[0].cover || '이미지 없음'}
             link={data?.item[0].link || ''}
             customerReviewRank={data?.item[0].customerReviewRank || 0} // 추가
             ratingCount={data?.item[0].subInfo?.ratingInfo?.ratingCount || 0} // 추가
@@ -96,7 +102,10 @@ const BookDetailPage = (): JSX.Element => {
         >
           {/* 메인 콘텐츠 */}
           <Box sx={{ width: '100%' }}>
-            <BookDetailNavBar onTabChange={handleTabChange} />
+            <BookDetailNavBar
+              totalReviews={totalReviews}
+              onTabChange={handleTabChange}
+            />
             {/* 성별, 연령별 인기 분포 섹션 */}
             {currentTab === 0 && (
               <BookIntroduceTab
