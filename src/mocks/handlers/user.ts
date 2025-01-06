@@ -161,9 +161,7 @@ export const userHandlers = [
     );
   }),
 
-  http.post('/api/user/:userId/avatar', async ({ params, request }) => {
-    const { userId } = params;
-
+  http.post('/api/user/:userId/avatar', async ({ request }) => {
     const formData = await request.formData();
     const file = formData.get('avatar');
 
