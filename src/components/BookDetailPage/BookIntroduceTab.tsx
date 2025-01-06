@@ -2,12 +2,17 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import GenderAgeChart from '@components/BookDetailPage/GenderAgeChart';
 import GenderAgeSummary from '@components/BookDetailPage/GenderAgeSummary';
-
+import { useGetGenderAgeQuery } from '@features/BookDetailPage/api/genderAgeApi';
 interface BookIntroduceTabProps {
-  description?: string;
+  itemId: number;
+  description: string;
 }
 
-const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({ description }) => {
+const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
+  itemId,
+  description,
+}) => {
+  const { data } = useGetGenderAgeQuery(itemId);
   return (
     <>
       {/* 성별·연령별 인기 분포 */}
@@ -19,8 +24,8 @@ const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({ description }) => {
           padding: '1rem 1rem',
         }}
       >
-        <GenderAgeChart />
-        <GenderAgeSummary />
+        <GenderAgeChart data={data ?? []} />
+        <GenderAgeSummary data={data ?? []} />
       </Box>
       {/* 책 소개 */}
       <Box

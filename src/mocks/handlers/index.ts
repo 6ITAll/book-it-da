@@ -4,10 +4,18 @@ import { postingHandlers } from './posting';
 import { kakaoHandlers } from './kakao';
 import { userHandlers } from './user';
 
+import { genderAgeHandlers } from './genderAge';
+import { reviewHandlers } from './DetailPageReview';
+import { postHandlers } from './DetailPagePost';
+import { addToLibraryHandlers } from './addToLibrary';
 export const handlers = [
   ...libraryHandlers,
   ...bookshelvesHandlers,
+  ...postHandlers,
   ...postingHandlers,
   ...kakaoHandlers,
   ...userHandlers,
+  ...genderAgeHandlers,
+  ...reviewHandlers,
+  ...addToLibraryHandlers,
 ];

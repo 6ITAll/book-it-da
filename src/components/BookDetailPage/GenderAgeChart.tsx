@@ -1,15 +1,11 @@
 import { Box, Typography, Stack, LinearProgress } from '@mui/material';
+import { GenderAge } from '@shared/types/type';
 
-const GenderAgeChart = (): JSX.Element => {
-  const data = [
-    { age: '10대', male: 3.6, female: 3.2 },
-    { age: '20대', male: 15.7, female: 17.8 },
-    { age: '30대', male: 11.3, female: 13.8 },
-    { age: '40대', male: 10.3, female: 10.6 },
-    { age: '50대', male: 5.3, female: 5 },
-    { age: '60대~', male: 1.3, female: 1.5 },
-  ];
+interface GenderAgeChartProps {
+  data: GenderAge[];
+}
 
+const GenderAgeChart = ({ data }: GenderAgeChartProps): JSX.Element => {
   return (
     <Box
       sx={{
