@@ -3,6 +3,7 @@ import BookInfoBox from './BookInfoBox';
 import ActionButtons from './ActionButtons';
 import FooterButtons from './FooterButtons';
 import { useFetchLibraryCountQuery } from '@features/BookDetailPage/api/bookUserShelfCountApi';
+
 interface RightBookBoxProps {
   itemId: number;
   title: string;

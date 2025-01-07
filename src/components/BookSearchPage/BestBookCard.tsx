@@ -21,7 +21,7 @@ const BestBookCard = ({
   return (
     <CommonBookCard
       image={image}
-      title={title}
+      title={title || '제목 없음'}
       onClick={handleCardClick}
       sx={{
         borderRadius: 0,

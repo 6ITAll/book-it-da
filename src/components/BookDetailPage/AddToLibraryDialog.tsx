@@ -17,11 +17,14 @@ import {
   useAddBookToBookshelfMutation,
   useAddBookshelfMutation,
 } from '@features/BookDetailPage/api/AddToLibraryApi';
+import { Bookshelf } from '@components/BookDetailPage/types';
 
-interface Bookshelf {
-  bookshelfId: number;
-  bookshelfName: string;
-}
+const getUserId = (): string | null => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '[]');
+  return Array.isArray(userInfo) && userInfo.length > 0
+    ? userInfo[0].userId
+    : null;
+};
 
 interface AddToLibraryModalProps {
   open: boolean;
@@ -31,13 +34,6 @@ interface AddToLibraryModalProps {
   author: string;
   imageUrl: string;
 }
-
-const getUserId = (): string | null => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '[]');
-  return Array.isArray(userInfo) && userInfo.length > 0
-    ? userInfo[0].userId
-    : null;
-};
 
 const AddToLibraryModal = ({
   open,
@@ -135,15 +131,13 @@ const AddToLibraryModal = ({
           <Typography
             variant="h6"
             color="text.secondary"
+            padding="1rem"
             onClick={() => setIsCreating(true)}
             sx={{
               cursor: 'pointer',
               textAlign: 'center',
               border: '1px solid #e6e7e8',
-              padding: '1rem',
               borderRadius: 1,
-              height: 38,
-              lineHeight: '38px',
             }}
           >
             + 책장 만들기

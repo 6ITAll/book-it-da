@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 
 interface LeftBookDetailBoxProps {
-  cover?: string;
-  title?: string;
+  cover: string;
+  title: string;
 }
 
 const LeftBookDetailBox = ({

@@ -8,6 +8,7 @@ import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLin
 import StarRating from '@components/commons/StarRating';
 import { useGetPostsQuery } from '@features/BookDetailPage/api/postApi';
 import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
+import { MoreType } from '@components/BookDetailPage/types';
 
 interface BookReviewTabProps {
   itemId: number;
@@ -15,8 +16,6 @@ interface BookReviewTabProps {
   author: string;
   imageUrl: string;
 }
-
-type MoreType = 'posts' | 'reviews';
 
 const BookReviewsTab = ({
   itemId,
@@ -79,14 +78,6 @@ const BookReviewsTab = ({
           <Typography variant="h6" fontWeight="bold">
             한 줄 리뷰 {totalReviews}
           </Typography>
-          <Button
-            size="small"
-            variant="text"
-            onClick={() => handleSeeMoreClick('reviews')}
-            sx={{ color: '#333', fontWeight: 'bold' }}
-          >
-            더보기
-          </Button>
         </Box>
         <Box
           sx={{
@@ -115,6 +106,19 @@ const BookReviewsTab = ({
           >
             이 책은 어떠셨나요? 별점을 남겨주세요
           </Typography>
+        </Box>
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => handleSeeMoreClick('reviews')}
+            sx={{
+              color: '#333',
+              fontWeight: 'bold',
+            }}
+          >
+            더보기
+          </Button>
         </Box>
         <Grid container spacing={2}>
           {reviews?.map((review, index) => (

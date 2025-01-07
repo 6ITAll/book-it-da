@@ -71,8 +71,8 @@ const BookDetailPage = (): JSX.Element => {
         >
           {/* 왼쪽 박스 (책 이미지) */}
           <LeftBookDetailBox
-            cover={data?.item[0].cover}
-            title={data?.item[0].title}
+            cover={data?.item[0].cover || '이미지 없음'}
+            title={data?.item[0].title || '제목 없음'}
           />
           {/* 오른쪽 박스 (책 정보) */}
           <RightBookDetailBox
@@ -86,8 +86,6 @@ const BookDetailPage = (): JSX.Element => {
             link={data?.item[0].link || ''}
             customerReviewRank={data?.item[0].customerReviewRank || 0} // 추가
             ratingCount={data?.item[0].subInfo?.ratingInfo?.ratingCount || 0} // 추가
-            imageUrl={data?.item[0].cover || ''}
-            itemId={numericItemId}
           />
         </Box>
         {/* 책 소개 및 리뷰 부분*/}
