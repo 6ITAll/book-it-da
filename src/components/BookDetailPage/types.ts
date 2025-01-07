@@ -1,7 +1,7 @@
 // AddToLibraryDialog.tsx 인터페이스
-export interface Bookshelf {
-  bookshelfId: number;
-  bookshelfName: string;
+export interface ResponseBookshelf {
+  id: number;
+  name: string;
 }
 
 // BookReviewTab.tsx 타입

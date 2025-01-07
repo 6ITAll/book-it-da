@@ -17,7 +17,7 @@ import {
   useAddBookToBookshelfMutation,
   useAddBookshelfMutation,
 } from '@features/BookDetailPage/api/AddToLibraryApi';
-import { Bookshelf } from '@components/BookDetailPage/types';
+import { ResponseBookshelf } from '@components/BookDetailPage/types';
 
 const getUserId = (): string | null => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '[]');
@@ -102,7 +102,7 @@ const AddToLibraryModal = ({
           bookshelfName: newBookshelfName,
         }).unwrap();
         refetch();
-        console.log('새 책장 추가:', response.bookshelf);
+        console.log('새 책장 추가:', response.bookshelf.name);
         setNewBookshelfName('');
         setIsCreating(false);
       } catch (error) {
@@ -174,12 +174,12 @@ const AddToLibraryModal = ({
           onChange={(e) => handleSelectBookshelf(Number(e.target.value))}
         >
           {bookshelves.length > 0 ? (
-            bookshelves.map((shelf: Bookshelf) => (
+            bookshelves.map((shelf: ResponseBookshelf) => (
               <FormControlLabel
-                key={shelf.bookshelfId}
-                value={shelf.bookshelfId}
+                key={shelf.id}
+                value={shelf.id}
                 control={<Radio />}
-                label={shelf.bookshelfName}
+                label={shelf.name}
                 sx={{
                   '& .MuiTypography-root': { fontSize: 14 },
                 }}
