@@ -33,9 +33,8 @@ const BestBookCard = ({
         alignItems: 'center',
         overflow: 'hidden',
         '& .MuiCardMedia-root': {
-          height: 200,
+          height: { xs: 100, sm: 150, md: 200 }, // 반응형 높이 조절
           width: 'auto',
-          margin: '0 auto',
         },
         '& .MuiCardContent-root': {
           display: 'flex',

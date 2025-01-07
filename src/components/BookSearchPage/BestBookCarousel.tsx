@@ -7,7 +7,8 @@ import Carousel from '@components/commons/Carousel';
 import BestBookCard from '@components/BookSearchPage/BestBookCard';
 
 const BestBookCarousel = (): JSX.Element => {
-  const { data, isLoading, error } = useGetBestBooksQuery();
+  const { data } = useGetBestBooksQuery();
+
   // 주차 정보 추출 (현재 날짜 기준)
   const currentDate = dayjs();
   const currentYear = currentDate.year();
@@ -17,11 +18,8 @@ const BestBookCarousel = (): JSX.Element => {
     (currentDate.date() + firstDayOfMonth.day()) / 7,
   );
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>에러가 발생하였습니다.</div>;
-
   return (
-    <div>
+    <>
       <Typography
         css={css`
           opacity: 0.5;
@@ -42,7 +40,7 @@ const BestBookCarousel = (): JSX.Element => {
           />
         ))}
       </Carousel>
-    </div>
+    </>
   );
 };
 

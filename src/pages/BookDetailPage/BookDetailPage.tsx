@@ -1,6 +1,6 @@
 import BookDetailNavBar from '@components/BookDetailPage/BookDetailNavBar';
 import { useState, useEffect } from 'react';
-import { Container, Box, Typography } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { useFetchBookDetailQuery } from '@features/BookSearchPage/api/bookDetailApi';
 import { setBookDetail } from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { useParams } from 'react-router-dom';
@@ -14,7 +14,7 @@ const BookDetailPage = (): JSX.Element => {
   const { itemId } = useParams<{ itemId: string }>();
   const [currentTab, setCurrentTab] = useState(0);
   const numericItemId = itemId ? parseInt(itemId, 10) : 0; // 넘버로 변경
-  const { data, isLoading, error } = useFetchBookDetailQuery({
+  const { data } = useFetchBookDetailQuery({
     itemId: numericItemId,
   });
   const dispatch = useDispatch();
@@ -47,18 +47,15 @@ const BookDetailPage = (): JSX.Element => {
     }
   }, [data, dispatch]);
 
-  if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;
-
   return (
     <>
       <Container
         maxWidth="lg"
         disableGutters
         sx={{
-          mt: 3,
           border: '1px solid #e7e8e9', // 모든 테두리에 스타일 지정
-          borderTop: 'none', // 위쪽 테두리를 제거 - 선을 navbar에 붙이기 위해서 설정
+          borderTop: 'none',
+          height: '100%',
         }}
       >
         {/*  북이미지와 정보 박스 */}
@@ -99,7 +96,7 @@ const BookDetailPage = (): JSX.Element => {
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
             boxSizing: 'border-box',
-            padding: '1rem 0',
+            height: '100%',
           }}
         >
           {/* 메인 콘텐츠 */}
