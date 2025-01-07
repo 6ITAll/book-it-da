@@ -76,7 +76,12 @@ const BookSearchPage = (): JSX.Element => {
   return (
     <Container
       maxWidth="lg"
-      sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        padding: '1rem',
+      }}
     >
       {/* 검색 바 섹션 */}
       <Box sx={{ marginBottom: 5 }}>
@@ -88,7 +93,12 @@ const BookSearchPage = (): JSX.Element => {
       </Box>
 
       {/* 베스트셀러 섹션 */}
-      <Box sx={{ marginBottom: 5 }}>
+      <Box
+        sx={{
+          width: '100%',
+          marginBottom: 5,
+        }}
+      >
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           베스트셀러
         </Typography>
@@ -131,7 +141,11 @@ const BookSearchPage = (): JSX.Element => {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)', // 4열로 정렬
+            boxSizing: 'border-box',
+            gridTemplateColumns: {
+              xs: 'repeat(2, 1fr)', // 모바일에서 2열
+              md: 'repeat(4, 1fr)', // 데스크톱에서 4열
+            },
             gap: 2, // 카드 간격
           }}
         >
