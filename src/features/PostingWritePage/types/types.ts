@@ -4,7 +4,7 @@ export interface PostingRequest {
   book: Book;
   title: string;
   content: string;
-  user: User;
+  user: Omit<User, 'isFollowing' | 'isFollower'>;
 }
 
 export interface PostingResponse {

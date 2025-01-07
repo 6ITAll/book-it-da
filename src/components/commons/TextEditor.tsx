@@ -70,10 +70,15 @@ const TextEditor = ({ value, setValue }: TextEditorProps): JSX.Element => {
 
   useEffect(() => {
     if (quillRef.current) {
-      quillRef.current.getEditor().root.dataset.placeholder =
-        '내용을 입력하세요';
+      const editor = quillRef.current.getEditor();
+      editor.root.dataset.placeholder = '내용을 입력하세요';
+
+      // 외부에서 value가 변경되었을 때 에디터 내용 업데이트
+      if (editor.getText().trim() !== value) {
+        editor.setText(value);
+      }
     }
-  }, []);
+  }, [value]);
 
   return (
     <TextEditorContainer>

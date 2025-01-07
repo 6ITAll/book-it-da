@@ -2,12 +2,13 @@ import { Box, IconButton, Typography, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useCreatePostingMutation } from '@features/PostingWritePage/api/postingWriteApi';
-import { Book } from '@shared/types/type';
+import { Book, User } from '@shared/types/type';
 
 interface PostingWriteHeaderProps {
   title: string;
   content: string;
   selectedBook: Book | null;
+  user: Omit<User, 'isFollowing' | 'isFollower'>;
 }
 
 const styles = {
@@ -32,6 +33,7 @@ const PostingWriteHeader = ({
   title,
   content,
   selectedBook,
+  user,
 }: PostingWriteHeaderProps) => {
   const navigate = useNavigate();
   const [createPosting] = useCreatePostingMutation();
@@ -47,8 +49,10 @@ const PostingWriteHeader = ({
         book: selectedBook,
         title,
         content,
+        user,
       }).unwrap();
 
+      localStorage.removeItem('tempPost');
       navigate('/');
     } catch (error) {
       console.error('포스팅 작성 실패:', error);
