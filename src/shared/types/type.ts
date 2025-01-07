@@ -16,6 +16,16 @@ export interface User {
   isFollower: boolean;
 }
 
+// 책 상세페이지 포스트
+export interface BookDetailPost {
+  itemId: string;
+  title: string;
+  description: string;
+  userName: string;
+  avatar: string;
+  createdAt: string;
+}
+
 // 게시물 interface
 export interface Post {
   id: number;

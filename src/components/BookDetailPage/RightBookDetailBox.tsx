@@ -14,8 +14,6 @@ interface RightBookBoxProps {
   imageUrl: string;
   customerReviewRank: number;
   ratingCount: number;
-  imageUrl: string;
-  itemId: number;
 }
 
 const RightBookBoxDetailBox = ({
@@ -29,8 +27,6 @@ const RightBookBoxDetailBox = ({
   imageUrl,
   customerReviewRank,
   ratingCount,
-  imageUrl,
-  itemId,
 }: RightBookBoxProps): JSX.Element => {
   const { data } = useFetchLibraryCountQuery(itemId);
   console.log(data);
