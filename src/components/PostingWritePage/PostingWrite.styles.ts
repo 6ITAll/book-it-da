@@ -76,7 +76,7 @@ export const styles = {
     flex: '1 1 auto',
   },
   bookPreviewBox: {
-    width: '90%',
+    width: '50%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -89,7 +89,9 @@ export const styles = {
     flexDirection: 'row !important',
     backgroundColor: 'transparent',
     padding: '1rem',
-    height: '60px',
+    height: '80px',
+    cursor: 'default',
+    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.4)',
     '& .MuiCardMedia-root': {
       width: '80px',
       height: '100%',
@@ -106,6 +108,7 @@ export const styles = {
     },
     '& .MuiTypography-body1': {
       fontSize: '14px',
+      color: 'black',
     },
     '& .MuiTypography-body2': {
       fontSize: '11px',
