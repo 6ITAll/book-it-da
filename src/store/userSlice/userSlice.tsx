@@ -1,7 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+export interface UserState {
+  isLoggedIn: boolean;
+  checkedPassword: boolean;
+}
+
+const initialState: UserState = {
   isLoggedIn: false,
+  checkedPassword: false,
 };
 
 export const userSlice = createSlice({
@@ -14,8 +20,12 @@ export const userSlice = createSlice({
     logoutSuccess: (state) => {
       state.isLoggedIn = false;
     },
+    setCheckedPassword(state, action: PayloadAction<boolean>) {
+      state.checkedPassword = action.payload;
+    },
   },
 });
 
-export const { loginSuccess, logoutSuccess } = userSlice.actions;
+export const { loginSuccess, logoutSuccess, setCheckedPassword } =
+  userSlice.actions;
 export default userSlice.reducer;
