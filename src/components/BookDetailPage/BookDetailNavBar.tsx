@@ -3,10 +3,12 @@ import { Box, Tabs, Tab } from '@mui/material';
 
 interface DetailsNavbarProps {
   onTabChange: (tabIndex: number) => void;
+  totalReviews: number;
 }
 
 const BookDetailsNavbar = ({
   onTabChange,
+  totalReviews,
 }: DetailsNavbarProps): JSX.Element => {
   const [currentTab, setCurrentTab] = useState<number>(0);
 
@@ -30,7 +32,7 @@ const BookDetailsNavbar = ({
         textColor="primary"
       >
         <Tab label="책 소개" sx={{ width: '100%' }} />
-        <Tab label="리뷰 (8)" sx={{ width: '100%' }} />
+        <Tab label={`리뷰 (${totalReviews})`} sx={{ width: '100%' }} />
       </Tabs>
     </Box>
   );

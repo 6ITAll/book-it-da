@@ -2,14 +2,16 @@ import { Box, Stack, Typography } from '@mui/material';
 import BookInfoBox from './BookInfoBox';
 import ActionButtons from './ActionButtons';
 import FooterButtons from './FooterButtons';
-
+import { useFetchLibraryCountQuery } from '@features/BookDetailPage/api/bookUserShelfCountApi';
 interface RightBookBoxProps {
+  itemId: number;
   title: string;
   subTitle: string;
   author: string;
   categoryName: string;
   pubDate: string;
   link: string;
+  imageUrl: string;
   customerReviewRank: number;
   ratingCount: number;
   imageUrl: string;
@@ -17,17 +19,21 @@ interface RightBookBoxProps {
 }
 
 const RightBookBoxDetailBox = ({
+  itemId,
   title,
   subTitle,
   author,
   categoryName,
   pubDate,
   link,
+  imageUrl,
   customerReviewRank,
   ratingCount,
   imageUrl,
   itemId,
 }: RightBookBoxProps): JSX.Element => {
+  const { data } = useFetchLibraryCountQuery(itemId);
+  console.log(data);
   return (
     <Box
       sx={{
@@ -87,7 +93,7 @@ const RightBookBoxDetailBox = ({
                 color: 'text.secondary',
               }}
             >
-              이 책이 담긴 서재 <strong>8.2만+</strong>
+              이 책이 담긴 서재 <strong>{data?.libraryCount || 0}명</strong>
             </Typography>
             <ActionButtons
               book={{
@@ -101,7 +107,13 @@ const RightBookBoxDetailBox = ({
         </Stack>
       </Box>
       {/* 하단 버튼 */}
-      <FooterButtons link={link} />
+      <FooterButtons
+        itemId={itemId}
+        title={title}
+        author={author}
+        imageUrl={imageUrl}
+        link={link}
+      />
     </Box>
   );
 };

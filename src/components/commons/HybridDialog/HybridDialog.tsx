@@ -22,7 +22,7 @@ interface BaseDialogProps extends DialogProps {
   fullScreen?: boolean;
 }
 
-interface DialogWithActionProps extends BaseDialogProps {
+export interface DialogWithActionProps extends BaseDialogProps {
   action: string;
   onActionClick: () => void;
 }
@@ -92,7 +92,7 @@ const HybridDialog = ({
             alignItems="center"
           >
             {onBack ? (
-              <IconButton onClick={onBack}>
+              <IconButton onClick={onBack} aria-label="back">
                 <ArrowBackIcon />
               </IconButton>
             ) : (
@@ -115,6 +115,7 @@ const HybridDialog = ({
             onClick={handleAction}
             fullWidth
             sx={{ borderRadius: 0 }}
+            aria-label="action"
           >
             {action}
           </Button>
