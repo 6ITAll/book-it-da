@@ -4,10 +4,18 @@ import PostingToolbar from './PostingToolbar';
 import BookSearchPopover from './BookSearchPopover';
 import PostingContent from './PostingContent';
 import { useState } from 'react';
-import { Book } from '@shared/types/type';
+import { Book, User } from '@shared/types/type';
 import PostingWriteHeader from './PostingWriteHeader';
 import { useLocation } from 'react-router-dom';
+import { PostingRequest } from '@features/PostingWritePage/types/types';
 
+type CurrentUser = Omit<User, 'isFollowing' | 'isFollower'>;
+
+const mockCurrentUser: CurrentUser = {
+  userId: 1,
+  userName: 'MockUser',
+  avatarUrl: 'https://example.com/avatar.jpg',
+};
 const PostingWrite = () => {
   const location = useLocation();
   const bookFromDetail = location.state?.book as Book;
@@ -29,6 +37,19 @@ const PostingWrite = () => {
     setAnchorEl(null);
   };
 
+  const handleLoadPosting = (posting: PostingRequest) => {
+    setTitle(posting.title);
+    setContent(posting.content);
+    setSelectedBook(posting.book);
+  };
+
+  const currentPosting = {
+    title,
+    content,
+    book: selectedBook || ({} as Book), // null 대신 빈 객체 사용
+    user: mockCurrentUser as User, // User 타입으로 타입 단언
+  };
+
   return (
     <Stack sx={{ width: '100%', minHeight: '100vh', boxSizing: 'border-box' }}>
       <PostingWriteHeader
@@ -37,7 +58,11 @@ const PostingWrite = () => {
         selectedBook={selectedBook}
       />
       <Stack sx={styles.Content}>
-        <PostingToolbar handleMaterialClick={handleMaterialClick} />
+        <PostingToolbar
+          currentPosting={currentPosting}
+          handleMaterialClick={handleMaterialClick}
+          onLoadPosting={handleLoadPosting}
+        />
         <BookSearchPopover
           anchorEl={anchorEl}
           onClose={handleClose}

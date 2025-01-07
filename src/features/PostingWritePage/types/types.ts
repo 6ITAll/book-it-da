@@ -1,9 +1,10 @@
-import { Book, Posting } from '@shared/types/type';
+import { Book, Posting, User } from '@shared/types/type';
 
 export interface PostingRequest {
   book: Book;
   title: string;
   content: string;
+  user: User;
 }
 
 export interface PostingResponse {
