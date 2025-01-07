@@ -147,7 +147,7 @@ const EditAccountPage = (): JSX.Element => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
-      <Stack alignItems="center" spacing={1} mb={4}>
+      <Stack alignItems="center" spacing={1} mb={3}>
         <Avatar
           src={userInfoState.avatarUrl}
           alt="avatar"
@@ -175,8 +175,14 @@ const EditAccountPage = (): JSX.Element => {
       </Stack>
 
       <Stack>
-        <Typography variant="h6" fontWeight="bold" mb={4}>
-          개인정보 수정
+        <Stack alignItems="center">
+          <Typography variant="h6" fontWeight="bold" mb={4}>
+            개인정보 수정
+          </Typography>
+        </Stack>
+
+        <Typography variant="subtitle1" fontWeight="bold" mb={1}>
+          회원 정보
         </Typography>
 
         <Stack direction="row" alignItems="center" spacing={1} mb={3}>
