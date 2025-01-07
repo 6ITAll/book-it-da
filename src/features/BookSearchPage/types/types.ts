@@ -4,6 +4,8 @@
 export interface BestBookResponse {
   item: Array<{
     itemId: number;
+    title: string;
+    cover: string;
     link: string; // 책 상세 페이지 링크
   }>;
 }
