@@ -36,12 +36,14 @@ const BookSearchPage = (): JSX.Element => {
 
   // URL에서 검색어를 Redux와 inputValue로 동기화
   useEffect(() => {
-    const query = searchParams.get('query');
-    if (query) {
-      dispatch(setSearchQuery(query));
-      setInputValue(query);
-    }
-  }, [dispatch, searchParams]);
+    const query = searchParams.get('query') || '';
+    const page = parseInt(searchParams.get('page') || '1', 10);
+
+    dispatch(setSearchQuery(query));
+    dispatch(setCurrentPage(page));
+    setInputValue(query); // 검색어를 input에 동기화
+    setInputValue(''); // 검색 후 검색어 초기화
+  }, [searchParams, dispatch]);
 
   // 정렬 옵션 변경 함수
   const handleSortChange = (event: SelectChangeEvent) => {
@@ -55,10 +57,12 @@ const BookSearchPage = (): JSX.Element => {
 
   // 검색 실행 함수
   const handleSearch = () => {
-    const trimmedInput = inputValue.trim(); // 공백 제거
-    setSearchParams(trimmedInput ? { query: trimmedInput } : {}); // URL 업데이트
-    dispatch(setSearchQuery(trimmedInput)); // Redux 상태 업데이트
-    setInputValue(''); // 검색 후 input 값 초기화
+    const trimmedQuery = inputValue.trim(); // 공백 제거
+    if (trimmedQuery) {
+      setSearchParams({ query: trimmedQuery }); // 검색어를 URL에 반영
+    } else {
+      setSearchParams({}); // 검색어가 없으면 URL 초기화
+    }
   };
 
   // 페이지네이션 처리 함수
