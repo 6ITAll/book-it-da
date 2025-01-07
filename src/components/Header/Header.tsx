@@ -134,8 +134,8 @@ const Header = (): JSX.Element => {
               <MenuItem onClick={() => handleNavigation('/my-page')}>
                 마이페이지
               </MenuItem>
-              <MenuItem onClick={() => handleNavigation('/edit-profile')}>
-                프로필 편집
+              <MenuItem onClick={() => handleNavigation('/edit-account')}>
+                개인정보수정
               </MenuItem>
               <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
             </Menu>

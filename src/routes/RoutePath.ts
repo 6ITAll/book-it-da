@@ -5,6 +5,7 @@ const RoutePaths = {
   FEED: '/feed',
   SEARCH: '/search',
   MY_PAGE: '/my-page',
+  EDIT_ACCOUNT: '/edit-account',
   BOOKSHELVES: '/bookshelves',
   POSTING: '/posting',
   POSTING_WRITE: '/posting/write',

@@ -16,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import PasswordInput from './PasswordInput';
+import { User } from '@features/user/types';
 
 const schema = yup.object().shape({
   name: yup.string().required('이름을 입력해주세요'),
@@ -44,14 +45,8 @@ const schema = yup.object().shape({
     .integer('나이는 정수여야 합니다'),
 });
 
-interface SignupData {
-  name: string;
-  userId: string;
-  phone: string;
-  password: string;
+interface SignupData extends Omit<User, 'avatarUrl'> {
   confirmPassword: string;
-  gender: string;
-  age: number;
 }
 
 const Signup = (): JSX.Element => {
