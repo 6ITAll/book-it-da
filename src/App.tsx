@@ -5,6 +5,8 @@ import Header from '@components/Header/Header';
 import SnackBar from './components/Snackbar/SnackBar';
 import { store } from '@store/index';
 import './App.css';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { muiTheme } from '@styles/theme';
 
 const AppContent = (): JSX.Element => {
   const location = useLocation();
@@ -29,9 +31,12 @@ const AppContent = (): JSX.Element => {
 const App = (): JSX.Element => {
   return (
     <Provider store={store}>
-      <Router>
-        <AppContent />
-      </Router>
+      <ThemeProvider theme={muiTheme}>
+        <CssBaseline />
+        <Router>
+          <AppContent />
+        </Router>
+      </ThemeProvider>
     </Provider>
   );
 };
