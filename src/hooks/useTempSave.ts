@@ -55,7 +55,8 @@ export const useTempSave = (
       if (
         tempPosting.title.trim() ||
         tempPosting.content.trim() ||
-        tempPosting.selectedBook
+        (tempPosting.selectedBook &&
+          Object.keys(tempPosting.selectedBook).length > 0)
       ) {
         setSelectedBook(tempPosting.selectedBook || bookFromDetail || null);
         setTitle(tempPosting.title || '');
