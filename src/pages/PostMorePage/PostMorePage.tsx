@@ -4,14 +4,14 @@ import PostCard from '@components/commons/DetailPagePostCard';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useGetPaginatedPostsQuery } from '@features/BookDetailPage/api/postApi';
-import { Post } from '@shared/types/type';
+import { BookDetailPost } from '@shared/types/type';
 
 const PostMorePage = (): JSX.Element => {
   const location = useLocation();
   const { bookDetails } = location.state || {};
   const { itemId } = bookDetails || {};
 
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<BookDetailPost[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 

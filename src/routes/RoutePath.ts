@@ -7,6 +7,8 @@ const RoutePaths = {
   MY_PAGE: '/my-page',
   BOOKSHELVES: '/bookshelves',
   POSTING: '/posting',
+  POSTING_WRITE: '/posting/write',
+  EDIT: 'EDIT',
   BOOKDETAIL: '/bookDetail',
   REVIEWS: 'reviews',
   POSTS: 'posts',

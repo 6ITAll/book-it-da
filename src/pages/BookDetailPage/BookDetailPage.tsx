@@ -89,6 +89,8 @@ const BookDetailPage = (): JSX.Element => {
             link={data?.item[0].link || ''}
             customerReviewRank={data?.item[0].customerReviewRank || 0} // 추가
             ratingCount={data?.item[0].subInfo?.ratingInfo?.ratingCount || 0} // 추가
+            imageUrl={data?.item[0].cover || ''}
+            itemId={numericItemId}
           />
         </Box>
         {/* 책 소개 및 리뷰 부분*/}

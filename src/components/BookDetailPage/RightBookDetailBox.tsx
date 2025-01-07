@@ -91,7 +91,14 @@ const RightBookBoxDetailBox = ({
             >
               이 책이 담긴 서재 <strong>{data?.libraryCount || 0}명</strong>
             </Typography>
-            <ActionButtons />
+            <ActionButtons
+              book={{
+                bookTitle: title,
+                author: author,
+                imageUrl: imageUrl,
+                itemId: itemId,
+              }}
+            />
           </Box>
         </Stack>
       </Box>

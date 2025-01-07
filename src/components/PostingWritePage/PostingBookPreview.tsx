@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import CommonBookCard from '@components/commons/CommonBookCard';
 import { Book } from '@shared/types/type';
-import { styles } from './PostingDialog.styles';
+import { styles } from './PostingWrite.styles';
 
 interface BookPreviewSectionProps {
   book: Book;

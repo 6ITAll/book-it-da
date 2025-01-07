@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Post } from '@shared/types/type';
+import { BookDetailPost } from '@shared/types/type';
 
 export interface PostResponse {
   totalPosts: number;
-  topPosts: Post[];
+  topPosts: BookDetailPost[];
 }
 
 export const postApi = createApi({
@@ -16,7 +16,7 @@ export const postApi = createApi({
     }),
     // 포스트 더보기 페이지에서 페이지네이션 기반 포스트 조회
     getPaginatedPosts: builder.query<
-      { posts: Post[]; totalPosts: number },
+      { posts: BookDetailPost[]; totalPosts: number },
       { itemId: number; page: number }
     >({
       query: ({ itemId, page }) => `posts/book/${itemId}?page=${page}`,

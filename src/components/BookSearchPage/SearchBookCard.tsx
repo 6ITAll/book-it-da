@@ -1,6 +1,6 @@
 import CommonBookCard from '@components/commons/CommonBookCard';
 import { useFetchRatingInfoQuery } from '@features/BookSearchPage/api/bookSearchApi';
-import { navigateToDetailPage } from '@shared/utils/navigation';
+import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 
 interface SearchBookCardProps {
@@ -27,7 +27,7 @@ const SearchBookCard = ({
 
   // 책 고유 id 값으로 상세페이지 이동
   const handleCardClick = () => {
-    navigateToDetailPage(navigate, itemId);
+    navigateToBookDetailPage(navigate, itemId);
   };
 
   return (

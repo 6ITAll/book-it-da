@@ -35,6 +35,7 @@
     "react-router-dom": "^7.0.2",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1",
+    "string-strip-html": "^13.4.8",
     "styled-components": "^6.1.13",
     "uuid": "^11.0.3",
     "yup": "^1.6.1"

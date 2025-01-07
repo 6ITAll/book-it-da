@@ -7,11 +7,13 @@ import MyPage from '@pages/MyPage/MyPage';
 import NotFoundPage from '@pages/NotFoundPage/NotFound';
 import RoutePaths from './RoutePath';
 import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
-import PostingDetailPage from '@pages/PostDetailPage/PostingDetailPage';
+import PostingDetailPage from '@pages/PostingDetailPage/PostingDetailPage';
 import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
 import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
 import PostMorePage from '@pages/PostMorePage/PostMorePage';
 import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
+import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
+
 const AppRouter = () => {
   return (
     <Routes>
@@ -38,6 +40,7 @@ const AppRouter = () => {
         path={`${RoutePaths.MY_PAGE}/:userId?${RoutePaths.BOOKSHELVES}/:bookShelvesId?`}
         element={<BookShelvesPage />}
       />
+      <Route path={RoutePaths.POSTING_WRITE} element={<PostingWritePage />} />
       <Route
         path={`${RoutePaths.POSTING}/:postingId?`}
         element={<PostingDetailPage />}

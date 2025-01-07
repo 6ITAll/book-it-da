@@ -1,19 +1,21 @@
 import { Stack, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
-import { PostType } from '@shared/types/type';
-import PostingDialog from '@components/FeedPage/PostingDialog/PostingDialog';
 import { useState } from 'react';
 import URLShareDialog from '@components/commons/URLShareDialog';
+import { useNavigate } from 'react-router-dom';
+import { Book } from '@shared/types/type';
 
-const ActionButtons = (): JSX.Element => {
-  const [selectedType, setSelectedType] = useState<PostType>(null);
+interface ActionButtonsProps {
+  book: Book;
+}
+const ActionButtons = ({ book }: ActionButtonsProps): JSX.Element => {
+  const navigate = useNavigate();
   const [openShareDialog, setOpenShareDialog] = useState<boolean>(false); // 공유 모달 상태 추가
 
-  const handleEditClick = (type: PostType) => {
-    setSelectedType(type);
+  const handleWriteClick = () => {
+    navigate('/posting/write', { state: { book } });
   };
-
   const handleShareClick = () => {
     setOpenShareDialog(true); // 공유 모달 열기
   };
@@ -22,9 +24,6 @@ const ActionButtons = (): JSX.Element => {
     setOpenShareDialog(false); // 공유 모달 닫기
   };
 
-  const handleCloseDialog = () => {
-    setSelectedType(null); // 모달 닫기
-  };
   return (
     <>
       <Stack direction="row" spacing={2}>
@@ -38,7 +37,7 @@ const ActionButtons = (): JSX.Element => {
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
             '&:hover': { backgroundColor: '#e0e0e0' },
           }}
-          onClick={() => handleEditClick('포스팅')} // 클릭 시 모달 열기
+          onClick={handleWriteClick} // 클릭 시 모달 열기
         >
           <EditIcon sx={{ width: 18, height: 18 }} />
         </Button>
@@ -57,11 +56,6 @@ const ActionButtons = (): JSX.Element => {
           <ShareIcon sx={{ width: 18, height: 18 }} />
         </Button>
       </Stack>
-      <PostingDialog
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        handleBack={handleCloseDialog}
-      />
       {/* 공유 모달 */}
       <URLShareDialog
         open={openShareDialog}

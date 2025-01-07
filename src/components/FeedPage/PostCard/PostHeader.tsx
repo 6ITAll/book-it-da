@@ -1,38 +1,42 @@
 import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
-import { styles } from './PostCard.styles';
-import { FeedType, PostType } from '@shared/types/type';
+import styles from './PostCard.styles';
+import { PostType, User } from '@shared/types/type';
+import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 
 interface PostCardHeaderProps {
-  userName: string;
+  user: User;
+  createdAt: string;
   postType: PostType;
-  timeAgo: string;
-  feedType: FeedType;
+  onFollowChange: (userId: number, isFollowing: boolean) => void;
 }
 
 const PostCardHeader = ({
-  userName,
+  user,
+  createdAt,
   postType,
-  timeAgo,
-  feedType,
-}: PostCardHeaderProps) => {
-  const isFollowing = feedType === '팔로잉';
+  onFollowChange,
+}: PostCardHeaderProps): JSX.Element => {
+  const handleFollowClick = () => {
+    onFollowChange(user.userId, !user.isFollowing);
+  };
 
   return (
     <CardHeader
       sx={styles.cardHeader}
-      avatar={<Avatar />}
+      avatar={<Avatar src={user.avatarUrl} alt={user.userName} />}
       action={
         <Button
           variant="outlined"
           size="small"
-          sx={styles.followButton(isFollowing)}
+          sx={styles.followButton(user.isFollowing)}
+          onClick={handleFollowClick}
         >
-          {isFollowing ? '팔로잉' : '팔로우'}
+          {user.isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       }
       title={
         <Typography variant="body2" fontWeight="bold">
-          {userName}
+          {user.userName}
         </Typography>
       }
       subheader={
@@ -44,7 +48,7 @@ const PostCardHeader = ({
             •
           </Typography>
           <Typography variant="caption" sx={{ fontSize: '11px' }}>
-            {timeAgo}
+            {formatTimeAgo(createdAt)}
           </Typography>
         </Box>
       }

@@ -1,12 +1,12 @@
 import { Box, CardMedia } from '@mui/material';
-import { styles } from './PostCard.styles';
+import styles from './PostCard.styles';
 
 interface BookImageProps {
   imageUrl: string;
   title: string;
 }
 
-const BookImage = ({ imageUrl, title }: BookImageProps) => (
+const BookImage = ({ imageUrl, title }: BookImageProps): JSX.Element => (
   <Box sx={styles.cardMediaBox}>
     <CardMedia
       component="img"

@@ -98,62 +98,66 @@ const BookSearchAutoComplete = ({
           },
         },
       }}
-      renderOption={(props, option) => (
-        <Box
-          component="li"
-          {...props}
-          sx={{
-            padding: '5px 10px !important',
-            borderBottom: '1px solid #ccc',
-          }}
-        >
-          <Stack
-            direction="row"
-            spacing={2}
-            alignItems="center"
-            sx={{ width: '100%', height: '100%' }}
+      renderOption={(props, option) => {
+        const { key, ...otherProps } = props;
+        return (
+          <Box
+            component="li"
+            key={key}
+            {...otherProps}
+            sx={{
+              padding: '5px 10px !important',
+              borderBottom: '1px solid #ccc',
+            }}
           >
-            <img
-              src={option.cover}
-              alt={option.title}
-              style={{ width: 40, height: 60 }}
-            />
-            <Stack>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: '14px',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  maxWidth: {
-                    xs: '150px',
-                    md: '200px',
-                  },
-                }}
-              >
-                {option.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  fontSize: '11px',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  maxWidth: {
-                    xs: '150px',
-                    md: '200px',
-                  },
-                }}
-              >
-                {option.author}
-              </Typography>
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              sx={{ width: '100%', height: '100%' }}
+            >
+              <img
+                src={option.cover}
+                alt={option.title}
+                style={{ width: 40, height: 60 }}
+              />
+              <Stack>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: '14px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: {
+                      xs: '150px',
+                      md: '200px',
+                    },
+                  }}
+                >
+                  {option.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: '11px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: {
+                      xs: '150px',
+                      md: '200px',
+                    },
+                  }}
+                >
+                  {option.author}
+                </Typography>
+              </Stack>
             </Stack>
-          </Stack>
-        </Box>
-      )}
+          </Box>
+        );
+      }}
       renderInput={(params) => (
         <TextField
           {...params}

@@ -1,4 +1,4 @@
-export const styles = {
+const styles = {
   dialogPaper: {
     '& .MuiDialog-paper': {
       borderRadius: '10px',
@@ -43,3 +43,5 @@ export const styles = {
     color: 'text.secondary',
   },
 };
+
+export default styles;

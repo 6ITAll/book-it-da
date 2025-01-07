@@ -1,21 +1,21 @@
 import { Button, Stack } from '@mui/material';
 import { PostType } from '@shared/types/type';
-import { styles } from './PostTypeFilter.styles';
+import styles from './PostTypeFilter.styles';
 
 interface PostTypeFilterProps {
-  postType: PostType | '';
+  postType: PostType | null;
   onPostTypeChange: (
     event: React.MouseEvent<HTMLElement>,
-    newValue: PostType | '',
+    newValue: PostType | null,
   ) => void;
 }
 
 const POST_TYPES = ['한줄평', '포스팅'] as const;
 
-export const PostTypeFilter = ({
+const PostTypeFilter = ({
   postType,
   onPostTypeChange,
-}: PostTypeFilterProps) => {
+}: PostTypeFilterProps): JSX.Element => {
   return (
     <Stack direction="row" spacing={1}>
       {POST_TYPES.map((type) => (
@@ -23,7 +23,7 @@ export const PostTypeFilter = ({
           key={type}
           variant={postType === type ? 'contained' : 'outlined'}
           size="small"
-          onClick={(e) => onPostTypeChange(e, postType === type ? '' : type)}
+          onClick={(e) => onPostTypeChange(e, postType === type ? null : type)}
           sx={styles.filterButton}
         >
           {type}
@@ -32,3 +32,5 @@ export const PostTypeFilter = ({
     </Stack>
   );
 };
+
+export default PostTypeFilter;

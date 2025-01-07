@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material';
 import { useState } from 'react';
-import PostingDialog from '../PostingDialog/PostingDialog';
 import OneLineReviewDialog from '../OneLineReviewDialog/OneLineReviewDialog';
 import { PostType } from '@shared/types/type';
 import { POST_TYPE_OPTIONS } from 'src/constants';
@@ -15,8 +14,8 @@ interface PostTypeSelectDialogProps {
 const PostTypeSelectDialog = ({
   dialogOpen,
   setDialogOpen,
-}: PostTypeSelectDialogProps) => {
-  const [selectedType, setSelectedType] = useState<PostType>(null);
+}: PostTypeSelectDialogProps): JSX.Element => {
+  const [selectedType, setSelectedType] = useState<PostType>('선택안함');
 
   const handleTypeSelect = (type: PostType) => {
     setSelectedType(type);
@@ -24,7 +23,7 @@ const PostTypeSelectDialog = ({
   };
 
   const handleBack = () => {
-    setSelectedType(() => null);
+    setSelectedType(() => '선택안함');
     setDialogOpen(true);
   };
 
@@ -49,12 +48,6 @@ const PostTypeSelectDialog = ({
         setOpen={setDialogOpen}
         contentNode={contentNode}
         maxWidth="xs"
-      />
-      {/* 포스팅 작성 모달 */}
-      <PostingDialog
-        handleBack={handleBack}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
       />
 
       {/* 한줄평 작성 모달 */}

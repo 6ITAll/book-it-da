@@ -1,14 +1,16 @@
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { PostType } from '@shared/types/type';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
 import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
 import StarRating from '@components/commons/StarRating';
-import { BookPreviewSection } from './OneLineReviewBookPreview';
-import { ReviewTextField } from './OneLineReviewTextField';
-import { styles } from './OneLineReviewDialog.styles';
+import BookPreviewSection from './OneLineReviewBookPreview';
+import ReviewTextField from './OneLineReviewTextField';
+import styles from './OneLineReviewDialog.styles';
 import { REVIEW_DIALOG } from 'src/constants';
+import { useCreateOneLineReviewMutation } from '@features/OneLineReviewDialog/api/oneLineReviewApi';
+import { validateOneLineReview } from '@features/OneLineReviewDialog/utils/validate';
 
 interface OneLineReviewDialogProps {
   // 포스팅 타입 선택 다이얼로그에서 오는 Props
@@ -40,6 +42,9 @@ const OneLineReviewDialog = ({
     receivedRating || REVIEW_DIALOG.DEFAULT_STAR_RATING,
   );
 
+  const [error, setError] = useState<string>('');
+  const [createOneLineReview] = useCreateOneLineReviewMutation();
+
   const dialogOpen = selectedType ? selectedType === '한줄평' : !!isOpen;
 
   // 다이얼로그 초기화 함수
@@ -55,7 +60,7 @@ const OneLineReviewDialog = ({
     if (!receivedBook && selectedType !== '한줄평') {
       resetState();
     }
-  }, [selectedType, receivedBook]);
+  }, [selectedType, receivedBook, selectedBook]);
 
   // 상세 페이지에서 가져온 별점 적용
   useEffect(() => {
@@ -64,18 +69,34 @@ const OneLineReviewDialog = ({
     }
   }, [receivedRating]);
 
-  const handleSubmit = () => {
-    if (!selectedBook || !review.trim() || starRating === 0) {
+  const handleSubmit = async () => {
+    const validation = validateOneLineReview(selectedBook, starRating, review);
+
+    if (!validation.isValid) {
+      setError(validation.error);
       return;
     }
-    console.log('한줄평 제출:', { selectedBook, review, starRating });
-    resetState();
-    handleDialogClose();
+
+    try {
+      const result = await createOneLineReview({
+        book: selectedBook!,
+        rating: starRating,
+        review: review.trim(),
+      }).unwrap();
+
+      if (result.success) {
+        resetState();
+        handleDialogClose();
+      }
+    } catch (error) {
+      setError('한줄평 작성에 실패했습니다. 다시 시도해주세요.');
+      console.error('한줄평 작성 실패:', error);
+    }
   };
 
   const handleDialogClose = () => {
     if (selectedType) {
-      setSelectedType?.(null);
+      setSelectedType?.('선택안함');
     } else {
       onClose?.();
     }
@@ -83,6 +104,11 @@ const OneLineReviewDialog = ({
 
   const contentNode = (
     <Stack sx={styles.contentStack}>
+      {error && (
+        <Typography color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
       {/* 상세 페이지에서 넘어갈 시 책 검색 기능 표시하지 않음 */}
       {!receivedBook && (
         <BookSearchAutoComplete
@@ -108,7 +134,11 @@ const OneLineReviewDialog = ({
   return (
     <HybridDialog
       open={dialogOpen}
-      setOpen={handleDialogClose}
+      setOpen={() => {
+        if (!error) {
+          handleDialogClose();
+        }
+      }}
       title="한줄평 작성"
       onBack={handleBack}
       action="한줄평 작성"

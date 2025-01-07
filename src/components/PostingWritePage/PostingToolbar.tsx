@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Stack } from '@mui/material';
-import { styles } from './PostingDialog.styles';
+import { styles } from './PostingWrite.styles';
 
 interface PostingToolbarProps {
   handleMaterialClick: (event: React.MouseEvent<HTMLElement>) => void;
@@ -13,6 +13,13 @@ const PostingToolbar = ({ handleMaterialClick }: PostingToolbarProps) => {
       alignItems="center"
       sx={styles.postingToolbar}
     >
+      <Button
+        size="small"
+        onClick={handleMaterialClick}
+        sx={styles.postingMaterialButton}
+      >
+        글감
+      </Button>
       <Box sx={styles.postingSaveBox}>
         <Button size="small" onClick={() => {}} sx={styles.postingSaveButton}>
           저장
@@ -22,13 +29,6 @@ const PostingToolbar = ({ handleMaterialClick }: PostingToolbarProps) => {
           0
         </Button>
       </Box>
-      <Button
-        size="small"
-        onClick={handleMaterialClick}
-        sx={styles.postingMaterialButton}
-      >
-        글감
-      </Button>
     </Stack>
   );
 };

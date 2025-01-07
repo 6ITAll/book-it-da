@@ -2,10 +2,10 @@ import { Stack, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import URLShareDialog from '@components/commons/URLShareDialog';
-import PostingUserInfo from '@components/PostDetailPage/PostingUserInfo';
-import PostingContent from '@components/PostDetailPage/PostingContent';
-import PostingHeader from '@components/PostDetailPage/PostingHeader';
-import OtherPostingGrid from '@components/PostDetailPage/OtherPostingGrid';
+import PostingUserInfo from '@components/PostingDetailPage/PostingUserInfo';
+import PostingContent from '@components/PostingDetailPage/PostingContent';
+import PostingHeader from '@components/PostingDetailPage/PostingHeader';
+import OtherPostingGrid from '@components/PostingDetailPage/OtherPostingGrid';
 import {
   useGetBookOtherPostsQuery,
   useGetCurrentUserQuery,
@@ -20,7 +20,7 @@ const PostingDetailPage = () => {
     post?.book?.itemId ?? 0,
   );
   const { data: userOtherPosts } = useGetUserOtherPostsQuery(
-    post?.user.id ?? 0,
+    post?.user.userId ?? 0,
   );
   const [isLiked, setIsLiked] = useState(false);
   const { data: currentUser } = useGetCurrentUserQuery();
@@ -55,8 +55,8 @@ const PostingDetailPage = () => {
         setIsLiked={setIsLiked}
         setOpenShareDialog={setOpenShareDialog}
         postingId={post.id}
-        userId={post.user.id}
-        currentUserId={currentUser.id}
+        userId={post.user.userId}
+        currentUserId={currentUser.userId}
         likeCount={post.likeCount}
       />
       {/* 포스팅 정보 */}
@@ -73,13 +73,14 @@ const PostingDetailPage = () => {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: '#fafafa',
+          boxSizing: 'border-box',
         }}
       >
         {/* 유저 정보 */}
         <PostingUserInfo
           user={post.user}
           createdAt={post.createdAt}
-          currentUserId={currentUser.id}
+          currentUserId={currentUser.userId}
         />
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />
