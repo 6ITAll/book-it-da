@@ -1,5 +1,6 @@
 import { Box, Typography, Rating, Stack } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
+import { bookDetailStyles } from './BookDetail.styles';
 interface BookInfoBoxProps {
   title: string;
   subTitle: string;
@@ -25,7 +26,7 @@ const BookInfoBox = ({
     : '0.0';
   return (
     <Box>
-      <Typography variant="h5" fontWeight="bold" sx={{ mb: '1.5rem' }}>
+      <Typography variant="h2" fontWeight="bold" sx={{ mb: '1rem' }}>
         {title}
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: '1rem' }}>
@@ -39,9 +40,7 @@ const BookInfoBox = ({
       </Typography>
       {/* 별점, 점수, 평가자 수 */}
       {customerReviewRank !== undefined && (
-        <Box
-          sx={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}
-        >
+        <Box sx={bookDetailStyles.ratingBox}>
           <Rating
             value={convertedRating}
             readOnly
@@ -53,23 +52,13 @@ const BookInfoBox = ({
           <Stack
             direction="row"
             spacing={1}
-            sx={{
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
+            sx={bookDetailStyles.scoreAndReviewStack}
           >
             <Typography variant="body2" fontWeight="bold">
               {displayRating}
             </Typography>
             {ratingCount !== undefined && (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center', // 세로 가운데 정렬
-                  justifyContent: 'flex-start', // 텍스트와 아이콘 정렬
-                  color: 'grey.500',
-                }}
-              >
+              <Box sx={bookDetailStyles.iconAndReviewerBox}>
                 <PeopleIcon sx={{ fontSize: '12px', marginRight: 0.5 }} />
                 <Typography noWrap variant="body2">
                   {ratingCount}명

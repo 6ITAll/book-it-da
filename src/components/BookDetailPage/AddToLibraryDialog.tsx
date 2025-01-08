@@ -18,6 +18,7 @@ import {
   useAddBookshelfMutation,
 } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { ResponseBookshelf } from '@components/BookDetailPage/types';
+import { bookDetailStyles } from './BookDetail.styles';
 
 const getUserId = (): string | null => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '[]');
@@ -58,8 +59,10 @@ const AddToLibraryModal = ({
       skip: !userId, // userId가 없으면 쿼리 실행하지 않음
     },
   );
+
   // 책장 추가 함수
   const [addBookshelf] = useAddBookshelfMutation();
+
   // 책 추가 함수
   const [addBookToBookshelf] = useAddBookToBookshelfMutation();
 
@@ -72,7 +75,6 @@ const AddToLibraryModal = ({
         author,
         imageUrl,
       };
-      console.log('newBook:', newBook);
       try {
         await addBookToBookshelf({
           itemId: itemId || 0,
@@ -128,20 +130,12 @@ const AddToLibraryModal = ({
       <DialogContent>
         {/* 책장 만들기 UI */}
         {!isCreating ? (
-          <Typography
-            variant="h6"
-            color="text.secondary"
-            padding="1rem"
+          <Button
             onClick={() => setIsCreating(true)}
-            sx={{
-              cursor: 'pointer',
-              textAlign: 'center',
-              border: '1px solid #e6e7e8',
-              borderRadius: 1,
-            }}
+            sx={bookDetailStyles.addBookShelfButton}
           >
             + 책장 만들기
-          </Typography>
+          </Button>
         ) : (
           <Stack direction="row" alignItems="center" spacing={2} mb={2}>
             <TextField
@@ -151,9 +145,7 @@ const AddToLibraryModal = ({
               value={newBookshelfName}
               onChange={(e) => setNewBookshelfName(e.target.value)}
               sx={{
-                '& .MuiOutlinedInput-root': {
-                  height: 48, // 외부 박스 높이
-                },
+                '& .MuiOutlinedInput-root': { height: 48 },
               }}
             />
             <Button

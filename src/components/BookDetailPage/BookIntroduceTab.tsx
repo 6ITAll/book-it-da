@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import GenderAgeChart from '@components/BookDetailPage/GenderAgeChart';
 import GenderAgeSummary from '@components/BookDetailPage/GenderAgeSummary';
 import { useGetGenderAgeQuery } from '@features/BookDetailPage/api/genderAgeApi';
+import { bookDetailStyles } from './BookDetail.styles';
 interface BookIntroduceTabProps {
   itemId: number;
   description: string;
@@ -16,25 +17,12 @@ const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
   return (
     <>
       {/* 성별·연령별 인기 분포 */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          gap: '1rem',
-          padding: '1rem 1rem',
-        }}
-      >
+      <Box sx={bookDetailStyles.bookIntroduceTabBox}>
         <GenderAgeChart data={data ?? []} />
         <GenderAgeSummary data={data ?? []} />
       </Box>
       {/* 책 소개 */}
-      <Box
-        sx={{
-          marginBottom: '1.5rem',
-          padding: '1rem 1rem',
-          borderTop: '4px solid #e6e7e8',
-        }}
-      >
+      <Box sx={bookDetailStyles.bookIntroduceBox}>
         <Typography variant="h6" fontWeight="bold" gutterBottom>
           책 소개
         </Typography>
