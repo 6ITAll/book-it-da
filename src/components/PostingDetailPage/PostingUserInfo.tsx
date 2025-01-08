@@ -36,6 +36,7 @@ const PostingUserInfo = ({
         </Stack>
       </Stack>
       {user.userId !== currentUserId && (
+        // 팔로우 버튼 공통 컴포넌트로 만들 예정
         <Button
           variant="outlined"
           size="small"

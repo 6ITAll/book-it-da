@@ -4,50 +4,12 @@ import CommonBookCard from '@components/commons/CommonBookCard';
 import { useNavigate } from 'react-router-dom';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { Book } from '@shared/types/type';
+import { postingDetailStyles } from './postingDetail.styles';
 
 interface PostingContentProps {
   content: string;
   book: Book;
 }
-
-const styles = {
-  bookPreviewBox: {
-    width: '50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    mt: '1rem',
-    padding: '0',
-  },
-  bookCard: {
-    width: '100%',
-    display: 'flex !important',
-    flexDirection: 'row !important',
-    backgroundColor: 'transparent',
-    padding: '1rem',
-    height: '100px',
-    '& .MuiCardMedia-root': {
-      width: '80px',
-      height: '100%',
-      padding: 'auto',
-      borderRadius: '0',
-    },
-    '& .MuiCardContent-root': {
-      flex: 1,
-      padding: '0.1rem',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      boxSizing: 'border-box',
-    },
-    '& .MuiTypography-body1': {
-      fontSize: '14px',
-    },
-    '& .MuiTypography-body2': {
-      fontSize: '11px',
-    },
-  },
-};
 
 const PostingContent = ({ content, book }: PostingContentProps) => {
   const navigate = useNavigate();
@@ -60,13 +22,13 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
   return (
     <>
       {/* 책 정보 */}
-      <Box sx={styles.bookPreviewBox} onClick={handleBookClick}>
+      <Box sx={postingDetailStyles.bookPreviewBox} onClick={handleBookClick}>
         {book && (
           <CommonBookCard
             image={book.imageUrl}
             title={book.bookTitle}
             author={book.author}
-            sx={styles.bookCard}
+            sx={postingDetailStyles.bookCard}
           />
         )}
       </Box>
