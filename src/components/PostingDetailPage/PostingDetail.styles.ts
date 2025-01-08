@@ -1,4 +1,30 @@
 export const postingDetailStyles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    minHeight: '100vh',
+    width: '100%',
+    padding: '0 !important',
+    margin: '0 !important',
+    backgroundColor: '#f0f0f0',
+    boxSizing: 'border-box',
+  },
+  posting: {
+    px: 4,
+    pt: 3,
+    width: {
+      xs: '100%',
+      md: '50%',
+    },
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fafafa',
+    boxSizing: 'border-box',
+  },
   postingHeader: {
     width: '100%',
     position: 'sticky',
@@ -21,6 +47,15 @@ export const postingDetailStyles = {
     transform: 'translateX(-50%)',
     fontSize: '0.75rem',
     color: 'text.secondary',
+  },
+  userInfoBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    p: 1,
+    mb: 3,
+    width: '100%',
+    borderBottom: '1px solid #eee',
   },
   bookPreviewBox: {
     width: '50%',

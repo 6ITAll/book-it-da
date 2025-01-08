@@ -5,24 +5,13 @@ import {
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
 import { User } from '@shared/types/type';
 import { useParams } from 'react-router-dom';
+import { postingDetailStyles } from './PostingDetail.styles';
 
 interface PostingUserInfoProps {
   user: User;
   createdAt: string;
   currentUserId: number;
 }
-
-const styles = {
-  userInfoBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    p: 1,
-    mb: 3,
-    width: '100%',
-    borderBottom: '1px solid #eee',
-  },
-};
 
 const PostingUserInfo = ({
   user,
@@ -46,7 +35,7 @@ const PostingUserInfo = ({
   };
 
   return (
-    <Box sx={styles.userInfoBox}>
+    <Box sx={postingDetailStyles.userInfoBox}>
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar src={user.avatarUrl} />
         <Stack>
