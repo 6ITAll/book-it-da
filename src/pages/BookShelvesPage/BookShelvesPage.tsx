@@ -102,7 +102,7 @@ const BookShelvesPage = () => {
       >
         {sortedBooks.map((book) => (
           <Grid
-            key={book.id}
+            key={book.itemId}
             size={
               viewMode === 'grid' ? { xs: 6, sm: 3, md: 2, lg: 2, xl: 1.5 } : 12
             }
