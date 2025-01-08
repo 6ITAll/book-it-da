@@ -3,6 +3,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useCreatePostingMutation } from '@features/PostingWritePage/api/postingWriteApi';
 import { Book, User } from '@shared/types/type';
+import { navigateBack } from '@shared/utils/navigation';
+import { TEMP_SAVE_STORAGE_KEY } from 'src/constants/postingwrite';
 
 interface PostingWriteHeaderProps {
   title: string;
@@ -52,14 +54,11 @@ const PostingWriteHeader = ({
         user,
       }).unwrap();
 
-      localStorage.removeItem('tempPost');
+      localStorage.removeItem(TEMP_SAVE_STORAGE_KEY);
       navigate('/');
     } catch (error) {
       console.error('포스팅 작성 실패:', error);
     }
-  };
-  const handleBack = () => {
-    navigate(-1);
   };
 
   return (
@@ -71,7 +70,7 @@ const PostingWriteHeader = ({
           gap: 3,
         }}
       >
-        <IconButton onClick={handleBack}>
+        <IconButton onClick={() => navigateBack(navigate)}>
           <ArrowBackIcon />
         </IconButton>
         <Typography variant="h5" sx={{ fontWeight: 900 }}>
