@@ -16,6 +16,7 @@ import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
+import URLShareDialog from '@components/commons/URLShareDialog';
 interface BookShelvesDetailDialogProps {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,6 +36,7 @@ const BookShelvesDetailDialog = ({
   );
   const [openAddToLibraryDialog, setOpenAddToLibraryDialog] = useState(false);
   const [openWriteDialog, setOpenWriteDialog] = useState(false);
+  const [openShareDialog, setOpenShareDialog] = useState(false);
   const [updateStatus] = useUpdateReadingStatusMutation();
 
   const handleReadingStatus = async (
@@ -56,8 +58,21 @@ const BookShelvesDetailDialog = ({
     }
   };
 
-  const handleWrite = () => {
-    setOpenWriteDialog(true);
+  const getShareUrl = () => {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/bookDetail/${book?.itemId}`;
+  };
+
+  const handleWriteClick = () => {
+    navigate('/posting/write', { state: { book } });
+  };
+
+  const handleShareClick = () => {
+    setOpenShareDialog(true); // 공유 모달 열기
+  };
+
+  const handleCloseShareDialog = () => {
+    setOpenShareDialog(false); // 공유 모달 닫기
   };
 
   const handleCloseWrite = () => {
@@ -98,7 +113,7 @@ const BookShelvesDetailDialog = ({
           variant="outlined"
           startIcon={<EditIcon />}
           sx={styles.mainButton}
-          onClick={handleWrite}
+          onClick={handleWriteClick}
         >
           글쓰기
         </Button>
@@ -106,6 +121,7 @@ const BookShelvesDetailDialog = ({
           variant="outlined"
           startIcon={<ShareIcon />}
           sx={styles.mainButton}
+          onClick={handleShareClick}
         >
           공유하기
         </Button>
@@ -157,6 +173,11 @@ const BookShelvesDetailDialog = ({
       <PostTypeSelectDialog
         dialogOpen={openWriteDialog}
         setDialogOpen={handleCloseWrite}
+      />
+      <URLShareDialog
+        open={openShareDialog}
+        handleClose={handleCloseShareDialog}
+        url={getShareUrl()}
       />
     </>
   );
