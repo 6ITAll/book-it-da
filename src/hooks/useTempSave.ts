@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Book } from '@shared/types/type';
 import { debounce } from 'lodash';
+import { TEMP_SAVE_STORAGE_KEY } from 'src/constants/postingwrite';
 
 interface TempSaveData {
   title: string;
@@ -28,7 +29,10 @@ export const useTempSave = (
           ...data,
           date: new Date().toISOString(),
         };
-        localStorage.setItem('tempPosting', JSON.stringify(tempPosting));
+        localStorage.setItem(
+          TEMP_SAVE_STORAGE_KEY,
+          JSON.stringify(tempPosting),
+        );
       }, 500),
     [],
   );
@@ -43,13 +47,13 @@ export const useTempSave = (
         date: new Date().toISOString(),
       });
     } else {
-      localStorage.removeItem('tempPosting');
+      localStorage.removeItem(TEMP_SAVE_STORAGE_KEY);
     }
   }, [debouncedSave, title, content, selectedBook]);
 
   // 컴포넌트 마운트시, 임시저장 글 적용
   useEffect(() => {
-    const tempPostingString = localStorage.getItem('tempPosting');
+    const tempPostingString = localStorage.getItem(TEMP_SAVE_STORAGE_KEY);
     if (tempPostingString) {
       const tempPosting: TempSaveData = JSON.parse(tempPostingString);
       if (
@@ -64,7 +68,7 @@ export const useTempSave = (
         setTempSaveDate(new Date(tempPosting.date));
         setShowLoadDialog(true);
       } else {
-        localStorage.removeItem('tempPosting');
+        localStorage.removeItem(TEMP_SAVE_STORAGE_KEY);
       }
     } else {
       setSelectedBook(bookFromDetail || null);
@@ -90,7 +94,7 @@ export const useTempSave = (
     setSelectedBook(bookFromDetail || null);
     setTitle('');
     setContent('');
-    localStorage.removeItem('tempPosting');
+    localStorage.removeItem(TEMP_SAVE_STORAGE_KEY);
     setShowLoadDialog(false);
   }, [bookFromDetail, setSelectedBook, setTitle, setContent]);
 
