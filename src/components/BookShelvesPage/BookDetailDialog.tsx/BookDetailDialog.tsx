@@ -147,7 +147,10 @@ const BookShelvesDetailDialog = ({
             ...styles.subButtons,
             color: 'error.main',
           }}
-          onClick={handleDeleteBook}
+          onClick={() => {
+            handleDeleteBook();
+            setOpenDialog(false);
+          }}
         >
           책장에서 삭제
         </Button>

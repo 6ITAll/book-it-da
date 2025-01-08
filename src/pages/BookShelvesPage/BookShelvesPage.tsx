@@ -33,7 +33,7 @@ const BookShelvesPage = () => {
 
   const { userId, bookshelfId } = useParams();
 
-  const { data, error, isLoading } = useGetBookshelfQuery({
+  const { data, error, isLoading, refetch } = useGetBookshelfQuery({
     userId: Number(userId),
     bookshelfId: Number(bookshelfId),
   });
@@ -53,11 +53,13 @@ const BookShelvesPage = () => {
 
     try {
       await deleteBook({
-        userId: 1, // TODO: 실제 사용자 ID로 변경
-        bookshelfId: selectedBook.bookshelfId,
+        userId: Number(userId),
+        bookshelfId: Number(bookshelfId),
         itemId: selectedBook.itemId,
       });
       setOpenDialog(false);
+      // 삭제 후 책장 데이터를 다시 불러옵니다.
+      refetch();
     } catch (error) {
       console.error('Failed to delete book:', error);
       // TODO: 에러 처리
