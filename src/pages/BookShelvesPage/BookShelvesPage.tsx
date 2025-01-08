@@ -6,7 +6,7 @@ import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookcard/Shelves
 import SortSelector, {
   SortOption,
 } from '@components/BookShelvesPage/SortSelector';
-import { sortBooks } from '@components/BookShelvesPage/sortBooks';
+import { sortBooks } from 'src/utils/BookShelvesPage/sortBooks';
 import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
 import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog.tsx/BookDetailDialog';
 import { SavedBook } from '@shared/types/type';

@@ -1,5 +1,5 @@
 import { SavedBook } from '@shared/types/type';
-import { SortOption } from './SortSelector';
+import { SortOption } from '../../components/BookShelvesPage/SortSelector';
 
 export const sortBooks = (books: SavedBook[], sortOption: SortOption) => {
   return [...books].sort((a, b) => {
