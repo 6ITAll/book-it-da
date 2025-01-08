@@ -1,5 +1,10 @@
+import {
+  useGetPostByIdQuery,
+  useToggleFollowMutation,
+} from '@features/PostDetailPage/api/postingApi';
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
 import { User } from '@shared/types/type';
+import { useParams } from 'react-router-dom';
 
 interface PostingUserInfoProps {
   user: User;
@@ -24,6 +29,22 @@ const PostingUserInfo = ({
   createdAt,
   currentUserId,
 }: PostingUserInfoProps) => {
+  const { postingId } = useParams();
+  const [toggleFollow, { isLoading }] = useToggleFollowMutation();
+  const { data: post, refetch } = useGetPostByIdQuery(postingId!);
+
+  const handleFollowToggle = async () => {
+    try {
+      await toggleFollow({
+        userId: user.userId,
+        isFollowing: !post?.user.isFollowing,
+      });
+      refetch(); // 데이터를 강제로 다시 가져옵니다.
+    } catch (error) {
+      console.error('팔로우 토글 실패:', error);
+    }
+  };
+
   return (
     <Box sx={styles.userInfoBox}>
       <Stack direction="row" spacing={2} alignItems="center">
@@ -36,17 +57,18 @@ const PostingUserInfo = ({
         </Stack>
       </Stack>
       {user.userId !== currentUserId && (
-        // 팔로우 버튼 공통 컴포넌트로 만들 예정
         <Button
           variant="outlined"
           size="small"
+          onClick={handleFollowToggle}
+          disabled={isLoading}
           sx={{
-            color: user.isFollowing ? 'black' : 'primary.main',
-            borderColor: user.isFollowing ? 'black' : 'primary.main',
+            color: post?.user.isFollowing ? 'black' : 'primary.main',
+            borderColor: post?.user.isFollowing ? 'black' : 'primary.main',
             mb: '0',
           }}
         >
-          {user.isFollowing ? '팔로잉' : '팔로우'}
+          {post?.user.isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       )}
     </Box>
