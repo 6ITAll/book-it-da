@@ -5,6 +5,7 @@ import { useCreatePostingMutation } from '@features/PostingWritePage/api/posting
 import { Book, User } from '@shared/types/type';
 import { navigateBack } from '@shared/utils/navigation';
 import { TEMP_SAVE_STORAGE_KEY } from 'src/constants/postingwrite';
+import { postingWriteStyles } from './PostingWrite.styles';
 
 interface PostingWriteHeaderProps {
   title: string;
@@ -12,24 +13,6 @@ interface PostingWriteHeaderProps {
   selectedBook: Book | null;
   user: Omit<User, 'isFollowing' | 'isFollower'>;
 }
-
-const styles = {
-  postingHeader: {
-    width: '100%',
-    position: 'sticky',
-    opacity: '0.9',
-    top: 0,
-    bgcolor: 'white',
-    zIndex: 1000,
-    borderBottom: '1px solid #eee',
-    py: 2,
-    px: 3,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-  },
-};
 
 const PostingWriteHeader = ({
   title,
@@ -62,7 +45,7 @@ const PostingWriteHeader = ({
   };
 
   return (
-    <Box sx={styles.postingHeader}>
+    <Box sx={postingWriteStyles.header}>
       <Box
         sx={{
           display: 'flex',

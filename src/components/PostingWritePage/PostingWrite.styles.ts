@@ -1,5 +1,17 @@
-export const styles = {
-  Content: {
+export const postingWriteStyles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    minHeight: '100vh',
+    width: '100%',
+    padding: '0 !important',
+    margin: '0 !important',
+    backgroundColor: '#f0f0f0',
+    boxSizing: 'border-box',
+  },
+  content: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -8,6 +20,21 @@ export const styles = {
     minHeight: '100vh',
     backgroundColor: '#f0f0f0',
     borderTop: '1px solid #ccc',
+    boxSizing: 'border-box',
+  },
+  header: {
+    width: '100%',
+    position: 'sticky',
+    opacity: '0.9',
+    top: 0,
+    bgcolor: 'white',
+    zIndex: 1000,
+    borderBottom: '1px solid #eee',
+    py: 2,
+    px: 3,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     boxSizing: 'border-box',
   },
   postingToolbar: {

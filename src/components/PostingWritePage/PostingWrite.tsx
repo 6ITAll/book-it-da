@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { styles } from './PostingWrite.styles';
+import { postingWriteStyles } from './PostingWrite.styles';
 import PostingToolbar from './PostingToolbar';
 import BookSearchPopover from './BookSearchPopover';
 import PostingContent from './PostingContent';
@@ -76,7 +76,7 @@ const PostingWrite = () => {
         selectedBook={selectedBook}
         user={mockCurrentUser}
       />
-      <Stack sx={styles.Content}>
+      <Stack sx={postingWriteStyles.content}>
         <PostingToolbar
           currentPosting={currentPosting}
           handleMaterialClick={handleMaterialClick}

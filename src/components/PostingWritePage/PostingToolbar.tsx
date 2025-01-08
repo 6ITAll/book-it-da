@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
-import { styles } from './PostingWrite.styles';
+import { postingWriteStyles } from './PostingWrite.styles';
 import { Book, User } from '@shared/types/type';
 import {
   useGetSavedPostingsQuery,
@@ -53,7 +53,7 @@ const PostingToolbar = ({
         <Box
           key={index}
           onClick={() => handleLoadPosting(posting)}
-          sx={styles.savedPostingBox}
+          sx={postingWriteStyles.savedPostingBox}
         >
           <Typography variant="h6">{posting.title}</Typography>
           <Typography variant="body2">
@@ -70,20 +70,20 @@ const PostingToolbar = ({
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={styles.postingToolbar}
+        sx={postingWriteStyles.postingToolbar}
       >
         <Button
           size="small"
           onClick={handleMaterialClick}
-          sx={styles.postingMaterialButton}
+          sx={postingWriteStyles.postingMaterialButton}
         >
           글감
         </Button>
-        <Box sx={styles.postingSaveBox}>
+        <Box sx={postingWriteStyles.postingSaveBox}>
           <Button
             size="small"
             onClick={handleSave}
-            sx={styles.postingSaveButton}
+            sx={postingWriteStyles.postingSaveButton}
           >
             저장
           </Button>
@@ -91,7 +91,7 @@ const PostingToolbar = ({
           <Button
             size="small"
             onClick={handleOpenSavedList}
-            sx={styles.postingLoadButton}
+            sx={postingWriteStyles.postingLoadButton}
           >
             {savedPostings?.length || 0}
           </Button>
