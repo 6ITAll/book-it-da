@@ -8,7 +8,10 @@ import {
   PostType,
 } from '@shared/types/type';
 import { OneLineReviewRequest } from '@features/OneLineReviewDialog/types/types';
-import { PostingRequest } from '@features/PostingWritePage/types/types';
+import {
+  PostingRequest,
+  UpdatePostingRequest,
+} from '@features/PostingWritePage/types/types';
 
 export const bookData: Book[] = [
   {
@@ -245,13 +248,13 @@ export const feedHandlers = [
   }),
   http.post('/api/posts/posting', async ({ request }) => {
     const body = (await request.json()) as PostingRequest;
-    const { book, title, content } = body;
+    const { book, title, content, userId } = body;
 
     const newPost: Posting = {
       id: mockPosts.length + 1,
       createdAt: new Date().toISOString(),
       user: {
-        userId: 1,
+        userId: userId,
         userName: 'currentUser',
         avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
         isFollower: false,
@@ -274,6 +277,49 @@ export const feedHandlers = [
     return HttpResponse.json(
       { success: true, message: '포스팅이 작성되었습니다.', post: newPost },
       { status: 201 },
+    );
+  }),
+  http.put('/api/posts/posting/:postingId', async ({ params, request }) => {
+    const { postingId } = params;
+    const body = (await request.json()) as UpdatePostingRequest;
+    const { book, title, content, userId } = body;
+
+    const postIndex = mockPosts.findIndex(
+      (post) => post.id === Number(postingId),
+    );
+
+    if (postIndex === -1) {
+      return HttpResponse.json(
+        { success: false, message: '포스팅을 찾을 수 없습니다.' },
+        { status: 404 },
+      );
+    }
+
+    // userId 확인 (옵션)
+    if (mockPosts[postIndex].user.userId !== userId) {
+      return HttpResponse.json(
+        { success: false, message: '포스팅을 수정할 권한이 없습니다.' },
+        { status: 403 },
+      );
+    }
+
+    const updatedPost = {
+      ...mockPosts[postIndex],
+      book: {
+        bookTitle: book.bookTitle,
+        author: book.author,
+        imageUrl: book.imageUrl,
+        itemId: book.itemId,
+      },
+      title,
+      content,
+    } as Posting;
+
+    mockPosts[postIndex] = updatedPost;
+
+    return HttpResponse.json(
+      { success: true, message: '포스팅이 수정되었습니다.', post: updatedPost },
+      { status: 200 },
     );
   }),
 ];

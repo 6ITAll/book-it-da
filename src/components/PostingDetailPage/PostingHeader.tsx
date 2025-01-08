@@ -47,6 +47,10 @@ const PostingHeader = ({
     navigate(-1);
   };
 
+  const handleEdit = () => {
+    navigate(`/posting/edit/${postingId}`);
+  };
+
   return (
     <Box sx={postingDetailStyles.postingHeader}>
       <Box
@@ -79,7 +83,7 @@ const PostingHeader = ({
         </IconButton>
         {/* 수정 버튼 */}
         {userId === currentUserId && (
-          <IconButton>
+          <IconButton onClick={handleEdit}>
             <EditIcon />
           </IconButton>
         )}

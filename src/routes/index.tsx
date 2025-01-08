@@ -52,6 +52,10 @@ const AppRouter = () => {
       />
       <Route path={RoutePaths.POSTING_WRITE} element={<PostingWritePage />} />
       <Route
+        path={`${RoutePaths.POSTING_EDIT}/:postingId`}
+        element={<PostingWritePage />}
+      />
+      <Route
         path={`${RoutePaths.POSTING}/:postingId?`}
         element={<PostingDetailPage />}
       />

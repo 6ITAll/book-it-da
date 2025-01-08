@@ -63,7 +63,6 @@ export const postingDetailStyles = {
     my: 5,
     px: 4,
     boxSizing: 'border-box',
-    border: '1px solid red',
   },
   otherPostingTitle: {
     mb: 2,
