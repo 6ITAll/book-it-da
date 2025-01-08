@@ -12,7 +12,7 @@ interface PostingContentProps {
 
 const styles = {
   bookPreviewBox: {
-    width: '90%',
+    width: '50%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -25,7 +25,7 @@ const styles = {
     flexDirection: 'row !important',
     backgroundColor: 'transparent',
     padding: '1rem',
-    height: '60px',
+    height: '100px',
     '& .MuiCardMedia-root': {
       width: '80px',
       height: '100%',
