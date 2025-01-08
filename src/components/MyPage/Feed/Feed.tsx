@@ -5,15 +5,16 @@ import ReviewFeedSection from './ReviewFeedSection';
 import PostFeedSection from './PostFeedSection';
 
 interface FeedProps {
+  userId: string;
   reviews: Review[];
   posts: Post[];
 }
 
-const Feed = ({ reviews, posts }: FeedProps): JSX.Element => {
+const Feed = ({ userId, reviews, posts }: FeedProps): JSX.Element => {
   return (
     <>
-      <ReviewFeedSection reviews={reviews} />
-      <PostFeedSection posts={posts} />
+      <ReviewFeedSection userId={userId} reviews={reviews} />
+      <PostFeedSection userId={userId} posts={posts} />
     </>
   );
 };

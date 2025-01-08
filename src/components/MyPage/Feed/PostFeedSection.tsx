@@ -2,12 +2,19 @@ import { Post } from '@components/BookDetailPage/BookReviewTab';
 import PostCard from '@components/commons/DetailPagePostCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { useNavigate } from 'react-router-dom';
 
 interface PostFeedSectionProps {
+  userId: string;
   posts: Post[];
 }
 
-const PostFeedSection = ({ posts }: PostFeedSectionProps): JSX.Element => {
+const PostFeedSection = ({
+  userId,
+  posts,
+}: PostFeedSectionProps): JSX.Element => {
+  const navigate = useNavigate();
+
   return (
     <Box>
       <Box
@@ -25,6 +32,9 @@ const PostFeedSection = ({ posts }: PostFeedSectionProps): JSX.Element => {
           size="small"
           variant="text"
           sx={{ color: '#333', fontWeight: 'bold' }}
+          onClick={() => {
+            navigate(`/my-page/${userId}/feeds/posts`);
+          }}
         >
           더보기
         </Button>
@@ -38,8 +48,8 @@ const PostFeedSection = ({ posts }: PostFeedSectionProps): JSX.Element => {
           >
             <PostCard
               title={post.title}
-              content={post.content}
-              author={post.author}
+              description={post.description}
+              userName={post.userName}
               avatar={post.avatar}
             />
           </Grid>

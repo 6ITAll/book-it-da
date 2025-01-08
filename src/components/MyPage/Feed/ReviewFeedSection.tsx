@@ -2,14 +2,19 @@ import ReviewCard from '@components/commons/DetailPageReviewCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Review } from '@shared/types/type';
+import { useNavigate } from 'react-router-dom';
 
 interface ReviewFeedSectionProps {
+  userId: string;
   reviews: Review[];
 }
 
 const ReviewFeedSection = ({
+  userId,
   reviews,
 }: ReviewFeedSectionProps): JSX.Element => {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <Box
@@ -27,6 +32,9 @@ const ReviewFeedSection = ({
           size="small"
           variant="text"
           sx={{ color: '#333', fontWeight: 'bold' }}
+          onClick={() => {
+            navigate(`/my-page/${userId}/feeds/reviews`);
+          }}
         >
           더보기
         </Button>
