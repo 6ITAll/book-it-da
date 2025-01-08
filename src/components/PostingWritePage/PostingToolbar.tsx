@@ -53,10 +53,7 @@ const PostingToolbar = ({
         <Box
           key={index}
           onClick={() => handleLoadPosting(posting)}
-          sx={{
-            cursor: 'pointer',
-            '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-          }}
+          sx={styles.savedPostingBox}
         >
           <Typography variant="h6">{posting.title}</Typography>
           <Typography variant="body2">

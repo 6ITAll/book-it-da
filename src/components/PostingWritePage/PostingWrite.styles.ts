@@ -149,4 +149,8 @@ export const styles = {
     flexDirection: 'column',
     width: '100%',
   },
+  savedPostingBox: {
+    cursor: 'pointer',
+    '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+  },
 };
