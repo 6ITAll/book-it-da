@@ -18,7 +18,7 @@ interface BookShelvesDetailDialogProps {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
   handleDeleteBook: () => void;
-  book: SavedBook | null;
+  book: SavedBook;
 }
 
 const BookShelvesDetailDialog = ({
@@ -44,7 +44,7 @@ const BookShelvesDetailDialog = ({
       await updateStatus({
         userId: 1,
         bookshelfId: book.bookshelfId,
-        itemId: book.id,
+        itemId: book.itemId,
         readingStatus: newStatus,
       });
       setReadingStatus(newStatus);
@@ -145,6 +145,10 @@ const BookShelvesDetailDialog = ({
       <AddToLibraryModal
         open={openAddToLibraryDialog}
         onClose={handleCloseAddToLibrary}
+        itemId={book?.itemId}
+        title={book?.bookTitle}
+        author={book?.author}
+        imageUrl={book?.imageUrl}
       />
       <PostTypeSelectDialog
         dialogOpen={openWriteDialog}

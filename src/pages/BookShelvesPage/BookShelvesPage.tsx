@@ -43,7 +43,7 @@ const BookShelvesPage = () => {
     bookId: number,
   ) => {
     event.stopPropagation();
-    const book = data?.books.find((book) => book.id === bookId);
+    const book = data?.books.find((book) => book.itemId === bookId);
     setSelectedBook(book || null);
     setOpenDialog(true);
   };
@@ -55,7 +55,7 @@ const BookShelvesPage = () => {
       await deleteBook({
         userId: 1, // TODO: 실제 사용자 ID로 변경
         bookshelfId: selectedBook.bookshelfId,
-        itemId: selectedBook.id,
+        itemId: selectedBook.itemId,
       });
       setOpenDialog(false);
     } catch (error) {
@@ -106,7 +106,11 @@ const BookShelvesPage = () => {
             size={
               viewMode === 'grid' ? { xs: 6, sm: 3, md: 2, lg: 2, xl: 1.5 } : 12
             }
-            sx={{ display: 'flex', flexDirection: 'column' }}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '5px',
+            }}
           >
             <ShelvesBookCard
               book={book}
@@ -118,11 +122,11 @@ const BookShelvesPage = () => {
       </Grid>
 
       <BookShelvesDetailDialog
-        key={`${userId}-${selectedBook?.id}`}
+        key={`${userId}-${selectedBook?.itemId}`}
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         handleDeleteBook={handleDeleteBook}
-        book={selectedBook}
+        book={selectedBook!}
       />
     </Box>
   );

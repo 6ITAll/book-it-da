@@ -1,7 +1,7 @@
 export const styles = {
   bookPreview: {
     width: '100%',
-    height: '100px',
+    height: '120px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -13,7 +13,7 @@ export const styles = {
     display: 'flex !important',
     flexDirection: 'row !important',
     padding: '1rem',
-    height: '100px',
+    height: '120px',
     boxShadow: 'none',
     '& .MuiCardMedia-root': {
       width: '100px',

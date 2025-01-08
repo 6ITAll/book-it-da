@@ -31,6 +31,7 @@ export const BookCard = styled(Card)<{ view: 'grid' | 'list' }>(({ view }) => ({
   }),
   // 그리드일 때
   ...(view === 'grid' && {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     '& .book-cover': {
