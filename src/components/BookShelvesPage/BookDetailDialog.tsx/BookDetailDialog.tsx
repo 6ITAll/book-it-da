@@ -14,6 +14,8 @@ import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bo
 import { ReadingStatusType } from '@shared/types/type';
 import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
+import { navigateToBookDetailPage } from '@shared/utils/navigation';
+import { useNavigate } from 'react-router-dom';
 interface BookShelvesDetailDialogProps {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,6 +29,7 @@ const BookShelvesDetailDialog = ({
   handleDeleteBook,
   book,
 }: BookShelvesDetailDialogProps) => {
+  const navigate = useNavigate();
   const [readingStatus, setReadingStatus] = useState<ReadingStatusType>(
     book?.readingStatus || null,
   );
@@ -87,6 +90,7 @@ const BookShelvesDetailDialog = ({
           variant="outlined"
           startIcon={<BookIcon />}
           sx={styles.mainButton}
+          onClick={() => navigateToBookDetailPage(navigate, book.itemId)}
         >
           책 정보
         </Button>

@@ -20,10 +20,6 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
   const formattedDate = formatDate(book.savedAt);
   const navigate = useNavigate();
 
-  const handleBookDetailClick = () => {
-    navigateToBookDetailPage(navigate, book.itemId);
-  };
-
   return (
     <BookCard
       view={view}
@@ -128,7 +124,9 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
                 </Box>
                 <Button
                   sx={{ width: '120px', bgcolor: '#333', color: '#fafafa' }}
-                  onClick={handleBookDetailClick}
+                  onClick={() =>
+                    navigateToBookDetailPage(navigate, book.itemId)
+                  }
                 >
                   책 보러 가기
                 </Button>
