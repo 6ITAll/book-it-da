@@ -10,31 +10,31 @@ export const addToLibraryApi = createApi({
     getBookshelves: builder.query<Bookshelf[], string>({
       query: (userId) => `/users/${userId}/add-to-library/bookshelves`,
     }),
+    // 책장 추가
+    addBookshelf: builder.mutation<
+      { message: string; bookshelf: Bookshelf },
+      { userId: string; name: string }
+    >({
+      query: ({ userId, name }) => ({
+        url: `/users/${userId}/bookshelves/add-to-library`,
+        method: 'POST',
+        body: { name }, // 요청 필드
+      }),
+    }),
     // 책 추가
     addBookToBookshelf: builder.mutation<
       void,
       {
         itemId: number;
         userId: string;
-        bookshelfId: number;
+        id: number;
         book: AddBookPayload;
       }
     >({
-      query: ({ userId, bookshelfId, book }) => ({
-        url: `/users/${userId}/bookshelves/add-to-library/${bookshelfId}/books`,
+      query: ({ userId, id, book }) => ({
+        url: `/users/${userId}/bookshelves/add-to-library/${id}/books`,
         method: 'POST',
         body: book,
-      }),
-    }),
-    // 책장 추가
-    addBookshelf: builder.mutation<
-      { message: string; bookshelf: Bookshelf },
-      { userId: string; bookshelfName: string }
-    >({
-      query: ({ userId, bookshelfName }) => ({
-        url: `/users/${userId}/bookshelves/add-to-library`,
-        method: 'POST',
-        body: { bookshelfName },
       }),
     }),
   }),
