@@ -11,7 +11,9 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "test-storybook": "test-storybook",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "swagger": "node swagger-server.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run swagger\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -68,6 +70,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser": "^2.1.8",
     "axe-playwright": "^2.0.3",
+    "concurrently": "^9.1.2",
     "esbuild": "^0.24.0",
     "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",

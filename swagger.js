@@ -10,11 +10,11 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:5173', // 개발 서버 URL
+        url: 'http://localhost:5173',
       },
     ],
   },
-  apis: ['./src/features/**/*.ts', './src/routes/*.ts'], // API 경로 패턴
+  apis: ['./src/features/**/*.ts', './src/components/**/*.ts'],
 };
 
 const specs = swaggerJsdoc(options);
