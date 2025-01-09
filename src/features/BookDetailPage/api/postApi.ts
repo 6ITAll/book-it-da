@@ -1,10 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BookDetailPost } from '@shared/types/type';
-
-export interface PostResponse {
-  totalPosts: number;
-  topPosts: BookDetailPost[];
-}
+import { PostResponse } from '@features/BookDetailPage/types/types';
 
 export const postApi = createApi({
   reducerPath: 'postApi',

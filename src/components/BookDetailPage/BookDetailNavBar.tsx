@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
+import { bookDetailStyles } from './BookDetail.styles';
 
 interface DetailsNavbarProps {
   onTabChange: (tabIndex: number) => void;
@@ -18,12 +19,7 @@ const BookDetailsNavbar = ({
   };
 
   return (
-    <Box
-      sx={{
-        borderBottom: '1px solid #ddd',
-        backgroundColor: '#fff',
-      }}
-    >
+    <Box sx={bookDetailStyles.bookDetailsNavbarBox}>
       <Tabs
         variant="fullWidth"
         value={currentTab}

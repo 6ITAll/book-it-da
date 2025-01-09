@@ -8,6 +8,8 @@ import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLin
 import StarRating from '@components/commons/StarRating';
 import { useGetPostsQuery } from '@features/BookDetailPage/api/postApi';
 import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
+import { MoreType } from '@components/BookDetailPage/types';
+import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface BookReviewTabProps {
   itemId: number;
@@ -16,39 +18,31 @@ interface BookReviewTabProps {
   imageUrl: string;
 }
 
-type MoreType = 'posts' | 'reviews';
-
 const BookReviewsTab = ({
   itemId,
   title,
   author,
   imageUrl,
 }: BookReviewTabProps): JSX.Element => {
-  const [rating, setRating] = useState<number>(0); // 선택된 별점 상태
+  const [rating, setRating] = useState<number>(0);
   const navigate = useNavigate();
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
-    useState<boolean>(false); // 모달 열림 상태
+    useState<boolean>(false);
 
-  // API 데이터 가져오기
   const { data: postData = { totalPosts: 0, topPosts: [] } } =
     useGetPostsQuery(itemId);
   const { data: reviewData = { totalReviews: 0, topReviews: [] } } =
     useGetReviewsQuery(itemId);
-  console.log(postData.topPosts);
-  // 리뷰 총 개수 계산
-  const reviews = reviewData?.topReviews || []; // 상위 3개 리뷰
-  const totalReviews = reviewData?.totalReviews || 0; // 총 리뷰 개수
 
-  // 포스트 총 개수 계산
+  const reviews = reviewData?.topReviews || [];
+  const totalReviews = reviewData?.totalReviews || 0;
   const totalPosts = postData?.totalPosts || 0;
   const topPosts = postData?.topPosts || [];
-  console.log('topPosts:', topPosts);
-  // 모달 닫기 핸들러
+
   const handleModalClose = () => {
     setIsOneLineReviewModalOpen(false);
   };
 
-  // 포스트, 리뷰 상세 페이지로 이동
   const handleSeeMoreClick = (type: MoreType) => {
     if (itemId) {
       navigate(`/bookDetail/${itemId}/${type}`, {
@@ -65,47 +59,21 @@ const BookReviewsTab = ({
   };
 
   return (
-    <Box sx={{ padding: '1rem 1rem' }}>
+    <Box sx={bookReviewTabStyles.container}>
       {/* 리뷰 섹션 */}
-      <Box sx={{ marginBottom: '2rem' }}>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1rem',
-          }}
-        >
+      <Box sx={bookReviewTabStyles.reviewSection}>
+        <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
             한 줄 리뷰 {totalReviews}
           </Typography>
-          <Button
-            size="small"
-            variant="text"
-            onClick={() => handleSeeMoreClick('reviews')}
-            sx={{ color: '#333', fontWeight: 'bold' }}
-          >
-            더보기
-          </Button>
         </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1rem',
-            border: '1px solid #e7e8e9',
-            borderRadius: '8px',
-            marginBottom: '1.5rem',
-          }}
-        >
+        <Box sx={bookReviewTabStyles.reviewBox}>
           <Stack direction="row" spacing={1}>
             <StarRating
               rating={rating}
               onRatingChange={setRating}
               isDialog={false}
-              openDialog={setIsOneLineReviewModalOpen} // 모달 열기 설정
+              openDialog={setIsOneLineReviewModalOpen}
             />
           </Stack>
           <Typography
@@ -116,12 +84,22 @@ const BookReviewsTab = ({
             이 책은 어떠셨나요? 별점을 남겨주세요
           </Typography>
         </Box>
+        <Box display="flex" justifyContent="flex-end">
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => handleSeeMoreClick('reviews')}
+            sx={bookReviewTabStyles.moreButton}
+          >
+            더보기
+          </Button>
+        </Box>
         <Grid container spacing={2}>
           {reviews?.map((review, index) => (
             <Grid
               key={index}
               size={{ xs: 12, md: 4 }}
-              sx={{ display: 'flex', flexDirection: 'column' }}
+              sx={bookReviewTabStyles.gridContainer}
             >
               <ReviewCard
                 username={review.username}
@@ -134,17 +112,9 @@ const BookReviewsTab = ({
           ))}
         </Grid>
       </Box>
-
       {/* 포스트 섹션 */}
       <Box>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1rem',
-          }}
-        >
+        <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
             이 책의 포스트 {totalPosts}
           </Typography>
@@ -152,7 +122,7 @@ const BookReviewsTab = ({
             size="small"
             variant="text"
             onClick={() => handleSeeMoreClick('posts')}
-            sx={{ color: '#333', fontWeight: 'bold' }}
+            sx={bookReviewTabStyles.moreButton}
           >
             더보기
           </Button>
@@ -162,7 +132,7 @@ const BookReviewsTab = ({
             <Grid
               key={index}
               size={{ xs: 12, md: 4 }}
-              sx={{ display: 'flex', flexDirection: 'column' }}
+              sx={bookReviewTabStyles.gridContainer}
             >
               <PostCard
                 title={post.title}

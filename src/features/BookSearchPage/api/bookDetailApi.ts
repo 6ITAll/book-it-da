@@ -1,25 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { aladinConfig } from '@shared/config/aladinConfig';
-
-export interface BookDetailResponse {
-  item: Array<{
-    itemId: number;
-    title: string;
-    description: string;
-    author: string;
-    categoryName: string;
-    pubDate: string;
-    cover: string;
-    link: string;
-    customerReviewRank?: number;
-    subInfo: {
-      subTitle: string;
-      ratingInfo?: {
-        ratingCount: number;
-      };
-    };
-  }>;
-}
+import { BookDetailResponse } from '@features/BookSearchPage/types/types';
 
 export const bookDetailApi = createApi({
   reducerPath: 'bookDetailApi',
