@@ -37,6 +37,8 @@
     "slick-carousel": "^1.8.1",
     "string-strip-html": "^13.4.8",
     "styled-components": "^6.1.13",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^11.0.3",
     "yup": "^1.6.1"
   },
@@ -61,6 +63,8 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/react-slick": "^0.23.13",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser": "^2.1.8",
     "axe-playwright": "^2.0.3",
