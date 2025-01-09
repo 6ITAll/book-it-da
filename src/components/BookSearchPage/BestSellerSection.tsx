@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import BestBookCarousel from './BestBookCarousel';
+import BestBookCarousel from '@components/BookSearchPage/BestBookCarousel';
 
 const BestSellerSection = (): JSX.Element => {
   return (
