@@ -1,6 +1,10 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import swaggerUi from 'swagger-ui-express';
+import specs from './swagger';
+import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd()); // 이 줄 추가
@@ -15,6 +19,17 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
+      middleware: [
+        (req: Request, res: Response, next: NextFunction) => {
+          if (req.url.startsWith('/api-docs')) {
+            const app = express();
+            app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+            app(req, res, next);
+          } else {
+            next();
+          }
+        },
+      ],
     },
   };
 });
