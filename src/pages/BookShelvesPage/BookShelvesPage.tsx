@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Container } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookcard/ShelvesBookCard';
-import SortSelector, {
-  SortOption,
-} from '@components/BookShelvesPage/SortSelector';
-import { sortBooks } from 'src/utils/BookShelvesPage/sortBooks';
-import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
+import SortSelector from '@components/BookShelvesPage/SortSelector';
+
+import ViewToggle from '@components/BookShelvesPage/ViewToggle';
 import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog/BookDetailDialog';
 import { SavedBook } from '@shared/types/type';
 import BookshelfHeader from '@components/BookShelvesPage/BookShelvesHeader';
@@ -22,6 +20,8 @@ import {
 import type { RootState } from '@store/index';
 import { useParams } from 'react-router-dom';
 import { bookShelvesStyles } from '@components/BookShelvesPage/BookShelves.styles';
+import { SortOption, ViewMode } from '@components/BookShelvesPage/types';
+import { sortBooks } from 'src/utils/BookShelvesPage/sortBooks';
 
 const BookShelvesPage = () => {
   const dispatch = useDispatch();

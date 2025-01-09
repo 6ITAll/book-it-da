@@ -1,6 +1,6 @@
 import { Box, Typography, CardMedia, IconButton, Button } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-import { formatDate } from 'src/utils/dateUtils';
+import { formatDate } from '@shared/utils/dateUtils';
 import { BookCard, shelvesBookCardStyles } from './ShelvesBookCard.styles';
 import { SavedBook } from '@shared/types/type';
 import {
