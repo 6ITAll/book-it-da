@@ -1,7 +1,7 @@
 import { Box, Typography, CardMedia, IconButton, Button } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { formatDate } from 'src/utils/dateUtils';
-import { BookCard } from './ShelvesBookCard.styles';
+import { BookCard, shelvesBookCardStyles } from './ShelvesBookCard.styles';
 import { SavedBook } from '@shared/types/type';
 import {
   renderReadingStatus,
@@ -21,20 +21,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
   const navigate = useNavigate();
 
   return (
-    <BookCard
-      view={view}
-      sx={{
-        borderRadius: '0 !important',
-        width:
-          view === 'list'
-            ? {
-                xs: '100%',
-                lg: '60%',
-              }
-            : '100%',
-        alignSelf: view === 'list' ? 'center' : 'none',
-      }}
-    >
+    <BookCard view={view} sx={{}}>
       {view === 'grid' ? (
         <>
           <Box className="book-cover">
@@ -43,18 +30,12 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               image={book.imageUrl}
               alt={book.bookTitle}
             />
-            <Box sx={{ position: 'absolute', top: 8, left: 8 }}>
+            <Box sx={shelvesBookCardStyles.gridReadingStatusIconBox}>
               {renderReadingStatusIcon(book.readingStatus)}
             </Box>
           </Box>
           <Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-              }}
-            >
+            <Box sx={shelvesBookCardStyles.gridBookTitleBox}>
               <Typography variant="subtitle1" noWrap sx={{ flex: 1 }}>
                 {book.bookTitle}
               </Typography>
@@ -66,7 +47,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
                 <MoreVert />
               </IconButton>
             </Box>
-            <Box sx={{}}>
+            <Box>
               <Typography variant="body2" color="text.secondary">
                 {book.author}
               </Typography>
@@ -88,24 +69,8 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             alt={book.bookTitle}
           />
           <Box className="book-info" sx={{ padding: '0 1rem !important' }}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                width: '100%',
-                height: '100%',
-              }}
-            >
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                }}
-              >
+            <Box sx={shelvesBookCardStyles.listBookCardContent}>
+              <Box sx={shelvesBookCardStyles.listBookInfoBox}>
                 {renderReadingStatus(book.readingStatus)}
                 <Box>
                   <Typography variant="h6" noWrap>
@@ -123,7 +88,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
                   </Typography>
                 </Box>
                 <Button
-                  sx={{ width: '120px', bgcolor: '#333', color: '#fafafa' }}
+                  sx={shelvesBookCardStyles.listBookDetailButton}
                   onClick={() =>
                     navigateToBookDetailPage(navigate, book.itemId)
                   }
@@ -134,7 +99,6 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               <IconButton
                 size="small"
                 onClick={(e) => onMenuOpen(e, book.itemId)}
-                sx={{ backgroundColor: 'transparent' }}
               >
                 <MoreVert />
               </IconButton>

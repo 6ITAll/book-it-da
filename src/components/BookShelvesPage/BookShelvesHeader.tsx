@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { bookShelvesStyles } from './BookShelves.styles';
 
 interface BookshelfHeaderProps {
   name: string;
@@ -7,16 +8,7 @@ interface BookshelfHeaderProps {
 
 const BookshelfHeader = ({ name, bookCount }: BookshelfHeaderProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        mb: 3,
-        gap: '5px',
-      }}
-    >
+    <Box sx={bookShelvesStyles.bookShelfHeader}>
       <Typography variant="h4">{name}</Typography>
       <Typography variant="body2" color="text.secondary">
         {bookCount}권

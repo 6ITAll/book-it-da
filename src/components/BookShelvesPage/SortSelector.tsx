@@ -5,6 +5,7 @@ import {
   Select,
   // Typography,
 } from '@mui/material';
+import { bookShelvesStyles } from './BookShelves.styles';
 
 export type SortOption = 'recent' | 'title' | 'author';
 
@@ -20,22 +21,15 @@ const SortSelector = ({ sortOption, onSortChange }: SortSelectorProps) => {
         value={sortOption}
         size="small"
         onChange={(e) => onSortChange(e.target.value as SortOption)}
-        sx={{
-          backgroundColor: '#fafafa',
-          color: '#333',
-          borderRadius: '16px',
-          '&:hover': {
-            backgroundColor: '#f0f0f0',
-          },
-        }}
+        sx={bookShelvesStyles.sortSelector}
       >
-        <MenuItem value="recent" sx={{ fontSize: '12px' }}>
+        <MenuItem value="recent" sx={bookShelvesStyles.sortMenus}>
           최신순
         </MenuItem>
-        <MenuItem value="title" sx={{ fontSize: '12px' }}>
+        <MenuItem value="title" sx={bookShelvesStyles.sortMenus}>
           제목순
         </MenuItem>
-        <MenuItem value="author" sx={{ fontSize: '12px' }}>
+        <MenuItem value="author" sx={bookShelvesStyles.sortMenus}>
           저자순
         </MenuItem>
       </Select>

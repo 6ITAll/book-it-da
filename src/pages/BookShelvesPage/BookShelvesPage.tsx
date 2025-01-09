@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookcard/ShelvesBookCard';
 import SortSelector, {
@@ -8,7 +8,7 @@ import SortSelector, {
 } from '@components/BookShelvesPage/SortSelector';
 import { sortBooks } from 'src/utils/BookShelvesPage/sortBooks';
 import ViewToggle, { ViewMode } from '@components/BookShelvesPage/ViewToggle';
-import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog.tsx/BookDetailDialog';
+import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog/BookDetailDialog';
 import { SavedBook } from '@shared/types/type';
 import BookshelfHeader from '@components/BookShelvesPage/BookShelvesHeader';
 import {
@@ -21,6 +21,7 @@ import {
 } from '@features/BookShelvesPage/slice/bookShelvesSlice';
 import type { RootState } from '@store/index';
 import { useParams } from 'react-router-dom';
+import { bookShelvesStyles } from '@components/BookShelvesPage/BookShelves.styles';
 
 const BookShelvesPage = () => {
   const dispatch = useDispatch();
@@ -58,11 +59,9 @@ const BookShelvesPage = () => {
         itemId: selectedBook.itemId,
       });
       setOpenDialog(false);
-      // 삭제 후 책장 데이터를 다시 불러옵니다.
       refetch();
     } catch (error) {
       console.error('Failed to delete book:', error);
-      // TODO: 에러 처리
     }
   };
 
@@ -81,12 +80,10 @@ const BookShelvesPage = () => {
   const sortedBooks = sortBooks(data.books, sortOption);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Container maxWidth="lg" sx={bookShelvesStyles.container}>
       <BookshelfHeader name={data.bookshelfName} bookCount={data.totalCount} />
 
-      <Box
-        sx={{ display: 'flex', gap: 2, mb: 3, justifyContent: 'space-between' }}
-      >
+      <Box sx={bookShelvesStyles.filterViewBox}>
         <SortSelector
           sortOption={sortOption}
           onSortChange={handleSortOptionChange}
@@ -94,25 +91,14 @@ const BookShelvesPage = () => {
         <ViewToggle viewMode={viewMode} onViewChange={handleViewModeChange} />
       </Box>
 
-      <Grid
-        container
-        spacing={4}
-        sx={{
-          alignItems: 'flex-end',
-          mt: 2,
-        }}
-      >
+      <Grid container spacing={4} sx={bookShelvesStyles.bookGridContainer}>
         {sortedBooks.map((book) => (
           <Grid
             key={book.itemId}
             size={
-              viewMode === 'grid' ? { xs: 6, sm: 3, md: 2, lg: 2, xl: 1.5 } : 12
+              viewMode === 'grid' ? { xs: 6, sm: 3, md: 2, lg: 2, xl: 2 } : 12
             }
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              padding: '5px',
-            }}
+            sx={bookShelvesStyles.bookGridItem}
           >
             <ShelvesBookCard
               book={book}
@@ -130,7 +116,7 @@ const BookShelvesPage = () => {
         handleDeleteBook={handleDeleteBook}
         book={selectedBook!}
       />
-    </Box>
+    </Container>
   );
 };
 
