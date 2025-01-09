@@ -1,4 +1,4 @@
-export const styles = {
+export const bookDetailDialogStyles = {
   bookPreview: {
     width: '100%',
     height: '120px',
