@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -115,51 +115,9 @@ const AddToLibraryModal = ({
     }
   };
 
-  useEffect(() => {
-    let previouslyFocusedElement = document.activeElement as HTMLElement;
-
-    if (open) {
-      // 현재 포커스된 요소가 HTMLElement인지 확인 후 저장
-      if (document.activeElement instanceof HTMLElement) {
-        previouslyFocusedElement = document.activeElement;
-      }
-
-      // 다이얼로그 내부의 첫 번째 포커스 가능한 요소로 이동
-      const firstFocusableElement = document.querySelector(
-        '.MuiDialog-container button, .MuiDialog-container input',
-      ) as HTMLElement | null;
-
-      if (firstFocusableElement) {
-        firstFocusableElement.focus();
-      }
-    } else if (previouslyFocusedElement) {
-      // 다이얼로그 닫힐 때 이전 포커스된 요소로 복원
-      previouslyFocusedElement.focus();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const appContainer = document.querySelector('.app-container');
-    const dialogRoot = document.getElementById('root');
-
-    if (open) {
-      if (appContainer && dialogRoot) {
-        appContainer.setAttribute('aria-hidden', 'true');
-        dialogRoot.removeAttribute('aria-hidden'); // 다이얼로그 활성화
-      }
-    } else if (appContainer) {
-      appContainer.removeAttribute('aria-hidden');
-    }
-
-    return () => {
-      if (appContainer) {
-        appContainer.removeAttribute('aria-hidden');
-      }
-    };
-  }, [open]);
-
   return (
     <Dialog
+      closeAfterTransition={false}
       container={document.getElementById('root')}
       open={open}
       onClose={onClose}

@@ -78,6 +78,7 @@ const HybridDialog = ({
       onClose={handleClose}
       closeAfterTransition={false}
       fullScreen={fullScreen}
+      aria-hidden="false"
       sx={{
         '& .MuiDialog-paper': {
           borderRadius: fullScreen ? '0px' : '10px',
