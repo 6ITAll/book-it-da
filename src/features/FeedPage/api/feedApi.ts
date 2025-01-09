@@ -8,6 +8,158 @@ import {
 import { RootState } from '@store/index';
 import { PostType } from '@shared/types/type';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Feed
+ *   description: Feed management
+ */
+
+/**
+ * @swagger
+ * /api/posts:
+ *   get:
+ *     summary: Get posts
+ *     tags: [Feed]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Page number
+ *       - in: query
+ *         name: postType
+ *         schema:
+ *           type: string
+ *           enum: [한줄평, 포스팅, 선택안함]
+ *         description: Type of post
+ *       - in: query
+ *         name: feedType
+ *         schema:
+ *           type: string
+ *           enum: [추천, 팔로워, 팔로잉]
+ *         required: true
+ *         description: Type of feed
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Number of posts per page
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PostsResponse'
+ */
+
+/**
+ * @swagger
+ * /api/follow:
+ *   post:
+ *     summary: Toggle follow status
+ *     tags: [Feed]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FollowRequest'
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ */
+
+/**
+ * @swagger
+ * /api/like:
+ *   post:
+ *     summary: Toggle like status
+ *     tags: [Feed]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LikeRequest'
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     PostsResponse:
+ *       type: object
+ *       properties:
+ *         posts:
+ *           type: array
+ *           items:
+ *             oneOf:
+ *               - $ref: '#/components/schemas/OneLinePost'
+ *               - $ref: '#/components/schemas/Posting'
+ *         hasMore:
+ *           type: boolean
+ *         totalCount:
+ *           type: integer
+ *     FollowRequest:
+ *       type: object
+ *       properties:
+ *         userId:
+ *           type: integer
+ *         isFollowing:
+ *           type: boolean
+ *     LikeRequest:
+ *       type: object
+ *       properties:
+ *         postId:
+ *           type: integer
+ *         isLiked:
+ *           type: boolean
+ *     OneLinePost:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         postType:
+ *           type: string
+ *           enum: [한줄평]
+ *         review:
+ *           type: string
+ *         rating:
+ *           type: number
+ *     Posting:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         postType:
+ *           type: string
+ *           enum: [포스팅]
+ *         title:
+ *           type: string
+ *         content:
+ *           type: string
+ */
+
 const postTypes = ['한줄평', '포스팅', '선택안함'] as const;
 const feedTypes = ['추천', '팔로워', '팔로잉'] as const;
 

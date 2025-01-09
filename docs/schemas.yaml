@@ -1,0 +1,117 @@
+components:
+  schemas:
+    PostsResponse:
+      type: object
+      properties:
+        posts:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/OneLinePost'
+              - $ref: '#/components/schemas/Posting'
+        hasMore:
+          type: boolean
+        totalCount:
+          type: integer
+
+    OneLinePost:
+      type: object
+      properties:
+        id:
+          type: integer
+        postType:
+          type: string
+          enum: [한줄평]
+        review:
+          type: string
+        rating:
+          type: number
+        createdAt:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        book:
+          $ref: '#/components/schemas/Book'
+        likeCount:
+          type: integer
+        isLiked:
+          type: boolean
+
+    Posting:
+      type: object
+      properties:
+        id:
+          type: integer
+        postType:
+          type: string
+          enum: [포스팅]
+        title:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        book:
+          $ref: '#/components/schemas/Book'
+        likeCount:
+          type: integer
+        isLiked:
+          type: boolean
+
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+        userName:
+          type: string
+        avatarUrl:
+          type: string
+        isFollowing:
+          type: boolean
+        isFollower:
+          type: boolean
+
+    Book:
+      type: object
+      properties:
+        bookTitle:
+          type: string
+        author:
+          type: string
+        imageUrl:
+          type: string
+        itemId:
+          type: integer
+
+    FollowRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+        isFollowing:
+          type: boolean
+
+    LikeRequest:
+      type: object
+      properties:
+        postId:
+          type: integer
+        isLiked:
+          type: boolean
+
+    GetPostsParams:
+      type: object
+      properties:
+        page:
+          type: integer
+        postType:
+          type: string
+          enum: [한줄평, 포스팅, 선택안함]
+        feedType:
+          type: string
+          enum: [추천, 팔로워, 팔로잉]
+        limit:
+          type: integer
