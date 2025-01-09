@@ -8,7 +8,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import BookIcon from '@mui/icons-material/Book';
 import EditIcon from '@mui/icons-material/Edit';
-import { styles } from './BookDetailDialog.styles';
+import { bookDetailDialogStyles } from './BookDetailDialog.styles';
 import ReadingStatus from './BookReadingStatus';
 import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
 import { ReadingStatusType } from '@shared/types/type';
@@ -89,22 +89,22 @@ const BookShelvesDetailDialog = ({
 
   const contentNode = (
     <Stack sx={{ width: '100%', boxSizing: 'border-box' }}>
-      <Box sx={styles.bookPreview}>
+      <Box sx={bookDetailDialogStyles.bookPreview}>
         {book && (
           <CommonBookCard
             image={book.imageUrl}
             title={book.bookTitle}
             author={book.author}
-            sx={styles.bookCard}
+            sx={bookDetailDialogStyles.bookCard}
           />
         )}
       </Box>
 
-      <Stack sx={styles.mainButtonStack}>
+      <Stack sx={bookDetailDialogStyles.mainButtonStack}>
         <Button
           variant="outlined"
           startIcon={<BookIcon />}
-          sx={styles.mainButton}
+          sx={bookDetailDialogStyles.mainButton}
           onClick={() => navigateToBookDetailPage(navigate, book.itemId)}
         >
           책 정보
@@ -112,7 +112,7 @@ const BookShelvesDetailDialog = ({
         <Button
           variant="outlined"
           startIcon={<EditIcon />}
-          sx={styles.mainButton}
+          sx={bookDetailDialogStyles.mainButton}
           onClick={handleWriteClick}
         >
           글쓰기
@@ -120,7 +120,7 @@ const BookShelvesDetailDialog = ({
         <Button
           variant="outlined"
           startIcon={<ShareIcon />}
-          sx={styles.mainButton}
+          sx={bookDetailDialogStyles.mainButton}
           onClick={handleShareClick}
         >
           공유하기
@@ -134,7 +134,7 @@ const BookShelvesDetailDialog = ({
         <Button
           fullWidth
           startIcon={<BookmarkBorderIcon />}
-          sx={styles.subButtons}
+          sx={bookDetailDialogStyles.subButtons}
           onClick={handleAddToLibrary}
         >
           책장에 담기
@@ -144,7 +144,7 @@ const BookShelvesDetailDialog = ({
           color="error"
           startIcon={<DeleteOutlineIcon />}
           sx={{
-            ...styles.subButtons,
+            ...bookDetailDialogStyles.subButtons,
             color: 'error.main',
           }}
           onClick={() => {

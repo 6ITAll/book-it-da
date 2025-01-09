@@ -6,8 +6,7 @@ import {
   // Typography,
 } from '@mui/material';
 import { bookShelvesStyles } from './BookShelves.styles';
-
-export type SortOption = 'recent' | 'title' | 'author';
+import { SortOption } from './types';
 
 interface SortSelectorProps {
   sortOption: SortOption;

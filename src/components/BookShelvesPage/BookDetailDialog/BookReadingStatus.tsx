@@ -10,7 +10,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DoneIcon from '@mui/icons-material/Done';
 import Zoom from '@mui/material/Zoom';
-import { styles } from './BookDetailDialog.styles';
+import { bookDetailDialogStyles } from './BookDetailDialog.styles';
 import { ReadingStatusType } from '@shared/types/type';
 
 interface ReadingStatusToggleProps {
@@ -26,7 +26,7 @@ const ReadingStatus = ({
   handleReadingStatus,
 }: ReadingStatusToggleProps) => {
   return (
-    <Box sx={styles.readingStatusBox}>
+    <Box sx={bookDetailDialogStyles.readingStatusBox}>
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: '7px' }}>
         <AutoStoriesIcon fontSize="small" />
         <Typography sx={{ fontSize: '14px' }}>독서 상태</Typography>
@@ -36,7 +36,7 @@ const ReadingStatus = ({
         exclusive
         onChange={handleReadingStatus}
         aria-label="독서 상태"
-        sx={styles.readingStatus}
+        sx={bookDetailDialogStyles.readingStatus}
       >
         <Tooltip
           title="읽고 싶은 책"
