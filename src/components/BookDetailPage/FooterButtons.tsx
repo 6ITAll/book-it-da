@@ -1,6 +1,7 @@
 import { Stack, Button } from '@mui/material';
 import { useState } from 'react';
 import AddToLibraryModal from './AddToLibraryDialog';
+import { bookDetailStyles } from './BookDetail.styles';
 interface FooterButtonsProps {
   itemId: number;
   title: string;
@@ -28,16 +29,7 @@ const FooterButtons = ({
 
   return (
     <Stack direction="row" height="15%" borderTop="1px solid #e7e8e9">
-      <Button
-        onClick={handleGoToBuy}
-        sx={{
-          flex: 1,
-          backgroundColor: '#333',
-          color: '#fff',
-          borderRadius: '0 0 0 8px',
-          '&:hover': { backgroundColor: '#444' },
-        }}
-      >
+      <Button onClick={handleGoToBuy} sx={bookDetailStyles.goToBuyButton}>
         사러 가기
       </Button>
       <Button
