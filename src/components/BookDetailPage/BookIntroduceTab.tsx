@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import GenderAgeChart from '@components/BookDetailPage/GenderAgeChart';
 import GenderAgeSummary from '@components/BookDetailPage/GenderAgeSummary';
 import { useGetGenderAgeQuery } from '@features/BookDetailPage/api/genderAgeApi';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 interface BookIntroduceTabProps {
   itemId: number;
   description: string;

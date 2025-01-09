@@ -5,7 +5,7 @@ import { useState } from 'react';
 import URLShareDialog from '@components/commons/URLShareDialog';
 import { useNavigate } from 'react-router-dom';
 import { Book } from '@shared/types/type';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface ActionButtonsProps {
   book: Book;

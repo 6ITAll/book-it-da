@@ -18,7 +18,7 @@ import {
   useAddBookshelfMutation,
 } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { ResponseBookshelf } from '@components/BookDetailPage/types';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 const getUserId = (): string | null => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') || '[]');

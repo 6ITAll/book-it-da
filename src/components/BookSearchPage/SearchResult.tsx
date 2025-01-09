@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import SortSelector from '@components/BookSearchPage/SortSelector';
 import Pagination from '@components/BookSearchPage/Pagination';
-import SearchBookCard from './SearchBookCard';
+import SearchBookCard from '@components/BookSearchPage/SearchBookCard';
 import { SortOption } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
