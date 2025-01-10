@@ -4,11 +4,12 @@ import { Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { follows } from 'src/mocks/handlers/follow';
+import { useGetKakaoUserInfoQuery } from '@features/SNSLogin/api/Kakaoapi';
 
 interface UserInfo {
   userId: string;
   name: string;
-  avartarUrl: string;
+  avatarUrl: string;
   about?: string;
   userStats?: Array<{ count: number; label: string; isAction?: boolean }>;
 }
@@ -16,16 +17,22 @@ interface UserInfo {
 const MyPage = (): JSX.Element => {
   const { userId: urlUserId } = useParams<{ userId: string }>();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [kakaoAccessToken, setKakaoAccessToken] = useState<string | null>(null);
+
+  const { data: kakaoUserInfo, error: kakaoError } = useGetKakaoUserInfoQuery(
+    kakaoAccessToken ?? '',
+    {
+      skip: !kakaoAccessToken,
+    },
+  );
 
   useEffect(() => {
-    //url로 userId 받기
     const fetchUserInfo = () => {
-      if (urlUserId) {
-        const followUser = follows.find((user) => user.userId === urlUserId);
-        if (followUser) {
-          setUserInfo(followUser);
-          return;
-        }
+      // 카카오 로그인(로컬스토리지)
+      const storedKakaoAccessToken = localStorage.getItem('kakaoAccessToken');
+      if (storedKakaoAccessToken) {
+        setKakaoAccessToken(storedKakaoAccessToken);
+        return;
       }
 
       // 일반 로그인
@@ -38,16 +45,13 @@ const MyPage = (): JSX.Element => {
         }
       }
 
-      // 카카오 로그인
-      const kakaoUserInfo = localStorage.getItem('kakaoUserInfo');
-      if (kakaoUserInfo) {
-        const kakaoUser = JSON.parse(kakaoUserInfo);
-        setUserInfo({
-          userId: kakaoUser.id.toString(),
-          name: kakaoUser.properties.nickname,
-          avartarUrl: kakaoUser.properties.profile_image,
-        });
-        return;
+      // 팔로우 사용자 정보 확인
+      if (urlUserId) {
+        const followUser = follows.find((user) => user.userId === urlUserId);
+        if (followUser) {
+          setUserInfo(followUser);
+          return;
+        }
       }
 
       setUserInfo(null);
@@ -55,6 +59,20 @@ const MyPage = (): JSX.Element => {
 
     fetchUserInfo();
   }, [urlUserId]);
+
+  useEffect(() => {
+    //실제 카카오 api
+    if (kakaoUserInfo) {
+      setUserInfo({
+        userId: kakaoUserInfo.userId.toString(),
+        name: kakaoUserInfo.properties.userName,
+        avatarUrl: kakaoUserInfo.properties.avatarUrl,
+      });
+    }
+    if (kakaoError) {
+      console.error('Kakao User Info Error:', kakaoError);
+    }
+  }, [kakaoUserInfo, kakaoError]);
 
   if (!userInfo) {
     return (
