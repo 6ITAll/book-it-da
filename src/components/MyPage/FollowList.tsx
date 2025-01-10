@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   List,
   ListItem,
@@ -8,84 +9,72 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
+import { useDeleteFollowMutation } from '@features/MyPage/api/followApi';
 
-const FollowList = () => {
-  /* TODO API 연동 필요 */
-  const users = [
-    {
-      id: 1,
-      userId: 'kim',
-      name: '김독서',
-      avartarUrl: '',
-      about: '책을 사랑하는 독서가',
-      userStats: [
-        { count: 286, label: '피드' },
-        { count: 842, label: '팔로워', isAction: true },
-        { count: 267, label: '팔로잉', isAction: true },
-      ],
-    },
-    {
-      id: 2,
-      userId: 'lee',
-      name: '이독서',
-      avartarUrl: '',
-      about: '책을 사랑하는 독서가',
-      userStats: [
-        { count: 286, label: '피드' },
-        { count: 842, label: '팔로워', isAction: true },
-        { count: 267, label: '팔로잉', isAction: true },
-      ],
-    },
-    {
-      id: 3,
-      userId: 'jung',
-      name: '정독서',
-      avartarUrl: '',
-      about: '책을 사랑하는 독서가',
-      userStats: [
-        { count: 286, label: '피드' },
-        { count: 842, label: '팔로워', isAction: true },
-        { count: 267, label: '팔로잉', isAction: true },
-      ],
-    },
-  ];
+interface User {
+  userId: string;
+  name: string;
+  avartarUrl: string;
+}
 
+interface FollowListProps {
+  setOpen: (open: boolean) => void;
+}
+
+const FollowList = ({ setOpen }: FollowListProps) => {
+  const [deleteFollow] = useDeleteFollowMutation();
   const navigate = useNavigate();
 
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchFollows = async () => {
+      const response = await fetch('/api/follows');
+      const data: User[] = await response.json();
+      setUsers(data);
+    };
+
+    fetchFollows();
+  }, []);
+
   const handleUserClick = (userId: string) => {
-    navigate(userId);
+    navigate(`/${userId}`);
+    setOpen(false);
   };
 
-  const handleDeleteIconClick = () => {
-    /* TODO 삭제 API 연동 필요 */
+  const handleDeleteIconClick = async (userId: string) => {
+    try {
+      await deleteFollow(userId).unwrap();
+      setUsers(users.filter((user) => user.userId !== userId));
+    } catch (error) {
+      console.error('Failed to delete follow:', error);
+    }
   };
 
   return (
     <List sx={{ gap: 2 }}>
-      {users.map(({ id, userId, name, avartarUrl }) => (
+      {users.map(({ userId, name, avartarUrl }) => (
         <ListItem
-          key={id}
+          key={userId}
           secondaryAction={
             <IconButton
               edge="end"
               aria-label="delete"
-              onClick={handleDeleteIconClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteIconClick(userId);
+              }}
             >
               <DeleteIcon />
             </IconButton>
           }
+          onClick={() => handleUserClick(userId)}
+          sx={{ cursor: 'pointer' }}
         >
-          <ListItemAvatar
-            onClick={() => handleUserClick(userId)}
-            sx={{ cursor: 'pointer' }}
-          >
+          <ListItemAvatar>
             <Avatar src={avartarUrl} />
           </ListItemAvatar>
-          <ListItemText
-            primary={name}
-            onClick={() => handleUserClick(userId)}
-            sx={{ cursor: 'pointer' }}
-          />
+          <ListItemText primary={name} />
         </ListItem>
       ))}
     </List>
