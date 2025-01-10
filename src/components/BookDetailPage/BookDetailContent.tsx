@@ -4,7 +4,7 @@ import BookIntroduceTab from '@components/BookDetailPage/BookIntroduceTab';
 import BookReviewTab from '@components/BookDetailPage/BookReviewTab';
 import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 import { useState } from 'react';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface BookDetailContentProps {
   itemId: number;

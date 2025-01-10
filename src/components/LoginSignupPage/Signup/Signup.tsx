@@ -1,9 +1,8 @@
 import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import {
-  Typography,
-  Button,
   TextField,
   Container,
   Box,
@@ -15,39 +14,9 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import PasswordInput from './PasswordInput';
-import { User } from '@features/user/types';
-
-const schema = yup.object().shape({
-  name: yup.string().required('이름을 입력해주세요'),
-  userId: yup
-    .string()
-    .required('아이디를 입력해주세요')
-    .min(4, '아이디는 최소 4자 이상이어야 합니다'),
-  phone: yup
-    .string()
-    .required('전화번호를 입력해주세요')
-    .matches(/^[0-9]{10,11}$/, '올바른 전화번호 형식이 아닙니다'),
-  password: yup
-    .string()
-    .required('비밀번호를 입력해주세요')
-    .min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
-  confirmPassword: yup
-    .string()
-    .required('비밀번호 확인을 입력해주세요')
-    .oneOf([yup.ref('password')], '비밀번호가 일치하지 않습니다'),
-  gender: yup.string().required('성별을 선택해주세요'),
-  age: yup
-    .number()
-    .typeError('나이를 입력해주세요')
-    .required('나이를 입력해주세요')
-    .positive('나이는 양수여야 합니다')
-    .integer('나이는 정수여야 합니다'),
-});
-
-interface SignupData extends Omit<User, 'avatarUrl'> {
-  confirmPassword: string;
-}
+import PasswordInput from '../PasswordInput';
+import { SignupData, schema } from '@features/SignupPage/type';
+import { StyledTitle, StyledSubmitButton } from './Signup.styles';
 
 const Signup = (): JSX.Element => {
   const {
@@ -62,6 +31,7 @@ const Signup = (): JSX.Element => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = (data: SignupData) => {
     const existingUserInfo = localStorage.getItem('userInfo');
@@ -100,7 +70,12 @@ const Signup = (): JSX.Element => {
     users.push(userInfo);
     localStorage.setItem('userInfo', JSON.stringify(users));
 
-    alert('회원가입에 성공했습니다!');
+    dispatch(
+      showSnackbar({
+        message: '회원가입에 성공했습니다!',
+        severity: 'success',
+      }),
+    );
     reset();
 
     navigate('/login');
@@ -108,9 +83,7 @@ const Signup = (): JSX.Element => {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
-        회원가입
-      </Typography>
+      <StyledTitle variant="h4">회원가입</StyledTitle>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="name"
@@ -225,9 +198,9 @@ const Signup = (): JSX.Element => {
             />
           )}
         />
-        <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+        <StyledSubmitButton type="submit" variant="contained" fullWidth>
           회원가입
-        </Button>
+        </StyledSubmitButton>
       </Box>
     </Container>
   );

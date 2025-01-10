@@ -1,4 +1,4 @@
-import Signup from '@components/LoginSignupPage/Signup';
+import Signup from '@components/LoginSignupPage/Signup/Signup';
 import { Stack } from '@mui/material';
 
 const SignupPage = (): JSX.Element => {
