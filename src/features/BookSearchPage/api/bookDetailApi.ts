@@ -4,7 +4,7 @@ import { BookDetailResponse } from '@features/BookSearchPage/types/types';
 
 export const bookDetailApi = createApi({
   reducerPath: 'bookDetailApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: aladinConfig.aladinBaseUrl }),
   endpoints: (builder) => ({
     fetchBookDetail: builder.query<BookDetailResponse, { itemId: number }>({
       query: ({ itemId }) => ({
