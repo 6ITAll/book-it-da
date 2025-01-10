@@ -12,6 +12,7 @@ import {
   useGetPostByIdQuery,
   useGetUserOtherPostsQuery,
 } from '@features/PostDetailPage/api/postingApi';
+import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
 
 const PostingDetailPage = () => {
   const { postingId } = useParams();
@@ -32,22 +33,7 @@ const PostingDetailPage = () => {
   if (!postingId) return <div>잘못된 접근입니다.</div>;
 
   return (
-    // 포스팅 상세 페이지에서는 기본 레이아웃 뺄 예정
-    <Container
-      maxWidth={false}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        minHeight: '100vh',
-        width: '100%',
-        padding: '0 !important',
-        margin: '0 !important',
-        backgroundColor: '#f0f0f0',
-        boxSizing: 'border-box',
-      }}
-    >
+    <Container maxWidth={false} sx={postingDetailStyles.container}>
       {/* 포스팅 헤더 */}
       <PostingHeader
         title={post.title}
@@ -60,22 +46,7 @@ const PostingDetailPage = () => {
         likeCount={post.likeCount}
       />
       {/* 포스팅 정보 */}
-      <Stack
-        sx={{
-          px: 4,
-          pt: 3,
-          width: {
-            xs: '100%',
-            md: '50%',
-          },
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#fafafa',
-          boxSizing: 'border-box',
-        }}
-      >
+      <Stack sx={postingDetailStyles.posting}>
         {/* 유저 정보 */}
         <PostingUserInfo
           user={post.user}
