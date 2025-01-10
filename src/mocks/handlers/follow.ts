@@ -4,7 +4,7 @@ interface User {
   id: number;
   userId: string;
   name: string;
-  avartarUrl: string;
+  avatarUrl: string;
   about?: string;
   userStats?: Array<{ count: number; label: string; isAction?: boolean }>;
 }
@@ -15,7 +15,7 @@ export const followsData: { follows: User[] } = {
       id: 1,
       userId: 'kim',
       name: '김독서',
-      avartarUrl: '',
+      avatarUrl: '',
       about: '책을 사랑하는 독서가',
       userStats: [
         { count: 286, label: '피드' },
@@ -27,7 +27,7 @@ export const followsData: { follows: User[] } = {
       id: 2,
       userId: 'lee',
       name: '이독서',
-      avartarUrl: '',
+      avatarUrl: '',
       about: '책을 사랑하는 독서가',
       userStats: [
         { count: 286, label: '피드' },
@@ -39,7 +39,7 @@ export const followsData: { follows: User[] } = {
       id: 3,
       userId: 'jung',
       name: '정독서',
-      avartarUrl: '',
+      avatarUrl: '',
       about: '책을 사랑하는 독서가',
       userStats: [
         { count: 286, label: '피드' },
