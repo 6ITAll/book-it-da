@@ -12,66 +12,76 @@ import {
   PostingRequest,
   UpdatePostingRequest,
 } from '@features/PostingWritePage/types/types';
+import sample1 from '@assets/images/sample1.jpg';
+import sample2 from '@assets/images/sample2.jpg';
+import sample3 from '@assets/images/sample3.jpg';
+import sample4 from '@assets/images/sample4.jpg';
+import sample5 from '@assets/images/sample5.jpg';
+import sample6 from '@assets/images/sample6.jpg';
+import sample7 from '@assets/images/sample7.jpg';
+import sample8 from '@assets/images/sample8.jpg';
+import sample9 from '@assets/images/sample9.jpg';
+import sample10 from '@assets/images/sample10.jpg';
 
 export const bookData: Book[] = [
   {
     bookTitle: '금각사',
     author: '미시마 유키오',
-    imageUrl: '/src/assets/images/sample1.jpg',
+    imageUrl: sample1,
     itemId: 107413605,
   },
   {
     bookTitle: '여행의 이유',
     author: '김영하',
-    imageUrl: '/src/assets/images/sample2.jpg',
+    imageUrl: sample2,
     itemId: 337633173,
   },
   {
     bookTitle: '참을 수 없는 존재의 가벼움',
     author: '밀란 쿤데라',
-    imageUrl: '/src/assets/images/sample3.jpg',
+    imageUrl: sample3,
     itemId: 347978053,
   },
   {
     bookTitle: '눈먼 자들의 도시',
     author: '주제 사라마구',
-    imageUrl: '/src/assets/images/sample4.jpg',
+    imageUrl: sample4,
     itemId: 303079837,
   },
   {
     bookTitle: '밤의 사색',
     author: '헤르만 헤세',
-    imageUrl: '/src/assets/images/sample5.jpg',
+    imageUrl: sample5,
     itemId: 192003166,
   },
   {
     bookTitle: '보통의 존재',
     author: '이석원',
-    imageUrl: '/src/assets/images/sample6.jpg',
+    imageUrl: sample6,
     itemId: 4785218,
   },
   {
     bookTitle: '모국어는 차라리 침묵',
     author: '목정원',
-    imageUrl: '/src/assets/images/sample7.jpg',
+    imageUrl: sample7,
     itemId: 280910486,
   },
   {
     bookTitle: '구토',
     author: '장 폴 사르트르',
-    imageUrl: '/src/assets/images/sample8.jpg',
+    imageUrl: sample8,
     itemId: 33606,
   },
   {
     bookTitle: '시와 산책',
     author: '한정원',
-    imageUrl: '/src/assets/images/sample9.jpg',
+    imageUrl: sample9,
     itemId: 243698085,
   },
   {
     bookTitle: '봄눈',
     author: '미시마 유키오',
-    imageUrl: '/src/assets/images/sample10.jpg',
+    imageUrl: sample10,
     itemId: 251278195,
   },
 ];
