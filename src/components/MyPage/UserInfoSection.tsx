@@ -4,7 +4,7 @@ import UserInfoSummary from './UserInfoSummary';
 interface UserInfo {
   userId: string;
   name: string;
-  avartarUrl: string;
+  avatarUrl: string;
 }
 
 interface UserInfoSectionProps {
@@ -22,7 +22,7 @@ const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
     <Stack direction="row" alignItems="center" spacing={4} padding={4}>
       <Avatar
         alt={userInfo.name}
-        src={userInfo.avartarUrl}
+        src={userInfo.avatarUrl}
         sx={{ width: 100, height: 100 }}
       />
       <Stack spacing={1}>

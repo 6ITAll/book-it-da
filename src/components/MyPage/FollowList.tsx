@@ -14,7 +14,7 @@ import { useDeleteFollowMutation } from '@features/MyPage/api/followApi';
 interface User {
   userId: string;
   name: string;
-  avartarUrl: string;
+  avatarUrl: string;
 }
 
 interface FollowListProps {
@@ -53,7 +53,7 @@ const FollowList = ({ setOpen }: FollowListProps) => {
 
   return (
     <List sx={{ gap: 2 }}>
-      {users.map(({ userId, name, avartarUrl }) => (
+      {users.map(({ userId, name, avatarUrl }) => (
         <ListItem
           key={userId}
           secondaryAction={
@@ -72,7 +72,7 @@ const FollowList = ({ setOpen }: FollowListProps) => {
           sx={{ cursor: 'pointer' }}
         >
           <ListItemAvatar>
-            <Avatar src={avartarUrl} />
+            <Avatar src={avatarUrl} />
           </ListItemAvatar>
           <ListItemText primary={name} />
         </ListItem>
