@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import {
   Card,
   CardActionArea,
@@ -8,23 +9,34 @@ import {
 } from '@mui/material';
 import { Bookshelf } from '@shared/types/type';
 
-const BookshelfCard = ({ shelf }: { shelf: Bookshelf }) => {
+const BookshelfCard = ({
+  shelf,
+  userId,
+}: {
+  shelf: Bookshelf;
+  userId: string;
+}) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/my-page/${userId}/bookshelves/${shelf.id}`);
+  };
+
   return (
     <Card
       sx={{
         maxWidth: 200,
       }}
     >
-      <CardActionArea>
+      <CardActionArea onClick={handleClick}>
         <Grid2 container height={140} overflow="hidden">
           {shelf.books.map((book) => (
             <Grid2
-              key={book.itemId}
-              size={shelf.books.length === 1 ? 12 : 6} // 1권이면 전체, 그 외 반반
+              key={`${book.itemId}-${shelf.id}`}
+              size={shelf.books.length === 1 ? 12 : 6}
               height={shelf.books.length > 2 ? '50%' : '100%'}
             >
               <CardMedia
-                key={book.itemId}
                 component="img"
                 image={book.imageUrl}
                 alt={`${book.bookTitle} cover`}
