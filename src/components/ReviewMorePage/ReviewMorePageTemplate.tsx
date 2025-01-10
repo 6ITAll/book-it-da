@@ -3,7 +3,7 @@ import { Box, Typography, Stack } from '@mui/material';
 import StarRating from '@components/commons/StarRating';
 import ReviewSortOptions from '@components/ReviewMorePage/ReviewSortOptions';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
-import ReviewCard from '@components/commons/DetailPageReviewCard';
+import ReviewCard from '@components/commons/ReviewCard';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
 import { Book, Review } from '@shared/types/type';
 

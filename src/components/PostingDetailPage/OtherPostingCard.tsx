@@ -1,4 +1,4 @@
-import PostCard from '@components/commons/DetailPagePostCard';
+import PostCard from '@components/commons/PostCard';
 
 interface OtherPostingCardProps {
   post: {

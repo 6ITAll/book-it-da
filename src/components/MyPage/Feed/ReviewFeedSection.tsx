@@ -1,4 +1,4 @@
-import ReviewCard from '@components/commons/DetailPageReviewCard';
+import ReviewCard from '@components/commons/ReviewCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Review } from '@shared/types/type';
