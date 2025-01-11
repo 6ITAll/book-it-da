@@ -5,7 +5,6 @@ const styles = {
     boxSizing: 'border-box',
     width: '100%',
     aspectRatio: 'auto',
-    bgcolor: '#fafafa',
     borderRadius: '8px',
     transition: 'all 0.3s ease-in-out',
     '&:hover': {
@@ -25,15 +24,12 @@ const styles = {
       alignSelf: 'center',
     },
   },
-  followButton: (isFollowing: boolean) => ({
-    color: isFollowing ? 'black' : 'primary',
-    borderColor: isFollowing ? 'black' : 'primary',
+  followButton: {
     mb: '0',
-  }),
+  },
   postInfoBox: {
     display: 'flex',
     fontSize: '11px',
-    color: '#666',
     gap: '5px',
   },
   cardMediaBox: {
@@ -74,13 +70,10 @@ const styles = {
   cardContent: {
     width: '100%',
     maxWidth: '100%',
-    overflow: 'hidden',
     padding: '1rem 1rem 0.5rem 1rem',
     height: '20%',
     borderRadius: '8px 8px 0px 0px',
-    marginTop: '-15px',
     position: 'relative',
-    backgroundColor: '#fafafa',
     zIndex: 2,
     boxSizing: 'border-box',
   },
@@ -95,7 +88,6 @@ const styles = {
   cardTitle: {
     fontSize: '18px',
     fontWeight: '700',
-    color: '#333',
     width: '100%',
     textAlign: 'center',
     display: '-webkit-box',
@@ -115,7 +107,6 @@ const styles = {
     padding: '1rem 0',
     width: '100%',
     height: '100%',
-    color: '#333',
     boxSizing: 'border-box',
     wordBreak: 'break-word',
     whiteSpace: 'pre-wrap',
@@ -123,7 +114,6 @@ const styles = {
   postingDescription: {
     height: 'auto',
     padding: '0.25rem 0.5rem',
-    color: '#333',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     display: '-webkit-box',
@@ -148,11 +138,8 @@ const styles = {
     borderRadius: isLeft ? '0px 0px 0px 8px' : '0px 0px 8px 0px',
     borderRight: isLeft ? '1px solid #ddd' : 'none',
     bgcolor: 'transparent',
-    color: '#333',
     transition: 'background-color 0.3s ease',
-    '&:hover': {
-      bgcolor: '#f0f0f0',
-    },
+    '&:hover': {},
   }),
 };
 

@@ -99,6 +99,8 @@ const Main = (): JSX.Element => {
     <Container
       maxWidth={false}
       sx={{
+        backgroundColor: 'background.default', // 다크/라이트 모드 배경색 적용
+        color: 'text.primary', // 텍스트 색상 적용
         width: '100%',
         padding: '1rem',
         margin: '0 auto',
