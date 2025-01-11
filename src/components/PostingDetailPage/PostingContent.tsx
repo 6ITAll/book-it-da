@@ -4,7 +4,7 @@ import CommonBookCard from '@components/commons/CommonBookCard';
 import { useNavigate } from 'react-router-dom';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { Book } from '@shared/types/type';
-import { postingDetailStyles } from './postingDetail.styles';
+import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
 
 interface PostingContentProps {
   content: string;

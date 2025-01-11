@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { formatCount } from '@shared/utils/formatCount';
 import { useToggleLikeMutation } from '@features/PostDetailPage/api/postingApi';
 import { useNavigate } from 'react-router-dom';
-import { postingDetailStyles } from './postingDetail.styles';
+import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
 
 interface PostingHeaderProps {
   title: string;

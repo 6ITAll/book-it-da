@@ -5,7 +5,7 @@ import {
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
 import { User } from '@shared/types/type';
 import { useParams } from 'react-router-dom';
-import { postingDetailStyles } from './PostingDetail.styles';
+import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
 
 interface PostingUserInfoProps {
   user: User;

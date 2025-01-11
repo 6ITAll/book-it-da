@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import OtherPostingCard from './OtherPostingCard';
 import { OtherPost } from '@features/PostDetailPage/types/types';
-import { postingDetailStyles } from './postingDetail.styles';
+import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
 
 interface OtherPostingGridProps {
   title: string;
