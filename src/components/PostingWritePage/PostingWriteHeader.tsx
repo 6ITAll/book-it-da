@@ -7,8 +7,8 @@ import {
 } from '@features/PostingWritePage/api/postingWriteApi';
 import { Book, User } from '@shared/types/type';
 import { navigateBack } from '@shared/utils/navigation';
-import { TEMP_SAVE_STORAGE_KEY } from 'src/constants/postingwrite';
 import { postingWriteStyles } from './PostingWrite.styles';
+import { TEMP_SAVE_STORAGE_KEY } from '@constants/postingWrite';
 
 interface PostingWriteHeaderProps {
   title: string;
@@ -43,6 +43,7 @@ const PostingWriteHeader = ({
       book: selectedBook,
       title,
       content,
+      user,
     };
 
     try {
