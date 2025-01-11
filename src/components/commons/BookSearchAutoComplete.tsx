@@ -50,7 +50,10 @@ const BookSearchAutoComplete = ({
         setAllItems(searchResults.item);
         setPage(2);
       } else {
-        setAllItems((prev) => [...prev, ...searchResults.item]);
+        setAllItems((prev: BookResponse['item']) => [
+          ...prev,
+          ...searchResults.item,
+        ]);
       }
     }
     // 의존성 배열 경고 메시지 무시

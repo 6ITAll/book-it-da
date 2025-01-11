@@ -6,6 +6,8 @@ import {
   RatingInfoResponse,
 } from '@features/BookSearchPage/types/types';
 
+export type { BookResponse };
+
 export const bookSearchApi = createApi({
   reducerPath: 'bookSearchApi',
   baseQuery: fetchBaseQuery({
