@@ -1,5 +1,5 @@
 import { Box, Popover } from '@mui/material';
-import { styles } from './PostingWrite.styles';
+import { postingWriteStyles } from './PostingWrite.styles';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
 
@@ -32,7 +32,7 @@ const BookSearchPopover = ({
       horizontal: 'right',
     }}
   >
-    <Box sx={styles.bookSearchBox}>
+    <Box sx={postingWriteStyles.bookSearchBox}>
       <BookSearchAutoComplete
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
