@@ -34,6 +34,11 @@ export interface Post {
   book: Book;
   likeCount: number;
   isLiked: boolean;
+  postType: PostType;
+  title: string;
+  description: string;
+  userName: string;
+  avatar: string;
 }
 
 // 한줄평 포스트
@@ -46,10 +51,10 @@ export interface OneLinePost extends Post {
 // 일반 포스팅
 export interface Posting extends Post {
   postType: '포스팅';
-  title: string;
   content: string;
 }
 
+// 리뷰 데이터 타입
 export interface Review {
   username: string;
   date: string;
@@ -66,13 +71,6 @@ export interface Book {
   itemId: number;
 }
 
-export interface Bookshelf {
-  id: number;
-  name: string; // 책장 이름
-  bookCount: number; // 책 개수
-  books: Book[]; // 책 목록
-}
-
 // 저장된 책 interface
 export interface SavedBook extends Book {
   bookshelfId: number; // 책장 ID
@@ -87,15 +85,7 @@ export interface Bookshelf {
   createdAt: string;
   updatedAt: string;
   bookCount: number; // 책장에 저장된 책 수
-}
-
-// 리뷰 데이터 타입
-export interface Review {
-  username: string;
-  date: string;
-  content: string;
-  likes: number;
-  rating: number;
+  books: SavedBook[]; // 첵징에 자징된 책들 배열
 }
 
 // 책 상세페이지 성별 및 연령 데이터 타입
