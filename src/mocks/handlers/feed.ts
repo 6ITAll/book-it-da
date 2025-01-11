@@ -109,6 +109,11 @@ const generateMockPosts = (): (OneLinePost | Posting)[] => {
       },
       likeCount: Math.floor(Math.random() * 1000),
       isLiked: false,
+      postType: '선택안함',
+      title: '',
+      description: '',
+      userName: `user${userId}`,
+      avatar: `https://mui.com/static/images/avatar/${Math.floor(Math.random() * 3) + 1}.jpg`,
     };
 
     if (Math.random() < 0.5) {
@@ -241,6 +246,10 @@ export const feedHandlers = [
       isLiked: false,
       review,
       rating,
+      title: `${book.bookTitle} 한줄평`,
+      description: review.substring(0, 50),
+      userName: 'currentUser',
+      avatar: 'https://mui.com/static/images/avatar/1.jpg',
     };
 
     mockPosts.unshift(newPost);
@@ -271,6 +280,9 @@ export const feedHandlers = [
       isLiked: false,
       title,
       content,
+      description: content.substring(0, 50),
+      userName: 'currentUser',
+      avatar: 'https://mui.com/static/images/avatar/1.jpg',
     };
 
     mockPosts.unshift(newPost);
