@@ -1,6 +1,7 @@
-import { SortOption } from '@components/BookShelvesPage/SortSelector';
-import { ViewMode } from '@components/BookShelvesPage/ViewToggle';
 import { ReadingStatusType, SavedBook } from '@shared/types/type';
+
+export type SortOption = 'recent' | 'title' | 'author';
+export type ViewMode = 'grid' | 'list';
 
 export interface BookInfo {
   itemId: number;

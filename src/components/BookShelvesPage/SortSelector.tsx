@@ -6,7 +6,7 @@ import {
   // Typography,
 } from '@mui/material';
 import { bookShelvesStyles } from './BookShelves.styles';
-import { SortOption } from './types';
+import { SortOption } from '@features/BookShelvesPage/types/types';
 
 interface SortSelectorProps {
   sortOption: SortOption;
