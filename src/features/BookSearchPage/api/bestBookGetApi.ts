@@ -5,7 +5,7 @@ import { BestBookResponse } from '@features/BookSearchPage/types/types';
 export const bestBookGetApi = createApi({
   reducerPath: 'bestBookGetApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: aladinConfig.aladinBaseUrl,
+    baseUrl: '/api',
   }),
   endpoints: (builder) => ({
     getBestBooks: builder.query<BestBookResponse, void>({
