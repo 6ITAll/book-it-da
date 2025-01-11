@@ -1,8 +1,10 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import BookInfoBox from './BookInfoBox';
 import ActionButtons from './ActionButtons';
 import FooterButtons from './FooterButtons';
 import { useFetchLibraryCountQuery } from '@features/BookDetailPage/api/bookUserShelfCountApi';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
+
 interface RightBookBoxProps {
   itemId: number;
   title: string;
@@ -29,78 +31,32 @@ const RightBookBoxDetailBox = ({
   ratingCount,
 }: RightBookBoxProps): JSX.Element => {
   const { data } = useFetchLibraryCountQuery(itemId);
-  console.log(data);
   return (
-    <Box
-      sx={{
-        flex: 2,
-        display: 'flex',
-        alignContent: 'space-between',
-        border: '1px solid #e7e8e9',
-        width: '100%',
-        flexDirection: 'column',
-        alignSelf: 'stretch',
-        borderRadius: '8px',
-        justifyContent: 'space-between',
-      }}
-    >
+    <Box sx={bookDetailStyles.rightBox}>
       {/* 책 정보와 액션 버튼 */}
-      <Box
-        sx={{
-          display: 'flex',
-          padding: '2rem',
-          height: '85%',
-          width: '100%',
-          boxSizing: 'border-box',
-        }}
-      >
-        <Stack
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
-          <BookInfoBox
-            title={title}
-            subTitle={subTitle}
-            author={author}
-            categoryName={categoryName}
-            pubDate={pubDate}
-            customerReviewRank={customerReviewRank}
-            ratingCount={ratingCount}
-          />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              borderTop: '1px solid #e7e8e9',
-              padding: '1rem 0 1rem 0',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+      <Box sx={bookDetailStyles.rightBoxInfoBox}>
+        <BookInfoBox
+          title={title}
+          subTitle={subTitle}
+          author={author}
+          categoryName={categoryName}
+          pubDate={pubDate}
+          customerReviewRank={customerReviewRank}
+          ratingCount={ratingCount}
+        />
+        <Box sx={bookDetailStyles.rightBoxBottom}>
+          <Typography variant="body2" color="text.secondary">
+            이 책이 담긴 서재 <strong>{data?.libraryCount || 0}명</strong>
+          </Typography>
+          <ActionButtons
+            book={{
+              bookTitle: title,
+              author: author,
+              imageUrl: imageUrl,
+              itemId: itemId,
             }}
-          >
-            <Typography
-              variant="body2"
-              sx={{
-                paddingTop: '0.5rem',
-                paddingBottom: '0.5rem',
-                color: 'text.secondary',
-              }}
-            >
-              이 책이 담긴 서재 <strong>{data?.libraryCount || 0}명</strong>
-            </Typography>
-            <ActionButtons
-              book={{
-                bookTitle: title,
-                author: author,
-                imageUrl: imageUrl,
-                itemId: itemId,
-              }}
-            />
-          </Box>
-        </Stack>
+          />
+        </Box>
       </Box>
       {/* 하단 버튼 */}
       <FooterButtons

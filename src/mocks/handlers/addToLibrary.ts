@@ -1,13 +1,13 @@
 import { http, HttpResponse } from 'msw';
 const mockAddToLibraryBookshelves: Array<{
   userId: string;
-  bookshelfId: number;
-  bookshelfName: string;
+  id: number;
+  name: string;
   books: AddBookPayload[];
 }> = [
-  { userId: 'test', bookshelfId: 1, bookshelfName: 'My Favorite', books: [] },
-  { userId: 'test', bookshelfId: 2, bookshelfName: 'test의 책장', books: [] },
-  { userId: 'test2', bookshelfId: 3, bookshelfName: '2024-12-22', books: [] },
+  { userId: 'test', id: 1, name: 'My Favorite', books: [] },
+  { userId: 'test', id: 2, name: 'test의 책장', books: [] },
+  { userId: 'test2', id: 3, name: '2024-12-22', books: [] },
 ];
 
 interface BookLibraryData {
@@ -23,8 +23,8 @@ const mockBookLibraryData: BookLibraryData[] = [
 
 interface Bookshelf {
   userId: string;
-  bookshelfId: number;
-  bookshelfName: string;
+  id: number;
+  name: string;
   books: AddBookPayload[];
 }
 
@@ -36,7 +36,7 @@ interface AddBookPayload {
 }
 
 interface AddBookshelfPayload {
-  bookshelfName: string;
+  name: string;
 }
 
 export const addToLibraryHandlers = [
@@ -51,17 +51,16 @@ export const addToLibraryHandlers = [
 
   // 책장에 책 추가
   http.post(
-    '/api/users/:userId/bookshelves/add-to-library/:bookshelfId/books',
+    '/api/users/:userId/bookshelves/add-to-library/:id/books',
     async ({ params, request }) => {
-      const { userId, bookshelfId } = params as {
+      const { userId, id } = params as {
         userId: string;
-        bookshelfId: string;
+        id: string;
       };
 
       const newBook = (await request.json()) as AddBookPayload;
       const targetBookshelf = mockAddToLibraryBookshelves.find(
-        (shelf) =>
-          shelf.userId === userId && shelf.bookshelfId === Number(bookshelfId),
+        (shelf) => shelf.userId === userId && shelf.id === Number(id),
       );
 
       if (targetBookshelf) {
@@ -84,17 +83,15 @@ export const addToLibraryHandlers = [
     '/api/users/:userId/bookshelves/add-to-library',
     async ({ params, request }) => {
       const { userId } = params as { userId: string };
-      const { bookshelfName } = (await request.json()) as AddBookshelfPayload;
+      const { name } = (await request.json()) as AddBookshelfPayload;
 
       const newBookshelfId =
-        Math.max(
-          ...mockAddToLibraryBookshelves.map((shelf) => shelf.bookshelfId),
-        ) + 1;
+        Math.max(...mockAddToLibraryBookshelves.map((shelf) => shelf.id)) + 1;
 
       const newBookshelf: Bookshelf = {
         userId,
-        bookshelfId: newBookshelfId,
-        bookshelfName,
+        id: newBookshelfId,
+        name,
         books: [],
       };
 

@@ -1,8 +1,9 @@
 import { Box } from '@mui/material';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface LeftBookDetailBoxProps {
-  cover?: string;
-  title?: string;
+  cover: string;
+  title: string;
 }
 
 const LeftBookDetailBox = ({
@@ -10,28 +11,12 @@ const LeftBookDetailBox = ({
   title,
 }: LeftBookDetailBoxProps): JSX.Element => {
   return (
-    <Box
-      sx={{
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: 'linear-gradient(145deg, #f0f0f0, #c8c8c8)', // 배경 효과
-        borderRadius: '12px',
-        height: { xs: '300px', md: '400px' }, // 반응형 높이
-        padding: '1rem',
-        boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <img
+    <Box sx={bookDetailStyles.leftBox}>
+      <Box
+        component="img"
         src={cover}
         alt={title || 'Book Cover'}
-        style={{
-          width: '80%',
-          height: '80%',
-          objectFit: 'contain',
-          borderRadius: '8px',
-        }}
+        sx={bookDetailStyles.imageStyle}
       />
     </Box>
   );

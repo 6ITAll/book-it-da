@@ -26,8 +26,9 @@ const styles = {
     },
   },
   followButton: (isFollowing: boolean) => ({
-    color: isFollowing ? 'black' : 'primary',
-    borderColor: isFollowing ? 'black' : 'primary',
+    color: '#fff',
+    backgroundColor: isFollowing ? '#333' : '#3983d3',
+    border: 'none',
     mb: '0',
   }),
   postInfoBox: {
