@@ -1,20 +1,15 @@
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+import YAML from 'yamljs';
 import swaggerJsdoc from 'swagger-jsdoc';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const swaggerDocument = YAML.load(resolve(__dirname, './docs/swagger.yaml'));
+
 const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Book-it-da API',
-      version: '1.0.0',
-      description: 'API documentation for Book-it-da project',
-    },
-    servers: [
-      {
-        url: 'http://localhost:5173',
-      },
-    ],
-  },
-  apis: ['./src/features/**/*.ts', './src/components/**/*.ts'],
+  definition: swaggerDocument,
+  apis: [],
 };
 
 const specs = swaggerJsdoc(options);

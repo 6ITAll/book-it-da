@@ -1,6 +1,8 @@
-import { Bookshelf } from '@features/BookDetailPage/types/types';
+import {
+  Bookshelf,
+  AddBookPayload,
+} from '@features/BookDetailPage/types/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AddBookPayload } from '@features/BookDetailPage/types/types';
 
 export const addToLibraryApi = createApi({
   reducerPath: 'addToLibraryApi',
