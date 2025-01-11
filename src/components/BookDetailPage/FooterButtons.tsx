@@ -1,8 +1,7 @@
 import { Stack, Button } from '@mui/material';
 import { useState } from 'react';
-import AddToLibraryModal from './AddToLibraryDialog'; // AddToLibraryModal 가져오기
-import { bookDetailStyles } from './BookDetail.styles';
-
+import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 interface FooterButtonsProps {
   itemId: number;
   title: string;

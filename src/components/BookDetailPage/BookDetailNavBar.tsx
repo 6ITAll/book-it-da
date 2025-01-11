@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface DetailsNavbarProps {
   onTabChange: (tabIndex: number) => void;

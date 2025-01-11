@@ -1,6 +1,6 @@
 import { TextField, InputAdornment, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { bookSearchBarStyles } from './BookSearch.style';
+import { bookSearchBarStyles } from '@components/BookSearchPage/BookSearch.style';
 
 interface BookSearchBarProps {
   value: string;

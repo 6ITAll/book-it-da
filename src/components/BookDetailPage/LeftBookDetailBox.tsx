@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface LeftBookDetailBoxProps {
   cover: string;

@@ -3,7 +3,7 @@ import BookInfoBox from './BookInfoBox';
 import ActionButtons from './ActionButtons';
 import FooterButtons from './FooterButtons';
 import { useFetchLibraryCountQuery } from '@features/BookDetailPage/api/bookUserShelfCountApi';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface RightBookBoxProps {
   itemId: number;

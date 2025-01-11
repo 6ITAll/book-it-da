@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import LeftBookDetailBox from '@components/BookDetailPage/LeftBookDetailBox';
 import RightBookDetailBox from '@components/BookDetailPage/RightBookDetailBox';
-import { bookDetailStyles } from './BookDetail.styles';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface BookDetailSectionProps {
   cover: string;

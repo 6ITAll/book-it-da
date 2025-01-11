@@ -14,11 +14,14 @@ import NonTitleDialog from '@components/commons/NonTitleDialog';
 interface URLShareDialogProps {
   open: boolean;
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
+  url?: string;
 }
 
-const URLShareDialog = ({ open, handleClose }: URLShareDialogProps) => {
+const URLShareDialog = ({ open, handleClose, url }: URLShareDialogProps) => {
   const [copied, setCopied] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const shareUrl = url || window.location.href;
 
   // 스낵바 X 누르면 꺼지도록
   const handleCloseSnackbar = (
@@ -34,7 +37,7 @@ const URLShareDialog = ({ open, handleClose }: URLShareDialogProps) => {
 
   const handleCopyClick = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setOpenSnackbar(true);
       setTimeout(() => setCopied(false), 2000);
@@ -61,7 +64,7 @@ const URLShareDialog = ({ open, handleClose }: URLShareDialogProps) => {
             flex: 1,
           }}
         >
-          {window.location.href}
+          {url}
         </Typography>
         <IconButton
           onClick={handleCopyClick}

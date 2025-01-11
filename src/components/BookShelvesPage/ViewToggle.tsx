@@ -1,7 +1,6 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { ViewModule, ViewList } from '@mui/icons-material';
-
-export type ViewMode = 'grid' | 'list';
+import { ViewMode } from './types';
 
 interface ViewToggleProps {
   viewMode: ViewMode;

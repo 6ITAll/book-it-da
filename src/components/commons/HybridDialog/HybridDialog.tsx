@@ -84,6 +84,7 @@ const HybridDialog = ({
           borderRadius: fullScreen ? '0px' : '10px',
         },
       }}
+      aria-label="hidden"
     >
       {title && (
         <DialogTitle>
