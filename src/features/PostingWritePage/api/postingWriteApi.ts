@@ -9,7 +9,7 @@ import { feedApi } from '@features/FeedPage/api/feedApi';
 export const postingWriteApi = createApi({
   reducerPath: 'postingWriteApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  tagTypes: ['Posts'] as const,
+  tagTypes: ['Posts', 'SavedPostings'] as const,
   endpoints: (builder) => ({
     // 포스팅 작성
     createPosting: builder.mutation<PostingResponse, PostingRequest>({
@@ -18,7 +18,7 @@ export const postingWriteApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [{ type: 'Posts' }],
+      invalidatesTags: [{ type: 'Posts' }, { type: 'SavedPostings' }],
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
@@ -45,8 +45,28 @@ export const postingWriteApi = createApi({
         }
       },
     }),
+    getSavedPostings: builder.query<PostingRequest[], void>({
+      query: () => 'postings/saved',
+      providesTags: ['SavedPostings'],
+    }),
+    savePosting: builder.mutation<PostingRequest, PostingRequest>({
+      query: (posting) => ({
+        url: 'postings/save',
+        method: 'POST',
+        body: posting,
+      }),
+      invalidatesTags: ['SavedPostings'],
+    }),
+    getSavedPosting: builder.query<PostingRequest, number>({
+      query: (index) => `postings/saved/${index}`,
+    }),
   }),
 });
 
-export const { useCreatePostingMutation, useUpdatePostingMutation } =
-  postingWriteApi;
+export const {
+  useCreatePostingMutation,
+  useUpdatePostingMutation,
+  useGetSavedPostingsQuery,
+  useSavePostingMutation,
+  useGetSavedPostingQuery,
+} = postingWriteApi;

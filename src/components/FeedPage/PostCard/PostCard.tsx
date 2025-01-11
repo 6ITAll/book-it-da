@@ -3,7 +3,7 @@ import { Book, PostType, User } from '@shared/types/type';
 import styles from './PostCard.styles';
 import PostCardContent from './PostCardContent';
 import BookImage from './PostCardImage';
-import PostCardHeader from './PostHeader';
+import PostCardHeader from './PostCardHeader';
 import PostCardFooter from './PostCardFooter';
 import { navigateToPostingDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
