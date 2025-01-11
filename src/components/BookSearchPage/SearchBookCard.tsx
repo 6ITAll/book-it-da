@@ -10,7 +10,6 @@ interface SearchBookCardProps {
   cover: string;
   customerReviewRank: number;
   priceStandard: number;
-  onClick: () => void;
 }
 
 const SearchBookCard = ({

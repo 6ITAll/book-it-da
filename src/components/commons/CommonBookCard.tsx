@@ -12,7 +12,7 @@ import PeopleIcon from '@mui/icons-material/People'; // 사람 아이콘 추가
 
 interface CommonBookCardProps {
   image: string; // 이미지
-  title?: string; // 제목
+  title: string; // 제목
   author?: string; // 저자
   customerReviewRank?: number; // 0~10점 값
   priceStandard?: number; // 정가 가격

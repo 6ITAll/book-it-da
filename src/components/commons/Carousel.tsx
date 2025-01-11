@@ -27,13 +27,13 @@ const Carousel = ({ settings, children }: CarouselProps): JSX.Element => {
     <Box
       sx={{
         width: '100%',
-        maxWidth: 900,
-        margin: '0 auto',
+        padding: '1rem',
+        boxSizing: 'border-box',
         '.slick-prev, .slick-next': {
           zIndex: 2,
           '&::before': {
             color: '#333',
-            fontSize: '30px',
+            fontSize: { xs: '16px', md: '24px' }, // 반응형 크기 설정
             opacity: 0.8,
             transition: 'color 0.3s ease',
           },

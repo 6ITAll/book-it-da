@@ -12,7 +12,13 @@ const LikedFeedTabPanel = ({ userId }: LikedFeedTabPanelProps): JSX.Element => {
   if (isLoading) return <Typography>로딩 중...</Typography>;
   if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;
 
-  return <>{feeds && <Feed posts={feeds.posts} reviews={feeds.reviews} />}</>;
+  return (
+    <>
+      {feeds && (
+        <Feed userId={userId} posts={feeds.posts} reviews={feeds.reviews} />
+      )}
+    </>
+  );
 };
 
 export default LikedFeedTabPanel;

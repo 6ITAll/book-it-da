@@ -7,105 +7,298 @@ const mockUser = {
   avatarUrl: 'https://github.com/publdaze.png',
 };
 
+const userPosts = [
+  {
+    itemId: '40869703',
+    title: '추천 도서 소개',
+    description: '제가 좋아하는 책을 소개합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar1.jpg',
+    createdAt: '2024-01-01T10:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '독서의 즐거움',
+    description: '독서를 통해 얻는 지식과 행복에 대해 이야기합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar2.jpg',
+    createdAt: '2024-01-02T11:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '2024년 독서 계획',
+    description: '올해는 이 책들과 함께 즐거운 독서를 해보려 합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar3.jpg',
+    createdAt: '2024-01-03T12:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '책으로 떠나는 여행',
+    description: '책에서 만나는 다양한 세계를 공유합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar4.jpg',
+    createdAt: '2023-12-31T15:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '추천 도서 목록',
+    description: '제가 추천하는 도서 목록을 확인해보세요!',
+    userName: '김구름',
+    avatar: '/path/to/avatar5.jpg',
+    createdAt: '2023-12-30T14:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '읽고 싶은 책',
+    description: '다음에 꼭 읽고 싶은 책들을 소개합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar6.jpg',
+    createdAt: '2023-12-29T13:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '고전 문학의 매력',
+    description: '고전 문학을 통해 느낄 수 있는 감동을 전합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar7.jpg',
+    createdAt: '2023-12-28T16:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '독서 방법 공유',
+    description: '효율적으로 책을 읽는 방법을 공유합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar8.jpg',
+    createdAt: '2023-12-27T17:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '독서 기록',
+    description: '제가 읽은 책에 대한 기록을 남깁니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar9.jpg',
+    createdAt: '2023-12-26T18:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '새로운 책 소개',
+    description: '최근에 구매한 책을 소개합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar10.jpg',
+    createdAt: '2023-12-25T19:00:00Z',
+  },
+  {
+    itemId: '278770576',
+    title: '새로운 책 소개',
+    description: '최근에 구매한 책을 소개합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar10.jpg',
+    createdAt: '2023-12-25T19:00:00Z',
+  },
+  {
+    itemId: '278770576',
+    title: '새로운 책 소개',
+    description: '최근에 구매한 책을 소개합니다.',
+    userName: '김구름',
+    avatar: '/path/to/avatar10.jpg',
+    createdAt: '2023-12-25T19:00:00Z',
+  },
+];
+
+const userReviews = [
+  {
+    username: '김독서',
+    date: '2024.08.01',
+    content: '새롭네요!',
+    likes: 1,
+    rating: 4, // 별점 추가
+  },
+  {
+    username: '김독서',
+    date: '2024.02.27',
+    content: '도슨트북 새롭고 재미있어요',
+    likes: 1,
+    rating: 5, // 별점 추가
+  },
+  {
+    username: '김독서',
+    date: '2024.10.16',
+    content: '책에 더 흥미를 갖게 도와주는 것 같아요',
+    likes: 1,
+    rating: 3, // 별점 추가
+  },
+];
+
+const likedPosts = [
+  {
+    itemId: '40869703',
+    title: '추천 도서 소개',
+    description: '제가 좋아하는 책을 소개합니다.',
+    userName: '독서연구소',
+    avatar: '/path/to/avatar1.jpg',
+    createdAt: '2024-01-01T10:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '독서의 즐거움',
+    description: '독서를 통해 얻는 지식과 행복에 대해 이야기합니다.',
+    userName: '책사랑',
+    avatar: '/path/to/avatar2.jpg',
+    createdAt: '2024-01-02T11:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '2024년 독서 계획',
+    description: '올해는 이 책들과 함께 즐거운 독서를 해보려 합니다.',
+    userName: '책벌레',
+    avatar: '/path/to/avatar3.jpg',
+    createdAt: '2024-01-03T12:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '책으로 떠나는 여행',
+    description: '책에서 만나는 다양한 세계를 공유합니다.',
+    userName: '책여행자',
+    avatar: '/path/to/avatar4.jpg',
+    createdAt: '2023-12-31T15:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '추천 도서 목록',
+    description: '제가 추천하는 도서 목록을 확인해보세요!',
+    userName: '추천왕',
+    avatar: '/path/to/avatar5.jpg',
+    createdAt: '2023-12-30T14:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '읽고 싶은 책',
+    description: '다음에 꼭 읽고 싶은 책들을 소개합니다.',
+    userName: '책수집가',
+    avatar: '/path/to/avatar6.jpg',
+    createdAt: '2023-12-29T13:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '고전 문학의 매력',
+    description: '고전 문학을 통해 느낄 수 있는 감동을 전합니다.',
+    userName: '문학연구소',
+    avatar: '/path/to/avatar7.jpg',
+    createdAt: '2023-12-28T16:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '독서 방법 공유',
+    description: '효율적으로 책을 읽는 방법을 공유합니다.',
+    userName: '효율적독서',
+    avatar: '/path/to/avatar8.jpg',
+    createdAt: '2023-12-27T17:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '독서 기록',
+    description: '제가 읽은 책에 대한 기록을 남깁니다.',
+    userName: '기록자',
+    avatar: '/path/to/avatar9.jpg',
+    createdAt: '2023-12-26T18:00:00Z',
+  },
+  {
+    itemId: '40869703',
+    title: '새로운 책 소개',
+    description: '최근에 구매한 책을 소개합니다.',
+    userName: '새책사랑',
+    avatar: '/path/to/avatar10.jpg',
+    createdAt: '2023-12-25T19:00:00Z',
+  },
+  {
+    itemId: '278770576',
+    title: '새로운 책 소개',
+    description: '최근에 구매한 책을 소개합니다.',
+    userName: '새책사랑',
+    avatar: '/path/to/avatar10.jpg',
+    createdAt: '2023-12-25T19:00:00Z',
+  },
+  {
+    itemId: '278770576',
+    title: '새로운 책 소개',
+    description: '최근에 구매한 책을 소개합니다.',
+    userName: '새책사랑',
+    avatar: '/path/to/avatar10.jpg',
+    createdAt: '2023-12-25T19:00:00Z',
+  },
+];
+
+const likedReviews = [
+  {
+    username: 'Lovely ChaeChae',
+    date: '2024.08.01',
+    content: '새롭네요!',
+    likes: 1,
+    rating: 4, // 별점 추가
+  },
+  {
+    username: '독서왕난이',
+    date: '2024.02.27',
+    content: '도슨트북 새롭고 재미있어요',
+    likes: 1,
+    rating: 5, // 별점 추가
+  },
+  {
+    username: '다비다나고양이',
+    date: '2024.10.16',
+    content: '책에 더 흥미를 갖게 도와주는 것 같아요',
+    likes: 1,
+    rating: 3, // 별점 추가
+  },
+];
+
 export const userHandlers = [
   http.get(`/api/user/:userId/feeds`, () => {
     return HttpResponse.json({
-      posts: [
-        {
-          title: '2월은 결심하기 좋은 자기계발의 달!',
-          content:
-            '2024년에도 어김없이 결심의 시즌이 돌아왔습니다! 여러분을 위한 특별한 추천 도서를 소개합니다.',
-          author: mockUser.name,
-          avatar: '/path/to/avatar1.jpg',
-        },
-        {
-          title: '✨ 2024 상반기 결산 - 책복/도슨트북',
-          content:
-            '밀리에서 전자책 외에다양한 독서 콘텐츠를 빼놓을 수 없죠! 😉밀리는 회원들의 일상생활에 독서가 1밀리 더스며들 수 있도록 다양한 도전을 이어가고 있어요. 챗북부터 도슨트북, 오브제북, 영상 콘텐츠까지!2024년 상반기에도 책을 쉽고, 재밌고, 풍성하게접할 수 있는 새로운 콘텐츠들이 쏟아졌는데요.과연 그중 어떤 콘텐츠가 주목받았는지함께 확인해 볼까요? 2024년의 상반기, 밀리 회원들이 좋아한 콘텐츠 랭킹을 보면 인간관계에 대한 관심이 높아진 것',
-          author: mockUser.name,
-          avatar: '/path/to/avatar1.jpg',
-        },
-        {
-          title: '좋아하는 것들',
-          content: '나만의 취향을 담은 독서 추천, 여러분과 함께 하고 싶어요.',
-          author: mockUser.name,
-          avatar: '/path/to/avatar1.jpg',
-        },
-      ],
-      reviews: [
-        {
-          username: mockUser.name,
-          date: '2024.08.01',
-          content: '새롭네요!',
-          likes: 1,
-          rating: 4, // 별점 추가
-        },
-        {
-          username: mockUser.name,
-          date: '2024.02.27',
-          content: '도슨트북 새롭고 재미있어요',
-          likes: 1,
-          rating: 5, // 별점 추가
-        },
-        {
-          username: mockUser.name,
-          date: '2024.10.16',
-          content: '책에 더 흥미를 갖게 도와주는 것 같아요',
-          likes: 1,
-          rating: 3, // 별점 추가
-        },
-      ],
+      posts: userPosts.slice(0, 3),
+      reviews: userReviews,
     });
   }),
   http.get(`/api/user/:userId/feeds/liked`, () => {
     return HttpResponse.json({
-      posts: [
-        {
-          title: '2월은 결심하기 좋은 자기계발의 달!',
-          content:
-            '2024년에도 어김없이 결심의 시즌이 돌아왔습니다! 여러분을 위한 특별한 추천 도서를 소개합니다.',
-          author: 'MILLIE 밀리',
-          avatar: '/path/to/avatar1.jpg',
-        },
-        {
-          title: '✨ 2024 상반기 결산 - 책복/도슨트북',
-          content:
-            '밀리에서 전자책 외에다양한 독서 콘텐츠를 빼놓을 수 없죠! 😉밀리는 회원들의 일상생활에 독서가 1밀리 더스며들 수 있도록 다양한 도전을 이어가고 있어요. 챗북부터 도슨트북, 오브제북, 영상 콘텐츠까지!2024년 상반기에도 책을 쉽고, 재밌고, 풍성하게접할 수 있는 새로운 콘텐츠들이 쏟아졌는데요.과연 그중 어떤 콘텐츠가 주목받았는지함께 확인해 볼까요? 2024년의 상반기, 밀리 회원들이 좋아한 콘텐츠 랭킹을 보면 인간관계에 대한 관심이 높아진 것',
-          author: '밀리 독서연구소',
-          avatar: '/path/to/avatar2.jpg',
-        },
-        {
-          title: '좋아하는 것들',
-          content: '나만의 취향을 담은 독서 추천, 여러분과 함께 하고 싶어요.',
-          author: '16층 노예',
-          avatar: '/path/to/avatar3.jpg',
-        },
-      ],
-      reviews: [
-        {
-          username: 'Lovely ChaeChae',
-          date: '2024.08.01',
-          content: '새롭네요!',
-          likes: 1,
-          rating: 4, // 별점 추가
-        },
-        {
-          username: '독서왕난이',
-          date: '2024.02.27',
-          content: '도슨트북 새롭고 재미있어요',
-          likes: 1,
-          rating: 5, // 별점 추가
-        },
-        {
-          username: '다비다나고양이',
-          date: '2024.10.16',
-          content: '책에 더 흥미를 갖게 도와주는 것 같아요',
-          likes: 1,
-          rating: 3, // 별점 추가
-        },
-      ],
+      posts: likedPosts.slice(0, 3),
+      reviews: likedReviews,
     });
   }),
+  http.get('/api/user/:userId/feeds/:feedType', ({ params, request }) => {
+    const { feedType } = params;
+    const url = new URL(request.url); // 문자열 URL을 URL 객체로 변환
+    const page = parseInt(url.searchParams.get('page') || '1', 10);
+    const limit = 5; // 한 페이지당 리뷰 수
+
+    const selectedFeed = feedType === 'post' ? userPosts : userReviews;
+    const totalFeeds = selectedFeed.length;
+    const startIndex = (page - 1) * limit;
+    const paginatedFeeds = selectedFeed.slice(startIndex, startIndex + limit);
+
+    return HttpResponse.json(
+      { feeds: paginatedFeeds, totalFeeds },
+      { status: 200 },
+    );
+  }),
+  http.get('/api/user/:userId/feeds/liked/:feedType', ({ params, request }) => {
+    const { feedType } = params;
+    const url = new URL(request.url); // 문자열 URL을 URL 객체로 변환
+    const page = parseInt(url.searchParams.get('page') || '1', 10);
+    const limit = 5; // 한 페이지당 리뷰 수
+
+    const selectedFeed = feedType === 'post' ? likedPosts : likedReviews;
+    const totalFeeds = selectedFeed.length;
+    const startIndex = (page - 1) * limit;
+    const paginatedFeeds = selectedFeed.slice(startIndex, startIndex + limit);
+
+    return HttpResponse.json(
+      { feeds: paginatedFeeds, totalFeeds },
+      { status: 200 },
+    );
+  }),
+
   http.post('/api/user/:userId/password-check', async ({ request }) => {
     const { password } = (await request.json()) as { password: string };
 

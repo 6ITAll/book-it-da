@@ -3,15 +3,16 @@ import { postingWriteStyles } from './PostingWrite.styles';
 import PostingToolbar from './PostingToolbar';
 import BookSearchPopover from './BookSearchPopover';
 import PostingContent from './PostingContent';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Book, User } from '@shared/types/type';
 import PostingWriteHeader from './PostingWriteHeader';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { PostingRequest } from '@features/PostingWritePage/types/types';
 import NonTitleDialog from '@components/commons/NonTitleDialog';
 import { useTempSave } from '@hooks/useTempSave';
 
 type CurrentUser = Omit<User, 'isFollowing' | 'isFollower'>;
+import { useGetPostByIdQuery } from '@features/PostDetailPage/api/postingApi';
 
 const mockCurrentUser: CurrentUser = {
   userId: 1,
@@ -19,7 +20,10 @@ const mockCurrentUser: CurrentUser = {
   avatarUrl: 'https://example.com/avatar.jpg',
 };
 const PostingWrite = () => {
+  const { postingId } = useParams();
   const location = useLocation();
+  const isEditing = location.pathname.includes('/posting/edit');
+  // 상세페이지에서 포스팅 작성 누를 시 책 정보 가져옴
   const bookFromDetail = location.state?.book as Book;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBook, setSelectedBook] = useState<Book | null>(
@@ -52,6 +56,20 @@ const PostingWrite = () => {
     user: mockCurrentUser as User, // User 타입으로 타입 단언
   };
 
+  const { data: postData } = useGetPostByIdQuery(postingId!, {
+    skip: !isEditing || !postingId,
+  });
+
+  useEffect(() => {
+    if (isEditing && postData) {
+      setTitle(postData.title);
+      setContent(postData.content);
+      setSelectedBook(postData.book);
+    } else if (!isEditing) {
+      setSelectedBook(bookFromDetail || null);
+    }
+  }, [isEditing, postData, bookFromDetail]);
+
   // 글감 버튼 클릭 시 책 검색 메뉴 열림
   const handleMaterialClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -74,6 +92,7 @@ const PostingWrite = () => {
         title={title}
         content={content}
         selectedBook={selectedBook}
+        isEditing={isEditing}
         user={mockCurrentUser}
       />
       <Stack sx={postingWriteStyles.content}>
