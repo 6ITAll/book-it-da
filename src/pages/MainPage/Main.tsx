@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -16,69 +16,65 @@ import PostTypeFilter from '@components/FeedPage/Filters/PostTypeFilter';
 import { PostType, FeedType, OneLinePost, Posting } from '@shared/types/type';
 import CreateIcon from '@mui/icons-material/Create';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
+import { useGetPostsQuery } from '@features/FeedPage/api/feedApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@store/index';
 import {
-  useGetPostsQuery,
-  useToggleFollowMutation,
-} from '@features/FeedPage/api/feedApi';
+  setPosts,
+  setPage,
+  setPostType,
+  setFeedType,
+  setHasMore,
+  setTotalCount,
+} from '@features/FeedPage/slice/feedSlice';
 
 const Main = (): JSX.Element => {
-  const [page, setPage] = useState(1);
-  const [postType, setPostType] = useState<PostType | null>(null);
-  const [feedType, setFeedType] = useState<FeedType>('추천');
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const [toggleFollow] = useToggleFollowMutation();
+  const dispatch = useDispatch();
+  const { page, postType, feedType, hasMore } = useSelector(
+    (state: RootState) => state.feed,
+  );
 
   const { data, isLoading, isFetching, refetch } = useGetPostsQuery(
-    {
-      page,
-      postType: postType || undefined,
-      feedType,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    },
+    { page, postType: postType || undefined, feedType },
+    { refetchOnMountOrArgChange: true },
   );
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setPosts(data.posts));
+      dispatch(setHasMore(data.hasMore));
+      dispatch(setTotalCount(data.totalCount));
+    }
+  }, [data, dispatch]);
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
     (_event: React.MouseEvent<HTMLElement>, newValue: PostType | null) => {
-      setPostType(newValue);
-      setPage(1);
+      dispatch(setPostType(newValue));
+      dispatch(setPage(1));
       window.scrollTo(0, 0);
       refetch();
     },
-    [refetch],
+    [dispatch, refetch],
   );
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링
   const handleFeedTypeChange = useCallback(
     (_: React.SyntheticEvent, newValue: FeedType) => {
-      setFeedType(newValue);
-      setPage(1);
+      dispatch(setFeedType(newValue));
+      dispatch(setPage(1));
       window.scrollTo(0, 0);
       refetch();
     },
-    [refetch],
-  );
-
-  const handleFollowChange = useCallback(
-    async (userId: number, isFollowing: boolean) => {
-      try {
-        // 팔로우 상태 변경 즉시 API 요청
-        await toggleFollow({ userId, isFollowing }).unwrap();
-      } catch (error) {
-        console.error('팔로우/언팔로우 실패:', error);
-      }
-    },
-    [toggleFollow],
+    [dispatch, refetch],
   );
 
   const fetchMoreData = useCallback(() => {
-    if (!isFetching && data?.hasMore && data.posts.length > 0) {
-      setPage((prev) => prev + 1);
+    if (!isFetching && hasMore) {
+      dispatch(setPage(page + 1));
     }
-  }, [isFetching, data?.hasMore, data?.posts.length]);
+  }, [isFetching, hasMore, page, dispatch]);
 
   if (isLoading) {
     return (
@@ -216,11 +212,6 @@ const Main = (): JSX.Element => {
                       postType="포스팅"
                       title={post.title}
                       content={post.content}
-                      onFollowChange={(userId: number, isFollowing: boolean) =>
-                        handleFollowChange(userId, isFollowing)
-                      }
-                      likeCount={post.likeCount}
-                      isLiked={post.isLiked}
                     />
                   </Box>
                 );
@@ -234,11 +225,6 @@ const Main = (): JSX.Element => {
                       book={post.book}
                       postType="한줄평"
                       review={post.review}
-                      onFollowChange={(userId: number, isFollowing: boolean) =>
-                        handleFollowChange(userId, isFollowing)
-                      }
-                      likeCount={post.likeCount}
-                      isLiked={post.isLiked}
                     />
                   </Box>
                 );

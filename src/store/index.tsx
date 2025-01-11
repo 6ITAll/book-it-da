@@ -23,6 +23,9 @@ import { userApi } from '@features/user/userApi';
 
 import { addToLibraryApi } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShelfCountApi';
+import { followApi } from '@features/commons/followApi';
+import feedReducer from '@features/FeedPage/slice/feedSlice';
+
 export const store = configureStore({
   reducer: {
     bookSearch: bookSearchReducer,
@@ -45,9 +48,11 @@ export const store = configureStore({
     [feedApi.reducerPath]: feedApi.reducer,
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [followApi.reducerPath]: followApi.reducer,
     counter: counterReducer,
     user: userReducer,
     snackbar: snackbarReducer,
+    feed: feedReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -68,6 +73,7 @@ export const store = configureStore({
       oneLineReviewApi.middleware,
       postingWriteApi.middleware,
       userApi.middleware,
+      followApi.middleware,
     ]),
 });
 

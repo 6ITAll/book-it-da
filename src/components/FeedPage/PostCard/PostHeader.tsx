@@ -2,22 +2,42 @@ import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
 import styles from './PostCard.styles';
 import { PostType, User } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
+import { useToggleFollowMutation } from '@features/commons/followApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateFollowStatus } from '@features/FeedPage/slice/feedSlice';
+import { RootState } from '@store/index';
 
 interface PostCardHeaderProps {
   user: User;
   createdAt: string;
   postType: PostType;
-  onFollowChange: (userId: number, isFollowing: boolean) => void;
 }
 
 const PostCardHeader = ({
   user,
   createdAt,
   postType,
-  onFollowChange,
 }: PostCardHeaderProps): JSX.Element => {
-  const handleFollowClick = () => {
-    onFollowChange(user.userId, !user.isFollowing);
+  const dispatch = useDispatch();
+  const [toggleFollow] = useToggleFollowMutation();
+  const isFollowing = useSelector((state: RootState) => {
+    const post = state.feed.posts.find(
+      (post) => post.user.userId === user.userId,
+    );
+    return post?.user.isFollowing ?? false;
+  });
+  const handleFollowClick = async () => {
+    try {
+      await toggleFollow({
+        userId: user.userId,
+        isFollowing: !isFollowing,
+      }).unwrap();
+      dispatch(
+        updateFollowStatus({ userId: user.userId, isFollowing: !isFollowing }),
+      );
+    } catch (error) {
+      console.error('팔로우/언팔로우 실패:', error);
+    }
   };
 
   return (
@@ -28,10 +48,10 @@ const PostCardHeader = ({
         <Button
           variant="outlined"
           size="small"
-          sx={styles.followButton(user.isFollowing)}
+          sx={styles.followButton(isFollowing)}
           onClick={handleFollowClick}
         >
-          {user.isFollowing ? '팔로잉' : '팔로우'}
+          {isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       }
       title={
