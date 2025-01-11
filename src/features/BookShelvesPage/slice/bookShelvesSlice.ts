@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ViewMode } from '@components/BookShelvesPage/ViewToggle';
-import { SortOption } from '@components/BookShelvesPage/SortSelector';
+import { ViewMode } from '@components/BookShelvesPage/types';
+import { SortOption } from '@components/BookShelvesPage/types';
 import { BookshelvesState } from '../types/types';
 
 const initialState: BookshelvesState = {
