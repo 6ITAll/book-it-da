@@ -9,7 +9,7 @@ import {
 export const bookSearchApi = createApi({
   reducerPath: 'bookSearchApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: aladinConfig.aladinBaseUrl,
+    baseUrl: '/api',
   }),
   endpoints: (builder) => ({
     searchBooks: builder.query<BookResponse, SearchBooksParams>({
