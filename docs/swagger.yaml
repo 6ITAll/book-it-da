@@ -853,55 +853,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OtherPost'
-  # 좋아요
-  /api/posts/{postId}/like:
-    post:
-      summary: 포스팅 좋아요 토글
-      tags: [공통]
-      parameters:
-        - in: path
-          name: postId
-          required: true
-          schema:
-            type: integer
-          description: 포스팅 ID
-      responses:
-        '200':
-          description: 성공적인 응답
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isLiked:
-                    type: boolean
-                  likeCount:
-                    type: integer
-  # 팔로우
-  /api/users/{userId}/follow:
-    post:
-      summary: 사용자 팔로우 토글 (팔로우 통일 필요)
-      tags: [공통]
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: integer
-          description: 사용자 ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FollowRequest'
-      responses:
-        '200':
-          description: 성공적인 응답
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
   # 로그인시 카카오 인증
   /oauth/token:
     post:
