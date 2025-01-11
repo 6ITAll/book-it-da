@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import AppRouter from './routes/index';
 import Header from '@components/Header/Header';
 import SnackBar from './components/Snackbar/SnackBar';
-import { store } from '@store/index';
+import { store, RootState } from '@store/index';
 import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { muiTheme } from '@styles/theme';
+import { createAppTheme } from '@styles/theme';
 
 const AppContent = (): JSX.Element => {
   const location = useLocation();
@@ -29,9 +29,12 @@ const AppContent = (): JSX.Element => {
 };
 
 const App = (): JSX.Element => {
+  const themeMode = useSelector((state: RootState) => state.darkMode.mode);
+  const theme = createAppTheme(themeMode);
+
   return (
     <Provider store={store}>
-      <ThemeProvider theme={muiTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
           <AppContent />

@@ -145,10 +145,20 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       },
     },
     components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
+            color: mode === 'light' ? '#000' : '#fff',
+          },
+        },
+      },
       // 버튼 BorderRadius
       MuiButton: {
         styleOverrides: {
           root: {
+            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
+            color: mode === 'light' ? '#000' : '#fff',
             textTransform: 'none',
             borderRadius: 16,
           },
@@ -158,6 +168,8 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       MuiIconButton: {
         styleOverrides: {
           root: {
+            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
+            color: mode === 'light' ? '#000' : '#fff',
             borderRadius: '50%',
           },
         },
@@ -165,7 +177,7 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       MuiCard: {
         styleOverrides: {
           root: {
-            borderRadius: 12,
+            borderRadius: 16,
             boxShadow:
               mode === 'light'
                 ? '0 1px 3px rgba(0,0,0,0.12)'
@@ -176,6 +188,8 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       MuiPaper: {
         styleOverrides: {
           root: {
+            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
+            color: mode === 'light' ? '#000' : '#fff',
             borderRadius: 8,
           },
         },
