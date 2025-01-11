@@ -1,6 +1,4 @@
-import { Review } from '@shared/types/type';
-/* TODO - Post interface 통합 후 @shared/types/type Post로 변경 필요 */
-import { Post } from '@components/BookDetailPage/BookReviewTab';
+import { Review, Post } from '@shared/types/type';
 import ReviewFeedSection from './ReviewFeedSection';
 import PostFeedSection from './PostFeedSection';
 

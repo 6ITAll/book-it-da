@@ -1,4 +1,4 @@
-import { Post } from '@components/BookDetailPage/BookReviewTab';
+import { Post } from '@shared/types/type';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Review } from '@shared/types/type';
 

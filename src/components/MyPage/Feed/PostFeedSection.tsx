@@ -1,4 +1,4 @@
-import { Post } from '@components/BookDetailPage/BookReviewTab';
+import { Post } from '@shared/types/type';
 import PostCard from '@components/commons/DetailPagePostCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
