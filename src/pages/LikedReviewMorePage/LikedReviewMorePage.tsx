@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Review } from '@shared/types/type';
+import { Review, OneLinePost } from '@shared/types/type';
 import ReviewMorePageTemplate from '@components/ReviewMorePage/ReviewMorePageTemplate';
 import { useGetLikedPaginatedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
 
@@ -16,8 +16,19 @@ const LikedReviewMorePage = (): JSX.Element => {
 
   useEffect(() => {
     if (data?.feeds) {
-      setReviews((prevReviews) => [...prevReviews, ...data.feeds]);
-      if (data.feeds.length < 5) setHasMore(false);
+      // data.feeds에서 Review 타입으로 변환하여 설정
+      const newReviews = data.feeds
+        .filter((feed): feed is OneLinePost => feed.postType === '한줄평') // 한줄평만 필터링 +타입 가드 사용
+        .map((feed) => ({
+          username: feed.user.userName,
+          date: feed.createdAt,
+          content: feed.review,
+          likes: feed.likeCount,
+          rating: feed.rating || 0,
+        }));
+
+      setReviews((prevReviews) => [...prevReviews, ...newReviews]);
+      if (newReviews.length < 5) setHasMore(false);
     }
   }, [data]);
 
