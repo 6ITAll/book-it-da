@@ -25,6 +25,8 @@ import { addToLibraryApi } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShelfCountApi';
 import { followApi } from '@features/commons/followApi';
 import feedReducer from '@features/FeedPage/slice/feedSlice';
+import { likeApi } from '@features/commons/likeApi';
+import postingDetailReducer from '@features/PostDetailPage/slice/postingDetailSlice';
 
 export const store = configureStore({
   reducer: {
@@ -49,10 +51,12 @@ export const store = configureStore({
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [followApi.reducerPath]: followApi.reducer,
+    [likeApi.reducerPath]: likeApi.reducer,
     counter: counterReducer,
     user: userReducer,
     snackbar: snackbarReducer,
     feed: feedReducer,
+    postingDetail: postingDetailReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -74,6 +78,7 @@ export const store = configureStore({
       postingWriteApi.middleware,
       userApi.middleware,
       followApi.middleware,
+      likeApi.middleware,
     ]),
 });
 

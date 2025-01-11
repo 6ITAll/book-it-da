@@ -147,22 +147,4 @@ export const postingHandlers = [
   http.get('/api/users/:userId/posts', () => {
     return HttpResponse.json(mockOtherPosts.userPosts);
   }),
-
-  http.post('/api/users/:userId/follow', async ({ params, request }) => {
-    const userId = Number(params.userId);
-    const { isFollowing } = (await request.json()) as { isFollowing: boolean };
-
-    const post = mockPosts.find((p) => p.user.userId === userId);
-
-    if (!post) {
-      return HttpResponse.json(
-        { message: '사용자를 찾을 수 없습니다.' },
-        { status: 404 },
-      );
-    }
-
-    post.user.isFollowing = isFollowing;
-
-    return HttpResponse.json(post.user);
-  }),
 ];

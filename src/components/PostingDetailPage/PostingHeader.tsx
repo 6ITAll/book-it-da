@@ -5,38 +5,40 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
 import { formatCount } from '@shared/utils/formatCount';
-import { useToggleLikeMutation } from '@features/PostDetailPage/api/postingApi';
 import { useNavigate } from 'react-router-dom';
-import { postingDetailStyles } from './postingDetail.styles';
+import { postingDetailStyles } from './PostingDetail.styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { useToggleLikeMutation } from '@features/commons/likeApi';
+import { RootState } from '@store/index';
+import { updateLikeStatus } from '@features/PostDetailPage/slice/postingDetailSlice';
+import { Posting } from '@shared/types/type';
 
 interface PostingHeaderProps {
   title: string;
-  isLiked: boolean;
-  setIsLiked: (value: boolean) => void;
   setOpenShareDialog: (value: boolean) => void;
   postingId: number;
   userId: number;
   currentUserId: number;
-  likeCount: number;
 }
 
 const PostingHeader = ({
   title,
-  isLiked,
-  setIsLiked,
   setOpenShareDialog,
   postingId,
   userId,
   currentUserId,
-  likeCount,
 }: PostingHeaderProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [toggleLike] = useToggleLikeMutation();
+  const { isLiked, likeCount } = useSelector(
+    (state: RootState) => (state.postingDetail.currentPost || {}) as Posting,
+  );
 
   const handleLikeClick = async () => {
     try {
-      await toggleLike(Number(postingId));
-      setIsLiked(!isLiked);
+      await toggleLike({ postId: postingId, isLiked: !isLiked }).unwrap();
+      dispatch(updateLikeStatus(!isLiked));
     } catch (error) {
       console.error('좋아요 오류:', error);
     }
