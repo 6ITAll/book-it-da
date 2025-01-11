@@ -1,20 +1,6 @@
-import { BookInfo } from '@features/BookShelvesPage/types/types';
+import { Bookshelf } from '@features/BookDetailPage/types/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-// 책장 데이터 타입
-export interface Bookshelf {
-  bookshelfId: number;
-  bookshelfName: string;
-  books: BookInfo[];
-}
-
-// 책 추가 요청에 사용되는 데이터 타입
-export interface AddBookPayload {
-  itemId: number;
-  title: string;
-  author: string;
-  imageUrl: string;
-}
+import { AddBookPayload } from '@features/BookDetailPage/types/types';
 
 export const addToLibraryApi = createApi({
   reducerPath: 'addToLibraryApi',

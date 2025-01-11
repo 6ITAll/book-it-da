@@ -5,6 +5,7 @@ import { useState } from 'react';
 import URLShareDialog from '@components/commons/URLShareDialog';
 import { useNavigate } from 'react-router-dom';
 import { Book } from '@shared/types/type';
+import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface ActionButtonsProps {
   book: Book;
@@ -28,30 +29,14 @@ const ActionButtons = ({ book }: ActionButtonsProps): JSX.Element => {
     <>
       <Stack direction="row" spacing={2}>
         <Button
-          sx={{
-            borderRadius: '50%',
-            minWidth: 0,
-            width: 36,
-            height: 36,
-            backgroundColor: '#f5f5f5',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            '&:hover': { backgroundColor: '#e0e0e0' },
-          }}
+          sx={bookDetailStyles.postingButton}
           onClick={handleWriteClick} // 클릭 시 모달 열기
         >
           <EditIcon sx={{ width: 18, height: 18 }} />
         </Button>
         <Button
           onClick={handleShareClick} // 공유 모달 열기
-          sx={{
-            borderRadius: '50%',
-            minWidth: 0,
-            width: 36,
-            height: 36,
-            backgroundColor: '#f5f5f5',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            '&:hover': { backgroundColor: '#e0e0e0' },
-          }}
+          sx={bookDetailStyles.shareButton}
         >
           <ShareIcon sx={{ width: 18, height: 18 }} />
         </Button>

@@ -148,23 +148,21 @@ export const postingHandlers = [
     return HttpResponse.json(mockOtherPosts.userPosts);
   }),
 
-  http.post('/api/posts/:postId/like', ({ params }) => {
-    const postId = Number(params.postId);
-    const post = mockPosts.find((p) => p.id === postId);
+  http.post('/api/users/:userId/follow', async ({ params, request }) => {
+    const userId = Number(params.userId);
+    const { isFollowing } = (await request.json()) as { isFollowing: boolean };
+
+    const post = mockPosts.find((p) => p.user.userId === userId);
 
     if (!post) {
       return HttpResponse.json(
-        { message: '포스팅을 찾을 수 없습니다.' },
+        { message: '사용자를 찾을 수 없습니다.' },
         { status: 404 },
       );
     }
 
-    post.isLiked = !post.isLiked;
-    post.likeCount += post.isLiked ? 1 : -1;
+    post.user.isFollowing = isFollowing;
 
-    return HttpResponse.json({
-      isLiked: post.isLiked,
-      likeCount: post.likeCount,
-    });
+    return HttpResponse.json(post.user);
   }),
 ];

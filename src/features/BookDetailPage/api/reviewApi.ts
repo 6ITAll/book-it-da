@@ -1,14 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Review } from '@shared/types/type';
-
-export interface ReviewResponse {
-  totalReviews: number;
-  topReviews: Review[];
-}
-
-export interface PaginatedReviewResponse {
-  reviews: Review[];
-}
+import { ReviewResponse } from '@features/BookDetailPage/types/types';
+import { PaginatedReviewResponse } from '@features/BookDetailPage/types/types';
 
 export const reviewApi = createApi({
   reducerPath: 'reviewApi',

@@ -15,7 +15,8 @@ import EditAccountPage from '@pages/EditAccountPage.tsx/EditAccountPage';
 import PasswordChkPage from '@pages/PasswordChkPage/PasswordChkPage';
 import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
 import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
-
+import LikedPostMorePage from '@pages/LikedPostMorePage/LikedPostMorePage';
+import LikedReviewMorePage from '@pages/LikedReviewMorePage/LikedReviewMorePage';
 const AppRouter = () => {
   return (
     <Routes>
@@ -52,8 +53,20 @@ const AppRouter = () => {
       />
       <Route path={RoutePaths.POSTING_WRITE} element={<PostingWritePage />} />
       <Route
+        path={`${RoutePaths.POSTING_EDIT}/:postingId`}
+        element={<PostingWritePage />}
+      />
+      <Route
         path={`${RoutePaths.POSTING}/:postingId?`}
         element={<PostingDetailPage />}
+      />
+      <Route
+        path={`${RoutePaths.MY_PAGE}/:userId?/feeds/${RoutePaths.POSTS}`}
+        element={<LikedPostMorePage />}
+      />
+      <Route
+        path={`${RoutePaths.MY_PAGE}/:userId?/feeds/${RoutePaths.REVIEWS}`}
+        element={<LikedReviewMorePage />}
       />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

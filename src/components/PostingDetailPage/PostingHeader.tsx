@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { formatCount } from '@shared/utils/formatCount';
 import { useToggleLikeMutation } from '@features/PostDetailPage/api/postingApi';
 import { useNavigate } from 'react-router-dom';
+import { postingDetailStyles } from './postingDetail.styles';
 
 interface PostingHeaderProps {
   title: string;
@@ -18,24 +19,6 @@ interface PostingHeaderProps {
   currentUserId: number;
   likeCount: number;
 }
-
-const styles = {
-  postingHeader: {
-    width: '100%',
-    position: 'sticky',
-    opacity: '0.9',
-    top: 0,
-    bgcolor: 'white',
-    zIndex: 1000,
-    borderBottom: '1px solid #eee',
-    py: 2,
-    px: 3,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-  },
-};
 
 const PostingHeader = ({
   title,
@@ -64,8 +47,12 @@ const PostingHeader = ({
     navigate(-1);
   };
 
+  const handleEdit = () => {
+    navigate(`/posting/edit/${postingId}`);
+  };
+
   return (
-    <Box sx={styles.postingHeader}>
+    <Box sx={postingDetailStyles.postingHeader}>
       <Box
         sx={{
           display: 'flex',
@@ -86,17 +73,7 @@ const PostingHeader = ({
           <IconButton onClick={handleLikeClick}>
             {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
           </IconButton>
-          <Typography
-            variant="caption"
-            sx={{
-              position: 'absolute',
-              bottom: -10,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              fontSize: '0.75rem',
-              color: 'text.secondary',
-            }}
-          >
+          <Typography variant="caption" sx={postingDetailStyles.likeCount}>
             {formatCount(likeCount)}
           </Typography>
         </Box>
@@ -106,7 +83,7 @@ const PostingHeader = ({
         </IconButton>
         {/* 수정 버튼 */}
         {userId === currentUserId && (
-          <IconButton>
+          <IconButton onClick={handleEdit}>
             <EditIcon />
           </IconButton>
         )}
