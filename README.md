@@ -163,7 +163,7 @@
 **:test_tube:  테스트 툴:** Vitest, Cypress
 
 ### 4.2 배포 URL
-- https://www.studyin.co.kr/
+- https://www.bookitda.store/
 
 ### 4.3 URL 구조
 | 기능 | URL |
