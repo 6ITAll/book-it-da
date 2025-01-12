@@ -1,13 +1,11 @@
-import { Review } from '@shared/types/type';
-/* TODO - Post interface 통합 후 @shared/types/type Post로 변경 필요 */
-import { Post } from '@components/BookDetailPage/BookReviewTab';
+import { BookDetailPost, Review } from '@shared/types/type';
 import ReviewFeedSection from './ReviewFeedSection';
 import PostFeedSection from './PostFeedSection';
 
 interface FeedProps {
   userId: string;
   reviews: Review[];
-  posts: Post[];
+  posts: BookDetailPost[];
 }
 
 const Feed = ({ userId, reviews, posts }: FeedProps): JSX.Element => {

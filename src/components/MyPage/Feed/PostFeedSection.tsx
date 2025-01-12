@@ -1,12 +1,12 @@
-import { Post } from '@components/BookDetailPage/BookReviewTab';
 import PostCard from '@components/commons/DetailPagePostCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { BookDetailPost } from '@shared/types/type';
 import { useNavigate } from 'react-router-dom';
 
 interface PostFeedSectionProps {
   userId: string;
-  posts: Post[];
+  posts: BookDetailPost[];
 }
 
 const PostFeedSection = ({
