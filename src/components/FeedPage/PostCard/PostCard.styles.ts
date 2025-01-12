@@ -1,3 +1,4 @@
+import { Theme } from '@mui/material';
 const styles = {
   card: {
     display: 'flex',
@@ -131,15 +132,19 @@ const styles = {
     gridTemplateColumns: '1fr 1fr',
     boxSizing: 'border-box',
   },
-  cardFooterButton: (isLeft: boolean) => ({
+  cardFooterButton: (isLeft: boolean) => (theme: Theme) => ({
     padding: '0.7rem 0',
     width: '100%',
     height: '100%',
     borderRadius: isLeft ? '0px 0px 0px 8px' : '0px 0px 8px 0px',
     borderRight: isLeft ? '1px solid #ddd' : 'none',
-    bgcolor: 'transparent',
+    bgcolor: theme.palette.background.paper,
+    color: theme.palette.text.primary, // 테마의 텍스트 색상 사용
     transition: 'background-color 0.3s ease',
-    '&:hover': {},
+    '&:hover': {
+      backgroundColor: '#e0e0e0', // hover 시 배경색 변경
+      color: '#000',
+    },
   }),
 };
 
