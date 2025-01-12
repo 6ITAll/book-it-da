@@ -225,7 +225,7 @@ export const bookReviewTabStyles = {
     fontWeight: 'bold',
     '&:hover': {
       bgcolor: theme.palette.background.default, // 배경색 유지
-      color: theme.palette.text.primary, // 텍스트 색상 유지
+      color: theme.palette.text.disabled, // 텍스트 색상 유지
     },
   }),
   gridContainer: {
