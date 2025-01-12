@@ -1,11 +1,7 @@
+import { SignupData } from '@features/SignupPage/types';
 import * as yup from 'yup';
-import { User } from '@features/user/types';
 
-export interface SignupData extends Omit<User, 'avatarUrl'> {
-  confirmPassword: string;
-}
-
-export const schema = yup.object().shape({
+export const schema = yup.object<SignupData>().shape({
   name: yup.string().required('이름을 입력해주세요'),
   userId: yup
     .string()
