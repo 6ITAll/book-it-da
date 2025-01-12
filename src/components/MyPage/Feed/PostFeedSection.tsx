@@ -51,6 +51,7 @@ const PostFeedSection = ({
               description={post.description}
               userName={post.userName}
               avatar={post.avatar}
+              userId={post.userId}
             />
           </Grid>
         ))}

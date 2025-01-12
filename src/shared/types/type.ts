@@ -57,6 +57,7 @@ export interface Review {
   content: string;
   likes: number;
   rating: number;
+  userId: string;
 }
 
 // 책 상세 페이지에 아바타에 필요한 userId 확장 타입
