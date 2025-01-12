@@ -21,14 +21,6 @@ const PostCardHeader = ({
   postType,
 }: PostCardHeaderProps): JSX.Element => {
   const navigate = useNavigate();
-
-  // 아바타 클릭 핸들러
-  const handleAvatarClick = () => {
-    navigateToUserPage(navigate, user.userId);
-  };
-
-  const handleFollowClick = () => {
-    onFollowChange(user.userId, !user.isFollowing);
   const dispatch = useDispatch();
   const [toggleFollow] = useToggleFollowMutation();
   const isFollowing = useSelector((state: RootState) => {
@@ -37,6 +29,12 @@ const PostCardHeader = ({
     );
     return post?.user.isFollowing ?? false;
   });
+
+  // 아바타 클릭 핸들러
+  const handleAvatarClick = () => {
+    navigateToUserPage(navigate, user.userId);
+  };
+
   const handleFollowClick = async () => {
     try {
       await toggleFollow({
