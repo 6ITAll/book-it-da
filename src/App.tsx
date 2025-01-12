@@ -2,7 +2,7 @@ import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import AppRouter from './routes/index';
 import Header from '@components/Header/Header';
-import SnackBar from './components/Snackbar/SnackBar';
+import SnackBar from './components/commons/SnackBar';
 import { store } from '@store/index';
 import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
