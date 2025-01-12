@@ -16,6 +16,7 @@ import { loginSuccess } from '@features/user/userSlice';
 import { LoginMessage } from './types'; // LoginProps는 필요 없으므로 제거
 import { StyledButton, StyledTypography } from './Login.styles';
 import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
+import kakaoLoginImg from '@assets/images/kakao_login.png';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
@@ -180,7 +181,7 @@ const Login = (): JSX.Element => {
 
         <StyledButton onClick={handleKakaoLogin}>
           <img
-            src="./src/components/LoginSignupPage/kakao_login.png"
+            src={kakaoLoginImg}
             alt="카카오톡 로그인"
             style={{ width: '50%', height: 'auto' }}
           />

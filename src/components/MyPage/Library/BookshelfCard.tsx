@@ -6,6 +6,8 @@ import {
   CardMedia,
   Grid2,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { Bookshelf } from '@shared/types/type';
 
@@ -17,6 +19,8 @@ const BookshelfCard = ({
   userId: string;
 }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleClick = () => {
     navigate(`/my-page/${userId}/bookshelves/${shelf.id}`);
@@ -25,7 +29,7 @@ const BookshelfCard = ({
   return (
     <Card
       sx={{
-        maxWidth: 200,
+        maxWidth: sm ? 200 : '100%',
       }}
     >
       <CardActionArea onClick={handleClick}>
