@@ -33,7 +33,7 @@ export const userFeedsApi = createApi({
       query: (userId) => `user/${userId}/feeds/liked`,
     }),
     getLikedPaginatedFeeds: builder.query<
-      { feeds: BookDetailPost[]; totalFeeds: number },
+      { feeds: (BookDetailPost | Review)[]; totalFeeds: number },
       { userId: string; feedType: FeedType; page: number }
     >({
       query: ({ userId, feedType, page }) =>
