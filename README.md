@@ -89,7 +89,7 @@
 </table>
 
 
-### 3 팀 구성 및 역할
+### 3. 팀 구성 및 역할
 <table>
     <tr>
         <td><strong>이종혁</strong></td>
