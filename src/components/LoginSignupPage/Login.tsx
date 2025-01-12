@@ -56,16 +56,16 @@ const Login = (): JSX.Element => {
             userId: user.userId,
             connected_at: new Date().toISOString(),
             properties: {
-              userName: user.userId, // 실제 사용자 이름이 있다면 그것을 사용
-              avatarUrl: '', // 실제 아바타 URL이 있다면 그것을 사용
+              userName: user.userId,
+              avatarUrl: '',
             },
             kakao_account: {
               profile_needs_agreement: false,
               profile: {
-                nickname: user.userId, // 실제 닉네임이 있다면 그것을 사용
-                avatarUrl: '', // 실제 아바타 URL이 있다면 그것을 사용
+                nickname: user.userId,
+                avatarUrl: '',
               },
-              email: user.userId, // 실제 이메일이 있다면 그것을 사용
+              email: user.userId,
             },
           };
 
