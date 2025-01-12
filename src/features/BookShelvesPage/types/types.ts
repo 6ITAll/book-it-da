@@ -1,5 +1,4 @@
-import { SortOption } from '@components/BookShelvesPage/SortSelector';
-import { ViewMode } from '@components/BookShelvesPage/ViewToggle';
+import { SortOption, ViewMode } from '@components/BookShelvesPage/types';
 import { ReadingStatusType, SavedBook } from '@shared/types/type';
 
 export interface BookInfo {

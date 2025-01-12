@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Post } from '@shared/types/type';
+import { BookDetailPost } from '@shared/types/type';
 import PostMoreTemplate from '@components/PostMorePage/PostMoreTemplate';
 import { useGetLikedPaginatedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
 
 const LikedPostMorePage = (): JSX.Element => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<BookDetailPost[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
@@ -16,13 +16,16 @@ const LikedPostMorePage = (): JSX.Element => {
 
   useEffect(() => {
     if (data?.feeds) {
-      setPosts((prevPosts) => [...prevPosts, ...data.feeds]);
-      if (data.feeds.length < 10) setHasMore(false);
+      const newPosts = data.feeds.filter(
+        (feed): feed is BookDetailPost => 'itemId' in feed,
+      );
+      setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+      if (newPosts.length < 10) setHasMore(false);
     }
   }, [data]);
 
   const fetchMoreData = () => {
-    if (!isLoading && !isError) {
+    if (!isLoading && !isError && hasMore) {
       setPage((prevPage) => prevPage + 1);
     }
   };

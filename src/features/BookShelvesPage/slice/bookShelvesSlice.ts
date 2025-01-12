@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ViewMode } from '@components/BookShelvesPage/ViewToggle';
-import { SortOption } from '@components/BookShelvesPage/SortSelector';
 import { BookshelvesState } from '../types/types';
+import { SortOption, ViewMode } from '@components/BookShelvesPage/types';
 
 const initialState: BookshelvesState = {
   viewMode: 'grid',

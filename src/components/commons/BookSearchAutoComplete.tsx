@@ -6,12 +6,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import {
-  BookResponse,
-  useSearchBooksQuery,
-} from '@features/BookSearchPage/api/bookSearchApi';
+import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
 import { Book } from '@shared/types/type';
 import { useEffect, useState } from 'react';
+import { BookResponse } from '@features/BookSearchPage/types/types';
 
 interface BookSearchAutoCompleteProps {
   searchQuery: string;

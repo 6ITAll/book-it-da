@@ -1,6 +1,5 @@
-import { Post } from '@components/BookDetailPage/BookReviewTab';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Review } from '@shared/types/type';
+import { BookDetailPost, Review } from '@shared/types/type';
 
 type FeedType = 'review' | 'post';
 
@@ -8,18 +7,17 @@ export const userFeedsApi = createApi({
   reducerPath: 'userFeedsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   endpoints: (builder) => ({
-    /* TODO - Post 타입 통일되면 공통 타입으로 빼낼 예정 */
     getUserFeeds: builder.query<
       {
         reviews: Review[];
-        posts: Post[];
+        posts: BookDetailPost[];
       },
       string
     >({
       query: (userId) => `user/${userId}/feeds`,
     }),
     getUserPaginatedFeeds: builder.query<
-      { feeds: Post[]; totalFeeds: number },
+      { feeds: BookDetailPost[]; totalFeeds: number },
       { userId: string; feedType: FeedType; page: number }
     >({
       query: ({ userId, feedType, page }) =>
@@ -28,14 +26,14 @@ export const userFeedsApi = createApi({
     getLikedFeeds: builder.query<
       {
         reviews: Review[];
-        posts: Post[];
+        posts: BookDetailPost[];
       },
       string
     >({
       query: (userId) => `user/${userId}/feeds/liked`,
     }),
     getLikedPaginatedFeeds: builder.query<
-      { feeds: Post[]; totalFeeds: number },
+      { feeds: (BookDetailPost | Review)[]; totalFeeds: number },
       { userId: string; feedType: FeedType; page: number }
     >({
       query: ({ userId, feedType, page }) =>

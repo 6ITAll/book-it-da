@@ -4,21 +4,14 @@ import PostingToolbar from './PostingToolbar';
 import BookSearchPopover from './BookSearchPopover';
 import PostingContent from './PostingContent';
 import { useEffect, useState } from 'react';
-import { Book, User } from '@shared/types/type';
+import { Book } from '@shared/types/type';
 import PostingWriteHeader from './PostingWriteHeader';
 import { useLocation, useParams } from 'react-router-dom';
 import { PostingRequest } from '@features/PostingWritePage/types/types';
 import NonTitleDialog from '@components/commons/NonTitleDialog';
 import { useTempSave } from '@hooks/useTempSave';
 
-type CurrentUser = Omit<User, 'isFollowing' | 'isFollower'>;
 import { useGetPostByIdQuery } from '@features/PostDetailPage/api/postingApi';
-
-const mockCurrentUser: CurrentUser = {
-  userId: 1,
-  userName: 'MockUser',
-  avatarUrl: 'https://example.com/avatar.jpg',
-};
 const PostingWrite = () => {
   const { postingId } = useParams();
   const location = useLocation();
@@ -53,7 +46,7 @@ const PostingWrite = () => {
     title,
     content,
     book: selectedBook || ({} as Book), // null 대신 빈 객체 사용
-    user: mockCurrentUser as User, // User 타입으로 타입 단언
+    userId: 1,
   };
 
   const { data: postData } = useGetPostByIdQuery(postingId!, {
@@ -93,7 +86,6 @@ const PostingWrite = () => {
         content={content}
         selectedBook={selectedBook}
         isEditing={isEditing}
-        user={mockCurrentUser}
       />
       <Stack sx={postingWriteStyles.content}>
         <PostingToolbar
