@@ -129,6 +129,7 @@ const Header = (): JSX.Element => {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              aria-hidden="false"
               MenuListProps={{
                 'aria-labelledby': 'basic-button',
               }}
