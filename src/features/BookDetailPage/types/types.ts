@@ -17,7 +17,7 @@ export interface AddBookPayload {
 }
 
 /** postApi.ts에 관련 타입 */
-import { BookDetailPost } from '@shared/types/type';
+import { BookDetailPost, ReviewCard } from '@shared/types/type';
 
 // 포스트 응답 데이터 타입
 export interface PostResponse {
@@ -30,7 +30,7 @@ import { Review } from '@shared/types/type';
 
 export interface ReviewResponse {
   totalReviews: number;
-  topReviews: Review[];
+  topReviews: ReviewCard[];
 }
 
 export interface PaginatedReviewResponse {
