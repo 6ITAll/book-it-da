@@ -9,6 +9,7 @@ import { genderAgeHandlers } from './genderAge';
 import { reviewHandlers } from './DetailPageReview';
 import { postHandlers } from './DetailPagePost';
 import { addToLibraryHandlers } from './addToLibrary';
+import { followHandlers } from './follow';
 import { savedPostingHandlers } from './savePosting';
 export const handlers = [
   ...libraryHandlers,
@@ -21,5 +22,6 @@ export const handlers = [
   ...genderAgeHandlers,
   ...reviewHandlers,
   ...addToLibraryHandlers,
+  ...followHandlers,
   ...savedPostingHandlers,
 ];

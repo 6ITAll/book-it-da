@@ -21,7 +21,7 @@ const LibraryTabPanel = ({ userId }: LibraryTabPanelProps) => {
       spacing={3}
     >
       {bookShelves?.map((shelf) => (
-        <BookshelfCard key={shelf.id} shelf={shelf} />
+        <BookshelfCard key={shelf.id} shelf={shelf} userId={userId} />
       ))}
     </Stack>
   );
