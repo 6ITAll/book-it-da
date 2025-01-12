@@ -12,6 +12,7 @@ export const useTempSave = (
   setTitle: (title: string) => void,
   setContent: (content: string) => void,
   setSelectedBook: (book: Book | null) => void,
+  isEditing: boolean,
 ) => {
   const [showLoadDialog, setShowLoadDialog] = useState(false);
   const [tempSaveDate, setTempSaveDate] = useState<Date | null>(null);
@@ -47,6 +48,11 @@ export const useTempSave = (
 
   // 컴포넌트 마운트시, 임시저장 글 적용
   useEffect(() => {
+    if (isEditing) {
+      // If editing, don't load from localStorage
+      return;
+    }
+
     const tempPostingString = localStorage.getItem(TEMP_SAVE_STORAGE_KEY);
     if (tempPostingString) {
       const tempPosting: TempSaveData = JSON.parse(tempPostingString);
@@ -67,7 +73,7 @@ export const useTempSave = (
     } else {
       setSelectedBook(bookFromDetail || null);
     }
-  }, [bookFromDetail, setSelectedBook, setTitle, setContent]);
+  }, [bookFromDetail, setSelectedBook, setTitle, setContent, isEditing]);
 
   // 변경사항 있을 때마다 임시저장
   useEffect(() => {

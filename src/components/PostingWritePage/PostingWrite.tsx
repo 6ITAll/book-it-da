@@ -40,6 +40,7 @@ const PostingWrite = () => {
     setTitle,
     setContent,
     setSelectedBook,
+    isEditing,
   );
 
   const currentPosting = {

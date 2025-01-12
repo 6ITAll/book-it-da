@@ -64,7 +64,7 @@ const URLShareDialog = ({ open, handleClose, url }: URLShareDialogProps) => {
             flex: 1,
           }}
         >
-          {url}
+          {shareUrl}
         </Typography>
         <IconButton
           onClick={handleCopyClick}
