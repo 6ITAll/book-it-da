@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BookshelvesState } from '../types/types';
 import { SortOption, ViewMode } from '@components/BookShelvesPage/types';
-import { ViewMode } from '@components/BookShelvesPage/ViewToggle';
-import { SortOption } from '@components/BookShelvesPage/SortSelector';
 import { SavedBook, ReadingStatusType } from '@shared/types/type';
 
 export interface BookshelvesState {
