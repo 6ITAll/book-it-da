@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import PasswordInput from './PasswordInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
+import kakaoLoginImg from '@assets/images/kakao_login.png';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
@@ -174,7 +175,7 @@ const Login = (): JSX.Element => {
           }}
         >
           <img
-            src="./src/components/LoginSignupPage/kakao_login.png"
+            src={kakaoLoginImg}
             alt="카카오톡 로그인"
             style={{ width: '50%', height: 'auto' }}
           />
