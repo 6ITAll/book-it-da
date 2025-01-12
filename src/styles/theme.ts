@@ -40,20 +40,22 @@ declare module '@mui/material/styles' {
 // 공통 팔레트
 const commonPalette = {
   primary: {
-    main: '#333333',
-    light: '#666666',
-    dark: '#1a1a1a',
+    main: '#1976d2', // 기본 MUI 블루
+    light: '#63a4ff',
+    dark: '#004ba0',
+    contrastText: '#ffffff',
   },
   secondary: {
     main: '#9c27b0',
-    light: '#ba68c8',
-    dark: '#7b1fa2',
+    light: '#d05ce3',
+    dark: '#6a0080',
+    contrastText: '#ffffff',
   },
   neutral: {
     main: '#64748B',
     light: '#94A3B8',
     dark: '#334155',
-    contrastText: '#fff',
+    contrastText: '#ffffff',
   },
   border: {
     light: '#E5E7EB',
@@ -68,7 +70,7 @@ const lightModePalette: PaletteOptions = {
   mode: 'light',
   ...commonPalette,
   background: {
-    default: '#f5f5f5',
+    default: '#f9f9f9',
     paper: '#ffffff',
   },
   text: {
@@ -145,22 +147,30 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       },
     },
     components: {
-      MuiCssBaseline: {
+      MuiContainer: {
         styleOverrides: {
-          body: {
-            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
-            color: mode === 'light' ? '#000' : '#fff',
+          root: {
+            backgroundColor: mode === 'light' ? '#f9f9f9' : '#121212',
           },
         },
       },
-      // 버튼 BorderRadius
+      // 전체 버튼
       MuiButton: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
-            color: mode === 'light' ? '#000' : '#fff',
-            textTransform: 'none',
+            transition: 'background-color 0.3s ease',
+            backgroundColor: mode === 'light' ? '#1976d2' : '#005cb2',
+            color: '#fff',
+            borderColor: mode === 'light' ? '#1976d2' : '#005cb2',
             borderRadius: 16,
+            '&:hover': {
+              backgroundColor: mode === 'light' ? '#115293' : '#1a76d2', // Adjusted hover color for contrast
+            },
+            '&:focus-visible': {
+              outline: '2px solid',
+              outlineColor: mode === 'light' ? '#1976d2' : '#1a76d2', // Focus ring color
+              outlineOffset: '2px',
+            },
           },
         },
       },
@@ -177,7 +187,8 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       MuiCard: {
         styleOverrides: {
           root: {
-            borderRadius: 16,
+            borderRadius: 12,
+            backgroundColor: mode === 'light' ? '#ffffff' : '#121212',
             boxShadow:
               mode === 'light'
                 ? '0 1px 3px rgba(0,0,0,0.12)'
@@ -192,6 +203,11 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
             color: mode === 'light' ? '#000' : '#fff',
             borderRadius: 8,
           },
+        },
+      },
+      MuiTextField: {
+        styleOverrides: {
+          root: {},
         },
       },
     },
