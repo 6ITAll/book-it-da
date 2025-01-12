@@ -24,7 +24,7 @@ export const navigateToPostingDetailPage = (
 
 export const navigateToUserPage = (
   navigate: NavigateFunction,
-  userId: string,
+  userId: string | number,
 ) => {
   if (!userId) {
     console.error('Invalid userId:', userId);
