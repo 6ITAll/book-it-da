@@ -25,9 +25,12 @@ const styles = {
       alignSelf: 'center',
     },
   },
-  followButton: {
+  followButton: (isFollowing: boolean) => ({
+    color: '#fff',
+    backgroundColor: isFollowing ? '#333' : '#3983d3',
+    border: 'none',
     mb: '0',
-  },
+  }),
   postInfoBox: {
     display: 'flex',
     fontSize: '11px',

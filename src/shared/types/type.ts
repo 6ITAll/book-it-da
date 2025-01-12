@@ -19,6 +19,7 @@ export interface User {
 // 책 상세페이지 포스트
 export interface BookDetailPost {
   itemId: string;
+  userId: string;
   title: string;
   description: string;
   userName: string;
@@ -56,6 +57,11 @@ export interface Review {
   content: string;
   likes: number;
   rating: number;
+}
+
+// 책 상세 페이지에 아바타에 필요한 userId 확장 타입
+export interface ReviewCard extends Review {
+  userId: string;
 }
 
 // 책 interface
@@ -103,4 +109,10 @@ export interface GenderAge {
   age: string;
   male: number;
   female: number;
+}
+
+//마이페이지 팔로우, 팔로잉
+export interface FollowRequest {
+  userId: string;
+  isFollowing: boolean;
 }

@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Stack, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import ReviewCard from '@components/commons/DetailPageReviewCard';
-import PostCard from '@components/commons/DetailPagePostCard';
+import ReviewCard from '@components/commons/ReviewCard';
+import PostCard from '@components/commons/PostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
 import StarRating from '@components/commons/StarRating';
@@ -34,8 +34,11 @@ const BookReviewsTab = ({
   const { data: reviewData = { totalReviews: 0, topReviews: [] } } =
     useGetReviewsQuery(itemId);
 
+  // 좋아요 높은 순 3개 리뷰
   const reviews = reviewData?.topReviews || [];
   const totalReviews = reviewData?.totalReviews || 0;
+
+  // 상위 3개 포스트
   const totalPosts = postData?.totalPosts || 0;
   const topPosts = postData?.topPosts || [];
 
@@ -104,6 +107,7 @@ const BookReviewsTab = ({
               >
                 <ReviewCard
                   username={review.username}
+                  userId={review.userId || ''}
                   date={review.date}
                   content={review.content}
                   likes={review.likes}
@@ -152,6 +156,7 @@ const BookReviewsTab = ({
                 sx={bookReviewTabStyles.gridContainer}
               >
                 <PostCard
+                  userId={post.userId}
                   title={post.title}
                   description={post.description}
                   userName={post.userName}

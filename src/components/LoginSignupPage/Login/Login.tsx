@@ -10,23 +10,25 @@ import {
   Divider,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import PasswordInput from './PasswordInput';
+import PasswordInput from '../PasswordInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
-import kakaoLoginImg from '@assets/images/kakao_login.png';
+import { LoginMessage } from './types'; // LoginProps는 필요 없으므로 제거
+import { StyledButton, StyledTypography } from './Login.styles';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}&response_type=code`;
 
-const Login = (): JSX.Element => {
+interface LoginProps {
+  onLogin: (userId: string) => void; // onLogin prop 추가
+}
+
+const Login = ({ onLogin }: LoginProps): JSX.Element => {
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [loginMessage, setLoginMessage] = useState<{
-    content: string;
-    isError: boolean;
-  }>({
+  const [loginMessage, setLoginMessage] = useState<LoginMessage>({
     content: '',
     isError: false,
   });
@@ -52,6 +54,7 @@ const Login = (): JSX.Element => {
 
         if (user) {
           dispatch(loginSuccess());
+          onLogin(userId); // 로그인 성공 시 onLogin 호출
           if (rememberMe) {
             localStorage.setItem('savedUserId', userId);
           } else {
@@ -79,7 +82,7 @@ const Login = (): JSX.Element => {
         });
       }
     },
-    [userId, password, rememberMe, autoLogin, navigate, dispatch],
+    [userId, password, rememberMe, autoLogin, navigate, dispatch, onLogin],
   );
 
   const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,8 +100,6 @@ const Login = (): JSX.Element => {
     if (savedUserId) {
       setUserId(savedUserId);
       setRememberMe(true);
-    } else {
-      setRememberMe(false);
     }
 
     const autoLoginData = localStorage.getItem('autoLogin');
@@ -107,7 +108,7 @@ const Login = (): JSX.Element => {
       setUserId(userId);
       setPassword(password);
       setAutoLogin(true);
-      handleLogin(null);
+      handleLogin(null); // 자동 로그인 시도
     }
   }, [handleLogin]);
 
@@ -120,7 +121,7 @@ const Login = (): JSX.Element => {
       <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
         로그인
       </Typography>
-      <Stack component="form" spacing={2} onSubmit={(e) => handleLogin(e)}>
+      <Stack component="form" spacing={2} onSubmit={handleLogin}>
         <TextField
           label="아이디"
           variant="outlined"
@@ -164,32 +165,22 @@ const Login = (): JSX.Element => {
 
         <Divider sx={{ my: 3 }}>또는</Divider>
 
-        <Button
-          onClick={handleKakaoLogin}
-          sx={{
-            padding: 0,
-            minWidth: 'auto',
-            '&:hover': {
-              opacity: 0.8,
-            },
-          }}
-        >
+        <StyledButton onClick={handleKakaoLogin}>
           <img
-            src={kakaoLoginImg}
+            src="./src/components/LoginSignupPage/kakao_login.png"
             alt="카카오톡 로그인"
             style={{ width: '50%', height: 'auto' }}
           />
-        </Button>
+        </StyledButton>
 
         <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
           계정이 없으신가요?{' '}
-          <Typography
+          <StyledTypography
             component="span"
-            sx={{ color: 'primary.main', cursor: 'pointer' }}
             onClick={() => navigate('/signup')}
           >
             회원가입
-          </Typography>
+          </StyledTypography>
         </Typography>
 
         {loginMessage.content && (

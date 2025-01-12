@@ -6,6 +6,19 @@ export interface User {
   gender: string;
   age: number;
   avatarUrl: string;
+  isFollowing: boolean;
+  isFollower: boolean;
+  userStats?: UserStat[];
+  about: string;
 }
 
-export type Account = Omit<User, 'gender' | 'age'>;
+export interface UserStat {
+  count: number;
+  label: string;
+  isAction?: boolean;
+}
+
+export type Account = Omit<User, 'gender' | 'age'> & {
+  userStats: UserStat[];
+  about: string;
+};
