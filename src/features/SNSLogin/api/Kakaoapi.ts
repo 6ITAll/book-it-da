@@ -15,6 +15,23 @@ export interface KakaoTokenResponse {
   refresh_token_expires_in: number;
 }
 
+export interface KakaoUserInfo {
+  userId: string;
+  connected_at: string;
+  properties: {
+    userName: string;
+    avatarUrl: string;
+  };
+  kakao_account: {
+    profile_needs_agreement?: boolean;
+    profile?: {
+      nickname: string;
+      avatarUrl: string;
+    };
+    email?: string;
+  };
+}
+
 export const kakaoApi = createApi({
   reducerPath: 'kakaoApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://kauth.kakao.com' }),
@@ -34,7 +51,16 @@ export const kakaoApi = createApi({
         }),
       }),
     }),
+    getKakaoUserInfo: builder.query<KakaoUserInfo, string>({
+      query: (accessToken) => ({
+        url: 'https://kapi.kakao.com/v2/user/me',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetKakaoTokenMutation } = kakaoApi;
+export const { useGetKakaoTokenMutation, useGetKakaoUserInfoQuery } = kakaoApi;

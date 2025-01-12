@@ -20,7 +20,7 @@ import { feedApi } from '@features/FeedPage/api/feedApi';
 import { oneLineReviewApi } from '@features/OneLineReviewDialog/api/oneLineReviewApi';
 import { postingWriteApi } from '@features/PostingWritePage/api/postingWriteApi';
 import { userApi } from '@features/user/userApi';
-
+import { followApi } from '@features/MyPage/api/followApi';
 import { addToLibraryApi } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShelfCountApi';
 import { followApi } from '@features/commons/followApi';
@@ -77,8 +77,6 @@ export const store = configureStore({
       oneLineReviewApi.middleware,
       postingWriteApi.middleware,
       userApi.middleware,
-      followApi.middleware,
-      likeApi.middleware,
     ]),
 });
 

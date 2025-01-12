@@ -104,3 +104,9 @@ export interface GenderAge {
   male: number;
   female: number;
 }
+
+//마이페이지 팔로우, 팔로잉
+export interface FollowRequest {
+  userId: string;
+  isFollowing: boolean;
+}

@@ -1,5 +1,22 @@
 import { http, HttpResponse } from 'msw';
 
+const mockKakaoUserInfo = {
+  userId: 'choi',
+  connected_at: '2025-01-10T16:00:00Z',
+  properties: {
+    userName: '최독서',
+    avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+  },
+  kakao_account: {
+    email: 'mockuser@example.com',
+    profile_needs_agreement: false,
+    profile: {
+      userName: '최독서',
+      avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+    },
+  },
+};
+
 export const kakaoHandlers = [
   http.post('https://kauth.kakao.com/oauth/token', async ({ request }) => {
     const body = await request.text();
@@ -24,6 +41,16 @@ export const kakaoHandlers = [
       );
     } else {
       return HttpResponse.json({ error: 'invalid_request' }, { status: 400 });
+    }
+  }),
+
+  http.get('https://kapi.kakao.com/v2/user/me', async ({ request }) => {
+    const authHeader = request.headers.get('Authorization');
+
+    if (authHeader === 'Bearer mock_access_token') {
+      return HttpResponse.json(mockKakaoUserInfo, { status: 200 });
+    } else {
+      return HttpResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
   }),
 ];
