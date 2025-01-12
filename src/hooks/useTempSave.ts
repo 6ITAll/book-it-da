@@ -50,7 +50,6 @@ export const useTempSave = (
   // 컴포넌트 마운트시, 임시저장 글 적용
   useEffect(() => {
     if (isEditing || hasBookFromDetail) {
-      // If editing or we have a book from location state, don't load from localStorage
       return;
     }
 
@@ -92,8 +91,15 @@ export const useTempSave = (
 
   // 설정한 정보 유지
   const loadTempPosting = useCallback(() => {
+    const tempPostingString = localStorage.getItem(TEMP_SAVE_STORAGE_KEY);
+    if (tempPostingString) {
+      const tempPosting: TempSaveData = JSON.parse(tempPostingString);
+      setTitle(tempPosting.title || '');
+      setContent(tempPosting.content || '');
+      setSelectedBook(tempPosting.selectedBook || null);
+    }
     setShowLoadDialog(false);
-  }, []);
+  }, [setTitle, setContent, setSelectedBook]);
 
   // 취소 누르면 데이터 초기화
   const ignoreTempPosting = useCallback(() => {

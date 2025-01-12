@@ -116,7 +116,7 @@ export const postingWriteStyles = {
     flexDirection: 'row !important',
     backgroundColor: 'transparent',
     padding: '1rem',
-    height: '80px',
+    height: '120px',
     cursor: 'default',
     boxShadow: '0 1px 4px rgba(0, 0, 0, 0.4)',
     '& .MuiCardMedia-root': {

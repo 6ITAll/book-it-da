@@ -12,6 +12,8 @@ import NonTitleDialog from '@components/commons/NonTitleDialog';
 import { useTempSave } from '@hooks/useTempSave';
 
 import { useGetPostByIdQuery } from '@features/PostDetailPage/api/postingApi';
+import { TEMP_SAVE_STORAGE_KEY } from '@constants/postingWrite';
+import { TempSaveData } from './types';
 const PostingWrite = () => {
   const { postingId } = useParams();
   const location = useLocation();
@@ -50,6 +52,9 @@ const PostingWrite = () => {
     book: selectedBook || ({} as Book), // null 대신 빈 객체 사용
     userId: 1,
   };
+  useEffect(() => {
+    console.log('selectedBook updated:', selectedBook);
+  }, [selectedBook]);
 
   const { data: postData } = useGetPostByIdQuery(postingId!, {
     skip: !isEditing || !postingId,
@@ -60,8 +65,16 @@ const PostingWrite = () => {
       setTitle(postData.title);
       setContent(postData.content);
       setSelectedBook(postData.book);
-    } else if (!isEditing) {
-      setSelectedBook(bookFromDetail || null);
+    } else if (!isEditing && bookFromDetail) {
+      setSelectedBook(bookFromDetail);
+    } else if (!isEditing && !bookFromDetail) {
+      const tempPostingString = localStorage.getItem(TEMP_SAVE_STORAGE_KEY);
+      if (tempPostingString) {
+        const tempPosting: TempSaveData = JSON.parse(tempPostingString);
+        setTitle(tempPosting.title || '');
+        setContent(tempPosting.content || '');
+        setSelectedBook(tempPosting.selectedBook || null);
+      }
     }
   }, [isEditing, postData, bookFromDetail]);
 
