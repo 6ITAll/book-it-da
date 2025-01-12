@@ -6,12 +6,15 @@ import {
   Stack,
   Button,
 } from '@mui/material';
+import { navigateToUserPage } from '@shared/utils/navigation';
+import { useNavigate } from 'react-router-dom';
 
 interface PostCardProps {
   title: string;
   description: string;
   userName: string;
   avatar: string;
+  userId: string;
 }
 
 const PostCard = ({
@@ -19,7 +22,10 @@ const PostCard = ({
   description,
   userName,
   avatar,
+  userId,
 }: PostCardProps): JSX.Element => {
+  const navigate = useNavigate();
+
   return (
     <Card
       sx={{
@@ -64,9 +70,10 @@ const PostCard = ({
         >
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar
+              onClick={() => navigateToUserPage(navigate, userId)}
               src={avatar}
               alt={userName}
-              sx={{ width: 40, height: 40 }}
+              sx={{ width: 40, height: 40, cursor: 'pointer' }}
             />
             <Typography variant="body2" fontWeight="bold">
               {userName}

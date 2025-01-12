@@ -2,7 +2,8 @@ import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
 import styles from './PostCard.styles';
 import { PostType, User } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
-
+import { navigateToUserPage } from '@shared/utils/navigation';
+import { useNavigate } from 'react-router-dom';
 interface PostCardHeaderProps {
   user: User;
   createdAt: string;
@@ -16,6 +17,13 @@ const PostCardHeader = ({
   postType,
   onFollowChange,
 }: PostCardHeaderProps): JSX.Element => {
+  const navigate = useNavigate();
+
+  // 아바타 클릭 핸들러
+  const handleAvatarClick = () => {
+    navigateToUserPage(navigate, user.userId);
+  };
+
   const handleFollowClick = () => {
     onFollowChange(user.userId, !user.isFollowing);
   };
@@ -23,7 +31,14 @@ const PostCardHeader = ({
   return (
     <CardHeader
       sx={styles.cardHeader}
-      avatar={<Avatar src={user.avatarUrl} alt={user.userName} />}
+      avatar={
+        <Avatar
+          onClick={handleAvatarClick}
+          sx={{ cursor: 'pointer' }}
+          src={user.avatarUrl}
+          alt={user.userName}
+        />
+      }
       action={
         <Button
           variant="outlined"
