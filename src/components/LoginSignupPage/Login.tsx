@@ -14,6 +14,7 @@ import PasswordInput from './PasswordInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
 import kakaoLoginImg from '@assets/images/kakao_login.png';
+import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
@@ -51,7 +52,24 @@ const Login = (): JSX.Element => {
         );
 
         if (user) {
-          dispatch(loginSuccess());
+          const userInfo: KakaoUserInfo = {
+            userId: user.userId,
+            connected_at: new Date().toISOString(),
+            properties: {
+              userName: user.userId,
+              avatarUrl: '',
+            },
+            kakao_account: {
+              profile_needs_agreement: false,
+              profile: {
+                nickname: user.userId,
+                avatarUrl: '',
+              },
+              email: user.userId,
+            },
+          };
+
+          dispatch(loginSuccess(userInfo));
           if (rememberMe) {
             localStorage.setItem('savedUserId', userId);
           } else {

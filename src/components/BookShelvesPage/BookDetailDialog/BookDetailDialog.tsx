@@ -167,7 +167,7 @@ const BookShelvesDetailDialog = ({
       />
       <AddToLibraryModal
         open={openAddToLibraryDialog}
-        onClose={handleCloseAddToLibrary}
+        setOpen={handleCloseAddToLibrary}
         itemId={book?.itemId}
         title={book?.bookTitle}
         author={book?.author}

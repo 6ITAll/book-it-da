@@ -18,7 +18,6 @@ export interface UserStat {
   isAction?: boolean;
 }
 
-export type Account = Omit<User, 'gender' | 'age'> & {
-  userStats: UserStat[];
-  about: string;
+export type Account = Pick<User, 'userId' | 'name' | 'phone' | 'avatarUrl'> & {
+  password: string;
 };

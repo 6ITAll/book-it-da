@@ -52,6 +52,7 @@ const ReviewFeedSection = ({
               date={review.date}
               content={review.content}
               likes={review.likes}
+              userId={review.userId}
             />
           </Grid>
         ))}

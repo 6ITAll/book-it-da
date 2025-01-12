@@ -15,17 +15,14 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
 import { LoginMessage } from './types'; // LoginProps는 필요 없으므로 제거
 import { StyledButton, StyledTypography } from './Login.styles';
+import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}&response_type=code`;
 
-interface LoginProps {
-  onLogin: (userId: string) => void; // onLogin prop 추가
-}
-
-const Login = ({ onLogin }: LoginProps): JSX.Element => {
+const Login = (): JSX.Element => {
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loginMessage, setLoginMessage] = useState<LoginMessage>({
@@ -53,8 +50,24 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         );
 
         if (user) {
-          dispatch(loginSuccess());
-          onLogin(userId); // 로그인 성공 시 onLogin 호출
+          const userInfo: KakaoUserInfo = {
+            userId: user.userId,
+            connected_at: new Date().toISOString(),
+            properties: {
+              userName: user.userId,
+              avatarUrl: '',
+            },
+            kakao_account: {
+              profile_needs_agreement: false,
+              profile: {
+                nickname: user.userId,
+                avatarUrl: '',
+              },
+              email: user.userId,
+            },
+          };
+          console.log(userInfo);
+          dispatch(loginSuccess(userInfo));
           if (rememberMe) {
             localStorage.setItem('savedUserId', userId);
           } else {
@@ -82,7 +95,7 @@ const Login = ({ onLogin }: LoginProps): JSX.Element => {
         });
       }
     },
-    [userId, password, rememberMe, autoLogin, navigate, dispatch, onLogin],
+    [userId, password, rememberMe, autoLogin, navigate, dispatch],
   );
 
   const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import { Snackbar as MuiSnackbar, Alert } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideSnackbar } from '@features/Snackbar/snackbarSlice';
-import { RootState } from '@store/store';
+import { RootState } from '@store/index';
 
 const SnackBar = (): JSX.Element | null => {
   const dispatch = useDispatch();

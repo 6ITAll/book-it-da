@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Book } from '@shared/types/type';
 import { debounce } from 'lodash';
-import { TEMP_SAVE_STORAGE_KEY } from 'src/constants/postingwrite';
+import { TEMP_SAVE_STORAGE_KEY } from 'src/constants/postingWrite';
 import { TempSaveData } from '@components/PostingWritePage/types';
 
 export const useTempSave = (
