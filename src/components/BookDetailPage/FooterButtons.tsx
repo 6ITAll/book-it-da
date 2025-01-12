@@ -18,8 +18,8 @@ const FooterButtons = ({
   link,
 }: FooterButtonsProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const handleGoToBuy = () => {
-    console.log(link);
     if (link) {
       window.open(link, '_blank'); // 링크로 이동
     } else {
@@ -36,15 +36,16 @@ const FooterButtons = ({
         onClick={() => setIsModalOpen(true)}
         sx={{ flex: 1, borderRadius: '0 0 8px 0' }}
       >
-        내서재에 담기
+        내 서재에 담기
       </Button>
+      {/* AddToLibraryModal 연결 */}
       <AddToLibraryModal
-        title={title}
         itemId={itemId}
+        title={title}
         author={author}
         imageUrl={imageUrl}
         open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        setOpen={setIsModalOpen} // 상태 관리 함수 전달
       />
     </Stack>
   );
