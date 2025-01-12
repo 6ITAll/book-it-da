@@ -1,46 +1,17 @@
-import { useState, KeyboardEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, KeyboardEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
-import { styled } from '@mui/material/styles';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Box, Button, Menu, MenuItem, InputBase } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
 import { logoutSuccess } from '@features/user/userSlice';
-
-const HeaderContainer = styled('header')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '10px 20px',
-  borderBottom: `1px solid ${theme.palette.divider}`,
-}));
-
-const Logo = styled(Link)(({ theme }) => ({
-  textDecoration: 'none',
-  color: theme.palette.text.primary,
-  fontSize: '24px',
-  fontWeight: 'bold',
-}));
-
-const SearchContainer = styled('div')({
-  marginRight: '20px',
-  display: 'flex',
-  alignItems: 'center',
-});
-
-const SearchInput = styled('input')(({ theme }) => ({
-  marginRight: '10px',
-  padding: '10px',
-  width: '250px',
-  borderRadius: '4px',
-  border: `1px solid ${theme.palette.divider}`,
-  outline: 'none',
-}));
-
-const IconWrapper = styled('div')({
-  cursor: 'pointer',
-});
+import {
+  StyledHeaderContainer,
+  StyledLogo,
+  StyledSearchContainer,
+  StyledIconWrapper,
+} from './Header.styles';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -63,12 +34,10 @@ const Header = (): JSX.Element => {
     const trimmedQuery = searchQuery.trim(); // 공백 제거
 
     if (trimmedQuery) {
-      // 검색어가 있을 경우 query 파라미터 추가 후 이동
       navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
       setSearchQuery(''); // 검색어 초기화
       setShowSearchBar(false); // 검색창 닫기
     } else {
-      // 검색어가 없을 경우 검색 페이지로 이동
       navigate('/search');
       setShowSearchBar(false); // 검색창 닫기
     }
@@ -100,28 +69,30 @@ const Header = (): JSX.Element => {
   };
 
   return (
-    <HeaderContainer>
-      <Logo to="/">잇다</Logo>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <SearchContainer>
+    <StyledHeaderContainer>
+      <StyledLogo to="/">잇다</StyledLogo>
+      <Box display="flex" alignItems="center">
+        <StyledSearchContainer>
           {showSearchBar && (
-            <SearchInput
-              type="text"
+            <InputBase
               placeholder="책 검색..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
+              sx={{ marginRight: '10px' }}
             />
           )}
-          <IconWrapper onClick={showSearchBar ? handleSearch : toggleSearchBar}>
+          <StyledIconWrapper
+            onClick={showSearchBar ? handleSearch : toggleSearchBar}
+          >
             <SearchIcon />
-          </IconWrapper>
-        </SearchContainer>
+          </StyledIconWrapper>
+        </StyledSearchContainer>
         {user.isLoggedIn ? (
           <div>
-            <IconWrapper onClick={handleProfileClick}>
+            <StyledIconWrapper onClick={handleProfileClick}>
               <PersonIcon />
-            </IconWrapper>
+            </StyledIconWrapper>
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -149,8 +120,8 @@ const Header = (): JSX.Element => {
             로그인
           </Button>
         )}
-      </div>
-    </HeaderContainer>
+      </Box>
+    </StyledHeaderContainer>
   );
 };
 
