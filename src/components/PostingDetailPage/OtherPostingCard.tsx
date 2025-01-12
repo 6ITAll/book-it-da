@@ -11,6 +11,7 @@ const OtherPostingCard = ({ post }: OtherPostingCardProps) => (
     description={post.content}
     userName={post.user.userName}
     avatar={post.user.avatarUrl}
+    userId={post.user.userId.toString()}
   />
 );
 

@@ -16,13 +16,16 @@ const LikedReviewMorePage = (): JSX.Element => {
 
   useEffect(() => {
     if (data?.feeds) {
-      setReviews((prevReviews) => [...prevReviews, ...data.feeds]);
-      if (data.feeds.length < 5) setHasMore(false);
+      const newReviews = data.feeds.filter(
+        (feed): feed is Review => 'username' in feed,
+      );
+      setReviews((prevReviews) => [...prevReviews, ...newReviews]);
+      if (newReviews.length < 5) setHasMore(false);
     }
   }, [data]);
 
   const fetchMoreData = () => {
-    if (!isLoading && !isError) {
+    if (!isLoading && !isError && hasMore) {
       setPage((prevPage) => prevPage + 1);
     }
   };

@@ -1,11 +1,11 @@
 import PostCard from '@components/commons/PostCard';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
 import { Box, Typography } from '@mui/material';
-import { Post } from '@shared/types/type';
+import { BookDetailPost } from '@shared/types/type';
 
 interface PostMoreTemplateProps {
   totalPosts?: number;
-  posts: Post[];
+  posts: BookDetailPost[];
   hasMore: boolean;
   fetchMoreData: () => void;
 }

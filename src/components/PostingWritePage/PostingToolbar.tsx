@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { postingWriteStyles } from './PostingWrite.styles';
-import { Book, User } from '@shared/types/type';
+import { Book } from '@shared/types/type';
 import {
   useGetSavedPostingsQuery,
   useSavePostingMutation,
@@ -15,7 +15,7 @@ interface PostingToolbarProps {
     title: string;
     content: string;
     book: Book;
-    user: User;
+    userId: number;
   };
   onLoadPosting: (posting: PostingRequest) => void;
 }

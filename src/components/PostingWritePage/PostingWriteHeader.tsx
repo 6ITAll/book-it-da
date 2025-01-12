@@ -5,7 +5,7 @@ import {
   useCreatePostingMutation,
   useUpdatePostingMutation,
 } from '@features/PostingWritePage/api/postingWriteApi';
-import { Book, User } from '@shared/types/type';
+import { Book } from '@shared/types/type';
 import { navigateBack } from '@shared/utils/navigation';
 import { postingWriteStyles } from './PostingWrite.styles';
 import { TEMP_SAVE_STORAGE_KEY } from '@constants/postingWrite';
@@ -15,7 +15,6 @@ interface PostingWriteHeaderProps {
   content: string;
   selectedBook: Book | null;
   isEditing: boolean;
-  user: Omit<User, 'isFollowing' | 'isFollower'>;
 }
 
 const PostingWriteHeader = ({
@@ -23,7 +22,6 @@ const PostingWriteHeader = ({
   content,
   selectedBook,
   isEditing,
-  user,
 }: PostingWriteHeaderProps) => {
   const navigate = useNavigate();
   const { postingId } = useParams();
@@ -43,7 +41,6 @@ const PostingWriteHeader = ({
       book: selectedBook,
       title,
       content,
-      user,
     };
 
     try {
@@ -51,7 +48,6 @@ const PostingWriteHeader = ({
         await updatePosting({
           postingId: Number(postingId),
           ...postData,
-          user,
         }).unwrap();
       } else {
         await createPosting(postData).unwrap();

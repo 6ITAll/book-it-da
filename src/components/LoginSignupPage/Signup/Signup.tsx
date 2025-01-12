@@ -15,8 +15,9 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import PasswordInput from '../PasswordInput';
-import { SignupData, schema } from '@features/SignupPage/type';
 import { StyledTitle, StyledSubmitButton } from './Signup.styles';
+import { SignupData } from '@features/SignupPage/types';
+import { schema } from '@utils/SignupPage/yupSchema';
 
 const Signup = (): JSX.Element => {
   const {
