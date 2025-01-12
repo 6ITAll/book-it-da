@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Container } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -16,6 +16,10 @@ import {
 import {
   setViewMode,
   setSortOption,
+  setBooks,
+  setTotalCount,
+  setBookshelfName,
+  deleteBook as deleteBookAction,
 } from '@features/BookShelvesPage/slice/bookShelvesSlice';
 import type { RootState } from '@store/index';
 import { useParams } from 'react-router-dom';
@@ -25,26 +29,33 @@ import { sortBooks } from 'src/utils/BookShelvesPage/sortBooks';
 
 const BookShelvesPage = () => {
   const dispatch = useDispatch();
-  const { viewMode, sortOption } = useSelector(
-    (state: RootState) => state.bookshelves,
-  );
+  const { viewMode, sortOption, books, totalCount, bookshelfName } =
+    useSelector((state: RootState) => state.bookshelves);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedBook, setSelectedBook] = useState<SavedBook | null>(null);
   const [deleteBook] = useDeleteBookMutation();
 
   const { userId, bookshelfId } = useParams();
 
-  const { data, error, isLoading, refetch } = useGetBookshelfQuery({
+  const { data, error, isLoading } = useGetBookshelfQuery({
     userId: Number(userId),
     bookshelfId: Number(bookshelfId),
   });
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setBooks(data.books));
+      dispatch(setTotalCount(data.totalCount));
+      dispatch(setBookshelfName(data.bookshelfName));
+    }
+  }, [data, dispatch]);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
     bookId: number,
   ) => {
     event.stopPropagation();
-    const book = data?.books.find((book) => book.itemId === bookId);
+    const book = books.find((book) => book.itemId === bookId);
     setSelectedBook(book || null);
     setOpenDialog(true);
   };
@@ -58,8 +69,8 @@ const BookShelvesPage = () => {
         bookshelfId: Number(bookshelfId),
         itemId: selectedBook.itemId,
       });
+      dispatch(deleteBookAction(selectedBook.itemId));
       setOpenDialog(false);
-      refetch();
     } catch (error) {
       console.error('Failed to delete book:', error);
     }
@@ -81,7 +92,7 @@ const BookShelvesPage = () => {
 
   return (
     <Container maxWidth="lg" sx={bookShelvesStyles.container}>
-      <BookshelfHeader name={data.bookshelfName} bookCount={data.totalCount} />
+      <BookshelfHeader name={bookshelfName} bookCount={totalCount} />
 
       <Box sx={bookShelvesStyles.filterViewBox}>
         <SortSelector
