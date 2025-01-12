@@ -1,4 +1,13 @@
 import { http, HttpResponse } from 'msw';
+import sample1 from '@assets/images/sample1.jpg';
+import sample2 from '@assets/images/sample2.jpg';
+import sample3 from '@assets/images/sample3.jpg';
+import sample4 from '@assets/images/sample4.jpg';
+import sample5 from '@assets/images/sample5.jpg';
+import sample6 from '@assets/images/sample6.jpg';
+import sample7 from '@assets/images/sample7.jpg';
+import sample8 from '@assets/images/sample8.jpg';
+import sample9 from '@assets/images/sample9.jpg';
 
 export const libraryHandlers = [
   http.get('/api/library/*', () => {
@@ -12,13 +21,13 @@ export const libraryHandlers = [
             {
               bookTitle: 'Book A',
               author: 'Author A',
-              imageUrl: 'src/assets/images/sample1.jpg',
+              imageUrl: sample1,
               itemId: 101,
             },
             {
               bookTitle: 'Book B',
               author: 'Author B',
-              imageUrl: 'src/assets/images/sample2.jpg',
+              imageUrl: sample2,
               itemId: 102,
             },
           ],
@@ -31,19 +40,19 @@ export const libraryHandlers = [
             {
               bookTitle: 'Book C',
               author: 'Author C',
-              imageUrl: 'src/assets/images/sample3.jpg',
+              imageUrl: sample3,
               itemId: 201,
             },
             {
               bookTitle: 'Book D',
               author: 'Author D',
-              imageUrl: 'src/assets/images/sample4.jpg',
+              imageUrl: sample4,
               itemId: 202,
             },
             {
               bookTitle: 'Book E',
               author: 'Author E',
-              imageUrl: 'src/assets/images/sample5.jpg',
+              imageUrl: sample5,
               itemId: 203,
             },
           ],
@@ -56,25 +65,25 @@ export const libraryHandlers = [
             {
               bookTitle: 'Book F',
               author: 'Author F',
-              imageUrl: 'src/assets/images/sample6.jpg',
+              imageUrl: sample6,
               itemId: 301,
             },
             {
               bookTitle: 'Book G',
               author: 'Author G',
-              imageUrl: 'src/assets/images/sample7.jpg',
+              imageUrl: sample7,
               itemId: 302,
             },
             {
               bookTitle: 'Book H',
               author: 'Author H',
-              imageUrl: 'src/assets/images/sample8.jpg',
+              imageUrl: sample8,
               itemId: 303,
             },
             {
               bookTitle: 'Book I',
               author: 'Author I',
-              imageUrl: 'src/assets/images/sample9.jpg',
+              imageUrl: sample9,
               itemId: 304,
             },
           ],

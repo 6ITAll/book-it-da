@@ -1,4 +1,4 @@
-import PostCard from '@components/commons/DetailPagePostCard';
+import PostCard from '@components/commons/PostCard';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
 import { Box, Typography } from '@mui/material';
 import { Post } from '@shared/types/type';

@@ -21,3 +21,14 @@ export const navigateToPostingDetailPage = (
 ) => {
   navigate(`/posting/${postId}`);
 };
+
+export const navigateToUserPage = (
+  navigate: NavigateFunction,
+  userId: string | number,
+) => {
+  if (!userId) {
+    console.error('Invalid userId:', userId);
+    return;
+  }
+  navigate(`/my-page/${userId}`);
+};

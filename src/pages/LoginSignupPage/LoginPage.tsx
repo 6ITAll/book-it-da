@@ -1,4 +1,4 @@
-import Login from '@components/LoginSignupPage/Login';
+import Login from '@components/LoginSignupPage/Login/Login';
 
 const LoginPage = (): JSX.Element => {
   const handleLogin = (userId: string) => {
