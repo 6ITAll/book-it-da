@@ -2,7 +2,7 @@ import { useState, KeyboardEvent, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Button, Menu, MenuItem, Switch } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
@@ -54,6 +54,7 @@ const Header = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const open = Boolean(anchorEl);
+  const theme = useTheme();
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
@@ -127,6 +128,10 @@ const Header = (): JSX.Element => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
+              sx={{
+                bgcolor: theme.palette.background.paper,
+                color: theme.palette.text.primary,
+              }}
             />
           )}
           <IconWrapper onClick={showSearchBar ? handleSearch : toggleSearchBar}>
