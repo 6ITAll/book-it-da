@@ -3,7 +3,6 @@ import LoginSignup from '@pages/LoginSignupPage/LoginPage';
 import SignupPage from '@pages/LoginSignupPage/SignupPage';
 import FeedPage from '@pages/MainPage/Main';
 import BookSearchPage from '@pages/BookSearchPage/BookSearch';
-import MyPage from '@pages/MyPage/MyPage';
 import NotFoundPage from '@pages/NotFoundPage/NotFound';
 import RoutePaths from './RoutePath';
 import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
@@ -17,6 +16,7 @@ import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
 import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
 import LikedPostMorePage from '@pages/LikedPostMorePage/LikedPostMorePage';
 import LikedReviewMorePage from '@pages/LikedReviewMorePage/LikedReviewMorePage';
+import MyPage from '@pages/MyPage/MyPage';
 const AppRouter = () => {
   return (
     <Routes>
@@ -27,6 +27,7 @@ const AppRouter = () => {
       <Route path={RoutePaths.SEARCH} element={<BookSearchPage />} />
       <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
       <Route path="/oauth/kakao" element={<KakaoCallback />} />
+      <Route path="/:userId" element={<MyPage />} />
       <Route
         path={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`}
         element={<PasswordChkPage />}
@@ -52,6 +53,10 @@ const AppRouter = () => {
         element={<BookShelvesPage />}
       />
       <Route path={RoutePaths.POSTING_WRITE} element={<PostingWritePage />} />
+      <Route
+        path={`${RoutePaths.POSTING_EDIT}/:postingId`}
+        element={<PostingWritePage />}
+      />
       <Route
         path={`${RoutePaths.POSTING}/:postingId?`}
         element={<PostingDetailPage />}

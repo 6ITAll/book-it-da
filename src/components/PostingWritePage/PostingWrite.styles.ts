@@ -1,5 +1,17 @@
-export const styles = {
-  Content: {
+export const postingWriteStyles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    minHeight: '100vh',
+    width: '100%',
+    padding: '0 !important',
+    margin: '0 !important',
+    backgroundColor: '#f0f0f0',
+    boxSizing: 'border-box',
+  },
+  content: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -8,6 +20,21 @@ export const styles = {
     minHeight: '100vh',
     backgroundColor: '#f0f0f0',
     borderTop: '1px solid #ccc',
+    boxSizing: 'border-box',
+  },
+  header: {
+    width: '100%',
+    position: 'sticky',
+    opacity: '0.9',
+    top: 0,
+    bgcolor: 'white',
+    zIndex: 1000,
+    borderBottom: '1px solid #eee',
+    py: 2,
+    px: 3,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     boxSizing: 'border-box',
   },
   postingToolbar: {
@@ -76,7 +103,7 @@ export const styles = {
     flex: '1 1 auto',
   },
   bookPreviewBox: {
-    width: '90%',
+    width: '50%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -89,7 +116,9 @@ export const styles = {
     flexDirection: 'row !important',
     backgroundColor: 'transparent',
     padding: '1rem',
-    height: '60px',
+    height: '80px',
+    cursor: 'default',
+    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.4)',
     '& .MuiCardMedia-root': {
       width: '80px',
       height: '100%',
@@ -106,6 +135,7 @@ export const styles = {
     },
     '& .MuiTypography-body1': {
       fontSize: '14px',
+      color: 'black',
     },
     '& .MuiTypography-body2': {
       fontSize: '11px',
@@ -145,5 +175,9 @@ export const styles = {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+  },
+  savedPostingBox: {
+    cursor: 'pointer',
+    '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
   },
 };

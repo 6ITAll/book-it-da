@@ -34,7 +34,7 @@ const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
         open={open}
         setOpen={setOpen}
         title={label}
-        contentNode={<FollowList />}
+        contentNode={<FollowList setOpen={setOpen} />}
       />
     </>
   );

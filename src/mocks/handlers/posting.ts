@@ -1,15 +1,12 @@
 import { http, HttpResponse } from 'msw';
 import { mockPosts } from './feed';
+import sample1 from '@assets/images/sample1.jpg';
+import sample2 from '@assets/images/sample2.jpg';
+import sample3 from '@assets/images/sample3.jpg';
 
 const CURRENT_USER = {
   userId: 2,
   userName: 'Current User',
-};
-
-const IMAGES = {
-  sample1: new URL('../../assets/images/sample1.jpg', import.meta.url).href,
-  sample2: new URL('../../assets/images/sample2.jpg', import.meta.url).href,
-  sample3: new URL('../../assets/images/sample3.jpg', import.meta.url).href,
 };
 
 const mockOtherPosts = {
@@ -73,7 +70,7 @@ const mockOtherPosts = {
       book: {
         title: '노르웨이의 숲',
         author: '무라카미 하루키',
-        imageUrl: IMAGES.sample1,
+        imageUrl: sample1,
         isFollowing: false,
         isFollower: false,
       },
@@ -93,7 +90,7 @@ const mockOtherPosts = {
       book: {
         title: '해변의 카프카',
         author: '무라카미 하루키',
-        imageUrl: IMAGES.sample2,
+        imageUrl: sample2,
       },
     },
     {
@@ -111,7 +108,7 @@ const mockOtherPosts = {
       book: {
         title: '상실의 시대',
         author: '무라카미 하루키',
-        imageUrl: IMAGES.sample3,
+        imageUrl: sample3,
       },
     },
   ],
@@ -148,23 +145,21 @@ export const postingHandlers = [
     return HttpResponse.json(mockOtherPosts.userPosts);
   }),
 
-  http.post('/api/posts/:postId/like', ({ params }) => {
-    const postId = Number(params.postId);
-    const post = mockPosts.find((p) => p.id === postId);
+  http.post('/api/users/:userId/follow', async ({ params, request }) => {
+    const userId = Number(params.userId);
+    const { isFollowing } = (await request.json()) as { isFollowing: boolean };
+
+    const post = mockPosts.find((p) => p.user.userId === userId);
 
     if (!post) {
       return HttpResponse.json(
-        { message: '포스팅을 찾을 수 없습니다.' },
+        { message: '사용자를 찾을 수 없습니다.' },
         { status: 404 },
       );
     }
 
-    post.isLiked = !post.isLiked;
-    post.likeCount += post.isLiked ? 1 : -1;
+    post.user.isFollowing = isFollowing;
 
-    return HttpResponse.json({
-      isLiked: post.isLiked,
-      likeCount: post.likeCount,
-    });
+    return HttpResponse.json(post.user);
   }),
 ];

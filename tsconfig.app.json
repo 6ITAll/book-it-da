@@ -9,7 +9,9 @@
       "@store/*": ["src/store/*"],
       "@styles/*": ["src/styles/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@constants/*": ["src/constants/*"],
+      "@assets/*": ["src/assets/*"]
     },
 
     "composite": true, // 프로젝트 참조를 위한 필수 옵션

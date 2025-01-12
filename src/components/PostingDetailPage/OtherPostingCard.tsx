@@ -1,22 +1,15 @@
 import PostCard from '@components/commons/PostCard';
+import { OtherPost } from '@features/PostDetailPage/types/types';
 
 interface OtherPostingCardProps {
-  post: {
-    title: string;
-    content: string;
-    user: {
-      id: number;
-      name: string;
-      avatarUrl: string;
-    };
-  };
+  post: OtherPost;
 }
 
 const OtherPostingCard = ({ post }: OtherPostingCardProps) => (
   <PostCard
     title={post.title}
-    content={post.content}
-    author={post.user.name}
+    description={post.content}
+    userName={post.user.userName}
     avatar={post.user.avatarUrl}
   />
 );

@@ -8,67 +8,80 @@ import {
   PostType,
 } from '@shared/types/type';
 import { OneLineReviewRequest } from '@features/OneLineReviewDialog/types/types';
-import { PostingRequest } from '@features/PostingWritePage/types/types';
+import {
+  PostingRequest,
+  UpdatePostingRequest,
+} from '@features/PostingWritePage/types/types';
+import sample1 from '@assets/images/sample1.jpg';
+import sample2 from '@assets/images/sample2.jpg';
+import sample3 from '@assets/images/sample3.jpg';
+import sample4 from '@assets/images/sample4.jpg';
+import sample5 from '@assets/images/sample5.jpg';
+import sample6 from '@assets/images/sample6.jpg';
+import sample7 from '@assets/images/sample7.jpg';
+import sample8 from '@assets/images/sample8.jpg';
+import sample9 from '@assets/images/sample9.jpg';
+import sample10 from '@assets/images/sample10.jpg';
 
 export const bookData: Book[] = [
   {
     bookTitle: '금각사',
     author: '미시마 유키오',
-    imageUrl: '/src/assets/images/sample1.jpg',
+    imageUrl: sample1,
     itemId: 107413605,
   },
   {
     bookTitle: '여행의 이유',
     author: '김영하',
-    imageUrl: '/src/assets/images/sample2.jpg',
+    imageUrl: sample2,
     itemId: 337633173,
   },
   {
     bookTitle: '참을 수 없는 존재의 가벼움',
     author: '밀란 쿤데라',
-    imageUrl: '/src/assets/images/sample3.jpg',
+    imageUrl: sample3,
     itemId: 347978053,
   },
   {
     bookTitle: '눈먼 자들의 도시',
     author: '주제 사라마구',
-    imageUrl: '/src/assets/images/sample4.jpg',
+    imageUrl: sample4,
     itemId: 303079837,
   },
   {
     bookTitle: '밤의 사색',
     author: '헤르만 헤세',
-    imageUrl: '/src/assets/images/sample5.jpg',
+    imageUrl: sample5,
     itemId: 192003166,
   },
   {
     bookTitle: '보통의 존재',
     author: '이석원',
-    imageUrl: '/src/assets/images/sample6.jpg',
+    imageUrl: sample6,
     itemId: 4785218,
   },
   {
     bookTitle: '모국어는 차라리 침묵',
     author: '목정원',
-    imageUrl: '/src/assets/images/sample7.jpg',
+    imageUrl: sample7,
     itemId: 280910486,
   },
   {
     bookTitle: '구토',
     author: '장 폴 사르트르',
-    imageUrl: '/src/assets/images/sample8.jpg',
+    imageUrl: sample8,
     itemId: 33606,
   },
   {
     bookTitle: '시와 산책',
     author: '한정원',
-    imageUrl: '/src/assets/images/sample9.jpg',
+    imageUrl: sample9,
     itemId: 243698085,
   },
   {
     bookTitle: '봄눈',
     author: '미시마 유키오',
-    imageUrl: '/src/assets/images/sample10.jpg',
+    imageUrl: sample10,
     itemId: 251278195,
   },
 ];
@@ -245,13 +258,13 @@ export const feedHandlers = [
   }),
   http.post('/api/posts/posting', async ({ request }) => {
     const body = (await request.json()) as PostingRequest;
-    const { book, title, content } = body;
+    const { book, title, content, userId } = body;
 
     const newPost: Posting = {
       id: mockPosts.length + 1,
       createdAt: new Date().toISOString(),
       user: {
-        userId: 1,
+        userId: userId,
         userName: 'currentUser',
         avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
         isFollower: false,
@@ -274,6 +287,49 @@ export const feedHandlers = [
     return HttpResponse.json(
       { success: true, message: '포스팅이 작성되었습니다.', post: newPost },
       { status: 201 },
+    );
+  }),
+  http.put('/api/posts/posting/:postingId', async ({ params, request }) => {
+    const { postingId } = params;
+    const body = (await request.json()) as UpdatePostingRequest;
+    const { book, title, content, userId } = body;
+
+    const postIndex = mockPosts.findIndex(
+      (post) => post.id === Number(postingId),
+    );
+
+    if (postIndex === -1) {
+      return HttpResponse.json(
+        { success: false, message: '포스팅을 찾을 수 없습니다.' },
+        { status: 404 },
+      );
+    }
+
+    // userId 확인 (옵션)
+    if (mockPosts[postIndex].user.userId !== userId) {
+      return HttpResponse.json(
+        { success: false, message: '포스팅을 수정할 권한이 없습니다.' },
+        { status: 403 },
+      );
+    }
+
+    const updatedPost = {
+      ...mockPosts[postIndex],
+      book: {
+        bookTitle: book.bookTitle,
+        author: book.author,
+        imageUrl: book.imageUrl,
+        itemId: book.itemId,
+      },
+      title,
+      content,
+    } as Posting;
+
+    mockPosts[postIndex] = updatedPost;
+
+    return HttpResponse.json(
+      { success: true, message: '포스팅이 수정되었습니다.', post: updatedPost },
+      { status: 200 },
     );
   }),
 ];
