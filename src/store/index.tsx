@@ -79,6 +79,8 @@ export const store = configureStore({
       postingWriteApi.middleware,
       mypageFollowApi.middleware,
       userApi.middleware,
+      followApi.middleware,
+      likeApi.middleware,
     ]),
 });
 
