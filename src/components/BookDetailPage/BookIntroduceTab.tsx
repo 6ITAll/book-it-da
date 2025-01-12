@@ -23,10 +23,18 @@ const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
       </Box>
       {/* 책 소개 */}
       <Box sx={bookDetailStyles.bookIntroduceBox}>
-        <Typography variant="h6" fontWeight="bold" gutterBottom>
+        <Typography
+          sx={bookDetailStyles.bookIntroduceText}
+          variant="h6"
+          fontWeight="bold"
+        >
           책 소개
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography
+          sx={bookDetailStyles.bookIntroduceText}
+          variant="body1"
+          color="text.secondary"
+        >
           {description || '책 소개가 없습니다.'}
         </Typography>
       </Box>

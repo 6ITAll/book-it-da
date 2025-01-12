@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Box, Typography, Button, Stack } from '@mui/material';
+import { Box, Typography, Button, Stack, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ReviewCard from '@components/commons/DetailPageReviewCard';
 import PostCard from '@components/commons/DetailPagePostCard';
@@ -10,7 +9,7 @@ import { useGetPostsQuery } from '@features/BookDetailPage/api/postApi';
 import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 import { MoreType } from '@components/BookDetailPage/types';
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
-
+import { useState } from 'react';
 interface BookReviewTabProps {
   itemId: number;
   title: string;
@@ -28,6 +27,7 @@ const BookReviewsTab = ({
   const navigate = useNavigate();
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
     useState<boolean>(false);
+  const theme = useTheme();
 
   const { data: postData = { totalPosts: 0, topPosts: [] } } =
     useGetPostsQuery(itemId);
@@ -84,7 +84,7 @@ const BookReviewsTab = ({
             이 책은 어떠셨나요? 별점을 남겨주세요
           </Typography>
         </Box>
-        <Box display="flex" justifyContent="flex-end">
+        <Box display="flex" padding="1rem 0rem" justifyContent="flex-end">
           <Button
             size="small"
             variant="text"
@@ -94,23 +94,39 @@ const BookReviewsTab = ({
             더보기
           </Button>
         </Box>
-        <Grid container spacing={2}>
-          {reviews?.map((review, index) => (
-            <Grid
-              key={index}
-              size={{ xs: 12, md: 4 }}
-              sx={bookReviewTabStyles.gridContainer}
-            >
-              <ReviewCard
-                username={review.username}
-                date={review.date}
-                content={review.content}
-                likes={review.likes}
-                rating={review.rating}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {reviews.length > 0 ? (
+          <Grid container spacing={2}>
+            {reviews.map((review, index) => (
+              <Grid
+                key={index}
+                size={{ xs: 12, md: 4 }}
+                sx={bookReviewTabStyles.gridContainer}
+              >
+                <ReviewCard
+                  username={review.username}
+                  date={review.date}
+                  content={review.content}
+                  likes={review.likes}
+                  rating={review.rating}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Box
+            sx={{
+              bgcolor: theme.palette.background.paper,
+              padding: '3rem',
+              textAlign: 'center',
+              borderRadius: '8px',
+              marginTop: '1rem',
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              리뷰가 없습니다.
+            </Typography>
+          </Box>
+        )}
       </Box>
       {/* 포스트 섹션 */}
       <Box>
@@ -127,22 +143,38 @@ const BookReviewsTab = ({
             더보기
           </Button>
         </Box>
-        <Grid container spacing={2}>
-          {topPosts?.map((post, index) => (
-            <Grid
-              key={index}
-              size={{ xs: 12, md: 4 }}
-              sx={bookReviewTabStyles.gridContainer}
-            >
-              <PostCard
-                title={post.title}
-                description={post.description}
-                userName={post.userName}
-                avatar={post.avatar}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {topPosts.length > 0 ? (
+          <Grid container spacing={2}>
+            {topPosts.map((post, index) => (
+              <Grid
+                key={index}
+                size={{ xs: 12, md: 4 }}
+                sx={bookReviewTabStyles.gridContainer}
+              >
+                <PostCard
+                  title={post.title}
+                  description={post.description}
+                  userName={post.userName}
+                  avatar={post.avatar}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Box
+            sx={{
+              bgcolor: theme.palette.background.paper,
+              padding: '3rem',
+              textAlign: 'center',
+              borderRadius: '8px',
+              marginTop: '1rem',
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              포스팅 글이 없습니다.
+            </Typography>
+          </Box>
+        )}
       </Box>
       {/* 한줄평 작성 모달 */}
       <OneLineReviewDialog
