@@ -20,8 +20,11 @@ const LikedPostMorePage = (): JSX.Element => {
         (feed): feed is BookDetailPost => 'itemId' in feed,
       );
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-      if (newPosts.length < 10) setHasMore(false);
+      setHasMore(
+        newPosts.length > 0 && posts.length + newPosts.length < data.totalFeeds,
+      );
     }
+    // eslint-disable-next-line
   }, [data]);
 
   const fetchMoreData = () => {
