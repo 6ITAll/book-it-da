@@ -1,23 +1,13 @@
 import React, { useState, KeyboardEvent, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
-import { styled, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import { Box, Button, Menu, MenuItem, InputBase, Switch } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
 import { toggleTheme } from '@features/DarkMode/darkModeSlice';
 import { logoutSuccess } from '@features/user/userSlice';
-
-const HeaderContainer = styled('header')(({ theme }) => ({
-  backgroundColor: theme.palette.background.default, // MUI 테마의 배경색
-  color: theme.palette.text.primary, // MUI 테마의 텍스트 색상
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '10px 20px',
-  borderBottom: `1px solid ${theme.palette.divider}`,
-}));
 
 import {
   StyledHeaderContainer,
