@@ -164,11 +164,11 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
             borderColor: mode === 'light' ? '#1976d2' : '#005cb2',
             borderRadius: 16,
             '&:hover': {
-              backgroundColor: mode === 'light' ? '#115293' : '#1a76d2', // Adjusted hover color for contrast
+              backgroundColor: mode === 'light' ? '#115293' : '#1976d2',
             },
             '&:focus-visible': {
               outline: '2px solid',
-              outlineColor: mode === 'light' ? '#1976d2' : '#1a76d2', // Focus ring color
+              outlineColor: mode === 'light' ? '#1976d2' : '#1a76d2',
               outlineOffset: '2px',
             },
           },
