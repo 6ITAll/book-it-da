@@ -43,7 +43,7 @@ const PostCardHeader = ({
         <Button
           variant="outlined"
           size="small"
-          sx={styles.followButton}
+          sx={styles.followButton(user.isFollowing)}
           onClick={handleFollowClick}
         >
           {user.isFollowing ? '팔로잉' : '팔로우'}

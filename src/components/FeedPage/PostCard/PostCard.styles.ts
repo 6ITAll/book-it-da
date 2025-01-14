@@ -25,11 +25,28 @@ const styles = {
       alignSelf: 'center',
     },
   },
-  followButton: (isFollowing: boolean) => ({
-    color: '#fff',
-    backgroundColor: isFollowing ? '#333' : '#3983d3',
+  followButton: (isFollowing: boolean) => (theme: Theme) => ({
+    color: isFollowing
+      ? theme.palette.getContrastText(theme.palette.secondary.main)
+      : theme.palette.getContrastText(theme.palette.primary.main),
+    backgroundColor: isFollowing
+      ? theme.palette.mode === 'light'
+        ? theme.palette.secondary.light
+        : theme.palette.secondary.dark
+      : theme.palette.mode === 'light'
+        ? theme.palette.primary.light
+        : theme.palette.primary.main,
     border: 'none',
     mb: '0',
+    '&:hover': {
+      backgroundColor: isFollowing
+        ? theme.palette.mode === 'light'
+          ? theme.palette.secondary.dark
+          : theme.palette.secondary.main
+        : theme.palette.mode === 'light'
+          ? theme.palette.primary.main
+          : theme.palette.primary.light,
+    },
   }),
   postInfoBox: {
     display: 'flex',
