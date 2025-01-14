@@ -27,12 +27,7 @@ export const bookShelvesStyles = {
     gap: '0.5rem',
   },
   sortSelector: {
-    backgroundColor: '#fafafa',
-    color: '#333',
     borderRadius: '16px',
-    '&:hover': {
-      backgroundColor: '#f0f0f0',
-    },
   },
   sortMenus: {
     fontSize: '12px',

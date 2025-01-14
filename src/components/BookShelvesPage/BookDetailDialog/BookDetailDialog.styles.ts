@@ -1,3 +1,5 @@
+import { Theme } from '@mui/material';
+
 export const bookDetailDialogStyles = {
   bookPreview: {
     width: '100%',
@@ -45,18 +47,18 @@ export const bookDetailDialogStyles = {
     mt: 1,
     mb: 2,
   },
-  mainButton: {
+  mainButton: (theme: Theme) => ({
     fontSize: '14px',
     p: 1.5,
     flex: 1,
-    backgroundColor: '#f0f0f0',
-    color: '#333',
+    bgcolor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
     border: 'none',
     borderRadius: '8px',
     '&:hover': {
-      backgroundColor: '#eaeaea',
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
-  },
+  }),
   readingStatusBox: {
     width: '100%',
     display: 'flex',
@@ -100,17 +102,18 @@ export const bookDetailDialogStyles = {
       },
     },
   },
-  subButtons: {
+  subButtons: (theme: Theme) => ({
     height: '6vh',
     justifyContent: 'flex-start',
     px: 2,
     py: 1.5,
     border: 'none',
     borderRadius: 0,
-    color: '#333',
+    bgcolor: theme.palette.background.default,
+    color: theme.palette.text.primary,
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
       border: 'none',
     },
-  },
+  }),
 };

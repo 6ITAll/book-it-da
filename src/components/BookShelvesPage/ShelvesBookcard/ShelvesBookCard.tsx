@@ -1,4 +1,11 @@
-import { Box, Typography, CardMedia, IconButton, Button } from '@mui/material';
+import {
+  Box,
+  Typography,
+  CardMedia,
+  IconButton,
+  Button,
+  useTheme,
+} from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { formatDate } from '@shared/utils/dateUtils';
 import { BookCard, shelvesBookCardStyles } from './ShelvesBookCard.styles';
@@ -19,9 +26,15 @@ interface BookCardProps {
 const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
   const formattedDate = formatDate(book.savedAt);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
-    <BookCard view={view} sx={{}}>
+    <BookCard
+      view={view}
+      sx={{
+        padding: view === 'grid' ? '0' : '1rem 0',
+      }}
+    >
       {view === 'grid' ? (
         <>
           <Box className="book-cover">
@@ -34,7 +47,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               {renderReadingStatusIcon(book.readingStatus)}
             </Box>
           </Box>
-          <Box>
+          <Box sx={{ bgcolor: theme.palette.background.default }}>
             <Box sx={shelvesBookCardStyles.gridBookTitleBox}>
               <Typography variant="subtitle1" noWrap sx={{ flex: 1 }}>
                 {book.bookTitle}
@@ -68,7 +81,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             image={book.imageUrl}
             alt={book.bookTitle}
           />
-          <Box className="book-info" sx={{ padding: '0 1rem !important' }}>
+          <Box className="book-info" sx={{ padding: '1rem 1rem !important' }}>
             <Box sx={shelvesBookCardStyles.listBookCardContent}>
               <Box sx={shelvesBookCardStyles.listBookInfoBox}>
                 {renderReadingStatus(book.readingStatus)}
