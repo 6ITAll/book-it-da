@@ -77,6 +77,9 @@ const ReviewCard = ({
             marginTop: '0.5rem',
             bgcolor: theme.palette.background.paper,
             color: theme.palette.text.primary,
+            '&:hover': {
+              bgcolor: 'transparent',
+            },
           }}
         >
           좋아요 {likes}
