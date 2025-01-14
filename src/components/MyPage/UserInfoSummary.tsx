@@ -1,7 +1,8 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography, useTheme } from '@mui/material';
 import HybridDialog from '../commons/HybridDialog/HybridDialog';
 import { useState } from 'react';
 import FollowList from './FollowList';
+import userInfoStyles from './Mypage.style';
 
 interface UserInfoSummaryProps {
   count: number;
@@ -11,6 +12,7 @@ interface UserInfoSummaryProps {
 
 const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
 
   return (
     <>
@@ -25,6 +27,13 @@ const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
                 setOpen(true);
               }
             : undefined
+        }
+        sx={
+          isAction
+            ? label === '팔로잉'
+              ? userInfoStyles.userInfoButtonFollowing(theme)
+              : userInfoStyles.userInfoButtonFollower(theme)
+            : {}
         }
       >
         <Typography>{count}</Typography>

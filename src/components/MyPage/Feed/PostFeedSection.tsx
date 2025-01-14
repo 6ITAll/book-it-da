@@ -1,5 +1,5 @@
 import PostCard from '@components/commons/PostCard';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { BookDetailPost } from '@shared/types/type';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ const PostFeedSection = ({
   posts,
 }: PostFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
     <Box>
@@ -31,7 +32,11 @@ const PostFeedSection = ({
         <Button
           size="small"
           variant="text"
-          sx={{ color: '#333', fontWeight: 'bold' }}
+          sx={{
+            color: theme.palette.text.primary,
+            bgcolor: theme.palette.background.default,
+            fontWeight: 'bold',
+          }}
           onClick={() => {
             navigate(`/my-page/${userId}/feeds/posts`);
           }}
