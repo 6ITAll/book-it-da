@@ -93,16 +93,21 @@ export const bookDetailStyles = {
     backgroundColor: '#333',
     color: '#fff',
     borderRadius: '0 0 0 8px',
-    '&:hover': { backgroundColor: '#444' },
+    '&:hover': { backgroundColor: '#222' },
   },
-  addBookShelfButton: {
+  addBookShelfButton: (theme: Theme) => ({
     width: '100%',
     cursor: 'pointer',
     textAlign: 'center',
-    border: '1px solid #e6e7e8',
+    border: '3px solid #e6e7e8',
     borderRadius: 1,
     padding: '1rem',
-  },
+    bgcolor: 'transparent',
+    color: theme.palette.text.primary,
+    '&:hover': {
+      bgcolor: theme.palette.action.selected,
+    },
+  }),
   bookDetailContentBox: {
     display: 'flex',
     flexDirection: { xs: 'column', md: 'row' },
@@ -186,6 +191,7 @@ export const summaryStyles = {
     bgcolor: theme.palette.background.paper,
     flex: 1,
     display: 'flex',
+    padding: '1rem 0',
     justifyContent: 'center',
     alignItems: 'center',
   }),
