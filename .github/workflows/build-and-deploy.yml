@@ -1,0 +1,61 @@
+name: Build & Deploy to AWS CloudFront
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    name: Build And Deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - name: Checkout Commit
+        uses: actions/checkout@v4
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-npm-v3-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-v3
+      - name: Install dependencies if cache invalid
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Configure environment variables
+        run: |
+          echo "VITE_PROD_ALADIN_PROXY_BASEURL=${{secrets.VITE_PROD_ALADIN_PROXY_BASEURL}}" >> .env.production
+          echo "VITE_ALADIN_API_KEY=${{secrets.VITE_ALADIN_API_KEY}}" >> .env.production
+          echo "VITE_ALADIN_BASEURL=${{secrets.VITE_ALADIN_BASEURL}}" >> .env.production
+          echo "VITE_ALADIN_ITEM_SEARCH_URL=${{secrets.VITE_ALADIN_ITEM_SEARCH_URL}}" >> .env.production
+          echo "VITE_ALADIN_ITEM_LIST_URL=${{secrets.VITE_ALADIN_ITEM_LIST_URL}}" >> .env.production
+          echo "VITE_ALADIN_ITEM_LOOK_UP_URL=${{secrets.VITE_ALADIN_ITEM_LOOK_UP_URL}}" >> .env.production
+          echo "VITE_KAKAO_REST_API_KEY=${{secrets.VITE_KAKAO_REST_API_KEY}}" >> .env.production
+          echo "VITE_KAKAO_REDIRECT_URI=${{secrets.VITE_KAKAO_REDIRECT_URI}}" >> .env.production
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Copy files to the production website with the AWS CLI
+        run: |
+          aws s3 sync --delete dist/ s3://${{ secrets.S3_BUCKET }}
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+
+      - name: Clean up .env file
+        run: rm -f .env.production

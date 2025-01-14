@@ -20,8 +20,9 @@ const LikedReviewMorePage = (): JSX.Element => {
         (feed): feed is Review => 'username' in feed,
       );
       setReviews((prevReviews) => [...prevReviews, ...newReviews]);
-      if (newReviews.length < 5) setHasMore(false);
+      setHasMore(reviews.length + newReviews.length < data.totalFeeds);
     }
+    // eslint-disable-next-line
   }, [data]);
 
   const fetchMoreData = () => {

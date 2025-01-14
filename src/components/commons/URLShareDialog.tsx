@@ -74,7 +74,7 @@ const URLShareDialog = ({ open, handleClose, url }: URLShareDialogProps) => {
             flex: 1,
           }}
         >
-          {url || 'URL이 없습니다.'}
+          {shareUrl}
         </Typography>
         <IconButton
           onClick={handleCopyClick}

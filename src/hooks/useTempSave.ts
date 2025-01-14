@@ -12,6 +12,8 @@ export const useTempSave = (
   setTitle: (title: string) => void,
   setContent: (content: string) => void,
   setSelectedBook: (book: Book | null) => void,
+  isEditing: boolean,
+  hasBookFromDetail: boolean,
 ) => {
   const [showLoadDialog, setShowLoadDialog] = useState(false);
   const [tempSaveDate, setTempSaveDate] = useState<Date | null>(null);
@@ -47,6 +49,10 @@ export const useTempSave = (
 
   // 컴포넌트 마운트시, 임시저장 글 적용
   useEffect(() => {
+    if (isEditing || hasBookFromDetail) {
+      return;
+    }
+
     const tempPostingString = localStorage.getItem(TEMP_SAVE_STORAGE_KEY);
     if (tempPostingString) {
       const tempPosting: TempSaveData = JSON.parse(tempPostingString);
@@ -56,7 +62,7 @@ export const useTempSave = (
         (tempPosting.selectedBook &&
           Object.keys(tempPosting.selectedBook).length > 0)
       ) {
-        setSelectedBook(tempPosting.selectedBook || bookFromDetail || null);
+        setSelectedBook(tempPosting.selectedBook || null);
         setTitle(tempPosting.title || '');
         setContent(tempPosting.content || '');
         setTempSaveDate(new Date(tempPosting.date));
@@ -64,10 +70,15 @@ export const useTempSave = (
       } else {
         localStorage.removeItem(TEMP_SAVE_STORAGE_KEY);
       }
-    } else {
-      setSelectedBook(bookFromDetail || null);
     }
-  }, [bookFromDetail, setSelectedBook, setTitle, setContent]);
+  }, [
+    bookFromDetail,
+    setSelectedBook,
+    setTitle,
+    setContent,
+    isEditing,
+    hasBookFromDetail,
+  ]);
 
   // 변경사항 있을 때마다 임시저장
   useEffect(() => {
@@ -80,8 +91,15 @@ export const useTempSave = (
 
   // 설정한 정보 유지
   const loadTempPosting = useCallback(() => {
+    const tempPostingString = localStorage.getItem(TEMP_SAVE_STORAGE_KEY);
+    if (tempPostingString) {
+      const tempPosting: TempSaveData = JSON.parse(tempPostingString);
+      setTitle(tempPosting.title || '');
+      setContent(tempPosting.content || '');
+      setSelectedBook(tempPosting.selectedBook || null);
+    }
     setShowLoadDialog(false);
-  }, []);
+  }, [setTitle, setContent, setSelectedBook]);
 
   // 취소 누르면 데이터 초기화
   const ignoreTempPosting = useCallback(() => {
