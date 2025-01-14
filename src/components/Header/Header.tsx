@@ -1,12 +1,11 @@
-import React, { useState, KeyboardEvent, useEffect } from 'react';
+import React, { useState, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import { useTheme } from '@mui/material/styles';
-import { Box, Button, Menu, MenuItem, InputBase, Switch } from '@mui/material';
+import { Box, Button, Menu, MenuItem, InputBase } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
-import { toggleTheme } from '@features/DarkMode/darkModeSlice';
 import { logoutSuccess } from '@features/user/userSlice';
 
 import {
@@ -21,7 +20,7 @@ const Header = (): JSX.Element => {
   const [searchQuery, setSearchQuery] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const user = useSelector((state: RootState) => state.user);
-  const themeMode = useSelector((state: RootState) => state.darkMode.mode); // 다크모드 상태 가져오기
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const open = Boolean(anchorEl);
@@ -72,23 +71,10 @@ const Header = (): JSX.Element => {
     navigate('/');
   };
 
-  const handleThemeToggle = () => {
-    console.log('theme모드:', themeMode);
-    dispatch(toggleTheme()); // 다크모드 토글 액션 호출
-  };
-
-  useEffect(() => {
-    console.log('theme모드 변경후:', themeMode);
-  }, [themeMode]);
   return (
     <StyledHeaderContainer>
       <StyledLogo to="/">잇다</StyledLogo>
       <Box display="flex" alignItems="center">
-        <Switch
-          checked={themeMode === 'dark'} // 다크모드인지 확인
-          onChange={handleThemeToggle} // 토글 액션 호출
-          inputProps={{ 'aria-label': 'dark mode toggle' }}
-        />
         <StyledSearchContainer>
           {showSearchBar && (
             <InputBase

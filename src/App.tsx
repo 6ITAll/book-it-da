@@ -7,6 +7,7 @@ import { store, RootState } from '@store/index';
 import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
+import DarkModeButton from '@components/DarkModeButton/DarkModeButton';
 
 const AppContent = (): JSX.Element => {
   const location = useLocation();
@@ -24,6 +25,7 @@ const AppContent = (): JSX.Element => {
         </footer>
       )}
       <SnackBar />
+      <DarkModeButton /> {/* 다크 모드 토글 버튼 추가 */}
     </div>
   );
 };
