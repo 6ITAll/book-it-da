@@ -88,16 +88,18 @@ const styles = {
     zIndex: 3,
     transform: 'scale(0.7)',
   },
-  cardContent: {
+  cardContent: (theme: Theme) => ({
     width: '100%',
     maxWidth: '100%',
     padding: '1rem 1rem 0.5rem 1rem',
     height: '20%',
-    borderRadius: '8px 8px 0px 0px',
+    borderRadius: '10px 10px 10px 0px',
     position: 'relative',
     zIndex: 2,
+    marginTop: '-10px',
     boxSizing: 'border-box',
-  },
+    bgcolor: theme.palette.background.paper,
+  }),
   cardTitleBox: {
     display: 'flex',
     flexDirection: 'column',
