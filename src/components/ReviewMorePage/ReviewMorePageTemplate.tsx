@@ -100,11 +100,11 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
       )}
 
       {/* 제목 및 정렬 옵션 */}
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-between" marginBottom="1rem">
         <Typography
           variant="h5"
           fontWeight="bold"
-          sx={{ marginBottom: '1rem' }}
+          sx={{ display: 'flex', alignItems: 'center' }}
         >
           한 줄 리뷰 {sortedReviews.length}
         </Typography>
