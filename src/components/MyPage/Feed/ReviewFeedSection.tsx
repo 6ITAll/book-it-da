@@ -1,5 +1,6 @@
+import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import ReviewCard from '@components/commons/ReviewCard';
-import { Box, Typography, Button, useTheme } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Review } from '@shared/types/type';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +15,7 @@ const ReviewFeedSection = ({
   reviews,
 }: ReviewFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  const theme = useTheme();
+
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <Box
@@ -31,14 +32,7 @@ const ReviewFeedSection = ({
         <Button
           size="small"
           variant="text"
-          sx={{
-            color: theme.palette.text.primary,
-            bgcolor: theme.palette.background.default,
-            '&hover': {
-              bgcolor: 'none',
-            },
-            fontWeight: 'bold',
-          }}
+          sx={bookReviewTabStyles.moreButton}
           onClick={() => {
             navigate(`/my-page/${userId}/feeds/reviews`);
           }}

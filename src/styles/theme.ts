@@ -25,15 +25,25 @@ declare module '@mui/material/styles' {
     };
     border: {
       light: string;
-      main: string;
       dark: string;
-      hover: string;
     };
   }
   interface Shape {
     buttonRadius: number;
     boxRadius: number;
     iconRadius: string;
+  }
+  // Custom shadows를 직접 확장하지 않고 별도 값으로 처리
+  interface Theme {
+    customShadows: {
+      card: string;
+    };
+  }
+
+  interface ThemeOptions {
+    customShadows?: {
+      card?: string;
+    };
   }
 }
 
@@ -77,6 +87,10 @@ const lightModePalette: PaletteOptions = {
     primary: '#1a1a1a',
     secondary: '#666666',
   },
+  border: {
+    light: '1px solid #e0e0e0',
+    dark: '1px solid #bdbdbd',
+  },
 };
 
 // 다크 모드 팔레트
@@ -92,10 +106,8 @@ const darkModePalette: PaletteOptions = {
     secondary: '#b3b3b3',
   },
   border: {
-    light: '#2D3748',
-    main: '#4A5568',
-    dark: '#718096',
-    hover: '#A0AEC0',
+    light: '1px solid #424242',
+    dark: '1px solid #616161',
   },
 };
 
@@ -103,6 +115,12 @@ const darkModePalette: PaletteOptions = {
 export const createAppTheme = (mode: 'light' | 'dark') => {
   return createTheme({
     palette: mode === 'light' ? lightModePalette : darkModePalette,
+    customShadows: {
+      card:
+        mode === 'light'
+          ? '0 4px 12px rgba(0, 0, 0, 0.2)' // 라이트 모드 shadow
+          : '0 4px 4px rgba(127, 127, 127, 0.3)', // 다크 모드 shadow
+    },
     typography: {
       fontFamily: [
         'Noto Sans KR',
@@ -189,10 +207,6 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
           root: {
             borderRadius: 12,
             backgroundColor: mode === 'light' ? '#ffffff' : '#121212',
-            boxShadow:
-              mode === 'light'
-                ? '0 1px 3px rgba(0,0,0,0.12)'
-                : '0 1px 3px rgba(255,255,255,0.12)',
           },
         },
       },
