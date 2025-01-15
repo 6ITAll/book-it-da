@@ -109,10 +109,10 @@ export const bookDetailDialogStyles = {
     py: 1.5,
     border: 'none',
     borderRadius: 0,
-    bgcolor: theme.palette.background.default,
+    bgcolor: 'transparent',
     color: theme.palette.text.primary,
     '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+      backgroundColor: 'rgba(0, 0, 0, 0.1)',
       border: 'none',
     },
   }),

@@ -1,4 +1,4 @@
-import { Card, styled, Theme } from '@mui/material';
+import { Card, styled } from '@mui/material';
 import { ViewMode } from '../types';
 
 export const shelvesBookCardStyles = {
@@ -7,12 +7,11 @@ export const shelvesBookCardStyles = {
     top: 8,
     left: 8,
   },
-  gridBookTitleBox: (theme: Theme) => ({
+  gridBookTitleBox: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    bgcolor: theme.palette.background.default,
-  }),
+  },
   listBookCardContent: {
     display: 'flex',
     flexDirection: 'row',
@@ -35,8 +34,8 @@ export const shelvesBookCardStyles = {
 
 export const BookCard = styled(Card)<{ view: ViewMode }>(({ view, theme }) => ({
   position: 'relative',
-  backgroundColor: 'transparent',
   boxShadow: 'none',
+  background: theme.palette.mode === 'dark' ? '#121212' : '#f9f9f9',
   '&:hover .book-actions': {
     opacity: 1,
   },
