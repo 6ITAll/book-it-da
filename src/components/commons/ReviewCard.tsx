@@ -34,7 +34,11 @@ const ReviewCard = ({
   const navigate = useNavigate();
   const theme = useTheme();
   return (
-    <Card sx={{ boxShadow: 'none' }}>
+    <Card
+      sx={{
+        border: theme.palette.border.dark,
+      }}
+    >
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar

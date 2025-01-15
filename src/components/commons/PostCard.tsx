@@ -5,6 +5,7 @@ import {
   Avatar,
   Stack,
   Button,
+  useTheme,
 } from '@mui/material';
 import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
@@ -25,13 +26,12 @@ const PostCard = ({
   userId,
 }: PostCardProps): JSX.Element => {
   const navigate = useNavigate();
-
+  const theme = useTheme();
   return (
     <Card
       sx={{
         borderRadius: '12px',
-        boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #e7e8e9',
+        border: theme.palette.border.dark,
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
