@@ -9,8 +9,11 @@ interface User {
   userStats?: Array<{ count: number; label: string; isAction?: boolean }>;
 }
 
-export const followsData: { follows: User[] } = {
-  follows: [
+export const followsData: {
+  followers: User[];
+  followings: User[];
+} = {
+  followers: [
     {
       id: 1,
       userId: 'kim',
@@ -35,6 +38,8 @@ export const followsData: { follows: User[] } = {
         { count: 267, label: '팔로잉', isAction: true },
       ],
     },
+  ],
+  followings: [
     {
       id: 3,
       userId: 'jung',
@@ -50,11 +55,18 @@ export const followsData: { follows: User[] } = {
   ],
 };
 
-export const follows = followsData.follows;
-
 export const followHandlers = [
-  http.get('/api/follows', () => {
-    return HttpResponse.json(follows, {
+  http.get('/api/followers', () => {
+    return HttpResponse.json(followsData.followers, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }),
+
+  http.get('/api/followings', () => {
+    return HttpResponse.json(followsData.followings, {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
@@ -65,8 +77,11 @@ export const followHandlers = [
   http.delete('/api/follows/:userId', (req) => {
     const { userId } = req.params;
 
-    followsData.follows = followsData.follows.filter(
-      (follow) => follow.userId !== userId,
+    followsData.followers = followsData.followers.filter(
+      (follower) => follower.userId !== userId,
+    );
+    followsData.followings = followsData.followings.filter(
+      (following) => following.userId !== userId,
     );
 
     return new HttpResponse(null, {

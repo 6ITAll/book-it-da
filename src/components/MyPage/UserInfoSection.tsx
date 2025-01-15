@@ -14,8 +14,18 @@ interface UserInfoSectionProps {
 const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
   const userStats = [
     { count: 286, label: '피드' },
-    { count: 842, label: '팔로워', isAction: true },
-    { count: 267, label: '팔로잉', isAction: true },
+    {
+      count: 842,
+      label: '팔로워',
+      isAction: true,
+      type: 'followers' as const,
+    }, // type 명시
+    {
+      count: 267,
+      label: '팔로잉',
+      isAction: true,
+      type: 'followings' as const,
+    },
   ];
 
   return (
@@ -30,12 +40,13 @@ const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
           {userInfo.name}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
-          {userStats.map(({ count, label, isAction }) => (
+          {userStats.map(({ count, label, isAction, type }) => (
             <UserInfoSummary
               key={label}
               count={count}
               label={label}
               isAction={isAction}
+              type={type} // type prop 전달
             />
           ))}
         </Stack>
