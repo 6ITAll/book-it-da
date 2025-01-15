@@ -2,31 +2,23 @@ import { Theme } from '@mui/material';
 
 const userInfoStyles = {
   userInfoButtonFollowing: (theme: Theme) => ({
-    color: '#fff',
-    backgroundColor:
-      theme.palette.mode === 'light'
-        ? theme.palette.secondary.light
-        : theme.palette.secondary.dark,
-    mb: '0',
+    color: theme.palette.text.primary,
+    bgcolor: theme.palette.background.default,
     '&:hover': {
-      backgroundColor:
+      bgcolor:
         theme.palette.mode === 'light'
-          ? theme.palette.secondary.dark
-          : theme.palette.secondary.main,
+          ? theme.palette.grey[200] // 라이트 모드에서는 밝은 색
+          : theme.palette.background.paper, // 다크 모드에서는 기존 색 유지
     },
   }),
   userInfoButtonFollower: (theme: Theme) => ({
-    color: '#fff',
-    backgroundColor:
-      theme.palette.mode === 'light'
-        ? theme.palette.primary.light
-        : theme.palette.primary.main,
-    mb: '0',
+    color: theme.palette.text.primary,
+    bgcolor: theme.palette.background.default,
     '&:hover': {
-      backgroundColor:
+      bgcolor:
         theme.palette.mode === 'light'
-          ? theme.palette.primary.main
-          : theme.palette.primary.light,
+          ? theme.palette.grey[200] // 라이트 모드에서는 밝은 색
+          : theme.palette.background.paper, // 다크 모드에서는 기존 색 유지
     },
   }),
 };

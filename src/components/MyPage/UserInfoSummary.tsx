@@ -1,8 +1,8 @@
-import { Button, Stack, Typography, useTheme } from '@mui/material';
+import { Button, Stack, Typography, useTheme, Divider } from '@mui/material';
 import HybridDialog from '../commons/HybridDialog/HybridDialog';
 import { useState } from 'react';
 import FollowList from './FollowList';
-import userInfoStyles from './Mypage.style';
+import userInfoStyles from '@components/MyPage/mypage.style';
 
 interface UserInfoSummaryProps {
   count: number;
@@ -15,11 +15,17 @@ const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
   const theme = useTheme();
 
   return (
-    <>
+    <Stack
+      divider={<Divider orientation="vertical" flexItem />}
+      direction="row"
+      alignItems="center"
+      sx={{
+        margin: '0 !important', // 최상위 Stack margin 제거
+      }}
+    >
       <Stack
         component={isAction ? Button : 'div'}
         alignItems="center"
-        padding="6px 4px"
         minWidth={64}
         onClick={
           isAction
@@ -45,7 +51,7 @@ const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
         title={label}
         contentNode={<FollowList setOpen={setOpen} />}
       />
-    </>
+    </Stack>
   );
 };
 
