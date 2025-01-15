@@ -14,12 +14,7 @@ const DarkModeButton = () => {
       aria-label="toggle theme"
       size="small"
       onClick={() => dispatch(toggleTheme())}
-      sx={{
-        position: 'fixed',
-        bottom: 32,
-        left: 16,
-        zIndex: 1300, // 다른 UI 요소 위에 표시되도록 z-index 설정
-      }}
+      sx={{ marginLeft: '1rem' }}
     >
       {themeMode === 'light' ? <Brightness3 /> : <WbSunny />}
     </Fab>

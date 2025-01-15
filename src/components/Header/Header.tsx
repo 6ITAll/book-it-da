@@ -7,6 +7,7 @@ import { Box, Button, Menu, MenuItem, InputBase } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
 import { logoutSuccess } from '@features/user/userSlice';
+import DarkModeButton from '@components/DarkModeButton/DarkModeButton';
 
 import {
   StyledHeaderContainer,
@@ -128,6 +129,7 @@ const Header = (): JSX.Element => {
             로그인
           </Button>
         )}
+        <DarkModeButton /> {/* 다크 모드 토글 버튼 추가 */}
       </Box>
     </StyledHeaderContainer>
   );
