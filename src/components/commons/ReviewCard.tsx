@@ -6,6 +6,7 @@ import {
   Stack,
   Box,
   Button,
+  useTheme,
 } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
@@ -31,9 +32,13 @@ const ReviewCard = ({
   rating,
 }: ReviewCardProps): JSX.Element => {
   const navigate = useNavigate();
-
+  const theme = useTheme();
   return (
-    <Card sx={{ boxShadow: 'none' }}>
+    <Card
+      sx={{
+        border: theme.palette.border.dark,
+      }}
+    >
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar
@@ -74,7 +79,11 @@ const ReviewCard = ({
           startIcon={<FavoriteBorderIcon />}
           sx={{
             marginTop: '0.5rem',
-            color: '#555',
+            bgcolor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+            '&:hover': {
+              bgcolor: 'transparent',
+            },
           }}
         >
           좋아요 {likes}

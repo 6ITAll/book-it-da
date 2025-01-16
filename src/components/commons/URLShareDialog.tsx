@@ -5,6 +5,7 @@ import {
   Stack,
   Snackbar,
   Alert,
+  useTheme,
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DoneIcon from '@mui/icons-material/Done';
@@ -20,8 +21,8 @@ interface URLShareDialogProps {
 const URLShareDialog = ({ open, handleClose, url }: URLShareDialogProps) => {
   const [copied, setCopied] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
   const shareUrl = url || window.location.href;
+  const theme = useTheme();
 
   // 스낵바 X 누르면 꺼지도록
   const handleCloseSnackbar = (
@@ -52,15 +53,24 @@ const URLShareDialog = ({ open, handleClose, url }: URLShareDialogProps) => {
           display: 'flex',
           alignItems: 'center',
           p: 2,
-          backgroundColor: '#f5f5f5',
+          bgcolor: theme.palette.background.paper,
           borderRadius: 1,
           gap: 1,
+          boxShadow:
+            theme.palette.mode === 'light'
+              ? '0px 4px 10px rgba(0, 0, 0, 0.1)' // 라이트 모드 그림자
+              : '0px 4px 10px rgba(255, 255, 255, 0.1)', // 다크 모드 그림자
+          border:
+            theme.palette.mode === 'light'
+              ? '1px solid rgba(0, 0, 0, 0.1)' // Subtle border for light mode
+              : '1px solid rgba(255, 255, 255, 0.1)', // Subtle border for dark mode
         }}
       >
         <Typography
           variant="body2"
           sx={{
             wordBreak: 'break-all',
+            color: theme.palette.text.primary,
             flex: 1,
           }}
         >

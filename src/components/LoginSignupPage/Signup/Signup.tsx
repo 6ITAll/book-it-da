@@ -67,7 +67,7 @@ const Signup = (): JSX.Element => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
       <StyledTitle variant="h4">회원가입</StyledTitle>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Controller

@@ -1,3 +1,4 @@
+import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import PostCard from '@components/commons/PostCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -31,7 +32,7 @@ const PostFeedSection = ({
         <Button
           size="small"
           variant="text"
-          sx={{ color: '#333', fontWeight: 'bold' }}
+          sx={bookReviewTabStyles.moreButton}
           onClick={() => {
             navigate(`/my-page/${userId}/feeds/posts`);
           }}

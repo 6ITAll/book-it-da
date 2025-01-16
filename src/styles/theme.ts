@@ -25,9 +25,7 @@ declare module '@mui/material/styles' {
     };
     border: {
       light: string;
-      main: string;
       dark: string;
-      hover: string;
     };
   }
   interface Shape {
@@ -35,25 +33,39 @@ declare module '@mui/material/styles' {
     boxRadius: number;
     iconRadius: string;
   }
+  // Custom shadows를 직접 확장하지 않고 별도 값으로 처리
+  interface Theme {
+    customShadows: {
+      card: string;
+    };
+  }
+
+  interface ThemeOptions {
+    customShadows?: {
+      card?: string;
+    };
+  }
 }
 
 // 공통 팔레트
 const commonPalette = {
   primary: {
-    main: '#333333',
-    light: '#666666',
-    dark: '#1a1a1a',
+    main: '#1976d2', // 기본 MUI 블루
+    light: '#63a4ff',
+    dark: '#004ba0',
+    contrastText: '#ffffff',
   },
   secondary: {
     main: '#9c27b0',
-    light: '#ba68c8',
-    dark: '#7b1fa2',
+    light: '#d05ce3',
+    dark: '#6a0080',
+    contrastText: '#ffffff',
   },
   neutral: {
     main: '#64748B',
     light: '#94A3B8',
     dark: '#334155',
-    contrastText: '#fff',
+    contrastText: '#ffffff',
   },
   border: {
     light: '#E5E7EB',
@@ -68,12 +80,16 @@ const lightModePalette: PaletteOptions = {
   mode: 'light',
   ...commonPalette,
   background: {
-    default: '#f5f5f5',
+    default: '#f9f9f9',
     paper: '#ffffff',
   },
   text: {
     primary: '#1a1a1a',
     secondary: '#666666',
+  },
+  border: {
+    light: '1px solid #e0e0e0',
+    dark: '1px solid #bdbdbd',
   },
 };
 
@@ -90,10 +106,8 @@ const darkModePalette: PaletteOptions = {
     secondary: '#b3b3b3',
   },
   border: {
-    light: '#2D3748',
-    main: '#4A5568',
-    dark: '#718096',
-    hover: '#A0AEC0',
+    light: '1px solid #424242',
+    dark: '1px solid #616161',
   },
 };
 
@@ -101,6 +115,12 @@ const darkModePalette: PaletteOptions = {
 export const createAppTheme = (mode: 'light' | 'dark') => {
   return createTheme({
     palette: mode === 'light' ? lightModePalette : darkModePalette,
+    customShadows: {
+      card:
+        mode === 'light'
+          ? '0 4px 12px rgba(0, 0, 0, 0.2)' // 라이트 모드 shadow
+          : '0 4px 4px rgba(127, 127, 127, 0.3)', // 다크 모드 shadow
+    },
     typography: {
       fontFamily: [
         'Noto Sans KR',
@@ -145,12 +165,30 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       },
     },
     components: {
-      // 버튼 BorderRadius
+      MuiContainer: {
+        styleOverrides: {
+          root: {
+            backgroundColor: mode === 'light' ? '#f9f9f9' : '#121212',
+          },
+        },
+      },
+      // 전체 버튼
       MuiButton: {
         styleOverrides: {
           root: {
-            textTransform: 'none',
+            transition: 'background-color 0.3s ease',
+            backgroundColor: mode === 'light' ? '#1976d2' : '#005cb2',
+            color: '#fff',
+            borderColor: mode === 'light' ? '#1976d2' : '#005cb2',
             borderRadius: 16,
+            '&:hover': {
+              backgroundColor: mode === 'light' ? '#115293' : '#1976d2',
+            },
+            '&:focus-visible': {
+              outline: '2px solid',
+              outlineColor: mode === 'light' ? '#1976d2' : '#1a76d2',
+              outlineOffset: '2px',
+            },
           },
         },
       },
@@ -158,6 +196,8 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       MuiIconButton: {
         styleOverrides: {
           root: {
+            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
+            color: mode === 'light' ? '#000' : '#fff',
             borderRadius: '50%',
           },
         },
@@ -166,18 +206,22 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
         styleOverrides: {
           root: {
             borderRadius: 12,
-            boxShadow:
-              mode === 'light'
-                ? '0 1px 3px rgba(0,0,0,0.12)'
-                : '0 1px 3px rgba(255,255,255,0.12)',
+            backgroundColor: mode === 'light' ? '#ffffff' : '#121212',
           },
         },
       },
       MuiPaper: {
         styleOverrides: {
           root: {
+            backgroundColor: mode === 'light' ? '#f5f5f5' : '#121212',
+            color: mode === 'light' ? '#000' : '#fff',
             borderRadius: 8,
           },
+        },
+      },
+      MuiTextField: {
+        styleOverrides: {
+          root: {},
         },
       },
     },

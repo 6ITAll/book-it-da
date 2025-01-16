@@ -1,4 +1,4 @@
-import { Button, CardActions } from '@mui/material';
+import { Button, CardActions, useTheme } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
@@ -20,6 +20,7 @@ const PostCardFooter = ({
   itemId,
 }: PostCardFooterProps): JSX.Element => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [toggleLike] = useToggleLikeMutation();
   const dispatch = useDispatch();
 
@@ -45,7 +46,7 @@ const PostCardFooter = ({
         startIcon={
           isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />
         }
-        sx={styles.cardFooterButton(true)}
+        sx={styles.cardFooterButton(true)(theme)}
         onClick={() => handleLike(postId, !isLiked)}
       >
         {likeCount}
@@ -53,7 +54,7 @@ const PostCardFooter = ({
       <Button
         fullWidth
         startIcon={<MenuBookIcon />}
-        sx={styles.cardFooterButton(false)}
+        sx={styles.cardFooterButton(false)(theme)}
         onClick={() => navigateToBookDetailPage(navigate, itemId)}
       >
         책 보러가기
