@@ -1,8 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
+
+export interface UserInfo {
+  id: string;
+  email?: string;
+  username?: string;
+}
 
 export interface UserState {
-  userInfo: KakaoUserInfo | null;
+  userInfo: UserInfo | null;
   isLoggedIn: boolean;
   checkedPassword: boolean;
 }
@@ -17,7 +22,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loginSuccess: (state, action: PayloadAction<KakaoUserInfo>) => {
+    loginSuccess: (state, action: PayloadAction<UserInfo>) => {
       state.userInfo = action.payload;
       state.isLoggedIn = true;
     },

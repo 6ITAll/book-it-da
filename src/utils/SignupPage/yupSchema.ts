@@ -7,6 +7,10 @@ export const schema = yup.object<SignupData>().shape({
     .string()
     .required('아이디를 입력해주세요')
     .min(4, '아이디는 최소 4자 이상이어야 합니다'),
+  email: yup
+    .string()
+    .required('이메일을 입력해주세요')
+    .email('유효한 이메일 형식이 아닙니다'),
   phone: yup
     .string()
     .required('전화번호를 입력해주세요')

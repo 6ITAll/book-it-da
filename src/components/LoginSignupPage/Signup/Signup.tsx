@@ -18,12 +18,13 @@ import PasswordInput from '../PasswordInput';
 import { StyledTitle, StyledSubmitButton } from './Signup.styles';
 import { SignupData } from '@features/SignupPage/types';
 import { schema } from '@utils/SignupPage/yupSchema';
+import { supabase } from '@utils/supabaseClient';
 
 const Signup = (): JSX.Element => {
   const {
     control,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors },
   } = useForm<SignupData>({
     resolver: yupResolver(schema),
@@ -34,52 +35,35 @@ const Signup = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onSubmit = (data: SignupData) => {
-    const existingUserInfo = localStorage.getItem('userInfo');
-    let users: Array<{ userId: string }> = [];
+  const onSubmit = async (formData: SignupData) => {
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            username: formData.userId,
+            name: formData.name,
+            phone: formData.phone,
+            gender: formData.gender,
+            age: formData.age,
+          },
+        },
+      });
 
-    if (existingUserInfo) {
-      try {
-        users = JSON.parse(existingUserInfo);
-        if (!Array.isArray(users)) {
-          users = [];
-        }
-      } catch (error) {
-        console.error('Error parsing user info:', error);
-        users = [];
-      }
-    }
+      if (error) throw error;
 
-    if (users.some((user) => user.userId === data.userId)) {
-      setErrorMessage(
-        '이 아이디는 이미 사용 중입니다. 다른 아이디를 입력해주세요.',
+      dispatch(
+        showSnackbar({
+          message: '회원가입에 성공했습니다! 이메일을 확인해주세요.',
+          severity: 'success',
+        }),
       );
-      return;
+      navigate('/login');
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setErrorMessage('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
-
-    setErrorMessage('');
-
-    const userInfo = {
-      name: data.name,
-      userId: data.userId,
-      phone: data.phone,
-      password: data.password,
-      gender: data.gender,
-      age: data.age,
-    };
-
-    users.push(userInfo);
-    localStorage.setItem('userInfo', JSON.stringify(users));
-
-    dispatch(
-      showSnackbar({
-        message: '회원가입에 성공했습니다!',
-        severity: 'success',
-      }),
-    );
-    reset();
-
-    navigate('/login');
   };
 
   return (
@@ -99,6 +83,23 @@ const Signup = (): JSX.Element => {
               margin="normal"
               error={!!errors.name}
               helperText={errors.name?.message}
+            />
+          )}
+        />
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="이메일"
+              type="email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
           )}
         />
