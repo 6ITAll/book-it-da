@@ -132,7 +132,7 @@ const Login = (): JSX.Element => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
       <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
         로그인
       </Typography>

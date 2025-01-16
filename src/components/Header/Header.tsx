@@ -2,10 +2,13 @@ import React, { useState, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
+import { useTheme } from '@mui/material/styles';
 import { Box, Button, Menu, MenuItem, InputBase } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
 import { logoutSuccess } from '@features/user/userSlice';
+import DarkModeButton from '@components/DarkModeButton/DarkModeButton';
+
 import {
   StyledHeaderContainer,
   StyledLogo,
@@ -18,10 +21,11 @@ const Header = (): JSX.Element => {
   const [searchQuery, setSearchQuery] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const user = useSelector((state: RootState) => state.user);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const open = Boolean(anchorEl);
+  const theme = useTheme();
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
@@ -87,7 +91,11 @@ const Header = (): JSX.Element => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
-              sx={{ marginRight: '10px' }}
+              sx={{
+                marginRight: '10px',
+                bgcolor: theme.palette.background.paper,
+                color: theme.palette.text.primary,
+              }}
             />
           )}
           <StyledIconWrapper
@@ -129,6 +137,7 @@ const Header = (): JSX.Element => {
             로그인
           </Button>
         )}
+        <DarkModeButton /> {/* 다크 모드 토글 버튼 추가 */}
       </Box>
     </StyledHeaderContainer>
   );

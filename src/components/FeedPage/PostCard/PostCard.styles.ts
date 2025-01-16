@@ -1,3 +1,4 @@
+import { Theme } from '@mui/material';
 const styles = {
   card: {
     display: 'flex',
@@ -5,7 +6,6 @@ const styles = {
     boxSizing: 'border-box',
     width: '100%',
     aspectRatio: 'auto',
-    bgcolor: '#fafafa',
     borderRadius: '8px',
     transition: 'all 0.3s ease-in-out',
     '&:hover': {
@@ -25,16 +25,32 @@ const styles = {
       alignSelf: 'center',
     },
   },
-  followButton: (isFollowing: boolean) => ({
-    color: '#fff',
-    backgroundColor: isFollowing ? '#333' : '#3983d3',
+  followButton: (isFollowing: boolean) => (theme: Theme) => ({
+    color: isFollowing
+      ? theme.palette.getContrastText(theme.palette.secondary.main)
+      : theme.palette.getContrastText(theme.palette.primary.main),
+    backgroundColor: isFollowing
+      ? theme.palette.mode === 'light'
+        ? theme.palette.secondary.light
+        : theme.palette.secondary.dark
+      : theme.palette.mode === 'light'
+        ? theme.palette.primary.light
+        : theme.palette.primary.main,
     border: 'none',
     mb: '0',
+    '&:hover': {
+      backgroundColor: isFollowing
+        ? theme.palette.mode === 'light'
+          ? theme.palette.secondary.dark
+          : theme.palette.secondary.main
+        : theme.palette.mode === 'light'
+          ? theme.palette.primary.main
+          : theme.palette.primary.light,
+    },
   }),
   postInfoBox: {
     display: 'flex',
     fontSize: '11px',
-    color: '#666',
     gap: '5px',
   },
   cardMediaBox: {
@@ -72,19 +88,18 @@ const styles = {
     zIndex: 3,
     transform: 'scale(0.7)',
   },
-  cardContent: {
+  cardContent: (theme: Theme) => ({
     width: '100%',
     maxWidth: '100%',
-    overflow: 'hidden',
     padding: '1rem 1rem 0.5rem 1rem',
     height: '20%',
-    borderRadius: '8px 8px 0px 0px',
-    marginTop: '-15px',
+    borderRadius: '10px 10px 10px 0px',
     position: 'relative',
-    backgroundColor: '#fafafa',
     zIndex: 2,
+    marginTop: '-10px',
     boxSizing: 'border-box',
-  },
+    bgcolor: theme.palette.background.paper,
+  }),
   cardTitleBox: {
     display: 'flex',
     flexDirection: 'column',
@@ -96,7 +111,6 @@ const styles = {
   cardTitle: {
     fontSize: '18px',
     fontWeight: '700',
-    color: '#333',
     width: '100%',
     textAlign: 'center',
     display: '-webkit-box',
@@ -116,7 +130,6 @@ const styles = {
     padding: '1rem 0',
     width: '100%',
     height: '100%',
-    color: '#333',
     boxSizing: 'border-box',
     wordBreak: 'break-word',
     whiteSpace: 'pre-wrap',
@@ -124,7 +137,6 @@ const styles = {
   postingDescription: {
     height: 'auto',
     padding: '0.25rem 0.5rem',
-    color: '#333',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     display: '-webkit-box',
@@ -142,17 +154,18 @@ const styles = {
     gridTemplateColumns: '1fr 1fr',
     boxSizing: 'border-box',
   },
-  cardFooterButton: (isLeft: boolean) => ({
+  cardFooterButton: (isLeft: boolean) => (theme: Theme) => ({
     padding: '0.7rem 0',
     width: '100%',
     height: '100%',
     borderRadius: isLeft ? '0px 0px 0px 8px' : '0px 0px 8px 0px',
     borderRight: isLeft ? '1px solid #ddd' : 'none',
-    bgcolor: 'transparent',
-    color: '#333',
+    bgcolor: theme.palette.background.paper,
+    color: theme.palette.text.primary, // 테마의 텍스트 색상 사용
     transition: 'background-color 0.3s ease',
     '&:hover': {
-      bgcolor: '#f0f0f0',
+      backgroundColor: '#e0e0e0', // hover 시 배경색 변경
+      color: '#000',
     },
   }),
 };
