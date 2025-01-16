@@ -55,9 +55,7 @@ const PostingUserInfo = ({
           size="small"
           onClick={handleFollowToggle}
           disabled={isLoading}
-          sx={postingDetailStyles.userInfoBoxButton(
-            post?.user.isFollowing ?? false,
-          )}
+          sx={postingDetailStyles.userInfoBoxButton(isFollowing ?? false)}
         >
           {isFollowing ? '팔로잉' : '팔로우'}
         </Button>
