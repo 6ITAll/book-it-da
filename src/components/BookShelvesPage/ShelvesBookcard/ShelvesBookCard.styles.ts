@@ -29,15 +29,13 @@ export const shelvesBookCardStyles = {
   },
   listBookDetailButton: {
     width: '120px',
-    bgcolor: '#333',
-    color: '#fafafa',
   },
 };
 
 export const BookCard = styled(Card)<{ view: ViewMode }>(({ view, theme }) => ({
   position: 'relative',
-  backgroundColor: 'transparent',
   boxShadow: 'none',
+  background: theme.palette.mode === 'dark' ? '#121212' : '#f9f9f9',
   '&:hover .book-actions': {
     opacity: 1,
   },

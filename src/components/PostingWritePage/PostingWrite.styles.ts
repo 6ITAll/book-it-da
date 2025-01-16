@@ -1,3 +1,5 @@
+import { Theme } from '@mui/material';
+
 export const postingWriteStyles = {
   container: {
     display: 'flex',
@@ -8,7 +10,7 @@ export const postingWriteStyles = {
     width: '100%',
     padding: '0 !important',
     margin: '0 !important',
-    backgroundColor: '#f0f0f0',
+
     boxSizing: 'border-box',
   },
   content: {
@@ -18,16 +20,16 @@ export const postingWriteStyles = {
     alignItems: 'center',
     width: '100%',
     minHeight: '100vh',
-    backgroundColor: '#f0f0f0',
+
     borderTop: '1px solid #ccc',
     boxSizing: 'border-box',
   },
-  header: {
+  header: (theme: Theme) => ({
     width: '100%',
     position: 'sticky',
     opacity: '0.9',
     top: 0,
-    bgcolor: 'white',
+    bgcolor: theme.palette.background.paper,
     zIndex: 1000,
     borderBottom: '1px solid #eee',
     py: 2,
@@ -36,18 +38,18 @@ export const postingWriteStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     boxSizing: 'border-box',
-  },
-  postingToolbar: {
+  }),
+  postingToolbar: (theme: Theme) => ({
     width: '100%',
     padding: '0.5rem 1rem',
     boxSizing: 'border-box',
-    backgroundColor: '#fcfcfc',
+    bgcolor: theme.palette.background.paper,
     borderBottom: '1px solid #ccc',
     flex: '0 0 auto',
-  },
+  }),
   postingSaveBox: {
     display: 'flex',
-    backgroundColor: '#f5f5f5',
+
     borderRadius: '4px',
     overflow: 'hidden',
   },
@@ -85,7 +87,7 @@ export const postingWriteStyles = {
       md: '300px',
     },
   },
-  posting: {
+  posting: (theme: Theme) => ({
     width: {
       xs: '100%',
       md: '50%',
@@ -94,14 +96,14 @@ export const postingWriteStyles = {
       xs: '0 1rem 1rem 1rem',
       md: '0',
     },
-    backgroundColor: '#fcfcfc',
+    bgcolor: theme.palette.background.paper,
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     flex: '1 1 auto',
-  },
+  }),
   bookPreviewBox: {
     width: '50%',
     display: 'flex',
@@ -120,7 +122,7 @@ export const postingWriteStyles = {
     cursor: 'default',
     boxShadow: '0 1px 4px rgba(0, 0, 0, 0.4)',
     '& .MuiCardMedia-root': {
-      width: '80px',
+      width: '100px',
       height: '100%',
       padding: 'auto',
       borderRadius: '0',
@@ -135,7 +137,6 @@ export const postingWriteStyles = {
     },
     '& .MuiTypography-body1': {
       fontSize: '14px',
-      color: 'black',
     },
     '& .MuiTypography-body2': {
       fontSize: '11px',

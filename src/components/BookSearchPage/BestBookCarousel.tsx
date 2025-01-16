@@ -24,7 +24,7 @@ const BestBookCarousel = (): JSX.Element => {
         css={css`
           opacity: 0.5;
           margin-bottom: 10px;
-          font-size: 12px;
+          font-size: 15px;
         `}
         gutterBottom
       >

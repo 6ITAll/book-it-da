@@ -141,12 +141,11 @@ const BookShelvesDetailDialog = ({
         </Button>
         <Button
           fullWidth
-          color="error"
           startIcon={<DeleteOutlineIcon />}
-          sx={{
-            ...bookDetailDialogStyles.subButtons,
-            color: 'error.main',
-          }}
+          sx={(theme) => ({
+            ...bookDetailDialogStyles.subButtons(theme),
+            color: theme.palette.error.main, // 텍스트 색상
+          })}
           onClick={() => {
             handleDeleteBook();
             setOpenDialog(false);

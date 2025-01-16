@@ -1,10 +1,12 @@
+import { Theme } from '@mui/material';
 export const bookSearchStyles = {
-  bookSearchContainer: {
+  bookSearchContainer: (theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
-    width: '100%',
+    height: '100%',
     padding: '1rem',
-  },
+    bgcolor: theme.palette.background.paper,
+  }),
 };
 
 export const bookSearchBarStyles = {
@@ -15,7 +17,6 @@ export const bookSearchBarStyles = {
   },
   textfield: {
     width: '100%',
-    backgroundColor: '#fff',
   },
 };
 

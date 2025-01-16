@@ -97,7 +97,7 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
             customerReviewRank={book.customerReviewRank}
             priceStandard={book.priceStandard}
           />
-        )) || <Typography>검색 결과가 없습니다.</Typography>}
+        )) || <Typography height="250px">검색 결과가 없습니다.</Typography>}
       </Box>
       {/* 페이지네이션 */}
       <Box sx={searchResultStyles.paginationBox}>

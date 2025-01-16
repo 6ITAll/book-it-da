@@ -21,6 +21,7 @@ import { oneLineReviewApi } from '@features/OneLineReviewDialog/api/oneLineRevie
 import { postingWriteApi } from '@features/PostingWritePage/api/postingWriteApi';
 import { userApi } from '@features/user/userApi';
 import { followApi } from '@features/MyPage/api/followApi';
+import darkModeReducer from '@features/DarkMode/darkModeSlice';
 import { addToLibraryApi } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShelfCountApi';
 export const store = configureStore({
@@ -28,6 +29,7 @@ export const store = configureStore({
     bookSearch: bookSearchReducer,
     bookDetail: bookDetailReducer,
     bookshelves: bookShelvesReducer,
+    darkMode: darkModeReducer,
     [bookSearchApi.reducerPath]: bookSearchApi.reducer,
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [kakaoApi.reducerPath]: kakaoApi.reducer,

@@ -1,3 +1,5 @@
+import { Theme } from '@mui/material';
+
 export const postingDetailStyles = {
   container: {
     display: 'flex',
@@ -8,10 +10,9 @@ export const postingDetailStyles = {
     width: '100%',
     padding: '0 !important',
     margin: '0 !important',
-    backgroundColor: '#f0f0f0',
     boxSizing: 'border-box',
   },
-  posting: {
+  posting: (theme: Theme) => ({
     px: 4,
     pt: 3,
     width: {
@@ -22,15 +23,15 @@ export const postingDetailStyles = {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fafafa',
+    bgcolor: theme.palette.background.paper,
     boxSizing: 'border-box',
-  },
-  postingHeader: {
+  }),
+  postingHeader: (theme: Theme) => ({
     width: '100%',
     position: 'sticky',
     opacity: '0.9',
     top: 0,
-    bgcolor: 'white',
+    bgcolor: theme.palette.background.paper,
     zIndex: 1000,
     borderBottom: '1px solid #eee',
     py: 2,
@@ -39,7 +40,7 @@ export const postingDetailStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     boxSizing: 'border-box',
-  },
+  }),
   likeCount: {
     position: 'absolute',
     bottom: -10,
@@ -103,4 +104,25 @@ export const postingDetailStyles = {
     mb: 2,
     fontWeight: 'bold',
   },
+  userInfoBoxButton: (isFollowing: boolean) => (theme: Theme) => ({
+    color: theme.palette.common.white, // 텍스트 색상 고정
+    backgroundColor: isFollowing
+      ? theme.palette.mode === 'light'
+        ? theme.palette.secondary.light // 팔로잉: 라이트 모드 밝은 보라색
+        : theme.palette.secondary.dark // 팔로잉: 다크 모드 어두운 보라색
+      : theme.palette.mode === 'light'
+        ? theme.palette.primary.light // 팔로우: 라이트 모드 밝은 파란색
+        : theme.palette.primary.main, // 팔로우: 다크 모드 기본 파란색
+    '&:hover': {
+      backgroundColor: isFollowing
+        ? theme.palette.mode === 'light'
+          ? theme.palette.secondary.dark // 팔로잉 호버: 라이트 모드 어두운 보라색
+          : theme.palette.secondary.main // 팔로잉 호버: 다크 모드 기본 보라색
+        : theme.palette.mode === 'light'
+          ? theme.palette.primary.main // 팔로우 호버: 라이트 모드 기본 파란색
+          : theme.palette.primary.dark, // 팔로우 호버: 다크 모드 어두운 파란색
+    },
+    borderRadius: 2,
+    padding: '4px 12px',
+  }),
 };
