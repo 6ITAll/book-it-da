@@ -11,13 +11,14 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../PasswordInput';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
 import { LoginMessage } from './types';
 import { StyledButton, StyledTypography } from './Login.styles';
 // import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 import kakaoLoginImg from '@assets/images/kakao_login.png';
 import { supabase } from '@utils/supabaseClient';
+import { RootState } from '@store/index';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
@@ -33,6 +34,8 @@ const Login = (): JSX.Element => {
   });
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -56,6 +59,7 @@ const Login = (): JSX.Element => {
             }),
           );
           navigate('/');
+          console.log(data);
         }
       } catch (error) {
         console.error('Login error:', error);
@@ -70,6 +74,11 @@ const Login = (): JSX.Element => {
     },
     [userId, password, dispatch, navigate],
   );
+
+  useEffect(() => {
+    console.log('isLoggedIn:', isLoggedIn);
+    console.log('userInfo:', userInfo);
+  }, [isLoggedIn, userInfo]);
 
   const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
