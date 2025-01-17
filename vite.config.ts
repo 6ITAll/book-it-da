@@ -3,12 +3,16 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd()); // 이 줄 추가
+  const env = loadEnv(mode, process.cwd());
 
   return {
     plugins: [react(), tsconfigPaths()],
     server: {
       proxy: {
+        '/api-docs': {
+          target: 'http://localhost:5174',
+          changeOrigin: true,
+        },
         '/api': {
           target: env.VITE_ALADIN_BASEURL,
           changeOrigin: true,
@@ -18,6 +22,3 @@ export default defineConfig(({ mode }) => {
     },
   };
 });
-
-// import.meta.env는 클라이언트 코드에서만 사용 가능하고,
-// vite.config.ts에서는 loadEnv를 사용해야 합니다.

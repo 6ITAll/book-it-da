@@ -20,10 +20,15 @@ import { feedApi } from '@features/FeedPage/api/feedApi';
 import { oneLineReviewApi } from '@features/OneLineReviewDialog/api/oneLineReviewApi';
 import { postingWriteApi } from '@features/PostingWritePage/api/postingWriteApi';
 import { userApi } from '@features/user/userApi';
-import { followApi } from '@features/MyPage/api/followApi';
+import { mypageFollowApi } from '@features/MyPage/api/followApi';
 import darkModeReducer from '@features/DarkMode/darkModeSlice';
 import { addToLibraryApi } from '@features/BookDetailPage/api/AddToLibraryApi';
 import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShelfCountApi';
+import { followApi } from '@features/commons/followApi';
+import feedReducer from '@features/FeedPage/slice/feedSlice';
+import { likeApi } from '@features/commons/likeApi';
+import postingDetailReducer from '@features/PostDetailPage/slice/postingDetailSlice';
+
 export const store = configureStore({
   reducer: {
     bookSearch: bookSearchReducer,
@@ -47,10 +52,14 @@ export const store = configureStore({
     [feedApi.reducerPath]: feedApi.reducer,
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [mypageFollowApi.reducerPath]: mypageFollowApi.reducer,
     [followApi.reducerPath]: followApi.reducer,
+    [likeApi.reducerPath]: likeApi.reducer,
     counter: counterReducer,
     user: userReducer,
     snackbar: snackbarReducer,
+    feed: feedReducer,
+    postingDetail: postingDetailReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -70,8 +79,10 @@ export const store = configureStore({
       feedApi.middleware,
       oneLineReviewApi.middleware,
       postingWriteApi.middleware,
+      mypageFollowApi.middleware,
       userApi.middleware,
       followApi.middleware,
+      likeApi.middleware,
     ]),
 });
 

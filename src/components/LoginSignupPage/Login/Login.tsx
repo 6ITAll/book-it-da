@@ -15,8 +15,9 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
 import { LoginMessage } from './types';
 import { StyledButton, StyledTypography } from './Login.styles';
-import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
+// import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 import kakaoLoginImg from '@assets/images/kakao_login.png';
+import { supabase } from '@utils/supabaseClient';
 
 const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
@@ -37,65 +38,37 @@ const Login = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const handleLogin = useCallback(
-    (e: React.FormEvent<HTMLFormElement> | null) => {
-      if (e) e.preventDefault();
-      setLoginMessage({ content: '', isError: false });
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: userId,
+          password: password,
+        });
+        if (error) throw error;
 
-      const storedUserInfo = localStorage.getItem('userInfo');
-
-      if (storedUserInfo) {
-        const users = JSON.parse(storedUserInfo);
-        const user = users.find(
-          (user: { userId: string; password: string }) =>
-            user.userId === userId && user.password === password,
-        );
-
-        if (user) {
-          const userInfo: KakaoUserInfo = {
-            userId: user.userId,
-            connected_at: new Date().toISOString(),
-            properties: {
-              userName: user.userId,
-              avatarUrl: '',
-            },
-            kakao_account: {
-              profile_needs_agreement: false,
-              profile: {
-                nickname: user.userId,
-                avatarUrl: '',
-              },
-              email: user.userId,
-            },
-          };
-          dispatch(loginSuccess(userInfo));
-          if (rememberMe) {
-            localStorage.setItem('savedUserId', userId);
-          } else {
-            localStorage.removeItem('savedUserId');
-          }
-          if (autoLogin) {
-            localStorage.setItem(
-              'autoLogin',
-              JSON.stringify({ userId, password, isActive: true }),
-            );
-          } else {
-            localStorage.removeItem('autoLogin');
-          }
+        if (data.user) {
+          dispatch(
+            loginSuccess({
+              id: data.user.id,
+              email: data.user.email ?? '',
+              username: data.user.email ?? '',
+            }),
+          );
           navigate('/');
-        } else {
-          setLoginMessage({
-            content: '아이디 또는 비밀번호가 올바르지 않습니다.',
-            isError: true,
-          });
         }
-      } else {
+      } catch (error) {
+        console.error('Login error:', error);
         setLoginMessage({
-          content: '사용자 정보가 없습니다. 회원가입 후 로그인 해주세요.',
+          content:
+            error instanceof Error
+              ? error.message
+              : '로그인 중 오류가 발생했습니다.',
           isError: true,
         });
       }
     },
-    [userId, password, rememberMe, autoLogin, navigate, dispatch],
+    [userId, password, dispatch, navigate],
   );
 
   const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +95,7 @@ const Login = (): JSX.Element => {
         setUserId(userId);
         setPassword(password);
         setAutoLogin(true);
-        handleLogin(null);
+        // handleLogin(null);
       }
     }
   }, [handleLogin]);

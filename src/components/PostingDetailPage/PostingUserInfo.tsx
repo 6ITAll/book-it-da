@@ -1,11 +1,10 @@
-import {
-  useGetPostByIdQuery,
-  useToggleFollowMutation,
-} from '@features/PostDetailPage/api/postingApi';
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
 import { User } from '@shared/types/type';
-import { useParams } from 'react-router-dom';
 import { postingDetailStyles } from './PostingDetail.styles';
+import { useToggleFollowMutation } from '@features/commons/followApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import { updateFollowStatus } from '@features/PostDetailPage/slice/postingDetailSlice';
 
 interface PostingUserInfoProps {
   user: User;
@@ -18,17 +17,22 @@ const PostingUserInfo = ({
   createdAt,
   currentUserId,
 }: PostingUserInfoProps) => {
-  const { postingId } = useParams();
+  const dispatch = useDispatch();
   const [toggleFollow, { isLoading }] = useToggleFollowMutation();
-  const { data: post, refetch } = useGetPostByIdQuery(postingId!);
+  const currentPost = useSelector(
+    (state: RootState) => state.postingDetail.currentPost,
+  );
+  const isFollowing = currentPost?.user.isFollowing ?? false;
 
   const handleFollowToggle = async () => {
     try {
-      await toggleFollow({
+      const result = await toggleFollow({
         userId: user.userId,
-        isFollowing: !post?.user.isFollowing,
-      });
-      refetch(); // 데이터를 강제로 다시 가져옵니다.
+        isFollowing: !isFollowing,
+      }).unwrap();
+      if (result.success) {
+        dispatch(updateFollowStatus(!isFollowing));
+      }
     } catch (error) {
       console.error('팔로우 토글 실패:', error);
     }
@@ -51,11 +55,9 @@ const PostingUserInfo = ({
           size="small"
           onClick={handleFollowToggle}
           disabled={isLoading}
-          sx={postingDetailStyles.userInfoBoxButton(
-            post?.user.isFollowing ?? false,
-          )}
+          sx={postingDetailStyles.userInfoBoxButton(isFollowing ?? false)}
         >
-          {post?.user.isFollowing ? '팔로잉' : '팔로우'}
+          {isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       )}
     </Box>

@@ -11,7 +11,9 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "test-storybook": "test-storybook",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "swagger": "node swagger-server.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run swagger\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -22,6 +24,7 @@
     "@mui/material": "^6.2.0",
     "@mui/x-date-pickers": "^7.23.2",
     "@reduxjs/toolkit": "^2.5.0",
+    "@supabase/supabase-js": "^2.47.13",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "firebase": "^11.1.0",
@@ -38,7 +41,10 @@
     "slick-carousel": "^1.8.1",
     "string-strip-html": "^13.4.8",
     "styled-components": "^6.1.13",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^11.0.3",
+    "yamljs": "^0.3.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {
@@ -63,9 +69,12 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/react-slick": "^0.23.13",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser": "^2.1.8",
     "axe-playwright": "^2.0.3",
+    "concurrently": "^9.1.2",
     "esbuild": "^0.24.0",
     "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",

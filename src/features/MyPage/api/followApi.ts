@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '@features/user/types';
 import { FollowRequest } from '@shared/types/type';
-export const followApi = createApi({
-  reducerPath: 'followApi',
+export const mypageFollowApi = createApi({
+  reducerPath: 'mypageFollowApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: ['FollowList'],
   endpoints: (builder) => ({
@@ -43,4 +43,4 @@ export const {
   useGetFollowListQuery,
   useToggleFollowMutation,
   useDeleteFollowMutation,
-} = followApi;
+} = mypageFollowApi;

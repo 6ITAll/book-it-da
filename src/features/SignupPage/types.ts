@@ -5,5 +5,6 @@ export interface SignupData
     User,
     'avatarUrl' | 'isFollowing' | 'isFollower' | 'userStats' | 'about'
   > {
+  email: string;
   confirmPassword: string;
 }

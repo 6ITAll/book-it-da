@@ -1,7 +1,7 @@
 // store/darkModeSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
 
-interface ThemeState {
+export interface ThemeState {
   mode: 'light' | 'dark';
 }
 

@@ -5,8 +5,8 @@ import {
   useGetKakaoTokenMutation,
   useGetKakaoUserInfoQuery,
 } from '@features/SNSLogin/api/Kakaoapi';
-import { loginSuccess } from '@features/user/userSlice';
-import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
+// import { loginSuccess } from '@features/user/userSlice';
+// import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 
 const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
@@ -47,7 +47,7 @@ const KakaoCallback = (): JSX.Element => {
 
   useEffect(() => {
     if (kakaoUserInfo) {
-      dispatch(loginSuccess(kakaoUserInfo as KakaoUserInfo));
+      // dispatch(loginSuccess(kakaoUserInfo as KakaoUserInfo));
       localStorage.setItem('kakaoUserInfo', JSON.stringify(kakaoUserInfo));
       navigate('/');
     }

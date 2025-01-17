@@ -5,7 +5,6 @@ import PostCardContent from './PostCardContent';
 import BookImage from './PostCardImage';
 import PostCardHeader from './PostCardHeader';
 import PostCardFooter from './PostCardFooter';
-import { useToggleLikeMutation } from '@features/FeedPage/api/feedApi';
 import { navigateToPostingDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,9 +14,6 @@ interface PostCardBaseProps {
   user: User;
   book: Book;
   postType: PostType;
-  likeCount: number;
-  isLiked: boolean;
-  onFollowChange: (userId: number, isFollowing: boolean) => void;
 }
 
 interface PostingCardProps extends PostCardBaseProps {
@@ -45,23 +41,8 @@ const PostCard = ({
   title,
   content,
   review,
-  likeCount,
-  isLiked,
-  onFollowChange,
 }: PostCardProps): JSX.Element => {
   const navigate = useNavigate();
-  const [toggleLike] = useToggleLikeMutation();
-
-  const handleLikeClick = async (postId: number, isLiked: boolean) => {
-    try {
-      const result = await toggleLike({ postId, isLiked }).unwrap();
-      if (!result.success) {
-        console.error('좋아요 처리 실패');
-      }
-    } catch (error) {
-      console.error('좋아요 토글 실패:', error);
-    }
-  };
 
   const handleCardClick = (postId: number) => {
     if (postType === '포스팅') {
@@ -71,12 +52,7 @@ const PostCard = ({
 
   return (
     <Card sx={styles.card}>
-      <PostCardHeader
-        user={user}
-        createdAt={createdAt}
-        postType={postType}
-        onFollowChange={onFollowChange}
-      />
+      <PostCardHeader user={user} createdAt={createdAt} postType={postType} />
       {/* 책 사진 */}
       <Box onClick={() => handleCardClick(postId)}>
         <BookImage imageUrl={book.imageUrl} title={book.bookTitle} />
@@ -97,13 +73,7 @@ const PostCard = ({
           }
         />
       </Box>
-      <PostCardFooter
-        postId={postId}
-        likeCount={likeCount}
-        isLiked={isLiked}
-        handleLikeClick={handleLikeClick}
-        itemId={book.itemId}
-      />
+      <PostCardFooter postId={postId} itemId={book.itemId} />
     </Card>
   );
 };
