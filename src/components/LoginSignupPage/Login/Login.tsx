@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../PasswordInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
-import { LoginMessage } from './types'; // LoginProps는 필요 없으므로 제거
+import { LoginMessage } from './types';
 import { StyledButton, StyledTypography } from './Login.styles';
 import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 import kakaoLoginImg from '@assets/images/kakao_login.png';
@@ -67,7 +67,6 @@ const Login = (): JSX.Element => {
               email: user.userId,
             },
           };
-          console.log(userInfo);
           dispatch(loginSuccess(userInfo));
           if (rememberMe) {
             localStorage.setItem('savedUserId', userId);
@@ -77,7 +76,7 @@ const Login = (): JSX.Element => {
           if (autoLogin) {
             localStorage.setItem(
               'autoLogin',
-              JSON.stringify({ userId, password }),
+              JSON.stringify({ userId, password, isActive: true }),
             );
           } else {
             localStorage.removeItem('autoLogin');
@@ -118,11 +117,13 @@ const Login = (): JSX.Element => {
 
     const autoLoginData = localStorage.getItem('autoLogin');
     if (autoLoginData) {
-      const { userId, password } = JSON.parse(autoLoginData);
-      setUserId(userId);
-      setPassword(password);
-      setAutoLogin(true);
-      handleLogin(null); // 자동 로그인 시도
+      const { userId, password, isActive } = JSON.parse(autoLoginData);
+      if (isActive) {
+        setUserId(userId);
+        setPassword(password);
+        setAutoLogin(true);
+        handleLogin(null);
+      }
     }
   }, [handleLogin]);
 

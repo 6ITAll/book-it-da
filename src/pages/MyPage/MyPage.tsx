@@ -3,7 +3,7 @@ import UserInfoSection from '@components/MyPage/UserInfoSection';
 import { Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { follows } from 'src/mocks/handlers/follow';
+import { followsData } from 'src/mocks/handlers/follow';
 import { useGetKakaoUserInfoQuery } from '@features/SNSLogin/api/Kakaoapi';
 
 interface UserInfo {
@@ -47,9 +47,18 @@ const MyPage = (): JSX.Element => {
 
       // 팔로우 사용자 정보 확인
       if (urlUserId) {
-        const followUser = follows.find((user) => user.userId === urlUserId);
-        if (followUser) {
-          setUserInfo(followUser);
+        const follower = followsData.followers.find(
+          (user) => user.userId === urlUserId,
+        );
+        const following = followsData.followings.find(
+          (user) => user.userId === urlUserId,
+        );
+        if (follower) {
+          setUserInfo(follower);
+          return;
+        }
+        if (following) {
+          setUserInfo(following);
           return;
         }
       }
