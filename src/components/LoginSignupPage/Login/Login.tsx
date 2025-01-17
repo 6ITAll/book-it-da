@@ -38,51 +38,23 @@ const Login = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const handleLogin = useCallback(
-    (e: React.FormEvent<HTMLFormElement> | null) => {
-      if (e) e.preventDefault();
-      setLoginMessage({ content: '', isError: false });
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: userId,
+          password: password,
+        });
+        if (error) throw error;
 
-      const storedUserInfo = localStorage.getItem('userInfo');
-
-      if (storedUserInfo) {
-        const users = JSON.parse(storedUserInfo);
-        const user = users.find(
-          (user: { userId: string; password: string }) =>
-            user.userId === userId && user.password === password,
-        );
-
-        if (user) {
-          const userInfo: KakaoUserInfo = {
-            userId: user.userId,
-            connected_at: new Date().toISOString(),
-            properties: {
-              userName: user.userId,
-              avatarUrl: '',
-            },
-            kakao_account: {
-              profile_needs_agreement: false,
-              profile: {
-                nickname: user.userId,
-                avatarUrl: '',
-              },
-              email: user.userId,
-            },
-          };
-          console.log(userInfo);
-          dispatch(loginSuccess(userInfo));
-          if (rememberMe) {
-            localStorage.setItem('savedUserId', userId);
-          } else {
-            localStorage.removeItem('savedUserId');
-          }
-          if (autoLogin) {
-            localStorage.setItem(
-              'autoLogin',
-              JSON.stringify({ userId, password }),
-            );
-          } else {
-            localStorage.removeItem('autoLogin');
-          }
+        if (data.user) {
+          dispatch(
+            loginSuccess({
+              id: data.user.id,
+              email: data.user.email ?? '',
+              username: data.user.email ?? '',
+            }),
+          );
           navigate('/');
         }
       } catch (error) {
@@ -123,7 +95,7 @@ const Login = (): JSX.Element => {
         setUserId(userId);
         setPassword(password);
         setAutoLogin(true);
-        handleLogin(null);
+        // handleLogin(null);
       }
     }
   }, [handleLogin]);
