@@ -299,10 +299,37 @@ export const userHandlers = [
     );
   }),
 
-  http.post('/api/user/:userId/password-check', async ({ request }) => {
+  http.post('/api/user/:userId/password-check', async ({ request, params }) => {
     const { password } = (await request.json()) as { password: string };
+    const { userId } = params;
 
-    const isPasswordCorrect = password === 'P@ssw0rd1!';
+    // 로컬 스토리지에서 사용자 정보 가져오기
+    const storedUserInfo = localStorage.getItem('userInfo');
+
+    if (!storedUserInfo) {
+      return HttpResponse.json(
+        {
+          success: false,
+          message: '사용자 정보를 찾을 수 없습니다.',
+        },
+        { status: 404 },
+      );
+    }
+
+    const users = JSON.parse(storedUserInfo);
+    const user = users.find((u: { userId: string }) => u.userId === userId);
+
+    if (!user) {
+      return HttpResponse.json(
+        {
+          success: false,
+          message: '해당 사용자를 찾을 수 없습니다.',
+        },
+        { status: 404 },
+      );
+    }
+
+    const isPasswordCorrect = password === user.password;
 
     if (isPasswordCorrect) {
       return HttpResponse.json(

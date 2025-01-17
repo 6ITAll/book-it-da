@@ -7,7 +7,7 @@ import {
   Stack,
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@store/index';
@@ -22,12 +22,46 @@ const PasswordChkPage = () => {
   const [passwordCheck] = usePasswordCheckMutation();
   const dispatch = useDispatch<AppDispatch>();
 
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      const parsedUserInfo = JSON.parse(userInfo);
+      if (Array.isArray(parsedUserInfo) && parsedUserInfo.length > 0) {
+        setUserId(parsedUserInfo[0].userId); // 배열의 첫 번째 요소에서 userId 설정
+      } else {
+        dispatch(
+          showSnackbar({
+            message: '사용자 정보를 찾을 수 없습니다.',
+            severity: 'error',
+          }),
+        );
+        navigate('/login');
+      }
+    } else {
+      navigate('/login');
+    }
+  }, [navigate, dispatch]);
+
   const handlePasswordCheck = async () => {
+    console.log('Checking password for userId:', userId);
+    if (!userId) {
+      dispatch(
+        showSnackbar({
+          message: '사용자 정보를 찾을 수 없습니다.',
+          severity: 'error',
+        }),
+      );
+      return;
+    }
+
     try {
       const response = await passwordCheck({
-        userId: 'user123',
+        userId,
         password,
       }).unwrap();
+
       if (response.success) {
         dispatch(setCheckedPassword(true));
         navigate('/edit-account');
@@ -41,7 +75,9 @@ const PasswordChkPage = () => {
 
       dispatch(
         showSnackbar({
-          message: (error.data as { message: string }).message,
+          message:
+            (error.data as { message: string }).message ||
+            '비밀번호 확인 중 오류가 발생했습니다.',
           severity: 'error',
         }),
       );

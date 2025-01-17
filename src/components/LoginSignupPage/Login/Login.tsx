@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../PasswordInput';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '@features/user/userSlice';
-import { LoginMessage } from './types'; // LoginProps는 필요 없으므로 제거
+import { LoginMessage } from './types';
 import { StyledButton, StyledTypography } from './Login.styles';
 // import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 import kakaoLoginImg from '@assets/images/kakao_login.png';
@@ -38,23 +38,51 @@ const Login = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const handleLogin = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: userId,
-          password: password,
-        });
-        if (error) throw error;
+    (e: React.FormEvent<HTMLFormElement> | null) => {
+      if (e) e.preventDefault();
+      setLoginMessage({ content: '', isError: false });
 
-        if (data.user) {
-          dispatch(
-            loginSuccess({
-              id: data.user.id,
-              email: data.user.email ?? '',
-              username: data.user.email ?? '',
-            }),
-          );
+      const storedUserInfo = localStorage.getItem('userInfo');
+
+      if (storedUserInfo) {
+        const users = JSON.parse(storedUserInfo);
+        const user = users.find(
+          (user: { userId: string; password: string }) =>
+            user.userId === userId && user.password === password,
+        );
+
+        if (user) {
+          const userInfo: KakaoUserInfo = {
+            userId: user.userId,
+            connected_at: new Date().toISOString(),
+            properties: {
+              userName: user.userId,
+              avatarUrl: '',
+            },
+            kakao_account: {
+              profile_needs_agreement: false,
+              profile: {
+                nickname: user.userId,
+                avatarUrl: '',
+              },
+              email: user.userId,
+            },
+          };
+          console.log(userInfo);
+          dispatch(loginSuccess(userInfo));
+          if (rememberMe) {
+            localStorage.setItem('savedUserId', userId);
+          } else {
+            localStorage.removeItem('savedUserId');
+          }
+          if (autoLogin) {
+            localStorage.setItem(
+              'autoLogin',
+              JSON.stringify({ userId, password }),
+            );
+          } else {
+            localStorage.removeItem('autoLogin');
+          }
           navigate('/');
         }
       } catch (error) {
@@ -90,10 +118,13 @@ const Login = (): JSX.Element => {
 
     const autoLoginData = localStorage.getItem('autoLogin');
     if (autoLoginData) {
-      const { userId, password } = JSON.parse(autoLoginData);
-      setUserId(userId);
-      setPassword(password);
-      setAutoLogin(true);
+      const { userId, password, isActive } = JSON.parse(autoLoginData);
+      if (isActive) {
+        setUserId(userId);
+        setPassword(password);
+        setAutoLogin(true);
+        handleLogin(null);
+      }
     }
   }, [handleLogin]);
 

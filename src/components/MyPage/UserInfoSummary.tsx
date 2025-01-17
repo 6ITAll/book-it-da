@@ -8,9 +8,15 @@ interface UserInfoSummaryProps {
   count: number;
   label: string;
   isAction?: boolean;
+  type?: 'followers' | 'followings'; //추가
 }
 
-const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
+const UserInfoSummary = ({
+  count,
+  label,
+  isAction,
+  type,
+}: UserInfoSummaryProps) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
 
@@ -45,12 +51,14 @@ const UserInfoSummary = ({ count, label, isAction }: UserInfoSummaryProps) => {
         <Typography>{count}</Typography>
         <Typography>{label}</Typography>
       </Stack>
-      <HybridDialog
-        open={open}
-        setOpen={setOpen}
-        title={label}
-        contentNode={<FollowList setOpen={setOpen} />}
-      />
+      {isAction && type && (
+        <HybridDialog
+          open={open}
+          setOpen={setOpen}
+          title={label}
+          contentNode={<FollowList setOpen={setOpen} type={type} />}
+        />
+      )}
     </Stack>
   );
 };

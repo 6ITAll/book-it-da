@@ -19,9 +19,10 @@ interface User {
 
 interface FollowListProps {
   setOpen: (open: boolean) => void;
+  type: 'followers' | 'followings';
 }
 
-const FollowList = ({ setOpen }: FollowListProps) => {
+const FollowList = ({ setOpen, type }: FollowListProps) => {
   const [deleteFollow] = useDeleteFollowMutation();
   const navigate = useNavigate();
 
@@ -29,13 +30,15 @@ const FollowList = ({ setOpen }: FollowListProps) => {
 
   useEffect(() => {
     const fetchFollows = async () => {
-      const response = await fetch('/api/follows');
+      const endpoint =
+        type === 'followers' ? '/api/followers' : '/api/followings';
+      const response = await fetch(endpoint);
       const data: User[] = await response.json();
       setUsers(data);
     };
 
     fetchFollows();
-  }, []);
+  }, [type]);
 
   const handleUserClick = (userId: string) => {
     navigate(`/${userId}`);

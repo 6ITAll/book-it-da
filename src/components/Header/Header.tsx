@@ -68,6 +68,14 @@ const Header = (): JSX.Element => {
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
+    const autoLoginData = localStorage.getItem('autoLogin');
+    if (autoLoginData) {
+      const parsedData = JSON.parse(autoLoginData);
+      localStorage.setItem(
+        'autoLogin',
+        JSON.stringify({ ...parsedData, isActive: false }),
+      );
+    }
     handleClose();
     navigate('/');
   };
