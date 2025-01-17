@@ -59,7 +59,7 @@ const UserInfoSummary = ({
           contentNode={<FollowList setOpen={setOpen} type={type} />}
         />
       )}
-    </>
+    </Stack>
   );
 };
 
