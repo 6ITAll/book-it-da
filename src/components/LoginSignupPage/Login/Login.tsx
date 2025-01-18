@@ -12,7 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../PasswordInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginSuccess } from '@features/user/userSlice';
+import { loginSuccess, setAutoLogin, setToken } from '@features/user/userSlice';
 import { LoginMessage } from './types';
 import { StyledButton, StyledTypography } from './Login.styles';
 // import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
@@ -33,7 +33,8 @@ const Login = (): JSX.Element => {
     isError: false,
   });
   const [rememberMe, setRememberMe] = useState<boolean>(false);
-  const [autoLogin, setAutoLogin] = useState<boolean>(false);
+
+  const autoLogin = useSelector((state: RootState) => state.user.autoLogin);
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
@@ -50,31 +51,19 @@ const Login = (): JSX.Element => {
         });
         if (error) throw error;
 
-        if (data.user) {
+        if (data.user && data.session) {
           dispatch(
             loginSuccess({
               id: data.user.id,
               email: data.user.email ?? '',
-              username: data.user.email ?? '',
             }),
           );
+          dispatch(setToken(data.session.access_token));
 
           if (autoLogin) {
-            // 자동 로그인 설정 저장
-            await supabase
-              .from('user_settings')
-              .upsert(
-                { user_id: data.user.id, auto_login: true },
-                { onConflict: 'user_id' },
-              );
+            localStorage.setItem('token', data.session.access_token);
           } else {
-            // 자동 로그인 설정 제거
-            await supabase
-              .from('user_settings')
-              .upsert(
-                { user_id: data.user.id, auto_login: false },
-                { onConflict: 'user_id' },
-              );
+            localStorage.removeItem('token');
           }
 
           navigate('/');
@@ -131,7 +120,6 @@ const Login = (): JSX.Element => {
             loginSuccess({
               id: session.user.id,
               email: session.user.email ?? '',
-              username: session.user.email ?? '',
             }),
           );
           navigate('/');
@@ -183,7 +171,7 @@ const Login = (): JSX.Element => {
             control={
               <Checkbox
                 checked={autoLogin}
-                onChange={(e) => setAutoLogin(e.target.checked)}
+                onChange={(e) => dispatch(setAutoLogin(e.target.checked))}
               />
             }
             label="자동 로그인"

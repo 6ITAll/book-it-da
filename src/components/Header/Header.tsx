@@ -69,27 +69,17 @@ const Header = (): JSX.Element => {
 
   const handleLogout = async () => {
     try {
-      // 로그아웃 처리
+      // Supabase 로그아웃
+      await supabase.auth.signOut();
+
+      // Redux 상태 업데이트
       dispatch(logoutSuccess());
 
-      // Supabase에서 현재 사용자 정보 가져오기
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      // 로컬 스토리지에서 토큰 제거
+      localStorage.removeItem('token');
 
-      if (user) {
-        // 서버에 자동 로그인 설정 해제 요청
-        await supabase
-          .from('user_settings')
-          .update({ auto_login: false })
-          .eq('user_id', user.id);
-      }
-
-      // 로컬 스토리지에서 자동 로그인 정보 제거
-      localStorage.removeItem('autoLogin');
-
-      handleClose();
-      navigate('/');
+      handleClose(); // 메뉴 닫기
+      navigate('/'); // 홈으로 이동
     } catch (error) {
       console.error('로그아웃 중 오류 발생:', error);
       // 오류 처리 (예: 사용자에게 알림)

@@ -3,19 +3,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface UserInfo {
   id: string;
   email?: string;
-  username?: string;
 }
 
 export interface UserState {
   userInfo: UserInfo | null;
   isLoggedIn: boolean;
   checkedPassword: boolean;
+  autoLogin: boolean;
+  token: string | null;
 }
 
 const initialState: UserState = {
   userInfo: null,
   isLoggedIn: false,
   checkedPassword: false,
+  autoLogin: false,
+  token: null,
 };
 
 export const userSlice = createSlice({
@@ -29,13 +32,26 @@ export const userSlice = createSlice({
     logoutSuccess: (state) => {
       state.userInfo = null;
       state.isLoggedIn = false;
+      state.autoLogin = false;
+      state.token = null;
     },
     setCheckedPassword(state, action: PayloadAction<boolean>) {
       state.checkedPassword = action.payload;
     },
+    setAutoLogin(state, action: PayloadAction<boolean>) {
+      state.autoLogin = action.payload;
+    },
+    setToken(state, action: PayloadAction<string | null>) {
+      state.token = action.payload;
+    },
   },
 });
 
-export const { loginSuccess, logoutSuccess, setCheckedPassword } =
-  userSlice.actions;
+export const {
+  loginSuccess,
+  logoutSuccess,
+  setCheckedPassword,
+  setAutoLogin,
+  setToken,
+} = userSlice.actions;
 export default userSlice.reducer;
