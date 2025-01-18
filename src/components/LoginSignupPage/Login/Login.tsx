@@ -58,8 +58,26 @@ const Login = (): JSX.Element => {
               username: data.user.email ?? '',
             }),
           );
+
+          if (autoLogin) {
+            // 자동 로그인 설정 저장
+            await supabase
+              .from('user_settings')
+              .upsert(
+                { user_id: data.user.id, auto_login: true },
+                { onConflict: 'user_id' },
+              );
+          } else {
+            // 자동 로그인 설정 제거
+            await supabase
+              .from('user_settings')
+              .upsert(
+                { user_id: data.user.id, auto_login: false },
+                { onConflict: 'user_id' },
+              );
+          }
+
           navigate('/');
-          console.log(data);
         }
       } catch (error) {
         console.error('Login error:', error);
@@ -72,7 +90,7 @@ const Login = (): JSX.Element => {
         });
       }
     },
-    [userId, password, dispatch, navigate],
+    [userId, password, autoLogin, dispatch, navigate],
   );
 
   useEffect(() => {
@@ -97,17 +115,32 @@ const Login = (): JSX.Element => {
       setRememberMe(true);
     }
 
-    const autoLoginData = localStorage.getItem('autoLogin');
-    if (autoLoginData) {
-      const { userId, password, isActive } = JSON.parse(autoLoginData);
-      if (isActive) {
-        setUserId(userId);
-        setPassword(password);
-        setAutoLogin(true);
-        // handleLogin(null);
+    const checkAutoLogin = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        const { data: settings } = await supabase
+          .from('user_settings')
+          .select('auto_login')
+          .eq('user_id', session.user.id)
+          .single();
+
+        if (settings && settings.auto_login) {
+          dispatch(
+            loginSuccess({
+              id: session.user.id,
+              email: session.user.email ?? '',
+              username: session.user.email ?? '',
+            }),
+          );
+          navigate('/');
+        }
       }
-    }
-  }, [handleLogin]);
+    };
+
+    checkAutoLogin();
+  }, [dispatch, navigate]);
 
   const handleKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
@@ -120,7 +153,7 @@ const Login = (): JSX.Element => {
       </Typography>
       <Stack component="form" spacing={2} onSubmit={handleLogin}>
         <TextField
-          label="아이디"
+          label="이메일"
           variant="outlined"
           fullWidth
           margin="normal"

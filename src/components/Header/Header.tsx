@@ -15,6 +15,7 @@ import {
   StyledSearchContainer,
   StyledIconWrapper,
 } from './Header.styles';
+import { supabase } from '@utils/supabaseClient';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -66,18 +67,33 @@ const Header = (): JSX.Element => {
     handleClose();
   };
 
-  const handleLogout = () => {
-    dispatch(logoutSuccess());
-    const autoLoginData = localStorage.getItem('autoLogin');
-    if (autoLoginData) {
-      const parsedData = JSON.parse(autoLoginData);
-      localStorage.setItem(
-        'autoLogin',
-        JSON.stringify({ ...parsedData, isActive: false }),
-      );
+  const handleLogout = async () => {
+    try {
+      // 로그아웃 처리
+      dispatch(logoutSuccess());
+
+      // Supabase에서 현재 사용자 정보 가져오기
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        // 서버에 자동 로그인 설정 해제 요청
+        await supabase
+          .from('user_settings')
+          .update({ auto_login: false })
+          .eq('user_id', user.id);
+      }
+
+      // 로컬 스토리지에서 자동 로그인 정보 제거
+      localStorage.removeItem('autoLogin');
+
+      handleClose();
+      navigate('/');
+    } catch (error) {
+      console.error('로그아웃 중 오류 발생:', error);
+      // 오류 처리 (예: 사용자에게 알림)
     }
-    handleClose();
-    navigate('/');
   };
 
   return (
