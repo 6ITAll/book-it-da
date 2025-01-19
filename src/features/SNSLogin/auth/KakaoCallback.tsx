@@ -25,8 +25,10 @@ const KakaoCallback: React.FC = () => {
 
           if (userError) throw userError;
 
+          let avatar_url: string | undefined;
+
           if (userData?.user?.user_metadata) {
-            const { avatar_url } = userData.user.user_metadata;
+            avatar_url = userData.user.user_metadata.avatar_url;
 
             // avatar_url 업데이트
             if (avatar_url) {
@@ -39,7 +41,13 @@ const KakaoCallback: React.FC = () => {
             }
           }
 
-          dispatch(loginSuccess({ id: user.id }));
+          dispatch(
+            loginSuccess({
+              id: user.id,
+              email: user.email,
+              avatarUrl: avatar_url,
+            }),
+          );
           dispatch(setToken(access_token));
           navigate('/');
         } else {

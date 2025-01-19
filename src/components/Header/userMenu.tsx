@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { Menu, MenuItem } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Avatar, Menu, MenuItem } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import { logoutSuccess } from '@features/user/userSlice';
+import { logoutSuccess, UserInfo } from '@features/user/userSlice';
 import { supabase } from '@utils/supabaseClient';
 import { StyledIconWrapper } from './Header.styles';
+import { RootState } from '@store/index';
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const open = Boolean(anchorEl);
+  const { avatarUrl } = useSelector(
+    (state: RootState) => state.user.userInfo as UserInfo,
+  );
 
   const handleProfileClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -41,7 +45,14 @@ const UserMenu = () => {
   return (
     <div>
       <StyledIconWrapper onClick={handleProfileClick}>
-        <PersonIcon />
+        <Avatar
+          src={avatarUrl}
+          alt="User Avatar"
+          sx={{ width: 30, height: 30 }}
+          variant="rounded"
+        >
+          {!avatarUrl && <PersonIcon />}
+        </Avatar>
       </StyledIconWrapper>
       <Menu
         id="basic-menu"
