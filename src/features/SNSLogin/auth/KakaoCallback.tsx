@@ -1,74 +1,60 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-  useGetKakaoTokenMutation,
-  useGetKakaoUserInfoQuery,
-} from '@features/SNSLogin/api/Kakaoapi';
-// import { loginSuccess } from '@features/user/userSlice';
-// import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
+import { loginSuccess, setToken } from '@features/user/userSlice';
+import { supabase } from '@utils/supabaseClient';
 
-const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-
-const KakaoCallback = (): JSX.Element => {
+const KakaoCallback: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [
-    getKakaoToken,
-    { data: tokenData, isLoading: tokenLoading, error: tokenError },
-  ] = useGetKakaoTokenMutation();
-
-  const {
-    data: kakaoUserInfo,
-    isLoading: userLoading,
-    error: userError,
-  } = useGetKakaoUserInfoQuery(tokenData?.access_token ?? '', {
-    skip: !tokenData,
-  });
 
   useEffect(() => {
-    const code = new URL(window.location.href).searchParams.get('code');
-    if (code) {
-      getKakaoToken({
-        client_id: REST_API_KEY,
-        redirect_uri: REDIRECT_URI,
-        code,
-      });
-    }
-  }, [getKakaoToken]);
+    const handleCallback = async () => {
+      try {
+        const { data: authData, error: authError } =
+          await supabase.auth.getSession();
 
-  useEffect(() => {
-    if (tokenData) {
-      localStorage.setItem('kakaoAccessToken', tokenData.access_token);
-      console.log('Access Token:', tokenData.access_token);
-    }
-  }, [tokenData]);
+        if (authError) throw authError;
 
-  useEffect(() => {
-    if (kakaoUserInfo) {
-      // dispatch(loginSuccess(kakaoUserInfo as KakaoUserInfo));
-      localStorage.setItem('kakaoUserInfo', JSON.stringify(kakaoUserInfo));
-      navigate('/');
-    }
-  }, [kakaoUserInfo, navigate, dispatch]);
+        if (authData?.session) {
+          const { user, access_token } = authData.session;
 
-  if (tokenLoading || userLoading) return <div>Loading...</div>;
+          // 카카오 사용자 정보 가져오기
+          const { data: userData, error: userError } =
+            await supabase.auth.getUser();
 
-  const getErrorMessage = (error: unknown): string => {
-    if (typeof error === 'object' && error !== null) {
-      if ('status' in error && 'data' in error) {
-        return `Error ${error.status}: ${JSON.stringify(error.data)}`;
+          if (userError) throw userError;
+
+          if (userData?.user?.user_metadata) {
+            const { avatar_url } = userData.user.user_metadata;
+
+            // avatar_url 업데이트
+            if (avatar_url) {
+              const { error: updateError } = await supabase
+                .from('user')
+                .update({ avatar_url: avatar_url })
+                .eq('id', user.id);
+
+              if (updateError) throw updateError;
+            }
+          }
+
+          dispatch(loginSuccess({ id: user.id }));
+          dispatch(setToken(access_token));
+          navigate('/');
+        } else {
+          throw new Error('세션 데이터가 없습니다.');
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        navigate('/login');
       }
-    }
-    return 'An unexpected error occurred.';
-  };
+    };
 
-  if (tokenError) return <div>Token Error: {getErrorMessage(tokenError)}</div>;
-  if (userError)
-    return <div>User Info Error: {getErrorMessage(userError)}</div>;
+    handleCallback();
+  }, [navigate, dispatch]);
 
-  return <div>Kakao Login Processing...</div>;
+  return <div>카카오 로그인 처리 중...</div>;
 };
 
 export default KakaoCallback;

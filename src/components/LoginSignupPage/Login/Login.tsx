@@ -15,15 +15,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess, setAutoLogin, setToken } from '@features/user/userSlice';
 import { LoginMessage } from './types';
 import { StyledButton, StyledTypography } from './Login.styles';
-// import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
 import kakaoLoginImg from '@assets/images/kakao_login.png';
 import { supabase } from '@utils/supabaseClient';
 import { RootState } from '@store/index';
-
-const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
-const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}&response_type=code`;
+import { useKakaoSDK } from '@hooks/useKakaoSDK';
 
 const Login = (): JSX.Element => {
   const [userId, setUserId] = useState<string>('');
@@ -130,8 +125,28 @@ const Login = (): JSX.Element => {
     checkAutoLogin();
   }, [dispatch, navigate]);
 
-  const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+  useKakaoSDK();
+
+  const handleKakaoLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'kakao',
+        options: {
+          redirectTo: `${window.location.origin}/oauth/kakao`,
+          queryParams: {
+            client_id: import.meta.env.VITE_KAKAO_REST_API_KEY,
+          },
+        },
+      });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Kakao login error:', error);
+      setLoginMessage({
+        content: '카카오 로그인 중 오류가 발생했습니다.',
+        isError: true,
+      });
+    }
   };
 
   return (
