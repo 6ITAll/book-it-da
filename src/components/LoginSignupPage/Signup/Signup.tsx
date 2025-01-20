@@ -45,7 +45,6 @@ const Signup = (): JSX.Element => {
   );
 
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
-  const [userIdErrorMessage, setUserIdErrorMessage] = useState('');
 
   const emailValue = watch('email');
   const userIdValue = watch('userId');
@@ -155,7 +154,6 @@ const Signup = (): JSX.Element => {
       }
     } catch (error) {
       console.error('Error checking userId duplicate:', error);
-      setUserIdErrorMessage('아이디 중복 확인 중 오류가 발생했습니다.');
     }
   };
 
@@ -165,7 +163,6 @@ const Signup = (): JSX.Element => {
       setEmailErrorMessage('');
     } else if (field === 'userId') {
       setIsUserIdAvailable(null);
-      setUserIdErrorMessage('');
     }
   };
 
