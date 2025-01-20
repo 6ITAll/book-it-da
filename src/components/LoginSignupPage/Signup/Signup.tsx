@@ -29,8 +29,8 @@ const Signup = (): JSX.Element => {
   const {
     control,
     handleSubmit,
-    // reset,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<SignupData>({
     resolver: yupResolver(schema),
@@ -46,6 +46,9 @@ const Signup = (): JSX.Element => {
 
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [userIdErrorMessage, setUserIdErrorMessage] = useState('');
+
+  const emailValue = watch('email');
+  const userIdValue = watch('userId');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -140,8 +143,16 @@ const Signup = (): JSX.Element => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
-      <StyledTitle variant="h4">회원가입</StyledTitle>
+    <Container
+      maxWidth="sm"
+      sx={{
+        p: 2,
+        mt: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <StyledTitle variant="h3">회원가입</StyledTitle>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="name"
@@ -186,6 +197,7 @@ const Signup = (): JSX.Element => {
             size="small"
             onClick={handleEmailDuplicateCheck}
             sx={signupStyles.checkDuplicateButton}
+            disabled={!emailValue}
           >
             중복확인
           </Button>
@@ -216,6 +228,7 @@ const Signup = (): JSX.Element => {
             size="small"
             onClick={handleUserIdDuplicateCheck}
             sx={signupStyles.checkDuplicateButton}
+            disabled={!userIdValue}
           >
             중복확인
           </Button>
