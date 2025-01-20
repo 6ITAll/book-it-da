@@ -80,7 +80,14 @@ const Signup = (): JSX.Element => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === 'email_address_invalid') {
+          setEmailErrorMessage('유효하지 않은 이메일입니다.');
+        } else {
+          throw error;
+        }
+        return;
+      }
 
       dispatch(
         showSnackbar({
@@ -106,9 +113,19 @@ const Signup = (): JSX.Element => {
       const isAvailable = await checkEmailDuplicate(email);
       setIsEmailAvailable(isAvailable);
       if (!isAvailable) {
-        setEmailErrorMessage('이미 사용 중인 이메일입니다.');
+        dispatch(
+          showSnackbar({
+            message: '이미 사용 중인 이메일입니다.',
+            severity: 'error',
+          }),
+        );
       } else {
-        setEmailErrorMessage('사용 가능한 이메일입니다.');
+        dispatch(
+          showSnackbar({
+            message: '사용 가능한 이메일입니다.',
+            severity: 'success',
+          }),
+        );
       }
     } catch (error) {
       console.error('Error checking email duplicate:', error);
@@ -122,9 +139,19 @@ const Signup = (): JSX.Element => {
       const isAvailable = await checkUserIdDuplicate(userId);
       setIsUserIdAvailable(isAvailable);
       if (!isAvailable) {
-        setUserIdErrorMessage('이미 사용 중인 아이디입니다.');
+        dispatch(
+          showSnackbar({
+            message: '이미 사용 중인 아이디입니다.',
+            severity: 'error',
+          }),
+        );
       } else {
-        setUserIdErrorMessage('사용 가능한 아이디입니다.');
+        dispatch(
+          showSnackbar({
+            message: '사용 가능한 아이디입니다.',
+            severity: 'success',
+          }),
+        );
       }
     } catch (error) {
       console.error('Error checking userId duplicate:', error);
@@ -183,7 +210,11 @@ const Signup = (): JSX.Element => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                error={!!errors.email || isEmailAvailable === false}
+                error={
+                  !!errors.email ||
+                  isEmailAvailable === false ||
+                  !!emailErrorMessage
+                }
                 helperText={errors.email?.message || emailErrorMessage}
                 onChange={(e) => {
                   field.onChange(e);
@@ -214,8 +245,8 @@ const Signup = (): JSX.Element => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                error={!!errors.userId || isUserIdAvailable === false}
-                helperText={errors.userId?.message || userIdErrorMessage}
+                error={!!errors.userId}
+                helperText={errors.userId?.message}
                 onChange={(e) => {
                   field.onChange(e);
                   handleInputChange('userId');

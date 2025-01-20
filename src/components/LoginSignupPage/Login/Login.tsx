@@ -49,7 +49,7 @@ const Login = (): JSX.Element => {
           if (error.message === 'Email not confirmed') {
             dispatch(
               showSnackbar({
-                message: '이메일을 확인해주세요.',
+                message: '이메일 인증이 필요합니다.',
                 severity: 'error',
               }),
             );
