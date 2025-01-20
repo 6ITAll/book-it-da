@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Skeleton } from '@mui/material';
 import GenderAgeChart from '@components/BookDetailPage/GenderAgeChart';
 import GenderAgeSummary from '@components/BookDetailPage/GenderAgeSummary';
 import { useGetGenderAgeQuery } from '@features/BookDetailPage/api/genderAgeApi';
@@ -7,21 +7,43 @@ import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 interface BookIntroduceTabProps {
   itemId: number;
   description: string;
+  isLoading: boolean;
 }
 
 const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
   itemId,
   description,
+  isLoading,
 }) => {
   const { data } = useGetGenderAgeQuery(itemId);
+
   return (
     <>
-      {/* 성별·연령별 인기 분포 */}
+      {/* 성별·연령 인기 분포 섹션 */}
       <Box sx={bookDetailStyles.bookIntroduceTabBox}>
-        <GenderAgeChart data={data ?? []} />
-        <GenderAgeSummary data={data ?? []} />
+        {isLoading ? (
+          <>
+            <Skeleton
+              variant="rectangular"
+              height="300px"
+              sx={{ borderRadius: '8px', marginBottom: '1rem', flex: 2 }}
+            />
+
+            <Skeleton
+              variant="text"
+              height="300px"
+              sx={{ display: 'flex', flex: 1 }}
+            />
+          </>
+        ) : (
+          <>
+            <GenderAgeChart data={data ?? []} />
+            <GenderAgeSummary data={data ?? []} />
+          </>
+        )}
       </Box>
-      {/* 책 소개 */}
+
+      {/* 책 소개 섹션 */}
       <Box sx={bookDetailStyles.bookIntroduceBox}>
         <Typography
           sx={bookDetailStyles.bookIntroduceText}
@@ -30,13 +52,17 @@ const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
         >
           책 소개
         </Typography>
-        <Typography
-          sx={bookDetailStyles.bookIntroduceText}
-          variant="body1"
-          color="text.secondary"
-        >
-          {description || '책 소개가 없습니다.'}
-        </Typography>
+        {isLoading ? (
+          <Skeleton variant="text" width="90%" height="100px" />
+        ) : (
+          <Typography
+            sx={bookDetailStyles.bookIntroduceText}
+            variant="body1"
+            color="text.secondary"
+          >
+            {description || '책 소개가 없습니다.'}
+          </Typography>
+        )}
       </Box>
     </>
   );

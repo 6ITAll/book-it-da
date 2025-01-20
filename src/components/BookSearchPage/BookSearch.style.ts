@@ -46,3 +46,47 @@ export const searchResultStyles = {
     marginTop: 4,
   },
 };
+
+export const bestBookStyles = {
+  commonCard: {
+    borderRadius: 0,
+    boxShadow: 'none',
+    border: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    '& .MuiCardMedia-root': {
+      height: { xs: 100, sm: 150, md: 200 }, // 반응형 높이 조절
+      padding: '0.5rem 0',
+      width: 'auto',
+    },
+    '& .MuiCardContent-root': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '8px',
+    },
+    '& .MuiTypography-body1': {
+      fontSize: '14px',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginTop: '8px',
+    },
+  },
+  bestBookSkeletonBox: {
+    width: '100%',
+    padding: '1rem',
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  bestBookSkeltonCard: {
+    borderRadius: 2,
+    height: { xs: 150, sm: 200, md: 250 }, // 반응형 높이
+    width: '22%', // Carousel의 개별 슬라이드 너비와 일치
+  },
+};
