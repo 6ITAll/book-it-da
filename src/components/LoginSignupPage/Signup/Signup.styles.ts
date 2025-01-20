@@ -9,3 +9,11 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
 export const StyledSubmitButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
+
+export const signupStyles = {
+  checkDuplicateButton: {
+    whiteSpace: 'nowrap',
+    minWidth: 'auto',
+    padding: '6px 12px',
+  },
+};

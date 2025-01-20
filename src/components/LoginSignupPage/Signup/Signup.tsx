@@ -11,31 +11,57 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
+  Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import PasswordInput from '../PasswordInput';
-import { StyledTitle, StyledSubmitButton } from './Signup.styles';
+import { StyledTitle, StyledSubmitButton, signupStyles } from './Signup.styles';
 import { SignupData } from '@features/SignupPage/types';
 import { schema } from '@utils/SignupPage/yupSchema';
 import { supabase } from '@utils/supabaseClient';
+import {
+  checkEmailDuplicate,
+  checkUserIdDuplicate,
+} from '@utils/SignupPage/checkDuplicate';
 
 const Signup = (): JSX.Element => {
   const {
     control,
     handleSubmit,
     // reset,
+    getValues,
     formState: { errors },
   } = useForm<SignupData>({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(
+    null,
+  );
+  const [isUserIdAvailable, setIsUserIdAvailable] = useState<boolean | null>(
+    null,
+  );
+
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [userIdErrorMessage, setUserIdErrorMessage] = useState('');
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit = async (formData: SignupData) => {
+    console.log(isEmailAvailable, isUserIdAvailable);
+    if (!isEmailAvailable || !isUserIdAvailable) {
+      dispatch(
+        showSnackbar({
+          message: '아이디 또는 이메일 중복 확인을 해주세요.',
+          severity: 'error',
+        }),
+      );
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.signUp({
         email: formData.email,
@@ -62,7 +88,54 @@ const Signup = (): JSX.Element => {
       navigate('/login');
     } catch (error) {
       console.error('Error during signup:', error);
-      setErrorMessage('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+      dispatch(
+        showSnackbar({
+          message: '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.',
+          severity: 'error',
+        }),
+      );
+    }
+  };
+
+  const handleEmailDuplicateCheck = async () => {
+    try {
+      const email = getValues('email');
+      const isAvailable = await checkEmailDuplicate(email);
+      setIsEmailAvailable(isAvailable);
+      if (!isAvailable) {
+        setEmailErrorMessage('이미 사용 중인 이메일입니다.');
+      } else {
+        setEmailErrorMessage('사용 가능한 이메일입니다.');
+      }
+    } catch (error) {
+      console.error('Error checking email duplicate:', error);
+      setEmailErrorMessage('이메일 중복 확인 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleUserIdDuplicateCheck = async () => {
+    try {
+      const userId = getValues('userId');
+      const isAvailable = await checkUserIdDuplicate(userId);
+      setIsUserIdAvailable(isAvailable);
+      if (!isAvailable) {
+        setUserIdErrorMessage('이미 사용 중인 아이디입니다.');
+      } else {
+        setUserIdErrorMessage('사용 가능한 아이디입니다.');
+      }
+    } catch (error) {
+      console.error('Error checking userId duplicate:', error);
+      setUserIdErrorMessage('아이디 중복 확인 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleInputChange = (field: 'email' | 'userId') => {
+    if (field === 'email') {
+      setIsEmailAvailable(null);
+      setEmailErrorMessage('');
+    } else if (field === 'userId') {
+      setIsUserIdAvailable(null);
+      setUserIdErrorMessage('');
     }
   };
 
@@ -86,39 +159,67 @@ const Signup = (): JSX.Element => {
             />
           )}
         />
-        <Controller
-          name="email"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="이메일"
-              type="email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              error={!!errors.email}
-              helperText={errors.email?.message}
-            />
-          )}
-        />
-        <Controller
-          name="userId"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="아이디"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              error={!!errors.userId || !!errorMessage}
-              helperText={errors.userId?.message || errorMessage}
-            />
-          )}
-        />
+        <Box display="flex" alignItems="center" gap={1}>
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="이메일"
+                type="email"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                error={!!errors.email || isEmailAvailable === false}
+                helperText={errors.email?.message || emailErrorMessage}
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleInputChange('email');
+                }}
+              />
+            )}
+          />
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleEmailDuplicateCheck}
+            sx={signupStyles.checkDuplicateButton}
+          >
+            중복확인
+          </Button>
+        </Box>
+        <Box display="flex" alignItems="center" gap={1}>
+          <Controller
+            name="userId"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="아이디"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                error={!!errors.userId || isUserIdAvailable === false}
+                helperText={errors.userId?.message || userIdErrorMessage}
+                onChange={(e) => {
+                  field.onChange(e);
+                  handleInputChange('userId');
+                }}
+              />
+            )}
+          />
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleUserIdDuplicateCheck}
+            sx={signupStyles.checkDuplicateButton}
+          >
+            중복확인
+          </Button>
+        </Box>
         <Controller
           name="phone"
           control={control}
