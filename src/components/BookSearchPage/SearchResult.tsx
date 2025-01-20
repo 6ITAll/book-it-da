@@ -11,7 +11,7 @@ import {
   setCurrentPage,
 } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
-import { searchResultStyles } from './BookSearch.style';
+import { searchResultStyles } from '@components/BookSearchPage/BookSearch.style';
 import React from 'react';
 import { renderSearchResultSkeleton } from './BookSearchSkeleton';
 // 정렬 옵션 배열 정의
