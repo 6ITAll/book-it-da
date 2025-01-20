@@ -1,8 +1,8 @@
 import { http, HttpResponse } from 'msw';
 
 export const genderAgeHandlers = [
-  http.get('/api/gender-age/:itemId', ({ params }) => {
-    const { itemId } = params;
+  http.get('/api/gender-age/:isbn', ({ params }) => {
+    const { isbn } = params;
 
     // Mock 데이터 (itemId별로 다르게 설정 가능)
     const mockData = {
@@ -33,7 +33,7 @@ export const genderAgeHandlers = [
     };
 
     // 요청된 itemId에 해당하는 데이터가 있는지 확인
-    const responseData = mockData[itemId as keyof typeof mockData];
+    const responseData = mockData[isbn as keyof typeof mockData];
 
     // 데이터가 없으면 모든 값을 0으로 설정
     const defaultData = [

@@ -89,8 +89,8 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
       <Box sx={searchResultStyles.searchResultListBox}>
         {data?.item?.map((book) => (
           <SearchBookCard
-            key={book.itemId} // 고유 key 추가
-            itemId={book.itemId}
+            key={book.isbn} // 고유 key 추가
+            isbn={book.isbn}
             title={book.title}
             author={book.author}
             cover={book.cover}

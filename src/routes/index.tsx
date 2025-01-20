@@ -37,15 +37,15 @@ const AppRouter = () => {
         element={<EditAccountPage />}
       />
       <Route
-        path={`${RoutePaths.BOOKDETAIL}/:itemId`}
+        path={`${RoutePaths.BOOKDETAIL}/:isbn`}
         element={<BookDetailPage />}
       />
       <Route
-        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.REVIEWS}`}
+        path={`${RoutePaths.BOOKDETAIL}/:isbn/${RoutePaths.REVIEWS}`}
         element={<ReviewMorePage />}
       />
       <Route
-        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.POSTS}`}
+        path={`${RoutePaths.BOOKDETAIL}/:isbn/${RoutePaths.POSTS}`}
         element={<PostMorePage />}
       />
       <Route

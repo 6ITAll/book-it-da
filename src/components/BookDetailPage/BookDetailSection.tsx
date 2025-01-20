@@ -14,7 +14,7 @@ interface BookDetailSectionProps {
   link: string;
   customerReviewRank: number;
   ratingCount: number;
-  itemId: number;
+  isbn: string;
 }
 
 const BookDetailSection = ({
@@ -28,7 +28,7 @@ const BookDetailSection = ({
   link,
   customerReviewRank,
   ratingCount,
-  itemId,
+  isbn,
 }: BookDetailSectionProps): JSX.Element => {
   return (
     <Box sx={bookDetailStyles.bookDetailSectionBox}>
@@ -36,7 +36,7 @@ const BookDetailSection = ({
       <LeftBookDetailBox cover={cover} title={title} />
       {/* 오른쪽 박스 (책 정보) */}
       <RightBookDetailBox
-        itemId={itemId}
+        isbn={isbn}
         title={title}
         subTitle={subTitle}
         author={author}

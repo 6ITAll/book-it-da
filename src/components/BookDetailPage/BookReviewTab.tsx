@@ -11,14 +11,14 @@ import { MoreType } from '@components/BookDetailPage/types';
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { useState } from 'react';
 interface BookReviewTabProps {
-  itemId: number;
+  isbn: string;
   title: string;
   author: string;
   imageUrl: string;
 }
 
 const BookReviewsTab = ({
-  itemId,
+  isbn,
   title,
   author,
   imageUrl,
@@ -30,9 +30,9 @@ const BookReviewsTab = ({
   const theme = useTheme();
 
   const { data: postData = { totalPosts: 0, topPosts: [] } } =
-    useGetPostsQuery(itemId);
+    useGetPostsQuery(isbn);
   const { data: reviewData = { totalReviews: 0, topReviews: [] } } =
-    useGetReviewsQuery(itemId);
+    useGetReviewsQuery(isbn);
 
   // 좋아요 높은 순 3개 리뷰
   const reviews = reviewData?.topReviews || [];
@@ -47,14 +47,14 @@ const BookReviewsTab = ({
   };
 
   const handleSeeMoreClick = (type: MoreType) => {
-    if (itemId) {
-      navigate(`/bookDetail/${itemId}/${type}`, {
+    if (isbn) {
+      navigate(`/bookDetail/${isbn}/${type}`, {
         state: {
           bookDetails: {
             title,
             imageUrl,
             author,
-            itemId,
+            isbn,
           },
         },
       });
@@ -186,10 +186,10 @@ const BookReviewsTab = ({
         isOpen={isOneLineReviewModalOpen}
         onClose={handleModalClose}
         receivedBook={{
-          bookTitle: title!,
+          title: title!,
           imageUrl: imageUrl!,
           author: author!,
-          itemId: itemId!,
+          isbn: isbn!,
         }}
         receivedRating={rating}
       />

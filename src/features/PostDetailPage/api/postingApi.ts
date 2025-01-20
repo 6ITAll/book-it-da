@@ -13,7 +13,7 @@ export const postingApi = createApi({
     getCurrentUser: builder.query<User, void>({
       query: () => '/me',
     }),
-    getBookOtherPosts: builder.query<OtherPost[], number>({
+    getBookOtherPosts: builder.query<OtherPost[], string>({
       query: (bookId) => `/books/${bookId}/posts`,
     }),
     getUserOtherPosts: builder.query<OtherPost[], number>({

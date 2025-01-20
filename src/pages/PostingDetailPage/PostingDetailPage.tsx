@@ -21,7 +21,7 @@ const PostingDetailPage = () => {
   const dispatch = useDispatch();
   const { data: post, isLoading, error } = useGetPostByIdQuery(postingId!);
   const { data: bookOtherPosts } = useGetBookOtherPostsQuery(
-    post?.book?.itemId ?? 0,
+    post?.book?.isbn ?? '',
   );
   const { data: userOtherPosts } = useGetUserOtherPostsQuery(
     post?.user.userId ?? 0,

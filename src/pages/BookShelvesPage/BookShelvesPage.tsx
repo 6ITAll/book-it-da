@@ -38,7 +38,7 @@ const BookShelvesPage = () => {
   const { userId, bookshelfId } = useParams();
 
   const { data, error, isLoading } = useGetBookshelfQuery({
-    userId: Number(userId),
+    userId: userId!,
     bookshelfId: Number(bookshelfId),
   });
 
@@ -52,10 +52,10 @@ const BookShelvesPage = () => {
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
-    bookId: number,
+    bookId: string,
   ) => {
     event.stopPropagation();
-    const book = books.find((book) => book.itemId === bookId);
+    const book = books.find((book) => book.isbn === bookId);
     setSelectedBook(book || null);
     setOpenDialog(true);
   };
@@ -65,11 +65,11 @@ const BookShelvesPage = () => {
 
     try {
       await deleteBook({
-        userId: Number(userId),
+        userId: userId!,
         bookshelfId: Number(bookshelfId),
-        itemId: selectedBook.itemId,
+        isbn: selectedBook.isbn,
       });
-      dispatch(deleteBookAction(selectedBook.itemId));
+      dispatch(deleteBookAction(selectedBook.isbn));
       setOpenDialog(false);
     } catch (error) {
       console.error('Failed to delete book:', error);
@@ -105,7 +105,7 @@ const BookShelvesPage = () => {
       <Grid container spacing={4} sx={bookShelvesStyles.bookGridContainer}>
         {sortedBooks.map((book) => (
           <Grid
-            key={book.itemId}
+            key={book.isbn}
             size={
               viewMode === 'grid' ? { xs: 6, sm: 3, md: 2, lg: 2, xl: 2 } : 12
             }
@@ -121,7 +121,7 @@ const BookShelvesPage = () => {
       </Grid>
 
       <BookShelvesDetailDialog
-        key={`${userId}-${selectedBook?.itemId}`}
+        key={`${userId}-${selectedBook?.isbn}`}
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         handleDeleteBook={handleDeleteBook}

@@ -15,8 +15,8 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
   const navigate = useNavigate();
 
   const handleBookClick = () => {
-    if (book?.itemId) {
-      navigateToBookDetailPage(navigate, book.itemId);
+    if (book?.isbn) {
+      navigateToBookDetailPage(navigate, book.isbn);
     }
   };
   return (
@@ -26,7 +26,7 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
         {book && (
           <CommonBookCard
             image={book.imageUrl}
-            title={book.bookTitle}
+            title={book.title}
             author={book.author}
             sx={postingDetailStyles.bookCard}
           />

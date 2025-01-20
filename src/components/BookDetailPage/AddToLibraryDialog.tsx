@@ -27,7 +27,7 @@ const getUserId = (): string | null => {
 interface AddToLibraryModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  itemId: number;
+  isbn: string;
   title: string;
   author: string;
   imageUrl: string;
@@ -36,7 +36,7 @@ interface AddToLibraryModalProps {
 const AddToLibraryModal = ({
   open,
   setOpen,
-  itemId,
+  isbn,
   title,
   author,
   imageUrl,
@@ -64,10 +64,10 @@ const AddToLibraryModal = ({
   // 책 추가 함수
   const handleAddBook = async () => {
     if (selectedBookshelf) {
-      const newBook = { itemId, title, author, imageUrl };
+      const newBook = { isbn, title, author, imageUrl };
       try {
         await addBookToBookshelf({
-          itemId: itemId || 0,
+          isbn: isbn || '',
           userId: userId || '',
           id: selectedBookshelf,
           book: newBook,

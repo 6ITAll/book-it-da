@@ -5,16 +5,15 @@ import BookDetailSection from '@components/BookDetailPage/BookDetailSection';
 import BookDetailContent from '@components/BookDetailPage/BookDetailContent';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 const BookDetailPage = (): JSX.Element => {
-  const { itemId } = useParams<{ itemId: string }>();
-  const numericItemId = itemId ? parseInt(itemId, 10) : 0; // 넘버로 변경
+  const { isbn } = useParams<{ isbn: string }>();
   const { data } = useFetchBookDetailQuery({
-    itemId: numericItemId,
+    isbn: isbn!,
   });
 
   return (
     <Container maxWidth="lg" disableGutters sx={bookDetailStyles.container}>
       <BookDetailSection
-        itemId={numericItemId}
+        isbn={data?.item[0].isbn || ''}
         title={data?.item[0].title || '제목 없음'}
         cover={data?.item[0].cover || '이미지 없음'}
         subTitle={data?.item[0].subInfo?.subTitle || '부제 없음'}
@@ -28,7 +27,7 @@ const BookDetailPage = (): JSX.Element => {
       />
       {/* 책 소개 및 리뷰 부분*/}
       <BookDetailContent
-        itemId={numericItemId}
+        isbn={data?.item[0].isbn || ''}
         title={data?.item[0].title || ''}
         description={data?.item[0].description || ''}
         author={data?.item[0].author || ''}

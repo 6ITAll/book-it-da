@@ -55,7 +55,7 @@ const PostCard = ({
       <PostCardHeader user={user} createdAt={createdAt} postType={postType} />
       {/* 책 사진 */}
       <Box onClick={() => handleCardClick(postId)}>
-        <BookImage imageUrl={book.imageUrl} title={book.bookTitle} />
+        <BookImage imageUrl={book.imageUrl} title={book.title} />
         {/* 포스팅 내용 */}
         <PostCardContent
           type={postType}
@@ -73,7 +73,7 @@ const PostCard = ({
           }
         />
       </Box>
-      <PostCardFooter postId={postId} itemId={book.itemId} />
+      <PostCardFooter postId={postId} isbn={book.isbn} />
     </Card>
   );
 };

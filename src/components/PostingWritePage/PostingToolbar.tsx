@@ -57,7 +57,7 @@ const PostingToolbar = ({
         >
           <Typography variant="h6">{posting.title}</Typography>
           <Typography variant="body2">
-            {posting.book?.bookTitle || '책 정보 없음'}
+            {posting.book?.title || '책 정보 없음'}
           </Typography>
         </Box>
       ))}

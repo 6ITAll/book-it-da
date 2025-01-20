@@ -37,7 +37,7 @@ const PostCardContent = ({
           <>
             <Box sx={styles.cardTitleBox}>
               <Typography variant="h6" sx={styles.cardTitle}>
-                {book.bookTitle}
+                {book.title}
               </Typography>
               <Typography variant="body2" sx={styles.bookAuthor}>
                 {book.author}

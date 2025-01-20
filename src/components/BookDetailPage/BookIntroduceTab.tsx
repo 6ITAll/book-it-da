@@ -5,15 +5,15 @@ import GenderAgeSummary from '@components/BookDetailPage/GenderAgeSummary';
 import { useGetGenderAgeQuery } from '@features/BookDetailPage/api/genderAgeApi';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 interface BookIntroduceTabProps {
-  itemId: number;
+  isbn: string;
   description: string;
 }
 
 const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
-  itemId,
+  isbn,
   description,
 }) => {
-  const { data } = useGetGenderAgeQuery(itemId);
+  const { data } = useGetGenderAgeQuery(isbn);
   return (
     <>
       {/* 성별·연령별 인기 분포 */}

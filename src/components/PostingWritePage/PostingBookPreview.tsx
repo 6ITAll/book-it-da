@@ -11,7 +11,7 @@ export const BookPreviewSection = ({ book }: BookPreviewSectionProps) => (
   <Box sx={postingWriteStyles.bookPreviewBox}>
     <CommonBookCard
       image={book.imageUrl}
-      title={book.bookTitle}
+      title={book.title}
       author={book.author}
       sx={postingWriteStyles.bookCard}
     />

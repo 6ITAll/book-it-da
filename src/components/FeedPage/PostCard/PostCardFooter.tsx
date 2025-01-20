@@ -12,13 +12,10 @@ import { RootState } from '@store/index';
 
 interface PostCardFooterProps {
   postId: number;
-  itemId: number;
+  isbn: string;
 }
 
-const PostCardFooter = ({
-  postId,
-  itemId,
-}: PostCardFooterProps): JSX.Element => {
+const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [toggleLike] = useToggleLikeMutation();
@@ -55,7 +52,7 @@ const PostCardFooter = ({
         fullWidth
         startIcon={<MenuBookIcon />}
         sx={styles.cardFooterButton(false)(theme)}
-        onClick={() => navigateToBookDetailPage(navigate, itemId)}
+        onClick={() => navigateToBookDetailPage(navigate, isbn)}
       >
         책 보러가기
       </Button>

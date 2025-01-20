@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // 상태 타입
 export interface BookDetailState {
-  itemId: number;
+  isbn: string;
   title: string;
   description: string;
   author: string;
@@ -15,7 +15,7 @@ export interface BookDetailState {
 
 // 초기 상태
 const initialState: BookDetailState = {
-  itemId: 0,
+  isbn: '',
   title: '',
   description: '',
   author: '',

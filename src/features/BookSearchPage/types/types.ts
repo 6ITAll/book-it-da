@@ -3,7 +3,7 @@
 // 알라딘 베스트셀러 관련 API 응답 타입
 export interface BestBookResponse {
   item: Array<{
-    itemId: number;
+    isbn: string;
     title: string;
     cover: string;
     link: string; // 책 상세 페이지 링크
@@ -15,7 +15,7 @@ export interface BestBookResponse {
 // 책 상세 응답 데이터
 export interface BookDetailResponse {
   item: Array<{
-    itemId: number;
+    isbn: string;
     title: string;
     description: string;
     author: string;
@@ -40,7 +40,7 @@ export interface BookResponse {
   version: string;
   totalResults: number;
   item: Array<{
-    itemId: number; // 상품 고유 번호
+    isbn: string; // isbn
     title: string; // 제목
     author: string; // 저자
     cover: string; // 이미지

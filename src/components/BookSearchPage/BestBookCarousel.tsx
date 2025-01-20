@@ -33,8 +33,8 @@ const BestBookCarousel = (): JSX.Element => {
       <Carousel>
         {data?.item?.map((book) => (
           <BestBookCard
-            key={book.itemId}
-            itemId={book.itemId}
+            key={book.isbn}
+            isbn={book.isbn}
             image={book.cover}
             title={book.title}
           />

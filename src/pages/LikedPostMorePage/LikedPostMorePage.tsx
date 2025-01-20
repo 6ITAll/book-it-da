@@ -17,7 +17,7 @@ const LikedPostMorePage = (): JSX.Element => {
   useEffect(() => {
     if (data?.feeds) {
       const newPosts = data.feeds.filter(
-        (feed): feed is BookDetailPost => 'itemId' in feed,
+        (feed): feed is BookDetailPost => 'isbn' in feed,
       );
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
       setHasMore(

@@ -18,7 +18,7 @@ export interface User {
 
 // 책 상세페이지 포스트
 export interface BookDetailPost {
-  itemId: string;
+  isbn: string;
   userId: string;
   title: string;
   description: string;
@@ -67,10 +67,10 @@ export interface ReviewCard extends Review {
 
 // 책 interface
 export interface Book {
-  bookTitle: string;
+  isbn: string;
+  title: string;
   author: string;
   imageUrl: string;
-  itemId: number;
 }
 
 export interface Bookshelf {

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface BookDetailContentProps {
-  itemId: number;
+  isbn: string;
   title: string;
   description: string;
   author: string;
@@ -15,14 +15,14 @@ interface BookDetailContentProps {
 }
 
 const BookDetailContent = ({
-  itemId,
+  isbn,
   description = '',
   title = '',
   author = '',
   imageUrl = '',
 }: BookDetailContentProps): JSX.Element => {
   // 리뷰 데이터 가져오기
-  const { data: reviewData } = useGetReviewsQuery(itemId);
+  const { data: reviewData } = useGetReviewsQuery(isbn);
   const totalReviews = reviewData?.totalReviews || 0;
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -40,12 +40,12 @@ const BookDetailContent = ({
         />
         {/* 성별, 연령별 인기 분포 섹션 */}
         {currentTab === 0 && (
-          <BookIntroduceTab itemId={itemId} description={description} />
+          <BookIntroduceTab isbn={isbn} description={description} />
         )}
         {/* 리뷰 섹션 */}
         {currentTab === 1 && (
           <BookReviewTab
-            itemId={itemId}
+            isbn={isbn}
             title={title}
             author={author}
             imageUrl={imageUrl}

@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 interface BookCardProps {
   book: SavedBook;
   view: 'grid' | 'list';
-  onMenuOpen: (event: React.MouseEvent<HTMLElement>, bookId: number) => void;
+  onMenuOpen: (event: React.MouseEvent<HTMLElement>, isbn: string) => void;
 }
 
 const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
@@ -43,7 +43,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               <CardMedia
                 component="img"
                 image={book.imageUrl}
-                alt={book.bookTitle}
+                alt={book.title}
               />
               <Box sx={shelvesBookCardStyles.gridReadingStatusIconBox}>
                 {renderReadingStatusIcon(book.readingStatus)}
@@ -57,11 +57,11 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             >
               <Box sx={shelvesBookCardStyles.gridBookTitleBox}>
                 <Typography variant="subtitle1" noWrap sx={{ flex: 1 }}>
-                  {book.bookTitle}
+                  {book.title}
                 </Typography>
                 <IconButton
                   size="small"
-                  onClick={(e) => onMenuOpen(e, book.itemId)}
+                  onClick={(e) => onMenuOpen(e, book.isbn)}
                   sx={{ ml: 1 }}
                 >
                   <MoreVert />
@@ -83,18 +83,14 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
           </>
         ) : (
           <>
-            <CardMedia
-              component="img"
-              image={book.imageUrl}
-              alt={book.bookTitle}
-            />
+            <CardMedia component="img" image={book.imageUrl} alt={book.title} />
             <Box className="book-info" sx={{ padding: '1rem 1rem !important' }}>
               <Box sx={shelvesBookCardStyles.listBookCardContent}>
                 <Box sx={shelvesBookCardStyles.listBookInfoBox}>
                   {renderReadingStatus(book.readingStatus)}
                   <Box>
                     <Typography variant="h6" noWrap>
-                      {book.bookTitle}
+                      {book.title}
                     </Typography>
                     <Typography variant="body1" color="text.secondary">
                       {book.author}
@@ -110,7 +106,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
                   <Button
                     sx={shelvesBookCardStyles.listBookDetailButton}
                     onClick={() =>
-                      navigateToBookDetailPage(navigate, book.itemId)
+                      navigateToBookDetailPage(navigate, book.isbn)
                     }
                   >
                     책 보러 가기
@@ -118,7 +114,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
                 </Box>
                 <IconButton
                   size="small"
-                  onClick={(e) => onMenuOpen(e, book.itemId)}
+                  onClick={(e) => onMenuOpen(e, book.isbn)}
                 >
                   <MoreVert />
                 </IconButton>

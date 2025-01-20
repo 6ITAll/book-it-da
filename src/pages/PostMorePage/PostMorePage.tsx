@@ -7,14 +7,14 @@ import PostMoreTemplate from '@components/PostMorePage/PostMoreTemplate';
 const PostMorePage = (): JSX.Element => {
   const location = useLocation();
   const { bookDetails } = location.state || {};
-  const { itemId } = bookDetails || {};
+  const { isbn } = bookDetails || {};
 
   const [posts, setPosts] = useState<BookDetailPost[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
   const { data, isLoading, isError } = useGetPaginatedPostsQuery({
-    itemId,
+    isbn,
     page,
   });
 

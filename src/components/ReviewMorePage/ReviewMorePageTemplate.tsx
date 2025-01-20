@@ -126,10 +126,10 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
           isOpen={isDialogOpen}
           onClose={handleModalClose}
           receivedBook={{
-            bookTitle: bookDetails.title,
+            title: bookDetails.title,
             imageUrl: bookDetails.imageUrl,
             author: bookDetails.author,
-            itemId: bookDetails.itemId,
+            isbn: bookDetails.isbn,
           }}
           receivedRating={selectedRating}
         />
