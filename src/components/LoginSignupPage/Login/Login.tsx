@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Typography,
   Button,
@@ -8,53 +8,81 @@ import {
   Checkbox,
   FormControlLabel,
   Divider,
+  Box,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../PasswordInput';
-import { useDispatch } from 'react-redux';
-import { loginSuccess } from '@features/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginSuccess, setAutoLogin, setToken } from '@features/user/userSlice';
 import { LoginMessage } from './types';
-import { StyledButton, StyledTypography } from './Login.styles';
-// import { KakaoUserInfo } from '@features/SNSLogin/api/Kakaoapi';
-import kakaoLoginImg from '@assets/images/kakao_login.png';
+import { loginStyles, StyledKakaoButton, SignupButton } from './Login.styles';
+import kakaoLogo from '@assets/images/kakao-logo.svg';
 import { supabase } from '@utils/supabaseClient';
-
-const KAKAO_CLIENT_ID = import.meta.env.VITE_KAKAO_REST_API_KEY;
-const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}&response_type=code`;
+import { RootState } from '@store/index';
+import { useKakaoSDK } from '@hooks/useKakaoSDK';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import { useSetAutoLoginSettings } from '@hooks/useSetAutoLogin';
+import { useRememberMe } from '@hooks/useRemeberMe';
 
 const Login = (): JSX.Element => {
-  const [userId, setUserId] = useState<string>('');
+  const { rememberMe, savedUserId, handleRememberMeChange } = useRememberMe();
+
+  const [userId, setUserId] = useState<string>(savedUserId || '');
   const [password, setPassword] = useState<string>('');
   const [loginMessage, setLoginMessage] = useState<LoginMessage>({
     content: '',
     isError: false,
   });
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
-  const [autoLogin, setAutoLogin] = useState<boolean>(false);
+  const autoLogin = useSelector((state: RootState) => state.user.autoLogin);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useSetAutoLoginSettings();
+  useKakaoSDK();
+
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
+      setLoginMessage({ content: '', isError: false });
       e.preventDefault();
       try {
         const { data, error } = await supabase.auth.signInWithPassword({
           email: userId,
           password: password,
         });
-        if (error) throw error;
+        if (error) {
+          if (error.message === 'Email not confirmed') {
+            dispatch(
+              showSnackbar({
+                message: '이메일 인증이 필요합니다.',
+                severity: 'error',
+              }),
+            );
+          } else {
+            throw error;
+          }
+          return;
+        }
 
-        if (data.user) {
+        if (data.user && data.session) {
           dispatch(
             loginSuccess({
               id: data.user.id,
               email: data.user.email ?? '',
-              username: data.user.email ?? '',
             }),
           );
+          dispatch(setToken(data.session.access_token));
+
+          if (rememberMe) {
+            localStorage.setItem('savedUserId', userId);
+          }
+
+          if (autoLogin) {
+            localStorage.setItem('token', data.session.access_token);
+          } else {
+            localStorage.removeItem('token');
+          }
+
           navigate('/');
         }
       } catch (error) {
@@ -68,50 +96,50 @@ const Login = (): JSX.Element => {
         });
       }
     },
-    [userId, password, dispatch, navigate],
+    [userId, password, dispatch, rememberMe, autoLogin, navigate],
   );
 
-  const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    setRememberMe(isChecked);
-    if (isChecked) {
-      localStorage.setItem('savedUserId', userId);
-    } else {
-      localStorage.removeItem('savedUserId');
-    }
-  };
+  const handleKakaoLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'kakao',
+        options: {
+          redirectTo: `${window.location.origin}/oauth/kakao`,
+          queryParams: {
+            client_id: import.meta.env.VITE_KAKAO_REST_API_KEY,
+          },
+        },
+      });
 
-  useEffect(() => {
-    const savedUserId = localStorage.getItem('savedUserId');
-    if (savedUserId) {
-      setUserId(savedUserId);
-      setRememberMe(true);
+      if (error) throw error;
+    } catch (error) {
+      console.error('Kakao login error:', error);
+      setLoginMessage({
+        content: '카카오 로그인 중 오류가 발생했습니다.',
+        isError: true,
+      });
     }
-
-    const autoLoginData = localStorage.getItem('autoLogin');
-    if (autoLoginData) {
-      const { userId, password, isActive } = JSON.parse(autoLoginData);
-      if (isActive) {
-        setUserId(userId);
-        setPassword(password);
-        setAutoLogin(true);
-        // handleLogin(null);
-      }
-    }
-  }, [handleLogin]);
-
-  const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
+    <Container
+      maxWidth="sm"
+      sx={{
+        p: 2,
+        mt: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Typography
+        variant="h3"
+        sx={{ alignSelf: 'center', fontWeight: 'bold', mb: 4 }}
+      >
         로그인
       </Typography>
       <Stack component="form" spacing={2} onSubmit={handleLogin}>
         <TextField
-          label="아이디"
+          label="이메일"
           variant="outlined"
           fullWidth
           margin="normal"
@@ -132,44 +160,58 @@ const Login = (): JSX.Element => {
             control={
               <Checkbox
                 checked={rememberMe}
-                onChange={handleRememberMeChange}
+                onChange={(e) =>
+                  handleRememberMeChange(userId, e.target.checked)
+                }
               />
             }
-            label="아이디 저장"
+            label={<Typography variant="h6">아이디 저장</Typography>}
           />
           <FormControlLabel
             control={
               <Checkbox
                 checked={autoLogin}
-                onChange={(e) => setAutoLogin(e.target.checked)}
+                onChange={(e) => dispatch(setAutoLogin(e.target.checked))}
               />
             }
-            label="자동 로그인"
+            label={<Typography variant="h6">자동 로그인</Typography>}
           />
         </Stack>
-        <Button type="submit" variant="contained" fullWidth>
+        <Button type="submit" variant="contained" sx={loginStyles.loginButton}>
           로그인
         </Button>
 
-        <Divider sx={{ my: 3 }}>또는</Divider>
+        <Divider sx={{ my: 3 }}>
+          <Typography variant="h6">또는</Typography>
+        </Divider>
 
-        <StyledButton onClick={handleKakaoLogin}>
-          <img
-            src={kakaoLoginImg}
-            alt="카카오톡 로그인"
-            style={{ width: '50%', height: 'auto' }}
-          />
-        </StyledButton>
-
-        <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-          계정이 없으신가요?{' '}
-          <StyledTypography
-            component="span"
-            onClick={() => navigate('/signup')}
-          >
+        <Box sx={loginStyles.snsLoginBox}>
+          <StyledKakaoButton onClick={handleKakaoLogin}>
+            <img
+              src={kakaoLogo}
+              alt="Kakao Logo"
+              style={{
+                width: '35px',
+                height: '35px',
+                objectFit: 'contain',
+              }}
+            />
+          </StyledKakaoButton>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Typography variant="h6">계정이 없으신가요? </Typography>
+          <SignupButton variant="h6" onClick={() => navigate('/signup')}>
             회원가입
-          </StyledTypography>
-        </Typography>
+          </SignupButton>
+        </Box>
 
         {loginMessage.content && (
           <Typography

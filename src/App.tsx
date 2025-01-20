@@ -7,6 +7,8 @@ import { store, RootState } from '@store/index';
 import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
+import { usePerformAutoLogin } from '@hooks/usePerformAutoLogin';
+import { useAuthStateChange } from '@hooks/useAuthStateChange';
 
 const AppContent = (): JSX.Element => {
   const location = useLocation();
@@ -31,6 +33,8 @@ const AppContent = (): JSX.Element => {
 const App = (): JSX.Element => {
   const themeMode = useSelector((state: RootState) => state.darkMode.mode);
   const theme = createAppTheme(themeMode);
+  usePerformAutoLogin();
+  useAuthStateChange();
 
   return (
     <Provider store={store}>

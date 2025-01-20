@@ -1,12 +1,10 @@
-import React, { useState, KeyboardEvent } from 'react';
+import { useState, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import PersonIcon from '@mui/icons-material/Person';
 import { useTheme } from '@mui/material/styles';
-import { Box, Button, Menu, MenuItem, InputBase } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
+import { Box, Button, InputBase } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-import { logoutSuccess } from '@features/user/userSlice';
 import DarkModeButton from '@components/DarkModeButton/DarkModeButton';
 
 import {
@@ -15,16 +13,14 @@ import {
   StyledSearchContainer,
   StyledIconWrapper,
 } from './Header.styles';
+import UserMenu from './userMenu';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const user = useSelector((state: RootState) => state.user);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const open = Boolean(anchorEl);
   const theme = useTheme();
 
   const toggleSearchBar = () => {
@@ -35,15 +31,14 @@ const Header = (): JSX.Element => {
   };
 
   const handleSearch = () => {
-    const trimmedQuery = searchQuery.trim(); // 공백 제거
-
+    const trimmedQuery = searchQuery.trim();
     if (trimmedQuery) {
       navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
-      setSearchQuery(''); // 검색어 초기화
-      setShowSearchBar(false); // 검색창 닫기
+      setSearchQuery('');
+      setShowSearchBar(false);
     } else {
       navigate('/search');
-      setShowSearchBar(false); // 검색창 닫기
+      setShowSearchBar(false);
     }
   };
 
@@ -51,33 +46,6 @@ const Header = (): JSX.Element => {
     if (event.key === 'Enter') {
       handleSearch();
     }
-  };
-
-  const handleProfileClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleNavigation = (path: string) => {
-    navigate(path);
-    handleClose();
-  };
-
-  const handleLogout = () => {
-    dispatch(logoutSuccess());
-    const autoLoginData = localStorage.getItem('autoLogin');
-    if (autoLoginData) {
-      const parsedData = JSON.parse(autoLoginData);
-      localStorage.setItem(
-        'autoLogin',
-        JSON.stringify({ ...parsedData, isActive: false }),
-      );
-    }
-    handleClose();
-    navigate('/');
   };
 
   return (
@@ -105,32 +73,10 @@ const Header = (): JSX.Element => {
           </StyledIconWrapper>
         </StyledSearchContainer>
         {user.isLoggedIn ? (
-          <div>
-            <StyledIconWrapper onClick={handleProfileClick}>
-              <PersonIcon />
-            </StyledIconWrapper>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              aria-hidden="false"
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem onClick={() => handleNavigation('/my-page')}>
-                마이페이지
-              </MenuItem>
-              <MenuItem onClick={() => handleNavigation('/edit-account')}>
-                개인정보수정
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
-            </Menu>
-          </div>
+          <UserMenu />
         ) : (
           <Button
-            onClick={() => handleNavigation('/login')}
+            onClick={() => navigate('/login')}
             variant="outlined"
             color="primary"
           >

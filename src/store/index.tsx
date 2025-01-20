@@ -9,7 +9,7 @@ import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
 import { postApi } from '@features/BookDetailPage/api/postApi';
 import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
-import userReducer from './userSlice/userSlice';
+import userReducer from '@features/user/userSlice';
 import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
 import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
 import { postingApi } from '@features/PostDetailPage/api/postingApi';
