@@ -8,14 +8,15 @@ import {
   Checkbox,
   FormControlLabel,
   Divider,
+  Box,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PasswordInput from '../PasswordInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess, setAutoLogin, setToken } from '@features/user/userSlice';
 import { LoginMessage } from './types';
-import { StyledButton, StyledTypography } from './Login.styles';
-import kakaoLoginImg from '@assets/images/kakao_login.png';
+import { loginStyles, StyledKakaoButton, SignupButton } from './Login.styles';
+import kakaoLogo from '@assets/images/kakao-logo.svg';
 import { supabase } from '@utils/supabaseClient';
 import { RootState } from '@store/index';
 import { useKakaoSDK } from '@hooks/useKakaoSDK';
@@ -157,8 +158,19 @@ const Login = (): JSX.Element => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 4 }}>
+    <Container
+      maxWidth="sm"
+      sx={{
+        p: 2,
+        mt: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Typography
+        variant="h3"
+        sx={{ alignSelf: 'center', fontWeight: 'bold', mb: 4 }}
+      >
         로그인
       </Typography>
       <Stack component="form" spacing={2} onSubmit={handleLogin}>
@@ -187,7 +199,7 @@ const Login = (): JSX.Element => {
                 onChange={handleRememberMeChange}
               />
             }
-            label="아이디 저장"
+            label={<Typography variant="h6">아이디 저장</Typography>}
           />
           <FormControlLabel
             control={
@@ -196,31 +208,36 @@ const Login = (): JSX.Element => {
                 onChange={(e) => dispatch(setAutoLogin(e.target.checked))}
               />
             }
-            label="자동 로그인"
+            label={<Typography variant="h6">자동 로그인</Typography>}
           />
         </Stack>
-        <Button type="submit" variant="contained" fullWidth>
+        <Button type="submit" variant="contained" sx={loginStyles.loginButton}>
           로그인
         </Button>
 
-        <Divider sx={{ my: 3 }}>또는</Divider>
+        <Divider sx={{ my: 3 }}>
+          <Typography variant="h6">또는</Typography>
+        </Divider>
 
-        <StyledButton onClick={handleKakaoLogin}>
-          <img
-            src={kakaoLoginImg}
-            alt="카카오톡 로그인"
-            style={{ width: '50%', height: 'auto' }}
-          />
-        </StyledButton>
+        <Box sx={loginStyles.snsLoginBox}>
+          <StyledKakaoButton onClick={handleKakaoLogin}>
+            <img
+              src={kakaoLogo}
+              alt="Kakao Logo"
+              style={{
+                width: '35px',
+                height: '35px',
+                objectFit: 'contain',
+              }}
+            />
+          </StyledKakaoButton>
+        </Box>
 
-        <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+        <Typography variant="h6" sx={{ mt: 2, textAlign: 'center' }}>
           계정이 없으신가요?{' '}
-          <StyledTypography
-            component="span"
-            onClick={() => navigate('/signup')}
-          >
+          <SignupButton variant="h6" onClick={() => navigate('/signup')}>
             회원가입
-          </StyledTypography>
+          </SignupButton>
         </Typography>
 
         {loginMessage.content && (
