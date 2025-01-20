@@ -13,9 +13,9 @@ import {
   setSortOption,
 } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
-import useSearchInput from './useSearchInput';
-import { searchResultStyles } from './BookSearch.style';
-import { renderSearchResultSkeleton } from './BookSearchSkeleton';
+import useSearchInput from '@components/BookSearchPage/useSearchInput';
+import { searchResultStyles } from '@components/BookSearchPage/BookSearch.style';
+import { renderSearchResultSkeleton } from '@components/BookSearchPage/BookSearchSkeleton';
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: 'SortAccuracy', label: '관련도순' },

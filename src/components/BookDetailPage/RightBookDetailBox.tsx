@@ -1,7 +1,7 @@
 import { Box, Typography, Skeleton } from '@mui/material';
-import BookInfoBox from './BookInfoBox';
-import ActionButtons from './ActionButtons';
-import FooterButtons from './FooterButtons';
+import BookInfoBox from '@components/BookDetailPage/BookInfoBox';
+import ActionButtons from '@components/BookDetailPage/ActionButtons';
+import FooterButtons from '@components/BookDetailPage/FooterButtons';
 import { useFetchLibraryCountQuery } from '@features/BookDetailPage/api/bookUserShelfCountApi';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 

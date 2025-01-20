@@ -1,7 +1,7 @@
 import CommonBookCard from '@components/commons/CommonBookCard';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
-import { bestBookStyles } from './BookSearch.style';
+import { bestBookStyles } from '@components/BookSearchPage/BookSearch.style';
 interface BestBookCardProps {
   itemId: number;
   image: string;
