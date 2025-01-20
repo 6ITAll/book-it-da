@@ -19,6 +19,7 @@ import kakaoLoginImg from '@assets/images/kakao_login.png';
 import { supabase } from '@utils/supabaseClient';
 import { RootState } from '@store/index';
 import { useKakaoSDK } from '@hooks/useKakaoSDK';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 
 const Login = (): JSX.Element => {
   const [userId, setUserId] = useState<string>('');
@@ -30,21 +31,32 @@ const Login = (): JSX.Element => {
   const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   const autoLogin = useSelector((state: RootState) => state.user.autoLogin);
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
+      setLoginMessage({ content: '', isError: false });
       e.preventDefault();
       try {
         const { data, error } = await supabase.auth.signInWithPassword({
           email: userId,
           password: password,
         });
-        if (error) throw error;
+        if (error) {
+          if (error.message === 'Email not confirmed') {
+            dispatch(
+              showSnackbar({
+                message: '이메일을 확인해주세요.',
+                severity: 'error',
+              }),
+            );
+          } else {
+            throw error;
+          }
+          return;
+        }
 
         if (data.user && data.session) {
           dispatch(
@@ -76,11 +88,6 @@ const Login = (): JSX.Element => {
     },
     [userId, password, autoLogin, dispatch, navigate],
   );
-
-  useEffect(() => {
-    console.log('isLoggedIn:', isLoggedIn);
-    console.log('userInfo:', userInfo);
-  }, [isLoggedIn, userInfo]);
 
   const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
