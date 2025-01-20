@@ -73,6 +73,10 @@ const Login = (): JSX.Element => {
           );
           dispatch(setToken(data.session.access_token));
 
+          if (rememberMe) {
+            localStorage.setItem('savedUserId', userId);
+          }
+
           if (autoLogin) {
             localStorage.setItem('token', data.session.access_token);
           } else {
@@ -92,7 +96,7 @@ const Login = (): JSX.Element => {
         });
       }
     },
-    [userId, password, autoLogin, dispatch, navigate],
+    [userId, password, dispatch, rememberMe, autoLogin, navigate],
   );
 
   const handleKakaoLogin = async () => {
