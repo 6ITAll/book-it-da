@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Typography,
   Button,
@@ -21,20 +21,25 @@ import { supabase } from '@utils/supabaseClient';
 import { RootState } from '@store/index';
 import { useKakaoSDK } from '@hooks/useKakaoSDK';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import { useSetAutoLoginSettings } from '@hooks/useSetAutoLogin';
+import { useRememberMe } from '@hooks/useRemeberMe';
 
 const Login = (): JSX.Element => {
-  const [userId, setUserId] = useState<string>('');
+  const { rememberMe, savedUserId, handleRememberMeChange } = useRememberMe();
+
+  const [userId, setUserId] = useState<string>(savedUserId || '');
   const [password, setPassword] = useState<string>('');
   const [loginMessage, setLoginMessage] = useState<LoginMessage>({
     content: '',
     isError: false,
   });
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
-
   const autoLogin = useSelector((state: RootState) => state.user.autoLogin);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useSetAutoLoginSettings();
+  useKakaoSDK();
 
   const handleLogin = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -89,51 +94,6 @@ const Login = (): JSX.Element => {
     },
     [userId, password, autoLogin, dispatch, navigate],
   );
-
-  const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    setRememberMe(isChecked);
-    if (isChecked) {
-      localStorage.setItem('savedUserId', userId);
-    } else {
-      localStorage.removeItem('savedUserId');
-    }
-  };
-
-  useEffect(() => {
-    const savedUserId = localStorage.getItem('savedUserId');
-    if (savedUserId) {
-      setUserId(savedUserId);
-      setRememberMe(true);
-    }
-
-    const checkAutoLogin = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session) {
-        const { data: settings } = await supabase
-          .from('user_settings')
-          .select('auto_login')
-          .eq('user_id', session.user.id)
-          .single();
-
-        if (settings && settings.auto_login) {
-          dispatch(
-            loginSuccess({
-              id: session.user.id,
-              email: session.user.email ?? '',
-            }),
-          );
-          navigate('/');
-        }
-      }
-    };
-
-    checkAutoLogin();
-  }, [dispatch, navigate]);
-
-  useKakaoSDK();
 
   const handleKakaoLogin = async () => {
     try {
@@ -196,7 +156,9 @@ const Login = (): JSX.Element => {
             control={
               <Checkbox
                 checked={rememberMe}
-                onChange={handleRememberMeChange}
+                onChange={(e) =>
+                  handleRememberMeChange(userId, e.target.checked)
+                }
               />
             }
             label={<Typography variant="h6">아이디 저장</Typography>}

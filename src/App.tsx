@@ -7,7 +7,7 @@ import { store, RootState } from '@store/index';
 import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
-import { useAutoLogin } from '@hooks/useAutoLogin';
+import { usePerformAutoLogin } from '@hooks/usePerformAutoLogin';
 import { useAuthStateChange } from '@hooks/useAuthStateChange';
 
 const AppContent = (): JSX.Element => {
@@ -33,7 +33,7 @@ const AppContent = (): JSX.Element => {
 const App = (): JSX.Element => {
   const themeMode = useSelector((state: RootState) => state.darkMode.mode);
   const theme = createAppTheme(themeMode);
-  useAutoLogin();
+  usePerformAutoLogin();
   useAuthStateChange();
 
   return (

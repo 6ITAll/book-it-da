@@ -1,10 +1,9 @@
-// src/hooks/useAutoLogin.ts
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, setAutoLogin, setToken } from '@features/user/userSlice';
 import { supabase } from '@utils/supabaseClient';
 
-export const useAutoLogin = () => {
+export const usePerformAutoLogin = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
