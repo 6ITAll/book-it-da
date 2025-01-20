@@ -232,13 +232,20 @@ const Login = (): JSX.Element => {
             />
           </StyledKakaoButton>
         </Box>
-
-        <Typography variant="h6" sx={{ mt: 2, textAlign: 'center' }}>
-          계정이 없으신가요?{' '}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Typography variant="h6">계정이 없으신가요? </Typography>
           <SignupButton variant="h6" onClick={() => navigate('/signup')}>
             회원가입
           </SignupButton>
-        </Typography>
+        </Box>
 
         {loginMessage.content && (
           <Typography
