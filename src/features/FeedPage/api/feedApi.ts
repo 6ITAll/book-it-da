@@ -8,9 +8,13 @@ export const feedApi = createApi({
   tagTypes: ['Posts'],
   endpoints: (builder) => ({
     getPosts: builder.query<PostsResponse, GetPostsParams>({
-      queryFn: async ({ page, postType, limit = 10 }) => {
+      queryFn: async ({ page, postType, feedType, limit = 10 }) => {
         try {
           const offset = (page - 1) * limit;
+
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
 
           // Supabase 쿼리 작성
           let query = supabase
@@ -38,10 +42,38 @@ export const feedApi = createApi({
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
+          // postType에 따른 필터링
           if (postType === '한줄평') {
             query = query.not('one_line_review', 'is', null);
           } else if (postType === '포스팅') {
             query = query.not('posting', 'is', null);
+          }
+
+          // feedType에 따른 필터링
+          if (feedType === '팔로잉' && user) {
+            const { data: followingIds } = await supabase
+              .from('user_follow')
+              .select('following_id')
+              .eq('follower_id', user.id);
+
+            if (followingIds) {
+              query = query.in(
+                'user_id',
+                followingIds.map((f) => f.following_id),
+              );
+            }
+          } else if (feedType === '팔로워' && user) {
+            const { data: followerIds } = await supabase
+              .from('user_follow')
+              .select('follower_id')
+              .eq('following_id', user.id);
+
+            if (followerIds) {
+              query = query.in(
+                'user_id',
+                followerIds.map((f) => f.follower_id),
+              );
+            }
           }
 
           const { data, error } = await query;
@@ -53,6 +85,8 @@ export const feedApi = createApi({
 
           const posts = data
             ?.map((post) => {
+              // 객체가 배열로 인식되는 문제
+              // 오류는 없지만 아래의 코드들 가독성이 떨어지는 것 같음
               const user = Array.isArray(post.user) ? post.user[0] : post.user;
               const oneLineReview = Array.isArray(post.one_line_review)
                 ? post.one_line_review[0]
@@ -99,8 +133,8 @@ export const feedApi = createApi({
           return {
             data: {
               posts,
-              hasMore: data.length === limit, // 더 많은 데이터가 있는지 확인
-              totalCount: data.length, // 총 데이터 개수 (예시)
+              hasMore: data.length === limit,
+              totalCount: data.length,
             },
           } as { data: PostsResponse };
         } catch (error) {
@@ -108,9 +142,11 @@ export const feedApi = createApi({
           return { error };
         }
       },
+      // 캐시 키 생성
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
-        return `${endpointName}-${queryArgs.postType}`;
+        return `${endpointName}-${queryArgs.postType}-${queryArgs.feedType}-${queryArgs.page}`;
       },
+      // 무한 스크롤 위해 기존 데이터와 병합
       merge: (currentCache, newItems, { arg }) => {
         if (arg.page === 1) {
           return newItems;

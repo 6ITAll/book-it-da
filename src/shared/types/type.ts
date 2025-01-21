@@ -23,6 +23,8 @@ export interface User {
   id: string;
   username?: string;
   avatarUrl?: string;
+  isFollowing?: boolean;
+  isFollower?: boolean;
 }
 
 // 게시물 interface

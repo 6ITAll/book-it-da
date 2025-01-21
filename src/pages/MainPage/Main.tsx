@@ -35,8 +35,8 @@ const Main = (): JSX.Element => {
     (state: RootState) => state.feed,
   );
 
-  const { data, isLoading, isFetching, refetch } = useGetPostsQuery(
-    { page, postType },
+  const { data, isLoading, isFetching } = useGetPostsQuery(
+    { page, postType, feedType },
     { refetchOnMountOrArgChange: true },
   );
 
@@ -58,9 +58,8 @@ const Main = (): JSX.Element => {
       dispatch(setPostType(newValue));
       dispatch(setPage(1));
       window.scrollTo(0, 0);
-      refetch();
     },
-    [dispatch, refetch],
+    [dispatch],
   );
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링
@@ -69,9 +68,8 @@ const Main = (): JSX.Element => {
       dispatch(setFeedType(newValue));
       dispatch(setPage(1));
       window.scrollTo(0, 0);
-      refetch();
     },
-    [dispatch, refetch],
+    [dispatch],
   );
 
   const fetchMoreData = useCallback(() => {
