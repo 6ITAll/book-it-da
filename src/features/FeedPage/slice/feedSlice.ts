@@ -4,7 +4,7 @@ import { PostType, FeedType, OneLinePost, Posting } from '@shared/types/type';
 export interface FeedState {
   posts: (OneLinePost | Posting)[];
   page: number;
-  postType: PostType | null;
+  postType: PostType;
   feedType: FeedType;
   hasMore: boolean;
   totalCount: number;
@@ -13,7 +13,7 @@ export interface FeedState {
 const initialState: FeedState = {
   posts: [],
   page: 1,
-  postType: null,
+  postType: '선택안함',
   feedType: '추천',
   hasMore: true,
   totalCount: 0,
@@ -29,7 +29,7 @@ const feedSlice = createSlice({
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload;
     },
-    setPostType: (state, action: PayloadAction<PostType | null>) => {
+    setPostType: (state, action: PayloadAction<PostType>) => {
       state.postType = action.payload;
     },
     setFeedType: (state, action: PayloadAction<FeedType>) => {

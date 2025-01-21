@@ -1,7 +1,7 @@
 import { bookshelvesHandlers } from './bookshelves';
-import { feedHandlers } from './feed';
+// import { feedHandlers } from './feed';
 import { libraryHandlers } from './library';
-import { postingHandlers } from './posting';
+// import { postingHandlers } from './posting';
 import { kakaoHandlers } from './kakao';
 import { userHandlers } from './user';
 
@@ -13,10 +13,10 @@ import { followHandlers } from './follow';
 import { savedPostingHandlers } from './savePosting';
 export const handlers = [
   ...libraryHandlers,
-  ...feedHandlers,
+  // ...feedHandlers,
   ...bookshelvesHandlers,
   ...postHandlers,
-  ...postingHandlers,
+  // ...postingHandlers,
   ...kakaoHandlers,
   ...userHandlers,
   ...genderAgeHandlers,

@@ -36,7 +36,7 @@ const Main = (): JSX.Element => {
   );
 
   const { data, isLoading, isFetching, refetch } = useGetPostsQuery(
-    { page, postType: postType || undefined, feedType },
+    { page, postType },
     { refetchOnMountOrArgChange: true },
   );
 
@@ -48,9 +48,13 @@ const Main = (): JSX.Element => {
     }
   }, [data, dispatch]);
 
+  useEffect(() => {
+    console.log(postType);
+  }, [postType]);
+
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
-    (_event: React.MouseEvent<HTMLElement>, newValue: PostType | null) => {
+    (_event: React.MouseEvent<HTMLElement>, newValue: PostType) => {
       dispatch(setPostType(newValue));
       dispatch(setPage(1));
       window.scrollTo(0, 0);
@@ -209,7 +213,7 @@ const Main = (): JSX.Element => {
                       createdAt={post.createdAt}
                       user={post.user}
                       book={post.book}
-                      postType="포스팅"
+                      postType={post.postType}
                       title={post.title}
                       content={post.content}
                     />
@@ -223,7 +227,7 @@ const Main = (): JSX.Element => {
                       createdAt={post.createdAt}
                       user={post.user}
                       book={post.book}
-                      postType="한줄평"
+                      postType={post.postType}
                       review={post.review}
                     />
                   </Box>

@@ -1,9 +1,9 @@
-import { PostType, FeedType, OneLinePost, Posting } from '@shared/types/type';
+import { PostType, OneLinePost, Posting } from '@shared/types/type';
 
 export interface GetPostsParams {
   page: number;
   postType?: PostType;
-  feedType: FeedType;
+  // feedType: FeedType;
   limit?: number;
 }
 

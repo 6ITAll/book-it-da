@@ -7,15 +7,6 @@ export type FeedType = '추천' | '팔로워' | '팔로잉';
 // 독서 상태 타입
 export type ReadingStatusType = 'READING' | 'COMPLETED' | 'WISH' | null;
 
-// 유저 인터페이스
-export interface User {
-  userId: number;
-  userName: string;
-  avatarUrl: string;
-  isFollowing: boolean;
-  isFollower: boolean;
-}
-
 // 책 상세페이지 포스트
 export interface BookDetailPost {
   isbn: string;
@@ -27,14 +18,21 @@ export interface BookDetailPost {
   createdAt: string;
 }
 
+// 유저 인터페이스
+export interface User {
+  id: string;
+  username?: string;
+  avatarUrl?: string;
+}
+
 // 게시물 interface
 export interface Post {
-  id: number;
-  createdAt: string;
+  id: string; // Supabase의 UUID
+  createdAt: string; // 생성 날짜
   user: User;
-  book: Book;
-  likeCount: number;
-  isLiked: boolean;
+  book: {
+    isbn: string; // 책 ISBN
+  };
 }
 
 // 한줄평 포스트

@@ -1,22 +1,24 @@
 import { Box, CardContent, Typography } from '@mui/material';
 import styles from './PostCard.styles';
-import { Book, PostType } from '@shared/types/type';
+import { PostType } from '@shared/types/type';
 import { stripHtml } from 'string-strip-html';
 
 interface PostCardBaseContent {
-  book: Book;
+  book: {
+    isbn: string;
+  };
 }
 
 interface PostingContent extends PostCardBaseContent {
   title: string;
   content: string;
-  review?: never;
+  review?: never; // 한줄평에서는 사용되지 않음
 }
 
 interface OneLineContent extends PostCardBaseContent {
   review: string;
-  title?: never;
-  content?: never;
+  title?: never; // 포스팅에서는 사용되지 않음
+  content?: never; // 포스팅에서는 사용되지 않음
 }
 
 interface PostCardContentProps {
@@ -37,10 +39,10 @@ const PostCardContent = ({
           <>
             <Box sx={styles.cardTitleBox}>
               <Typography variant="h6" sx={styles.cardTitle}>
-                {book.title}
+                {/* {book.title} */}
               </Typography>
               <Typography variant="body2" sx={styles.bookAuthor}>
-                {book.author}
+                {/* {book.author} */}
               </Typography>
             </Box>
             <Box sx={styles.cardDescriptionBox}>

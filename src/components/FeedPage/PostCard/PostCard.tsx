@@ -1,5 +1,5 @@
 import { Box, Card } from '@mui/material';
-import { Book, PostType, User } from '@shared/types/type';
+import { PostType } from '@shared/types/type';
 import styles from './PostCard.styles';
 import PostCardContent from './PostCardContent';
 import BookImage from './PostCardImage';
@@ -9,25 +9,31 @@ import { navigateToPostingDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 
 interface PostCardBaseProps {
-  postId: number;
+  postId: string;
   createdAt: string;
-  user: User;
-  book: Book;
-  postType: PostType;
+  user: {
+    id: string;
+    username?: string;
+    avatarUrl?: string;
+  };
+  book: {
+    isbn: string;
+  };
+  postType: Exclude<PostType, '선택안함'>;
 }
 
 interface PostingCardProps extends PostCardBaseProps {
   postType: '포스팅';
   title: string;
   content: string;
-  review?: never;
+  review?: never; // 한줄평에서는 사용되지 않음
 }
 
 interface OneLineCardProps extends PostCardBaseProps {
   postType: '한줄평';
   review: string;
-  title?: never;
-  content?: never;
+  title?: never; // 포스팅에서는 사용되지 않음
+  content?: never; // 포스팅에서는 사용되지 않음
 }
 
 type PostCardProps = PostingCardProps | OneLineCardProps;
@@ -44,7 +50,7 @@ const PostCard = ({
 }: PostCardProps): JSX.Element => {
   const navigate = useNavigate();
 
-  const handleCardClick = (postId: number) => {
+  const handleCardClick = (postId: string) => {
     if (postType === '포스팅') {
       navigateToPostingDetailPage(navigate, postId);
     }

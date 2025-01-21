@@ -11,7 +11,7 @@ import { updateLikeStatus } from '@features/FeedPage/slice/feedSlice';
 import { RootState } from '@store/index';
 
 interface PostCardFooterProps {
-  postId: number;
+  postId: string;
   isbn: string;
 }
 
@@ -27,7 +27,7 @@ const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
   const isLiked = post?.isLiked ?? false;
   const likeCount = post?.likeCount ?? 0;
 
-  const handleLike = async (postId: number, isLiked: boolean) => {
+  const handleLike = async (postId: string, isLiked: boolean) => {
     try {
       await toggleLike({ postId, isLiked }).unwrap();
       dispatch(updateLikeStatus({ postId, isLiked }));
