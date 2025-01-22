@@ -5,9 +5,11 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import styles from './PostCard.styles';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
-import { useToggleLikeMutation } from '@features/commons/likeApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateLikeStatus } from '@features/FeedPage/slice/feedSlice';
+import {
+  useCheckLikeStatusQuery,
+  useToggleLikeMutation,
+} from '@features/commons/likeApi';
+import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 
 interface PostCardFooterProps {
@@ -18,19 +20,17 @@ interface PostCardFooterProps {
 const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const { data: likeStatus, refetch } = useCheckLikeStatusQuery(postId, {
+    skip: !isLoggedIn,
+  });
   const [toggleLike] = useToggleLikeMutation();
-  const dispatch = useDispatch();
 
-  const post = useSelector((state: RootState) =>
-    state.feed.posts.find((post) => post.id === postId),
-  );
-  const isLiked = post?.isLiked ?? false;
-  const likeCount = post?.likeCount ?? 0;
-
-  const handleLike = async (postId: string, isLiked: boolean) => {
+  const handleLike = async () => {
+    if (!isLoggedIn) return;
     try {
-      await toggleLike({ postId, isLiked }).unwrap();
-      dispatch(updateLikeStatus({ postId, isLiked }));
+      await toggleLike(postId);
+      refetch();
     } catch (error) {
       console.error('좋아요 토글 실패:', error);
     }
@@ -41,12 +41,16 @@ const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
       <Button
         fullWidth
         startIcon={
-          isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />
+          likeStatus?.isLiked ? (
+            <FavoriteIcon color="error" />
+          ) : (
+            <FavoriteBorderIcon />
+          )
         }
         sx={styles.cardFooterButton(true)(theme)}
-        onClick={() => handleLike(postId, !isLiked)}
+        onClick={handleLike}
       >
-        {likeCount}
+        {likeStatus?.likeCount || 0}
       </Button>
       <Button
         fullWidth
