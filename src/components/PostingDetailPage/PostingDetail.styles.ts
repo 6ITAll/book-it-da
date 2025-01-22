@@ -72,7 +72,7 @@ export const postingDetailStyles = {
     flexDirection: 'row !important',
     backgroundColor: 'transparent',
     padding: '1rem',
-    height: '100px',
+    height: '140px',
     '& .MuiCardMedia-root': {
       width: '80px',
       height: '100%',

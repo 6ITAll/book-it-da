@@ -7,6 +7,7 @@ import {
 import { supabase } from '@utils/supabaseClient';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { FeedType, PostType, SavedPosting } from '@shared/types/type';
+import { postingApi } from '@features/PostDetailPage/api/postingApi';
 
 export const postingWriteApi = createApi({
   reducerPath: 'postingWriteApi',
@@ -108,9 +109,14 @@ export const postingWriteApi = createApi({
           return { error: { status: 500, data: 'Failed to update posting' } };
         }
       },
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          dispatch(
+            postingApi.util.invalidateTags([
+              { type: 'Post', id: args.postingId },
+            ]),
+          );
           await dispatch(feedApi.util.invalidateTags(['Posts']));
           const feedTypes: FeedType[] = ['추천', '팔로잉', '팔로워'];
           const postTypes: PostType[] = ['선택안함', '한줄평', '포스팅'];

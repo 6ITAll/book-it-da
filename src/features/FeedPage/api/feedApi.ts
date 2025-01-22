@@ -100,7 +100,7 @@ export const feedApi = createApi({
                 createdAt: post.created_at,
                 user: {
                   id: user?.id,
-                  username: user?.username,
+                  username: user?.username || user?.id,
                   avatarUrl: user?.avatar_url,
                 },
                 book: { isbn: post.isbn },

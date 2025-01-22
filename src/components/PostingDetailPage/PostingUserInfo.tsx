@@ -9,55 +9,56 @@ import { updateFollowStatus } from '@features/PostDetailPage/slice/postingDetail
 interface PostingUserInfoProps {
   user: User;
   createdAt: string;
-  currentUserId: number;
+  isUserOwnsPost: boolean;
 }
 
 const PostingUserInfo = ({
   user,
   createdAt,
-  currentUserId,
+  isUserOwnsPost,
 }: PostingUserInfoProps) => {
   const dispatch = useDispatch();
   const [toggleFollow, { isLoading }] = useToggleFollowMutation();
   const currentPost = useSelector(
     (state: RootState) => state.postingDetail.currentPost,
   );
-  const isFollowing = currentPost?.user.isFollowing ?? false;
+  console.log(user);
+  console.log(isUserOwnsPost);
 
-  const handleFollowToggle = async () => {
-    try {
-      const result = await toggleFollow({
-        userId: user.userId,
-        isFollowing: !isFollowing,
-      }).unwrap();
-      if (result.success) {
-        dispatch(updateFollowStatus(!isFollowing));
-      }
-    } catch (error) {
-      console.error('팔로우 토글 실패:', error);
-    }
-  };
+  // const handleFollowToggle = async () => {
+  //   try {
+  //     const result = await toggleFollow({
+  //       userId: user.userId,
+  //       isFollowing: !isFollowing,
+  //     }).unwrap();
+  //     if (result.success) {
+  //       dispatch(updateFollowStatus(!isFollowing));
+  //     }
+  //   } catch (error) {
+  //     console.error('팔로우 토글 실패:', error);
+  //   }
+  // };
 
   return (
     <Box sx={postingDetailStyles.userInfoBox}>
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar src={user.avatarUrl} />
         <Stack>
-          <Typography>{user.userName}</Typography>
+          <Typography>{user.username}</Typography>
           <Typography variant="caption" color="text.secondary">
             {new Date(createdAt).toISOString().split('T')[0]}
           </Typography>
         </Stack>
       </Stack>
-      {user.userId !== currentUserId && (
+      {!isUserOwnsPost && (
         <Button
           variant="outlined"
           size="small"
-          onClick={handleFollowToggle}
+          // onClick={handleFollowToggle}
           disabled={isLoading}
-          sx={postingDetailStyles.userInfoBoxButton(isFollowing ?? false)}
+          sx={postingDetailStyles.userInfoBoxButton(user.isFollowing ?? false)}
         >
-          {isFollowing ? '팔로잉' : '팔로우'}
+          {user.isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       )}
     </Box>

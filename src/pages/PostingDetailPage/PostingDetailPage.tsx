@@ -1,46 +1,34 @@
+import { useState } from 'react';
 import { Stack, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import URLShareDialog from '@components/commons/URLShareDialog';
 import PostingUserInfo from '@components/PostingDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostingDetailPage/PostingContent';
 import PostingHeader from '@components/PostingDetailPage/PostingHeader';
 import OtherPostingGrid from '@components/PostingDetailPage/OtherPostingGrid';
-import {
-  useGetBookOtherPostsQuery,
-  useGetCurrentUserQuery,
-  useGetPostByIdQuery,
-  useGetUserOtherPostsQuery,
-} from '@features/PostDetailPage/api/postingApi';
+import { useGetPostByIdQuery } from '@features/PostDetailPage/api/postingApi';
 import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
-import { useDispatch } from 'react-redux';
-import { setCurrentPost } from '@features/PostDetailPage/slice/postingDetailSlice';
 
 const PostingDetailPage = () => {
   const { postingId } = useParams();
-  const dispatch = useDispatch();
-  const { data: post, isLoading, error } = useGetPostByIdQuery(postingId!);
-  const { data: bookOtherPosts } = useGetBookOtherPostsQuery(
-    post?.book?.isbn ?? '',
-  );
-  const { data: userOtherPosts } = useGetUserOtherPostsQuery(
-    post?.user.userId ?? 0,
-  );
-  const { data: currentUser } = useGetCurrentUserQuery();
   const [openShareDialog, setOpenShareDialog] = useState(false);
 
-  useEffect(() => {
-    if (post) {
-      dispatch(setCurrentPost(post));
-    }
-  }, [post, dispatch]);
+  const { data: post, isLoading, error } = useGetPostByIdQuery(postingId!);
+
+  console.log(post);
+
+  // 책 정보 업데이트
+  // useEffect(() => {
+  //   if (post && bookData) {
+  //     post.book.title = bookData.title;
+  //     post.book.author = bookData.author;
+  //     post.book.imageUrl = bookData.cover;
+  //   }
+  // }, [post, bookData]);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
-  if (!post || !currentUser) return null;
-  if (!postingId) return <div>잘못된 접근입니다.</div>;
-
-  console.log(post);
+  if (!post || !postingId) return <div>잘못된 접근입니다.</div>;
 
   return (
     <Container maxWidth={false} sx={postingDetailStyles.container}>
@@ -49,8 +37,7 @@ const PostingDetailPage = () => {
         title={post.title}
         setOpenShareDialog={setOpenShareDialog}
         postingId={post.id}
-        userId={post.user.userId}
-        currentUserId={currentUser.userId}
+        isUserOwnsPost={post.isUserOwnsPost}
       />
       {/* 포스팅 정보 */}
       <Stack sx={postingDetailStyles.posting}>
@@ -58,20 +45,14 @@ const PostingDetailPage = () => {
         <PostingUserInfo
           user={post.user}
           createdAt={post.createdAt}
-          currentUserId={currentUser.userId}
+          isUserOwnsPost={post.isUserOwnsPost}
         />
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />
       </Stack>
       <Stack sx={{ width: '80%', mt: '1rem', boxSizing: 'border-box' }}>
-        <OtherPostingGrid
-          title="이 책의 다른 포스팅"
-          posts={bookOtherPosts ?? []}
-        />
-        <OtherPostingGrid
-          title="사용자의 다른 포스팅"
-          posts={userOtherPosts ?? []}
-        />
+        <OtherPostingGrid title="이 책의 다른 포스팅" posts={[]} />
+        <OtherPostingGrid title="사용자의 다른 포스팅" posts={[]} />
       </Stack>
       <URLShareDialog open={openShareDialog} handleClose={setOpenShareDialog} />
     </Container>
