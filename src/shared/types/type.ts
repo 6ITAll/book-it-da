@@ -32,9 +32,7 @@ export interface Post {
   id: string; // Supabase의 UUID
   createdAt: string; // 생성 날짜
   user: User;
-  book: {
-    isbn: string; // 책 ISBN
-  };
+  book: Book;
 }
 
 // 한줄평 포스트
