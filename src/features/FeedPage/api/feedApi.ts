@@ -144,7 +144,7 @@ export const feedApi = createApi({
       },
       // 캐시 키 생성
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
-        return `${endpointName}-${queryArgs.postType}-${queryArgs.feedType}-${queryArgs.page}`;
+        return `${endpointName}-${queryArgs.feedType}-${queryArgs.postType}`;
       },
       // 무한 스크롤 위해 기존 데이터와 병합
       merge: (currentCache, newItems, { arg }) => {

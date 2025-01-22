@@ -22,12 +22,19 @@ export const bookSearchByIsbnApi = createApi({
           ItemIdType: 'ISBN',
           output: aladinConfig.defaultOutput,
           Version: aladinConfig.version,
+          cover: 'Big',
         },
       }),
       transformResponse: (response: {
-        item: BookbyIsbnResponse;
+        item: BookbyIsbnResponse[];
       }): BookbyIsbnResponse => {
-        return response.item;
+        const item = response.item[0];
+        console.log(response);
+        return {
+          title: item.title,
+          author: item.author,
+          cover: item.cover,
+        };
       },
     }),
   }),

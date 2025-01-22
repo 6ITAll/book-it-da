@@ -7,6 +7,7 @@ import PostCardHeader from './PostCardHeader';
 import PostCardFooter from './PostCardFooter';
 import { navigateToPostingDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
+import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
 
 interface PostCardBaseProps {
   postId: string;
@@ -44,11 +45,18 @@ const PostCard = ({
   user,
   book,
   postType,
-  title,
-  content,
+  title: postTitle,
+  content: postContent,
   review,
 }: PostCardProps): JSX.Element => {
   const navigate = useNavigate();
+  const {
+    data: bookInfo,
+    isLoading,
+    error,
+  } = useSearchBookByIsbnQuery({
+    isbn: book.isbn,
+  });
 
   const handleCardClick = (postId: string) => {
     if (postType === '포스팅') {
@@ -56,24 +64,27 @@ const PostCard = ({
     }
   };
 
+  if (isLoading) return <div>Loading book information...</div>;
+  if (error) return <div>Error fetching book information</div>;
+
   return (
     <Card sx={styles.card}>
       <PostCardHeader user={user} createdAt={createdAt} postType={postType} />
       {/* 책 사진 */}
       <Box onClick={() => handleCardClick(postId)}>
-        <BookImage imageUrl={book.imageUrl} title={book.title} />
+        <BookImage imageUrl={bookInfo!.cover} title={bookInfo!.title} />
         {/* 포스팅 내용 */}
         <PostCardContent
           type={postType}
           content={
             postType === '포스팅'
               ? {
-                  book,
-                  title,
-                  content,
+                  postTitle,
+                  postContent,
                 }
               : {
-                  book,
+                  title: bookInfo!.title,
+                  author: bookInfo!.author,
                   review,
                 }
           }

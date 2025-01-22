@@ -28,6 +28,7 @@ import { followApi } from '@features/commons/followApi';
 import feedReducer from '@features/FeedPage/slice/feedSlice';
 import { likeApi } from '@features/commons/likeApi';
 import postingDetailReducer from '@features/PostDetailPage/slice/postingDetailSlice';
+import { bookSearchByIsbnApi } from '@features/commons/bookSearchByIsbn';
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ export const store = configureStore({
     bookshelves: bookShelvesReducer,
     darkMode: darkModeReducer,
     [bookSearchApi.reducerPath]: bookSearchApi.reducer,
+    [bookSearchByIsbnApi.reducerPath]: bookSearchByIsbnApi.reducer,
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [kakaoApi.reducerPath]: kakaoApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
@@ -64,6 +66,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
       bookSearchApi.middleware,
+      bookSearchByIsbnApi.middleware,
       bestBookGetApi.middleware,
       kakaoApi.middleware,
       bookDetailApi.middleware,
