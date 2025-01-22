@@ -11,6 +11,8 @@ import styles from './OneLineReviewDialog.styles';
 import { REVIEW_DIALOG } from 'src/constants';
 import { useCreateOneLineReviewMutation } from '@features/OneLineReviewDialog/api/oneLineReviewApi';
 import { validateOneLineReview } from '@features/OneLineReviewDialog/utils/validate';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import { useDispatch } from 'react-redux';
 
 interface OneLineReviewDialogProps {
   // 포스팅 타입 선택 다이얼로그에서 오는 Props
@@ -33,6 +35,7 @@ const OneLineReviewDialog = ({
   isOpen,
   onClose,
 }: OneLineReviewDialogProps) => {
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBook, setSelectedBook] = useState<Book | null>(
     receivedBook || null,
@@ -87,10 +90,28 @@ const OneLineReviewDialog = ({
       if (result.success) {
         resetState();
         handleDialogClose();
+        dispatch(
+          showSnackbar({
+            message: '한줄평이 성공적으로 작성되었습니다.',
+            severity: 'success',
+          }),
+        );
+      } else {
+        dispatch(
+          showSnackbar({
+            message: '한줄평 작성에 실패했습니다. 다시 시도해주세요.',
+            severity: 'error',
+          }),
+        );
       }
     } catch (error) {
-      setError('한줄평 작성에 실패했습니다. 다시 시도해주세요.');
       console.error('한줄평 작성 실패:', error);
+      dispatch(
+        showSnackbar({
+          message: '한줄평 작성에 실패했습니다. 다시 시도해주세요.',
+          severity: 'error',
+        }),
+      );
     }
   };
 
