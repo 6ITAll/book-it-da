@@ -31,6 +31,9 @@ import {
 const Main = (): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch();
+
+  const { isLoggedIn } = useSelector((state: RootState) => state.user);
+
   const { page, postType, feedType, hasMore } = useSelector(
     (state: RootState) => state.feed,
   );
@@ -111,13 +114,15 @@ const Main = (): JSX.Element => {
           feedType={feedType}
           onFeedTypeChange={handleFeedTypeChange}
         />
-        <Button
-          variant="outlined"
-          onClick={() => setDialogOpen(true)}
-          endIcon={<CreateIcon />}
-        >
-          글쓰기
-        </Button>
+        {isLoggedIn && (
+          <Button
+            variant="outlined"
+            onClick={() => setDialogOpen(true)}
+            endIcon={<CreateIcon />}
+          >
+            글쓰기
+          </Button>
+        )}
         <PostTypeSelectDialog
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
