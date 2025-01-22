@@ -4,10 +4,12 @@ import { PostType } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
-// import { useToggleFollowMutation } from '@features/commons/followApi';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { updateFollowStatus } from '@features/FeedPage/slice/feedSlice';
-// import { RootState } from '@store/index';
+import { RootState } from '@store/index';
+import {
+  useCheckFollowStatusQuery,
+  useToggleFollowMutation,
+} from '@features/commons/followApi';
+import { useSelector } from 'react-redux';
 
 interface PostCardHeaderProps {
   user: {
@@ -25,33 +27,30 @@ const PostCardHeader = ({
   postType,
 }: PostCardHeaderProps): JSX.Element => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const [toggleFollow] = useToggleFollowMutation();
-  // const isFollowing = useSelector((state: RootState) => {
-  //   const post = state.feed.posts.find(
-  //     (post) => post.user.id === user.id,
-  //   );
-  //   return post?.user.isFollowing ?? false;
-  // });
+  const currentUserId = useSelector(
+    (state: RootState) => state.user.userInfo?.id,
+  );
+  const isOwnPost = currentUserId === user.id;
 
-  // 아바타 클릭 핸들러
+  const { data: followStatus, refetch } = useCheckFollowStatusQuery(user.id, {
+    skip: isOwnPost,
+  });
+
+  const [toggleFollow] = useToggleFollowMutation();
+
   const handleAvatarClick = () => {
     navigateToUserPage(navigate, user.id);
   };
 
-  // const handleFollowClick = async () => {
-  //   try {
-  //     await toggleFollow({
-  //       userId: user.userId,
-  //       isFollowing: !isFollowing,
-  //     }).unwrap();
-  //     dispatch(
-  //       updateFollowStatus({ userId: user.userId, isFollowing: !isFollowing }),
-  //     );
-  //   } catch (error) {
-  //     console.error('팔로우/언팔로우 실패:', error);
-  //   }
-  // };
+  const handleFollowClick = async () => {
+    if (isOwnPost) return;
+    try {
+      await toggleFollow(user.id);
+      refetch();
+    } catch (error) {
+      console.error('Failed to toggle follow status:', error);
+    }
+  };
 
   return (
     <CardHeader
@@ -65,14 +64,16 @@ const PostCardHeader = ({
         />
       }
       action={
-        <Button
-          variant="outlined"
-          size="small"
-          // sx={styles.followButton(isFollowing)}
-          // onClick={handleFollowClick}
-        >
-          {/* {isFollowing ? '팔로잉' : '팔로우'} */}
-        </Button>
+        !isOwnPost && (
+          <Button
+            variant="outlined"
+            size="small"
+            sx={styles.followButton(followStatus?.isFollowing)}
+            onClick={handleFollowClick}
+          >
+            {followStatus?.isFollowing ? '팔로잉' : '팔로우'}
+          </Button>
+        )
       }
       title={
         <Typography variant="body2" fontWeight="bold">
