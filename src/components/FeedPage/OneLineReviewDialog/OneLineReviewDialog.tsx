@@ -46,6 +46,7 @@ const OneLineReviewDialog = ({
   );
 
   const [error, setError] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [createOneLineReview] = useCreateOneLineReviewMutation();
 
   const dialogOpen = selectedType ? selectedType === '한줄평' : !!isOpen;
@@ -55,6 +56,7 @@ const OneLineReviewDialog = ({
     setSelectedBook(null);
     setSearchQuery('');
     setReview('');
+    setError('');
     setStarRating(REVIEW_DIALOG.DEFAULT_STAR_RATING);
   };
 
@@ -73,10 +75,12 @@ const OneLineReviewDialog = ({
   }, [receivedRating]);
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     const validation = validateOneLineReview(selectedBook, starRating, review);
 
     if (!validation.isValid) {
       setError(validation.error);
+      setIsSubmitting(false);
       return;
     }
 
@@ -116,10 +120,12 @@ const OneLineReviewDialog = ({
   };
 
   const handleDialogClose = () => {
-    if (selectedType) {
-      setSelectedType?.('선택안함');
-    } else {
-      onClose?.();
+    if (!error) {
+      if (selectedType) {
+        setSelectedType?.('선택안함');
+      } else {
+        onClose?.();
+      }
     }
   };
 
@@ -156,7 +162,7 @@ const OneLineReviewDialog = ({
     <HybridDialog
       open={dialogOpen}
       setOpen={() => {
-        if (!error) {
+        if (!isSubmitting && !error) {
           handleDialogClose();
         }
       }}
