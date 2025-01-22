@@ -6,7 +6,7 @@ import {
 } from '../types/types';
 import { supabase } from '@utils/supabaseClient';
 import { feedApi } from '@features/FeedPage/api/feedApi';
-import { FeedType, PostType } from '@shared/types/type';
+import { FeedType, PostType, SavedPosting } from '@shared/types/type';
 
 export const postingWriteApi = createApi({
   reducerPath: 'postingWriteApi',
@@ -129,8 +129,68 @@ export const postingWriteApi = createApi({
         }
       },
     }),
+    savePosting: builder.mutation<number, Omit<PostingRequest, 'userId'>>({
+      queryFn: async ({ book, title, content }) => {
+        try {
+          const { data: session } = await supabase.auth.getSession();
+          if (!session) {
+            return { error: { status: 401, data: 'Not authenticated' } };
+          }
+
+          const userId = session.session?.user.id;
+
+          const { data, error } = await supabase.rpc('save_or_update_posting', {
+            p_user_id: userId,
+            p_title: title,
+            p_isbn: book.isbn,
+            p_content: content,
+          });
+
+          if (error) throw error;
+
+          return { data };
+        } catch (error) {
+          console.error('포스팅 저장 실패:', error);
+          return { error: { status: 500, data: 'Failed to save posting' } };
+        }
+      },
+      invalidatesTags: ['SavedPostings'],
+    }),
+
+    getSavedPostings: builder.query<SavedPosting[], void>({
+      queryFn: async () => {
+        try {
+          const { data: session } = await supabase.auth.getSession();
+          if (!session) {
+            return { error: { status: 401, data: 'Not authenticated' } };
+          }
+
+          const userId = session.session?.user.id;
+
+          const { data, error } = await supabase
+            .from('saved_postings')
+            .select('*')
+            .eq('user_id', userId)
+            .order('updated_at', { ascending: false });
+
+          if (error) throw error;
+
+          return { data };
+        } catch (error) {
+          console.error('저장된 포스팅 조회 실패:', error);
+          return {
+            error: { status: 500, data: 'Failed to get saved postings' },
+          };
+        }
+      },
+      providesTags: ['SavedPostings'],
+    }),
   }),
 });
 
-export const { useCreatePostingMutation, useUpdatePostingMutation } =
-  postingWriteApi;
+export const {
+  useCreatePostingMutation,
+  useUpdatePostingMutation,
+  useSavePostingMutation,
+  useGetSavedPostingsQuery,
+} = postingWriteApi;

@@ -49,6 +49,16 @@ export interface Posting extends Post {
   content: string;
 }
 
+export interface SavedPosting {
+  id: number;
+  user_id: string;
+  title: string | null;
+  isbn: string | null;
+  content: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Review {
   username: string;
   date: string;
