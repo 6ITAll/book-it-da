@@ -128,8 +128,6 @@ export const feedApi = createApi({
             })
             .filter((post): post is NonNullable<typeof post> => post !== null);
 
-          console.log('Mapped Posts:', posts);
-
           return {
             data: {
               posts,

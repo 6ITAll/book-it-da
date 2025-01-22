@@ -29,7 +29,6 @@ export const bookSearchByIsbnApi = createApi({
         item: BookbyIsbnResponse[];
       }): BookbyIsbnResponse => {
         const item = response.item[0];
-        console.log(response);
         return {
           title: item.title,
           author: item.author,

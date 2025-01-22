@@ -21,13 +21,9 @@ export const followApi = createApi({
           .select('*')
           .eq('follower_id', session.session?.user.id)
           .eq('following_id', userId)
-          .single();
+          .maybeSingle();
 
-        if (error) {
-          // 결과가 없는 경우
-          if (error.code === 'PGRST116') {
-            return { data: { isFollowing: false } };
-          }
+        if (error && error.code !== 'PGRST116') {
           return { error: { status: 500, data: error.message } };
         }
         return { data: { isFollowing: !!data } };
@@ -41,45 +37,19 @@ export const followApi = createApi({
         if (!session) {
           return { error: { status: 401, data: 'Not authenticated' } };
         }
-        const { data: existingFollow, error: checkError } = await supabase
-          .from('user_follow')
-          .select('*')
-          .eq('follower_id', session.session?.user.id)
-          .eq('following_id', userId)
-          .single();
+        const followerId = session.session?.user.id;
 
-        if (checkError && checkError.code !== 'PGRST116') {
-          return { error: { status: 500, data: checkError.message } };
+        const { data, error } = await supabase.rpc('toggle_follow', {
+          p_follower_id: followerId,
+          p_following_id: userId,
+        });
+
+        if (error) {
+          return { error: { status: 500, data: error.message } };
         }
-
-        if (existingFollow) {
-          const { error: deleteError } = await supabase
-            .from('user_follow')
-            .delete()
-            .eq('follower_id', session.session?.user.id)
-            .eq('following_id', userId);
-
-          if (deleteError) {
-            return { error: { status: 500, data: deleteError.message } };
-          }
-          return { data: { isFollowing: false } };
-        } else {
-          const { error: insertError } = await supabase
-            .from('user_follow')
-            .insert({
-              follower_id: session.session?.user.id,
-              following_id: userId,
-            });
-
-          if (insertError) {
-            return { error: { status: 500, data: insertError.message } };
-          }
-          return { data: { isFollowing: true } };
-        }
+        return { data: { isFollowing: data } };
       },
-      invalidatesTags: (_, __, userId) => [
-        { type: 'Follow' as const, id: userId },
-      ],
+      invalidatesTags: (_, __, userId) => [{ type: 'Follow', id: userId }],
     }),
   }),
 });

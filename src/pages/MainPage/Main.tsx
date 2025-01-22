@@ -48,10 +48,6 @@ const Main = (): JSX.Element => {
     }
   }, [data, dispatch]);
 
-  useEffect(() => {
-    console.log(postType);
-  }, [postType]);
-
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
     (_event: React.MouseEvent<HTMLElement>, newValue: PostType) => {
