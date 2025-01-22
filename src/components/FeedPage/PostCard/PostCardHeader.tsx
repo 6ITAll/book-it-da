@@ -27,13 +27,14 @@ const PostCardHeader = ({
   postType,
 }: PostCardHeaderProps): JSX.Element => {
   const navigate = useNavigate();
-  const currentUserId = useSelector(
-    (state: RootState) => state.user.userInfo?.id,
+
+  const { isLoggedIn, userInfo } = useSelector(
+    (state: RootState) => state.user,
   );
-  const isOwnPost = currentUserId === user.id;
+  const isOwnPost = userInfo?.id === user.id;
 
   const { data: followStatus, refetch } = useCheckFollowStatusQuery(user.id, {
-    skip: isOwnPost,
+    skip: !isLoggedIn || isOwnPost,
   });
 
   const [toggleFollow] = useToggleFollowMutation();
@@ -43,7 +44,7 @@ const PostCardHeader = ({
   };
 
   const handleFollowClick = async () => {
-    if (isOwnPost) return;
+    if (!isLoggedIn || isOwnPost) return;
     try {
       await toggleFollow(user.id);
       refetch();
@@ -64,6 +65,7 @@ const PostCardHeader = ({
         />
       }
       action={
+        isLoggedIn &&
         !isOwnPost && (
           <Button
             variant="outlined"
