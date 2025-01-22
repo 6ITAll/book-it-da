@@ -60,7 +60,7 @@ const EditAccountPage = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (!checkedPassword) navigate('/edit-account/passwordChk');
+    if (!checkedPassword) navigate('/profile/edit/passwordChk');
   }, [checkedPassword, navigate]);
 
   useEffect(() => {

@@ -66,7 +66,7 @@ const UserMenu = () => {
         <MenuItem onClick={() => handleNavigation('/my-page')}>
           마이페이지
         </MenuItem>
-        <MenuItem onClick={() => handleNavigation('/edit-account')}>
+        <MenuItem onClick={() => handleNavigation('/profile/edit')}>
           개인정보수정
         </MenuItem>
         <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
