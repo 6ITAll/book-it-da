@@ -6,15 +6,15 @@ import { SortOption } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { SelectChangeEvent } from '@mui/material';
-import { useEffect } from 'react';
 import {
-  setSearchQuery,
-  setCurrentPage,
   setSortOption,
+  setCurrentPage,
 } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
-import useSearchInput from './useSearchInput';
+import { useSearchParams } from 'react-router-dom';
 import { searchResultStyles } from './BookSearch.style';
+import React from 'react';
+
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: 'SortAccuracy', label: '관련도순' },
@@ -23,25 +23,23 @@ const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: 'PublishTime', label: '출간일순' },
 ];
 
-interface SearchResultProps {
-  searchParams: URLSearchParams;
-}
-
-const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
+const SearchResult = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { setInputValue } = useSearchInput();
-  const { searchQuery, currentPage, sortOption } = useSelector(
-    (state: RootState) => state.bookSearch,
-  );
+  const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    const query = searchParams.get('query') || '';
-    const page = parseInt(searchParams.get('page') || '1', 10);
+  // URL에서 검색어와 페이지 정보 가져오기
+  const query = searchParams.get('query') || '';
+  const page = parseInt(searchParams.get('page') || '1', 10);
 
-    dispatch(setSearchQuery(query));
-    dispatch(setCurrentPage(page));
-    setInputValue(query); // 검색어를 input에 동기화
-  }, [searchParams, dispatch, setInputValue]);
+  // Redux 상태 가져오기
+  const { sortOption } = useSelector((state: RootState) => state.bookSearch);
+
+  // API 호출
+  const { data } = useSearchBooksQuery({
+    query,
+    page,
+    sort: sortOption,
+  });
 
   // 정렬 옵션 변경 함수
   const handleSortChange = (event: SelectChangeEvent) => {
@@ -49,16 +47,9 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
   };
 
   // 페이지네이션 처리 함수
-  const handlePageChange = (value: number) => {
-    dispatch(setCurrentPage(value));
+  const handlePageChange = (newPage: number) => {
+    dispatch(setCurrentPage(newPage));
   };
-
-  // API 호출
-  const { data } = useSearchBooksQuery({
-    query: searchQuery,
-    page: currentPage,
-    sort: sortOption,
-  });
 
   return (
     <>
@@ -84,12 +75,11 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
           options={sortOptions}
         />
       </Box>
-
       {/* 검색 결과 리스트 */}
       <Box sx={searchResultStyles.searchResultListBox}>
         {data?.item?.map((book) => (
           <SearchBookCard
-            key={book.itemId} // 고유 key 추가
+            key={book.itemId}
             itemId={book.itemId}
             title={book.title}
             author={book.author}
@@ -103,12 +93,12 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
       <Box sx={searchResultStyles.paginationBox}>
         <Pagination
           count={Math.ceil((data?.totalResults || 0) / 4)}
-          page={currentPage}
-          onChange={(_, value) => handlePageChange(value)}
+          page={page}
+          onChange={(_, newPage) => handlePageChange(newPage)}
         />
       </Box>
     </>
   );
 };
 
-export default SearchResult;
+export default React.memo(SearchResult);
