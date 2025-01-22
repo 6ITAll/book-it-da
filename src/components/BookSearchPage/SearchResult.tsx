@@ -11,10 +11,9 @@ import {
   setCurrentPage,
 } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
-import { useSearchParams } from 'react-router-dom';
 import { searchResultStyles } from './BookSearch.style';
 import React from 'react';
-
+import { useSearchParams } from 'react-router-dom';
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: 'SortAccuracy', label: '관련도순' },
@@ -51,6 +50,16 @@ const SearchResult = (): JSX.Element => {
     dispatch(setCurrentPage(newPage));
   };
 
+  // 검색 API 호출
+  const { data, isFetching } = useSearchBooksQuery(
+    {
+      query: searchQuery,
+      page: currentPage,
+      sort: sortOption,
+    },
+    { refetchOnMountOrArgChange: true },
+  );
+
   return (
     <>
       <Box sx={searchResultStyles.searchResultBox}>
@@ -76,19 +85,23 @@ const SearchResult = (): JSX.Element => {
         />
       </Box>
       {/* 검색 결과 리스트 */}
-      <Box sx={searchResultStyles.searchResultListBox}>
-        {data?.item?.map((book) => (
-          <SearchBookCard
-            key={book.itemId}
-            itemId={book.itemId}
-            title={book.title}
-            author={book.author}
-            cover={book.cover}
-            customerReviewRank={book.customerReviewRank}
-            priceStandard={book.priceStandard}
-          />
-        )) || <Typography height="250px">검색 결과가 없습니다.</Typography>}
-      </Box>
+      {isFetching ? (
+        renderSearchResultSkeleton(8)
+      ) : (
+        <Box sx={searchResultStyles.searchResultListBox}>
+          {data?.item?.map((book) => (
+            <SearchBookCard
+              key={book.itemId}
+              itemId={book.itemId}
+              title={book.title}
+              author={book.author}
+              cover={book.cover}
+              customerReviewRank={book.customerReviewRank}
+              priceStandard={book.priceStandard}
+            />
+          )) || <Typography height="250px">검색 결과가 없습니다.</Typography>}
+        </Box>
+      )}
       {/* 페이지네이션 */}
       <Box sx={searchResultStyles.paginationBox}>
         <Pagination

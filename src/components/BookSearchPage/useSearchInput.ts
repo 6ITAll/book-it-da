@@ -18,6 +18,7 @@ const useSearchInput = () => {
     } else {
       setSearchParams({}); // 검색어가 없으면 URL 초기화
     }
+    setInputValue(''); // 입력창 초기화
   };
 
   return {
