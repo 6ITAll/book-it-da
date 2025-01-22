@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
 import { Box, Button, InputBase } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
 import DarkModeButton from '@components/DarkModeButton/DarkModeButton';
-
+import { setSearchQuery } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import {
   StyledHeaderContainer,
   StyledLogo,
@@ -17,27 +17,29 @@ import UserMenu from './userMenu';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
   const user = useSelector((state: RootState) => state.user);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
     if (showSearchBar) {
-      setSearchQuery('');
+      setLocalSearchQuery('');
     }
   };
 
+  // 검색 실행 함수
   const handleSearch = () => {
-    const trimmedQuery = searchQuery.trim();
+    const trimmedQuery = localSearchQuery.trim();
     if (trimmedQuery) {
-      navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
-      setSearchQuery('');
-      setShowSearchBar(false);
+      dispatch(setSearchQuery(trimmedQuery)); // Redux에 검색어 업데이트
+      navigate('/search'); // 검색 페이지로 이동
+      setLocalSearchQuery(''); // 로컬 상태 초기화
+      setShowSearchBar(false); // 검색바 닫기
     } else {
-      navigate('/search');
+      navigate('/search'); // 검색어가 없으면 검색 페이지로 이동
       setShowSearchBar(false);
     }
   };
@@ -56,8 +58,8 @@ const Header = (): JSX.Element => {
           {showSearchBar && (
             <InputBase
               placeholder="책 검색..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={localSearchQuery}
+              onChange={(e) => setLocalSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
               sx={{
                 marginRight: '10px',

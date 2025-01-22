@@ -2,11 +2,12 @@ import { TextField, InputAdornment, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { bookSearchBarStyles } from '@components/BookSearchPage/BookSearch.style';
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setSearchQuery } from '@features/BookSearchPage/Slice/bookSearchSlice';
 
 const BookSearchBar = React.memo((): JSX.Element => {
   const [inputValue, setInputValue] = useState('');
-  const [, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -15,14 +16,13 @@ const BookSearchBar = React.memo((): JSX.Element => {
   const handleSearch = () => {
     const trimmedQuery = inputValue.trim();
     if (trimmedQuery) {
-      setSearchParams({ query: trimmedQuery }); // URL 업데이트
-    } else {
-      setSearchParams({});
+      dispatch(setSearchQuery(trimmedQuery));
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      e.preventDefault(); // 중복 호출 방지
       handleSearch();
     }
   };
@@ -36,16 +36,18 @@ const BookSearchBar = React.memo((): JSX.Element => {
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment
-              position="start"
-              sx={{ cursor: 'pointer' }}
-              onClick={handleSearch}
-            >
-              <SearchIcon />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment
+                position="start"
+                sx={{ cursor: 'pointer' }}
+                onClick={handleSearch}
+              >
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          },
         }}
         sx={bookSearchBarStyles.textfield}
       />

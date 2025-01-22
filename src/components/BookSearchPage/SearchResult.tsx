@@ -13,7 +13,7 @@ import {
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
 import { searchResultStyles } from './BookSearch.style';
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { renderSearchResultSkeleton } from './BookSearchSkeleton';
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: 'SortAccuracy', label: '관련도순' },
@@ -24,33 +24,11 @@ const sortOptions: Array<{ value: SortOption; label: string }> = [
 
 const SearchResult = (): JSX.Element => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
-
-  // URL에서 검색어와 페이지 정보 가져오기
-  const query = searchParams.get('query') || '';
-  const page = parseInt(searchParams.get('page') || '1', 10);
-
-  // Redux 상태 가져오기
-  const { sortOption } = useSelector((state: RootState) => state.bookSearch);
+  const { searchQuery, currentPage, sortOption } = useSelector(
+    (state: RootState) => state.bookSearch,
+  );
 
   // API 호출
-  const { data } = useSearchBooksQuery({
-    query,
-    page,
-    sort: sortOption,
-  });
-
-  // 정렬 옵션 변경 함수
-  const handleSortChange = (event: SelectChangeEvent) => {
-    dispatch(setSortOption(event.target.value as SortOption));
-  };
-
-  // 페이지네이션 처리 함수
-  const handlePageChange = (newPage: number) => {
-    dispatch(setCurrentPage(newPage));
-  };
-
-  // 검색 API 호출
   const { data, isFetching } = useSearchBooksQuery(
     {
       query: searchQuery,
@@ -59,6 +37,15 @@ const SearchResult = (): JSX.Element => {
     },
     { refetchOnMountOrArgChange: true },
   );
+  // 정렬 옵션 변경 함수
+  const handleSortChange = (event: SelectChangeEvent) => {
+    dispatch(setSortOption(event.target.value as SortOption));
+  };
+
+  // 페이지네이션 처리
+  const handlePageChange = (newPage: number) => {
+    dispatch(setCurrentPage(newPage));
+  };
 
   return (
     <>
@@ -106,7 +93,7 @@ const SearchResult = (): JSX.Element => {
       <Box sx={searchResultStyles.paginationBox}>
         <Pagination
           count={Math.ceil((data?.totalResults || 0) / 4)}
-          page={page}
+          page={currentPage}
           onChange={(_, newPage) => handlePageChange(newPage)}
         />
       </Box>
