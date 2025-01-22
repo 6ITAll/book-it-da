@@ -17,6 +17,7 @@ import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
 import LikedPostMorePage from '@pages/LikedPostMorePage/LikedPostMorePage';
 import LikedReviewMorePage from '@pages/LikedReviewMorePage/LikedReviewMorePage';
 import MyPage from '@pages/MyPage/MyPage';
+import AdditionalInfoPage from '@pages/AdditionalInfoPage/AdditionalInfoPage';
 const AppRouter = () => {
   return (
     <Routes>
@@ -28,6 +29,10 @@ const AppRouter = () => {
       <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
       <Route path="/oauth/kakao" element={<KakaoCallback />} />
       <Route path="/:userId" element={<MyPage />} />
+      <Route
+        path={RoutePaths.KAKAO_ADDITIONAL_INFO}
+        element={<AdditionalInfoPage />}
+      />
       <Route
         path={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`}
         element={<PasswordChkPage />}
