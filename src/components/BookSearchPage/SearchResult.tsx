@@ -13,8 +13,9 @@ import {
   setSortOption,
 } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
-import useSearchInput from './useSearchInput';
-import { searchResultStyles } from './BookSearch.style';
+import useSearchInput from '@components/BookSearchPage/useSearchInput';
+import { searchResultStyles } from '@components/BookSearchPage/BookSearch.style';
+import { renderSearchResultSkeleton } from '@components/BookSearchPage/BookSearchSkeleton';
 // 정렬 옵션 배열 정의
 const sortOptions: Array<{ value: SortOption; label: string }> = [
   { value: 'SortAccuracy', label: '관련도순' },
@@ -37,10 +38,8 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
   useEffect(() => {
     const query = searchParams.get('query') || '';
     const page = parseInt(searchParams.get('page') || '1', 10);
-
     dispatch(setSearchQuery(query));
     dispatch(setCurrentPage(page));
-    setInputValue(query); // 검색어를 input에 동기화
   }, [searchParams, dispatch, setInputValue]);
 
   // 정렬 옵션 변경 함수
@@ -53,12 +52,15 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
     dispatch(setCurrentPage(value));
   };
 
-  // API 호출
-  const { data } = useSearchBooksQuery({
-    query: searchQuery,
-    page: currentPage,
-    sort: sortOption,
-  });
+  // 검색 API 호출
+  const { data, isFetching } = useSearchBooksQuery(
+    {
+      query: searchQuery,
+      page: currentPage,
+      sort: sortOption,
+    },
+    { refetchOnMountOrArgChange: true },
+  );
 
   return (
     <>
@@ -86,19 +88,23 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
       </Box>
 
       {/* 검색 결과 리스트 */}
-      <Box sx={searchResultStyles.searchResultListBox}>
-        {data?.item?.map((book) => (
-          <SearchBookCard
-            key={book.isbn} // 고유 key 추가
-            isbn={book.isbn}
-            title={book.title}
-            author={book.author}
-            cover={book.cover}
-            customerReviewRank={book.customerReviewRank}
-            priceStandard={book.priceStandard}
-          />
-        )) || <Typography height="250px">검색 결과가 없습니다.</Typography>}
-      </Box>
+      {isFetching ? (
+        renderSearchResultSkeleton(8)
+      ) : (
+        <Box sx={searchResultStyles.searchResultListBox}>
+          {data?.item?.map((book) => (
+            <SearchBookCard
+              key={book.isbn}
+              isbn={book.isbn}
+              title={book.title}
+              author={book.author}
+              cover={book.cover}
+              customerReviewRank={book.customerReviewRank}
+              priceStandard={book.priceStandard}
+            />
+          )) || <Typography height="250px">검색 결과가 없습니다.</Typography>}
+        </Box>
+      )}
       {/* 페이지네이션 */}
       <Box sx={searchResultStyles.paginationBox}>
         <Pagination

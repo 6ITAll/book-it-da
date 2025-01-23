@@ -15,6 +15,7 @@ interface BookDetailSectionProps {
   customerReviewRank: number;
   ratingCount: number;
   isbn: string;
+  isLoading: boolean;
 }
 
 const BookDetailSection = ({
@@ -29,11 +30,12 @@ const BookDetailSection = ({
   customerReviewRank,
   ratingCount,
   isbn,
+  isLoading,
 }: BookDetailSectionProps): JSX.Element => {
   return (
     <Box sx={bookDetailStyles.bookDetailSectionBox}>
       {/* 왼쪽 박스 (책 이미지) */}
-      <LeftBookDetailBox cover={cover} title={title} />
+      <LeftBookDetailBox cover={cover} title={title} isLoading={isLoading} />
       {/* 오른쪽 박스 (책 정보) */}
       <RightBookDetailBox
         isbn={isbn}
@@ -46,6 +48,7 @@ const BookDetailSection = ({
         link={link}
         customerReviewRank={customerReviewRank}
         ratingCount={ratingCount}
+        isLoading={isLoading} // 로딩 상태 전달
       />
     </Box>
   );

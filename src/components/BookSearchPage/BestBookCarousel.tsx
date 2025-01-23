@@ -1,13 +1,12 @@
-/** @jsxImportSource @emotion/react */
 import { Typography } from '@mui/material';
-import { css } from '@emotion/react';
 import dayjs from 'dayjs';
 import { useGetBestBooksQuery } from '@features/BookSearchPage/api/bestBookGetApi';
 import Carousel from '@components/commons/Carousel';
 import BestBookCard from '@components/BookSearchPage/BestBookCard';
+import { renderBestBookSkeletons } from '@components/BookSearchPage/BookSearchSkeleton';
 
 const BestBookCarousel = (): JSX.Element => {
-  const { data } = useGetBestBooksQuery();
+  const { data, isLoading } = useGetBestBooksQuery();
 
   // 주차 정보 추출 (현재 날짜 기준)
   const currentDate = dayjs();
@@ -21,25 +20,27 @@ const BestBookCarousel = (): JSX.Element => {
   return (
     <>
       <Typography
-        css={css`
-          opacity: 0.5;
-          margin-bottom: 10px;
-          font-size: 15px;
-        `}
+        sx={{ opacity: '0.5', marginBottom: '10px', fontSize: '15px' }}
         gutterBottom
       >
         {`${currentYear}년 ${currentMonth}월 ${weekNumber}주차 기준`}
       </Typography>
-      <Carousel>
-        {data?.item?.map((book) => (
-          <BestBookCard
-            key={book.isbn}
-            isbn={book.isbn}
-            image={book.cover}
-            title={book.title}
-          />
-        ))}
-      </Carousel>
+
+      {/* 조건부 렌더링 */}
+      {isLoading ? (
+        renderBestBookSkeletons(4) // 스켈레톤 4개 생성
+      ) : (
+        <Carousel>
+          {data?.item?.map((book) => (
+            <BestBookCard
+              key={book.isbn}
+              isbn={book.isbn}
+              image={book.cover}
+              title={book.title}
+            />
+          ))}
+        </Carousel>
+      )}
     </>
   );
 };

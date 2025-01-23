@@ -12,6 +12,7 @@ interface BookDetailContentProps {
   description: string;
   author: string;
   imageUrl: string;
+  isLoading: boolean;
 }
 
 const BookDetailContent = ({
@@ -20,6 +21,7 @@ const BookDetailContent = ({
   title = '',
   author = '',
   imageUrl = '',
+  isLoading,
 }: BookDetailContentProps): JSX.Element => {
   // 리뷰 데이터 가져오기
   const { data: reviewData } = useGetReviewsQuery(isbn);
@@ -40,7 +42,11 @@ const BookDetailContent = ({
         />
         {/* 성별, 연령별 인기 분포 섹션 */}
         {currentTab === 0 && (
-          <BookIntroduceTab isbn={isbn} description={description} />
+          <BookIntroduceTab
+            isbn={isbn}
+            description={description}
+            isLoading={isLoading}
+          />
         )}
         {/* 리뷰 섹션 */}
         {currentTab === 1 && (

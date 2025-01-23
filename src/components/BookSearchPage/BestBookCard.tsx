@@ -1,6 +1,7 @@
 import CommonBookCard from '@components/commons/CommonBookCard';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
+import { bestBookStyles } from '@components/BookSearchPage/BookSearch.style';
 interface BestBookCardProps {
   isbn: string;
   image: string;
@@ -23,33 +24,7 @@ const BestBookCard = ({
       image={image}
       title={title || '제목 없음'}
       onClick={handleCardClick}
-      sx={{
-        borderRadius: 0,
-        boxShadow: 'none',
-        border: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        overflow: 'hidden',
-        '& .MuiCardMedia-root': {
-          height: { xs: 100, sm: 150, md: 200 }, // 반응형 높이 조절
-          width: 'auto',
-        },
-        '& .MuiCardContent-root': {
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '8px',
-        },
-        '& .MuiTypography-body1': {
-          fontSize: '14px',
-          fontWeight: 'bold',
-          textAlign: 'center',
-          marginTop: '8px',
-        },
-      }}
+      sx={bestBookStyles.commonCard}
     />
   );
 };
