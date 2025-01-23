@@ -3,6 +3,7 @@ import { postingWriteStyles } from './PostingWrite.styles';
 import { BookPreviewSection } from './PostingBookPreview';
 import TextEditor from '@components/commons/TextEditor';
 import { Book } from '@shared/types/type';
+import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
 
 export interface PostingContentProps {
   selectedBook: Book | null;
@@ -18,24 +19,39 @@ const PostingContent = ({
   setTitle,
   content,
   setContent,
-}: PostingContentProps) => (
-  <Stack sx={postingWriteStyles.posting}>
-    {/* 글감 선택 시 */}
-    {selectedBook && <BookPreviewSection book={selectedBook} />}
-    <Stack flex="0 0 auto" sx={{ width: '100%' }}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        placeholder="제목"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        sx={postingWriteStyles.postingTitle}
-      />
+}: PostingContentProps) => {
+  const { data: bookData } = useSearchBookByIsbnQuery(
+    { isbn: selectedBook?.isbn ?? '' },
+    { skip: !selectedBook?.isbn },
+  );
+
+  const bookToDisplay = selectedBook?.isbn
+    ? {
+        isbn: selectedBook.isbn,
+        title: bookData?.title ?? selectedBook.title ?? '',
+        author: bookData?.author ?? selectedBook.author ?? '',
+        imageUrl: bookData?.cover ?? selectedBook.imageUrl ?? '',
+      }
+    : null;
+
+  return (
+    <Stack sx={postingWriteStyles.posting}>
+      {bookToDisplay && <BookPreviewSection book={bookToDisplay} />}
+      <Stack flex="0 0 auto" sx={{ width: '100%' }}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="제목"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          sx={postingWriteStyles.postingTitle}
+        />
+      </Stack>
+      <Box sx={postingWriteStyles.postingContentBox}>
+        <TextEditor value={content} setValue={setContent} />
+      </Box>
     </Stack>
-    <Box sx={postingWriteStyles.postingContentBox}>
-      <TextEditor value={content} setValue={setContent} />
-    </Box>
-  </Stack>
-);
+  );
+};
 
 export default PostingContent;

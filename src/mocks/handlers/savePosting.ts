@@ -3,22 +3,22 @@ import { Book, Posting, User } from '@shared/types/type';
 
 const sampleBooks: Book[] = [
   {
-    bookTitle: '금각사',
+    title: '금각사',
     author: '미시마 유키오',
     imageUrl: '/src/assets/images/sample1.jpg',
-    itemId: 107413605,
+    isbn: '890121590X',
   },
   {
-    bookTitle: '여행의 이유',
+    title: '여행의 이유',
     author: '김영하',
     imageUrl: '/src/assets/images/sample2.jpg',
-    itemId: 337633173,
+    isbn: 'K312930064',
   },
   {
-    bookTitle: '참을 수 없는 존재의 가벼움',
+    title: '참을 수 없는 존재의 가벼움',
     author: '밀란 쿤데라',
     imageUrl: '/src/assets/images/sample3.jpg',
-    itemId: 347978053,
+    isbn: '8937437562',
   },
 ];
 

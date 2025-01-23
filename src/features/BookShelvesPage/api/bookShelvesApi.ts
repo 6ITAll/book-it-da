@@ -9,7 +9,7 @@ export const bookShelvesApi = createApi({
   endpoints: (builder) => ({
     getBookshelf: builder.query<
       GetBookshelfResponse,
-      { userId: number; bookshelfId: number }
+      { userId: string; bookshelfId: number }
     >({
       query: ({ userId, bookshelfId }) =>
         `/users/${userId}/bookshelves/${bookshelfId}`,
@@ -18,14 +18,14 @@ export const bookShelvesApi = createApi({
     updateReadingStatus: builder.mutation<
       void,
       {
-        userId: number;
+        userId: string;
         bookshelfId: number;
-        itemId: number;
+        isbn: string;
         readingStatus: ReadingStatusType;
       }
     >({
-      query: ({ userId, bookshelfId, itemId, readingStatus }) => ({
-        url: `/users/${userId}/bookshelves/${bookshelfId}/books/${itemId}/status`,
+      query: ({ userId, bookshelfId, isbn, readingStatus }) => ({
+        url: `/users/${userId}/bookshelves/${bookshelfId}/books/${isbn}/status`,
         method: 'PATCH',
         body: { readingStatus },
       }),
@@ -33,10 +33,10 @@ export const bookShelvesApi = createApi({
     }),
     deleteBook: builder.mutation<
       void,
-      { userId: number; bookshelfId: number; itemId: number }
+      { userId: string; bookshelfId: number; isbn: string }
     >({
-      query: ({ userId, bookshelfId, itemId }) => ({
-        url: `/users/${userId}/bookshelves/${bookshelfId}/books/${itemId}`,
+      query: ({ userId, bookshelfId, isbn }) => ({
+        url: `/users/${userId}/bookshelves/${bookshelfId}/books/${isbn}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Bookshelf'],

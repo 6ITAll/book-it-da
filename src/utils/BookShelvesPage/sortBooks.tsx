@@ -7,7 +7,7 @@ export const sortBooks = (books: SavedBook[], sortOption: SortOption) => {
       case 'recent':
         return new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime();
       case 'title':
-        return a.bookTitle.localeCompare(b.bookTitle);
+        return a.title.localeCompare(b.title);
       case 'author':
         return a.author.localeCompare(b.author);
       default:

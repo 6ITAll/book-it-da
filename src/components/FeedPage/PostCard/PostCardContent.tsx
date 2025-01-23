@@ -1,22 +1,17 @@
 import { Box, CardContent, Typography } from '@mui/material';
 import styles from './PostCard.styles';
-import { Book, PostType } from '@shared/types/type';
+import { PostType } from '@shared/types/type';
 import { stripHtml } from 'string-strip-html';
 
-interface PostCardBaseContent {
-  book: Book;
+interface PostingContent {
+  postTitle: string;
+  postContent: string;
 }
 
-interface PostingContent extends PostCardBaseContent {
+interface OneLineContent {
   title: string;
-  content: string;
-  review?: never;
-}
-
-interface OneLineContent extends PostCardBaseContent {
+  author: string;
   review: string;
-  title?: never;
-  content?: never;
 }
 
 interface PostCardContentProps {
@@ -26,21 +21,20 @@ interface PostCardContentProps {
 
 const PostCardContent = ({
   type,
-  content: { book, title, content, review },
+  content,
 }: PostCardContentProps): JSX.Element => {
-  // html 태그를 제거한 순수 텍스트
-  const plainText = stripHtml(content ?? '').result;
   const getContent = () => {
     switch (type) {
-      case '한줄평':
+      case '한줄평': {
+        const { title, author, review } = content as OneLineContent;
         return (
           <>
             <Box sx={styles.cardTitleBox}>
               <Typography variant="h6" sx={styles.cardTitle}>
-                {book.bookTitle}
+                {title}
               </Typography>
               <Typography variant="body2" sx={styles.bookAuthor}>
-                {book.author}
+                {author}
               </Typography>
             </Box>
             <Box sx={styles.cardDescriptionBox}>
@@ -56,13 +50,16 @@ const PostCardContent = ({
             </Box>
           </>
         );
+      }
       case '포스팅':
-      default:
+      default: {
+        const { postTitle, postContent } = content as PostingContent;
+        const plainText = stripHtml(postContent ?? '').result;
         return (
           <>
             <Box sx={styles.cardTitleBox}>
               <Typography variant="h6" sx={styles.cardTitle}>
-                {title}
+                {postTitle}
               </Typography>
             </Box>
             <Box sx={styles.cardDescriptionBox}>
@@ -76,6 +73,7 @@ const PostCardContent = ({
             </Box>
           </>
         );
+      }
     }
   };
 

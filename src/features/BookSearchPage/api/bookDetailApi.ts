@@ -6,13 +6,13 @@ export const bookDetailApi = createApi({
   reducerPath: 'bookDetailApi',
   baseQuery: fetchBaseQuery({ baseUrl: aladinConfig.aladinBaseUrl }),
   endpoints: (builder) => ({
-    fetchBookDetail: builder.query<BookDetailResponse, { itemId: number }>({
-      query: ({ itemId }) => ({
+    fetchBookDetail: builder.query<BookDetailResponse, { isbn: string }>({
+      query: ({ isbn }) => ({
         url: aladinConfig.itemLookUpUrl,
         params: {
           ttbkey: aladinConfig.aladinApiKey,
-          ItemId: itemId,
-          ItemIdType: 'ItemId',
+          ItemId: isbn,
+          ItemIdType: 'ISBN',
           output: aladinConfig.defaultOutput,
           Version: aladinConfig.version,
           Cover: 'Big',

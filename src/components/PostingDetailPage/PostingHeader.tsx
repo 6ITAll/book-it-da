@@ -7,38 +7,44 @@ import EditIcon from '@mui/icons-material/Edit';
 import { formatCount } from '@shared/utils/formatCount';
 import { useNavigate } from 'react-router-dom';
 import { postingDetailStyles } from './PostingDetail.styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { useToggleLikeMutation } from '@features/commons/likeApi';
-import { RootState } from '@store/index';
-import { updateLikeStatus } from '@features/PostDetailPage/slice/postingDetailSlice';
-import { Posting } from '@shared/types/type';
+import { useEffect, useState } from 'react';
+import {
+  useCheckLikeStatusQuery,
+  useToggleLikeMutation,
+} from '@features/commons/likeApi';
 
 interface PostingHeaderProps {
   title: string;
   setOpenShareDialog: (value: boolean) => void;
-  postingId: number;
-  userId: number;
-  currentUserId: number;
+  postingId: string;
+  isUserOwnsPost: boolean;
 }
 
 const PostingHeader = ({
   title,
   setOpenShareDialog,
   postingId,
-  userId,
-  currentUserId,
+  isUserOwnsPost,
 }: PostingHeaderProps) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
+  const { data: likeStatus } = useCheckLikeStatusQuery(postingId);
   const [toggleLike] = useToggleLikeMutation();
-  const { isLiked, likeCount } = useSelector(
-    (state: RootState) => (state.postingDetail.currentPost || {}) as Posting,
-  );
+
+  useEffect(() => {
+    if (likeStatus) {
+      setIsLiked(likeStatus.isLiked);
+      setLikeCount(likeStatus.likeCount);
+    }
+  }, [likeStatus]);
 
   const handleLikeClick = async () => {
     try {
-      await toggleLike({ postId: postingId, isLiked: !isLiked }).unwrap();
-      dispatch(updateLikeStatus(!isLiked));
+      const result = await toggleLike(postingId).unwrap();
+      setIsLiked(result.isLiked);
+      setLikeCount(result.likeCount);
     } catch (error) {
       console.error('좋아요 오류:', error);
     }
@@ -84,7 +90,7 @@ const PostingHeader = ({
           <ShareIcon />
         </IconButton>
         {/* 수정 버튼 */}
-        {userId === currentUserId && (
+        {isUserOwnsPost && (
           <IconButton onClick={handleEdit}>
             <EditIcon />
           </IconButton>

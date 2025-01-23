@@ -6,17 +6,16 @@ import BookDetailContent from '@components/BookDetailPage/BookDetailContent';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 const BookDetailPage = (): JSX.Element => {
-  const { itemId } = useParams<{ itemId: string }>();
-  const numericItemId = itemId ? parseInt(itemId, 10) : 0; // ID를 숫자로 변환
+  const { isbn } = useParams<{ isbn: string }>();
   const { data, isLoading } = useFetchBookDetailQuery({
-    itemId: numericItemId,
+    isbn: isbn!,
   });
 
   return (
     <Container maxWidth="lg" disableGutters sx={bookDetailStyles.container}>
       <BookDetailSection
         isLoading={isLoading}
-        itemId={numericItemId}
+        isbn={data?.item[0].isbn || ''}
         cover={data?.item[0]?.cover || ''}
         title={data?.item[0]?.title || ''}
         subTitle={data?.item[0]?.subInfo?.subTitle || ''}
@@ -31,7 +30,7 @@ const BookDetailPage = (): JSX.Element => {
 
       <BookDetailContent
         isLoading={isLoading}
-        itemId={numericItemId}
+        isbn={data?.item[0].isbn || ''}
         title={data?.item[0]?.title || ''}
         description={data?.item[0]?.description || ''}
         author={data?.item[0]?.author || ''}

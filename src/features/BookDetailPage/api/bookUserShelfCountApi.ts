@@ -5,10 +5,10 @@ export const bookUserShelfCountApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   endpoints: (builder) => ({
     fetchLibraryCount: builder.query<
-      { itemId: number; libraryCount: number },
-      number
+      { isbn: string; libraryCount: number },
+      string
     >({
-      query: (itemId) => `/books/${itemId}/library-count`,
+      query: (isbn) => `/books/${isbn}/library-count`,
     }),
   }),
 });

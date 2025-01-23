@@ -7,15 +7,15 @@ export const reviewApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   endpoints: (builder) => ({
     // 최상위 3개 리뷰 및 총 리뷰 개수
-    getReviews: builder.query<ReviewResponse, number>({
-      query: (itemId) => `reviews/top/${itemId}`,
+    getReviews: builder.query<ReviewResponse, string>({
+      query: (isbn) => `reviews/top/${isbn}`,
     }),
     // 페이지네이션 기반으로 모든 리뷰 반환
     getPaginatedReviews: builder.query<
       PaginatedReviewResponse,
-      { itemId: number; page: number }
+      { isbn: string; page: number }
     >({
-      query: ({ itemId, page }) => `reviews/${itemId}?page=${page}`,
+      query: ({ isbn, page }) => `reviews/${isbn}?page=${page}`,
     }),
   }),
 });

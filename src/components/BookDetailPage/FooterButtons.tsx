@@ -3,7 +3,7 @@ import { useState } from 'react';
 import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 interface FooterButtonsProps {
-  itemId: number;
+  isbn: string;
   title: string;
   author: string;
   imageUrl: string;
@@ -11,7 +11,7 @@ interface FooterButtonsProps {
 }
 
 const FooterButtons = ({
-  itemId,
+  isbn,
   title,
   author,
   imageUrl,
@@ -40,7 +40,7 @@ const FooterButtons = ({
       </Button>
       {/* AddToLibraryModal 연결 */}
       <AddToLibraryModal
-        itemId={itemId}
+        isbn={isbn}
         title={title}
         author={author}
         imageUrl={imageUrl}

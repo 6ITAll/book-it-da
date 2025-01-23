@@ -29,13 +29,13 @@ export const bookSearchApi = createApi({
       }),
     }),
     // 상품조회 Lookup_url 에 평가한 사람의 수 가져오기 위한 api
-    fetchRatingInfo: builder.query<RatingInfoResponse, { itemId: number }>({
-      query: ({ itemId }) => ({
+    fetchRatingInfo: builder.query<RatingInfoResponse, { isbn: string }>({
+      query: ({ isbn }) => ({
         url: aladinConfig.itemLookUpUrl,
         params: {
           ttbkey: aladinConfig.aladinApiKey,
-          ItemId: itemId,
-          ItemIdType: 'ItemId',
+          ItemId: isbn,
+          ItemIdType: 'ISBN',
           OptResult: 'ratingInfo',
           output: aladinConfig.defaultOutput,
           Version: aladinConfig.version,
