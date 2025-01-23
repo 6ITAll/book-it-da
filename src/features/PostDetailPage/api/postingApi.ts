@@ -116,8 +116,11 @@ export const postingApi = createApi({
       providesTags: (result, _, postId) =>
         result ? [{ type: 'Post', id: postId }] : [],
     }),
-    getBookOtherPosts: builder.query<OtherPost[], string>({
-      queryFn: async (isbn) => {
+    getBookOtherPosts: builder.query<
+      OtherPost[],
+      { isbn: string; currentPostingId: string }
+    >({
+      queryFn: async ({ isbn, currentPostingId }) => {
         try {
           const { data, error } = (await supabase
             .from('post_with_like_count')
@@ -133,6 +136,7 @@ export const postingApi = createApi({
               `,
             )
             .eq('isbn', isbn)
+            .neq('id', currentPostingId)
             .order('like_count', { ascending: false }) // 임시 집계 컬럼으로 정렬
             .order('created_at', { ascending: false })
             .limit(3)) as PostgrestResponse<SupabaseBookOtherPostsResponse>;
@@ -160,8 +164,11 @@ export const postingApi = createApi({
       },
     }),
 
-    getUserOtherPosts: builder.query<OtherPost[], string>({
-      queryFn: async (userId) => {
+    getUserOtherPosts: builder.query<
+      OtherPost[],
+      { userId: string; currentPostingId: string }
+    >({
+      queryFn: async ({ userId, currentPostingId }) => {
         try {
           const { data, error } = (await supabase
             .from('post_with_like_count')
@@ -177,6 +184,7 @@ export const postingApi = createApi({
               `,
             )
             .eq('user_id', userId)
+            .neq('id', currentPostingId)
             .order('like_count', { ascending: false }) // 임시 집계 컬럼으로 정렬
             .order('created_at', { ascending: false })
             .limit(3)) as PostgrestResponse<SupabaseBookOtherPostsResponse>;

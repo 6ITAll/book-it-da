@@ -13,12 +13,14 @@ interface OtherPostingGridProps {
   type: OtherPostingType;
   isbn?: string;
   userId?: string;
+  postingId: string;
 }
 
 const OtherPostingGrid: React.FC<OtherPostingGridProps> = ({
   type,
   isbn,
   userId,
+  postingId,
 }) => {
   const title =
     type === 'BookOtherPosting'
@@ -26,13 +28,19 @@ const OtherPostingGrid: React.FC<OtherPostingGridProps> = ({
       : '사용자의 다른 포스팅';
 
   const { data: bookOtherPosts, isLoading: isBookLoading } =
-    useGetBookOtherPostsQuery(isbn || '', {
-      skip: type !== 'BookOtherPosting' || !isbn,
-    });
+    useGetBookOtherPostsQuery(
+      { isbn: isbn || '', currentPostingId: postingId },
+      {
+        skip: type !== 'BookOtherPosting' || !isbn || !postingId,
+      },
+    );
   const { data: userOtherPosts, isLoading: isUserLoading } =
-    useGetUserOtherPostsQuery(userId || '', {
-      skip: type !== 'UserOtherPosting' || !userId,
-    });
+    useGetUserOtherPostsQuery(
+      { userId: userId || '', currentPostingId: postingId },
+      {
+        skip: type !== 'UserOtherPosting' || !userId || !postingId,
+      },
+    );
 
   const posts = type === 'BookOtherPosting' ? bookOtherPosts : userOtherPosts;
   const isLoading = type === 'BookOtherPosting' ? isBookLoading : isUserLoading;
