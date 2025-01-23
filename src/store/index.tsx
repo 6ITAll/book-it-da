@@ -27,7 +27,6 @@ import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShel
 import { followApi } from '@features/commons/followApi';
 import feedReducer from '@features/FeedPage/slice/feedSlice';
 import { likeApi } from '@features/commons/likeApi';
-import postingDetailReducer from '@features/PostDetailPage/slice/postingDetailSlice';
 import { bookSearchByIsbnApi } from '@features/commons/bookSearchByIsbn';
 
 export const store = configureStore({
@@ -61,7 +60,6 @@ export const store = configureStore({
     user: userReducer,
     snackbar: snackbarReducer,
     feed: feedReducer,
-    postingDetail: postingDetailReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([

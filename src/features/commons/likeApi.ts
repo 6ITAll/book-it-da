@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
 
-interface LikeResponse {
+export interface LikeResponse {
   isLiked: boolean;
   likeCount: number;
 }
