@@ -3,7 +3,7 @@ import UserInfoSection from '@components/MyPage/UserInfoSection';
 import { Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { followsData } from 'src/mocks/handlers/follow';
+import { followsData } from '@mocks/handlers/follow';
 import { useGetKakaoUserInfoQuery } from '@features/SNSLogin/api/Kakaoapi';
 
 interface UserInfo {

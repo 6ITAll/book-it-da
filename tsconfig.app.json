@@ -11,7 +11,8 @@
       "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"],
       "@constants/*": ["src/constants/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@mocks/*": ["src/mocks/*"]
     },
 
     "composite": true, // 프로젝트 참조를 위한 필수 옵션
