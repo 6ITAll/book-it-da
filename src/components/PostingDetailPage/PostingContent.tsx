@@ -19,8 +19,6 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
     { skip: !book.isbn },
   );
 
-  console.log(content);
-
   const handleBookClick = () => {
     if (book?.isbn) {
       navigateToBookDetailPage(navigate, book.isbn);

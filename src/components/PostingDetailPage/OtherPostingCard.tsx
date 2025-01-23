@@ -1,4 +1,5 @@
 import PostCard from '@components/commons/PostCard';
+import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
 import { OtherPost } from '@features/PostDetailPage/types/types';
 
 interface OtherPostingCardProps {
@@ -6,13 +7,17 @@ interface OtherPostingCardProps {
 }
 
 const OtherPostingCard = ({ post }: OtherPostingCardProps) => {
-  console.log('OtherPostingCard post:', post.id);
+  const { data: bookData } = useSearchBookByIsbnQuery(
+    { isbn: post?.isbn ?? '' },
+    { skip: !post?.isbn },
+  );
 
   return (
     <PostCard
       postId={post.id}
       title={post.title}
       content={post.content}
+      cover={bookData?.cover}
       user={post.user}
     />
   );

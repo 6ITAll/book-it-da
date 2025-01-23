@@ -1,11 +1,11 @@
 import {
   Card,
-  CardContent,
   Typography,
   Avatar,
   Stack,
   Button,
   useTheme,
+  Box,
 } from '@mui/material';
 import { User } from '@shared/types/type';
 import {
@@ -27,6 +27,7 @@ interface PostCardProps {
   postId: string;
   title: string;
   content: string;
+  cover?: string;
   user: User;
 }
 
@@ -60,6 +61,7 @@ const PostCard = ({
   postId,
   title,
   content,
+  cover,
   user,
 }: PostCardProps): JSX.Element => {
   const navigate = useNavigate();
@@ -101,63 +103,110 @@ const PostCard = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        cursor: 'pointer',
       }}
       onClick={() => handleCardClick(postId)}
     >
-      <CardContent sx={{ flex: 1 }}>
-        <Typography
-          variant="body1"
-          fontWeight="bold"
-          gutterBottom
-          sx={{ marginBottom: '1rem' }}
-        >
-          {title}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{
-            marginBottom: '1rem',
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical',
-            WebkitLineClamp: 4,
-            overflow: 'hidden',
+      <Stack direction="row" spacing={2} sx={{ padding: '16px' }}>
+        {/* 책 이미지 */}
+        <img
+          src={cover}
+          alt={title}
+          style={{
+            width: '20%',
+            height: 'auto',
+            objectFit: 'cover',
+            borderRadius: '4px',
           }}
-        >
-          {plainContent}
-        </Typography>
-      </CardContent>
-      <CardContent>
+        />
+        {/* 제목 및 내용 */}
+        <Stack sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="body1"
+            fontWeight="bold"
+            gutterBottom
+            sx={{ marginBottom: '0.5rem' }}
+          >
+            {title}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 3,
+              overflow: 'hidden',
+            }}
+          >
+            {plainContent}
+          </Typography>
+        </Stack>
+      </Stack>
+
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={2}
+        sx={{
+          borderTop: `1px solid ${theme.palette.divider}`,
+          padding: '16px',
+        }}
+      >
+        {/* 유저 정보 */}
         <Stack
           direction="row"
           alignItems="center"
-          justifyContent="space-between"
           spacing={2}
-          sx={{ borderTop: '1px solid #e7e8e9', paddingTop: '1rem' }}
+          sx={{ flex: 1, maxWidth: '80%' }}
         >
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar
-              onClick={() => navigateToUserPage(navigate, user.id)}
-              src={user?.avatarUrl}
-              alt={user?.username}
-              sx={{ width: 40, height: 40, cursor: 'pointer' }}
-            />
-            <Typography variant="body2" fontWeight="bold">
-              {user?.username}
-            </Typography>
-          </Stack>
+          <Avatar
+            onClick={(e) => {
+              e.stopPropagation(); // 클릭 이벤트 전파 방지
+              navigateToUserPage(navigate, user.id);
+            }}
+            src={user?.avatarUrl}
+            alt={user?.username}
+            sx={{ width: 40, height: 40, cursor: 'pointer' }}
+          />
+          <Typography
+            variant="body2"
+            fontWeight="bold"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              flexGrow: 1,
+            }}
+          >
+            {user?.username}
+          </Typography>
+        </Stack>
+
+        <Box
+          sx={{
+            width: '20%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+        >
+          {/* 팔로우 버튼 */}
           {isLoggedIn && !isOwnPost && (
             <Button
               variant="outlined"
               size="small"
               sx={styles.followButton(followStatus?.isFollowing)}
-              onClick={handleFollowClick}
+              onClick={(e) => {
+                e.stopPropagation(); // 클릭 이벤트 전파 방지
+                handleFollowClick();
+              }}
             >
               {followStatus?.isFollowing ? '팔로잉' : '팔로우'}
             </Button>
           )}
-        </Stack>
-      </CardContent>
+        </Box>
+      </Stack>
     </Card>
   );
 };

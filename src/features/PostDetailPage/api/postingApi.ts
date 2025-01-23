@@ -150,7 +150,7 @@ export const postingApi = createApi({
             createdAt: post.created_at,
             user: {
               id: post.user.id,
-              username: post.user.username,
+              username: post.user.username || post.user.id,
               avatarUrl: post.user.avatar_url,
             },
             isbn: post.isbn,
@@ -198,7 +198,7 @@ export const postingApi = createApi({
             createdAt: post.created_at,
             user: {
               id: post.user.id,
-              username: post.user.username,
+              username: post.user.username || post.user.id,
               avatarUrl: post.user.avatar_url,
             },
             isbn: post.isbn,

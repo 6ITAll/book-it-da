@@ -33,6 +33,7 @@ const PostMoreTemplate = ({
             postId="postId"
             title={post.title}
             content="내용"
+            cover="커버"
             user={mockUser}
           />
         )}

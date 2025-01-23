@@ -15,17 +15,6 @@ const PostingDetailPage = () => {
 
   const { data: post, isLoading, error } = useGetPostByIdQuery(postingId!);
 
-  console.log(post);
-
-  // 책 정보 업데이트
-  // useEffect(() => {
-  //   if (post && bookData) {
-  //     post.book.title = bookData.title;
-  //     post.book.author = bookData.author;
-  //     post.book.imageUrl = bookData.cover;
-  //   }
-  // }, [post, bookData]);
-
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post || !postingId) return <div>잘못된 접근입니다.</div>;
