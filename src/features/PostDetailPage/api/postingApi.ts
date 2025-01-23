@@ -1,7 +1,11 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
 import { Posting } from '@shared/types/type';
-import { PostgrestSingleResponse } from '@supabase/supabase-js';
+import {
+  PostgrestResponse,
+  PostgrestSingleResponse,
+} from '@supabase/supabase-js';
+import { OtherPost } from '../types/types';
 
 interface SupabasePostingResponse {
   id: string;
@@ -16,6 +20,25 @@ interface SupabasePostingResponse {
     title: string;
     content: string;
   };
+}
+
+interface SupabaseBookOtherPostsResponse {
+  id: string;
+  created_at: string;
+  user: {
+    id: string;
+    username: string;
+    avatar_url: string;
+  };
+  isbn: string;
+  posting: {
+    title: string;
+    content: string;
+  };
+  post_like: {
+    user_id: string;
+  }[];
+  like_count: number;
 }
 
 export const postingApi = createApi({
@@ -93,7 +116,99 @@ export const postingApi = createApi({
       providesTags: (result, _, postId) =>
         result ? [{ type: 'Post', id: postId }] : [],
     }),
+    getBookOtherPosts: builder.query<OtherPost[], string>({
+      queryFn: async (isbn) => {
+        try {
+          const { data, error } = (await supabase
+            .from('post_with_like_count')
+            .select(
+              `
+                id,
+                created_at,
+                user:user_id (id, username, avatar_url),
+                isbn,
+                posting (title, content),
+                post_like!post_id (user_id),
+                like_count:post_like!post_id(count)
+              `,
+            )
+            .eq('isbn', isbn)
+            .order('like_count', { ascending: false }) // 임시 집계 컬럼으로 정렬
+            .order('created_at', { ascending: false })
+            .limit(3)) as PostgrestResponse<SupabaseBookOtherPostsResponse>;
+
+          if (error) throw error;
+
+          const otherPosts: OtherPost[] = data.map((post) => ({
+            id: post.id,
+            title: post.posting.title,
+            content: post.posting.content,
+            createdAt: post.created_at,
+            user: {
+              id: post.user.id,
+              username: post.user.username,
+              avatarUrl: post.user.avatar_url,
+            },
+            isbn: post.isbn,
+            likeCount: post.like_count,
+          }));
+          return { data: otherPosts };
+        } catch (error) {
+          console.error('다른 책 포스팅 조회 실패:', error);
+          return { error };
+        }
+      },
+    }),
+
+    getUserOtherPosts: builder.query<OtherPost[], string>({
+      queryFn: async (userId) => {
+        try {
+          const { data, error } = (await supabase
+            .from('post_with_like_count')
+            .select(
+              `
+                id,
+                created_at,
+                user:user_id (id, username, avatar_url),
+                isbn,
+                posting (title, content),
+                post_like!post_id (user_id),
+                like_count:post_like!post_id(count)
+              `,
+            )
+            .eq('user_id', userId)
+            .order('like_count', { ascending: false }) // 임시 집계 컬럼으로 정렬
+            .order('created_at', { ascending: false })
+            .limit(3)) as PostgrestResponse<SupabaseBookOtherPostsResponse>;
+
+          if (error) throw error;
+
+          const otherPosts: OtherPost[] = data.map((post) => ({
+            id: post.id,
+            title: post.posting.title,
+            content: post.posting.content,
+            createdAt: post.created_at,
+            user: {
+              id: post.user.id,
+              username: post.user.username,
+              avatarUrl: post.user.avatar_url,
+            },
+            isbn: post.isbn,
+            likeCount: post.like_count,
+          }));
+
+          return { data: otherPosts };
+        } catch (error) {
+          console.error('사용자의 다른 포스팅 조회 실패:', error);
+          return { error };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetPostByIdQuery } = postingApi;
+export const {
+  useGetPostByIdQuery,
+  useGetBookOtherPostsQuery,
+  useGetUserOtherPostsQuery,
+} = postingApi;

@@ -1,11 +1,13 @@
-import { Book, User } from '@shared/types/type';
-
 export interface OtherPost {
-  id: number;
+  id: string;
   title: string;
   content: string;
   createdAt: string;
-  user: User;
-  book: Book;
+  user: {
+    id: string;
+    username: string;
+    avatarUrl: string;
+  };
+  isbn: string;
   likeCount: number;
 }

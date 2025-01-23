@@ -51,8 +51,8 @@ const PostingDetailPage = () => {
         <PostingContent content={post.content} book={post.book} />
       </Stack>
       <Stack sx={{ width: '80%', mt: '1rem', boxSizing: 'border-box' }}>
-        <OtherPostingGrid title="이 책의 다른 포스팅" posts={[]} />
-        <OtherPostingGrid title="사용자의 다른 포스팅" posts={[]} />
+        <OtherPostingGrid type="BookOtherPosting" isbn={post.book.isbn} />
+        <OtherPostingGrid type="UserOtherPosting" userId={post.user.id} />
       </Stack>
       <URLShareDialog open={openShareDialog} handleClose={setOpenShareDialog} />
     </Container>

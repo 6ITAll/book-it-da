@@ -22,8 +22,6 @@ const PostingUserInfo = ({
   const [toggleFollow, { isLoading }] = useToggleFollowMutation();
 
   const { isLoggedIn } = useSelector((state: RootState) => state.user);
-  console.log(user);
-  console.log(isUserOwnsPost);
 
   const { data: followStatus, refetch } = useCheckFollowStatusQuery(user.id, {
     skip: !isLoggedIn || isUserOwnsPost,

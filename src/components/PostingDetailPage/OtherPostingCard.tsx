@@ -5,14 +5,18 @@ interface OtherPostingCardProps {
   post: OtherPost;
 }
 
-const OtherPostingCard = ({ post }: OtherPostingCardProps) => (
-  <PostCard
-    title={post.title}
-    description={post.content}
-    userName={post.user.userName}
-    avatar={post.user.avatarUrl}
-    userId={post.user.userId.toString()}
-  />
-);
+const OtherPostingCard = ({ post }: OtherPostingCardProps) => {
+  console.log('OtherPostingCard post:', post);
+
+  return (
+    <PostCard
+      title={post.title}
+      description={post.content}
+      userName={post.user.username}
+      avatar={post.user.avatarUrl}
+      userId={post.user.id}
+    />
+  );
+};
 
 export default OtherPostingCard;
