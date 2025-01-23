@@ -28,6 +28,7 @@ const BookReviewsTab = ({
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
     useState<boolean>(false);
   const theme = useTheme();
+  const mockUser = { id: '1' };
 
   const { data: postData = { totalPosts: 0, topPosts: [] } } =
     useGetPostsQuery(isbn);
@@ -156,11 +157,10 @@ const BookReviewsTab = ({
                 sx={bookReviewTabStyles.gridContainer}
               >
                 <PostCard
-                  userId={post.userId}
+                  postId="postId"
                   title={post.title}
-                  description={post.description}
-                  userName={post.userName}
-                  avatar={post.avatar}
+                  content="내용"
+                  user={mockUser}
                 />
               </Grid>
             ))}

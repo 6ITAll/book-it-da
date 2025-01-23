@@ -15,6 +15,7 @@ const PostFeedSection = ({
   posts,
 }: PostFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
+  const mockUser = { id: '1' };
 
   return (
     <Box>
@@ -48,11 +49,10 @@ const PostFeedSection = ({
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <PostCard
+              postId="postId"
               title={post.title}
-              description={post.description}
-              userName={post.userName}
-              avatar={post.avatar}
-              userId={post.userId}
+              content="내용"
+              user={mockUser}
             />
           </Grid>
         ))}

@@ -16,6 +16,7 @@ const PostMoreTemplate = ({
   hasMore,
   fetchMoreData,
 }: PostMoreTemplateProps) => {
+  const mockUser = { id: '1' };
   return (
     <Box sx={{ padding: '1rem', maxWidth: '1200px', margin: 'auto' }}>
       <Typography variant="h5" fontWeight="bold" sx={{ marginBottom: '1rem' }}>
@@ -27,7 +28,14 @@ const PostMoreTemplate = ({
         hasMore={hasMore}
         fetchMore={fetchMoreData}
         gridSize={{ xs: 12, md: 6 }}
-        renderItem={(post) => <PostCard {...post} />}
+        renderItem={(post) => (
+          <PostCard
+            postId="postId"
+            title={post.title}
+            content="내용"
+            user={mockUser}
+          />
+        )}
       />
     </Box>
   );
