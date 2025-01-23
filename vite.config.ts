@@ -21,6 +21,14 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             react: ['react', 'react-dom'],
+            mui: ['@mui/material'],
+            muiBase: ['@mui/base'],
+            muiIcon: ['@mui/icons-material'],
+            muiLab: ['@mui/lab'],
+            redux: ['@reduxjs/toolkit', 'react-redux'],
+            form: ['react-hook-form', '@hookform/resolvers', 'yup'],
+            vendor: ['lodash', 'dayjs'],
+            swagger: ['swagger-jsdoc', 'swagger-ui-express', 'yamljs'],
           },
         },
       },
