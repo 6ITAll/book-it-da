@@ -1,10 +1,12 @@
 import { Box, Typography, Avatar, Button, Stack } from '@mui/material';
 import { User } from '@shared/types/type';
 import { postingDetailStyles } from './PostingDetail.styles';
-import { useToggleFollowMutation } from '@features/commons/followApi';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useCheckFollowStatusQuery,
+  useToggleFollowMutation,
+} from '@features/commons/followApi';
+import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-import { updateFollowStatus } from '@features/PostDetailPage/slice/postingDetailSlice';
 
 interface PostingUserInfoProps {
   user: User;
@@ -17,27 +19,25 @@ const PostingUserInfo = ({
   createdAt,
   isUserOwnsPost,
 }: PostingUserInfoProps) => {
-  const dispatch = useDispatch();
   const [toggleFollow, { isLoading }] = useToggleFollowMutation();
-  const currentPost = useSelector(
-    (state: RootState) => state.postingDetail.currentPost,
-  );
+
+  const { isLoggedIn } = useSelector((state: RootState) => state.user);
   console.log(user);
   console.log(isUserOwnsPost);
 
-  // const handleFollowToggle = async () => {
-  //   try {
-  //     const result = await toggleFollow({
-  //       userId: user.userId,
-  //       isFollowing: !isFollowing,
-  //     }).unwrap();
-  //     if (result.success) {
-  //       dispatch(updateFollowStatus(!isFollowing));
-  //     }
-  //   } catch (error) {
-  //     console.error('팔로우 토글 실패:', error);
-  //   }
-  // };
+  const { data: followStatus, refetch } = useCheckFollowStatusQuery(user.id, {
+    skip: !isLoggedIn || isUserOwnsPost,
+  });
+
+  const handleFollowClick = async () => {
+    if (!isLoggedIn || isUserOwnsPost) return;
+    try {
+      await toggleFollow(user.id);
+      refetch();
+    } catch (error) {
+      console.error('Failed to toggle follow status:', error);
+    }
+  };
 
   return (
     <Box sx={postingDetailStyles.userInfoBox}>
@@ -50,15 +50,15 @@ const PostingUserInfo = ({
           </Typography>
         </Stack>
       </Stack>
-      {!isUserOwnsPost && (
+      {isLoggedIn && !isUserOwnsPost && (
         <Button
           variant="outlined"
           size="small"
-          // onClick={handleFollowToggle}
+          onClick={handleFollowClick}
           disabled={isLoading}
-          sx={postingDetailStyles.userInfoBoxButton(user.isFollowing ?? false)}
+          sx={postingDetailStyles.userInfoBoxButton(followStatus?.isFollowing)}
         >
-          {user.isFollowing ? '팔로잉' : '팔로우'}
+          {followStatus?.isFollowing ? '팔로잉' : '팔로우'}
         </Button>
       )}
     </Box>

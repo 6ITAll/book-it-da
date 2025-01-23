@@ -104,7 +104,7 @@ export const postingDetailStyles = {
     mb: 2,
     fontWeight: 'bold',
   },
-  userInfoBoxButton: (isFollowing: boolean) => (theme: Theme) => ({
+  userInfoBoxButton: (isFollowing: boolean | undefined) => (theme: Theme) => ({
     color: theme.palette.common.white, // 텍스트 색상 고정
     backgroundColor: isFollowing
       ? theme.palette.mode === 'light'
