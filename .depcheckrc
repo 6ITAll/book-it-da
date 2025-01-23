@@ -1,0 +1,7 @@
+{
+  "ignores": [
+    "@storybook/addon-*",
+    "@chromatic-com/storybook",
+    "esbuild"
+  ]
+}
