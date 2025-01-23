@@ -7,7 +7,7 @@ import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 const BookDetailPage = (): JSX.Element => {
   const { isbn } = useParams<{ isbn: string }>();
-  const { data } = useFetchBookDetailQuery({
+  const { data, isLoading } = useFetchBookDetailQuery({
     isbn: isbn!,
   });
 
