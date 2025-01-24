@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, setToken } from '@features/user/userSlice';
 import { supabase } from '@utils/supabaseClient';
 
-const KakaoCallback: React.FC = () => {
+const KakaoCallback = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -19,7 +19,6 @@ const KakaoCallback: React.FC = () => {
         if (authData?.session) {
           const { user, access_token } = authData.session;
 
-          // 카카오 사용자 정보 가져오기
           const { data: userData, error: userError } =
             await supabase.auth.getUser();
 
@@ -30,7 +29,6 @@ const KakaoCallback: React.FC = () => {
           if (userData?.user?.user_metadata) {
             avatar_url = userData.user.user_metadata.avatar_url;
 
-            // avatar_url 업데이트
             if (avatar_url) {
               const { error: updateError } = await supabase
                 .from('user')
@@ -49,6 +47,24 @@ const KakaoCallback: React.FC = () => {
             }),
           );
           dispatch(setToken(access_token));
+
+          const { data: userProfile, error: profileError } = await supabase
+            .from('user')
+            .select('username, gender, age')
+            .eq('id', user.id)
+            .single();
+
+          if (profileError) throw profileError;
+
+          if (
+            !userProfile?.username ||
+            !userProfile?.gender ||
+            !userProfile?.age
+          ) {
+            navigate('/kakao/additional-info');
+            return;
+          }
+
           navigate('/');
         } else {
           throw new Error('세션 데이터가 없습니다.');

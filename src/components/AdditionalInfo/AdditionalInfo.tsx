@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -16,6 +17,7 @@ import {
   Typography,
 } from '@mui/material';
 import { checkUserIdDuplicate } from '@utils/SignupPage/checkDuplicate';
+import { supabase } from '@utils/supabaseClient';
 import { AdditionalInfoData } from './AdditionalInfo.types';
 import {
   FormContainer,
@@ -29,6 +31,7 @@ const additionalInfoSchema = yup.object().shape({
   age: yup
     .number()
     .positive('나이는 양수여야 합니다')
+    .integer('나이는 정수여야 합니다')
     .required('나이를 입력해주세요'),
 });
 
@@ -47,6 +50,7 @@ const AdditionalInfo = (): JSX.Element => {
     null,
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (formData: AdditionalInfoData) => {
     if (!isUserIdAvailable) {
@@ -59,7 +63,42 @@ const AdditionalInfo = (): JSX.Element => {
       return;
     }
 
-    console.log('카카오 로그인 추가 정보:', formData);
+    try {
+      const { data: authData, error: authError } =
+        await supabase.auth.getSession();
+
+      if (authError) throw authError;
+
+      const userId = authData?.session?.user?.id;
+      if (!userId) throw new Error('사용자 ID를 찾을 수 없습니다.');
+
+      const { error: updateError } = await supabase
+        .from('user')
+        .update({
+          username: formData.userId,
+          gender: formData.gender,
+          age: formData.age,
+        })
+        .eq('id', userId);
+
+      if (updateError) throw updateError;
+
+      dispatch(
+        showSnackbar({
+          message: '추가 정보가 성공적으로 저장되었습니다.',
+          severity: 'success',
+        }),
+      );
+      navigate('/');
+    } catch (error) {
+      console.error('추가 정보 저장 실패:', error);
+      dispatch(
+        showSnackbar({
+          message: '추가 정보를 저장하는 중 오류가 발생했습니다.',
+          severity: 'error',
+        }),
+      );
+    }
   };
 
   const handleUserIdDuplicateCheck = async () => {
@@ -118,13 +157,13 @@ const AdditionalInfo = (): JSX.Element => {
                   helperText={errors.userId?.message}
                   onChange={(e) => {
                     field.onChange(e);
-                    setIsUserIdAvailable(null);
+                    setIsUserIdAvailable(null); // 중복 확인 초기화
                   }}
                 />
                 <CheckDuplicateButton
                   variant="contained"
                   onClick={handleUserIdDuplicateCheck}
-                  disabled={false}
+                  disabled={!field.value} // 값이 없으면 비활성화
                 >
                   중복확인
                 </CheckDuplicateButton>
