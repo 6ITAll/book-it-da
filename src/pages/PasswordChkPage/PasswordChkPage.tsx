@@ -12,14 +12,14 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@store/index';
 import { setCheckedPassword } from '@features/user/userSlice';
-import { usePasswordCheckMutation } from '@features/user/userApi';
+// import { usePasswordCheckMutation } from '@features/user/userApi';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
 const PasswordChkPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const [passwordCheck] = usePasswordCheckMutation();
+  // const [passwordCheck] = usePasswordCheckMutation();
   const dispatch = useDispatch<AppDispatch>();
 
   const [userId, setUserId] = useState('');
@@ -44,64 +44,64 @@ const PasswordChkPage = () => {
     }
   }, [navigate, dispatch]);
 
-  const handlePasswordCheck = async () => {
-    console.log('Checking password for userId:', userId);
-    if (!userId) {
-      dispatch(
-        showSnackbar({
-          message: '사용자 정보를 찾을 수 없습니다.',
-          severity: 'error',
-        }),
-      );
-      return;
-    }
+  // const handlePasswordCheck = async () => {
+  //   console.log('Checking password for userId:', userId);
+  //   if (!userId) {
+  //     dispatch(
+  //       showSnackbar({
+  //         message: '사용자 정보를 찾을 수 없습니다.',
+  //         severity: 'error',
+  //       }),
+  //     );
+  //     return;
+  //   }
 
-    try {
-      const response = await passwordCheck({
-        userId,
-        password,
-      }).unwrap();
+  //   try {
+  //     const response = await passwordCheck({
+  //       userId,
+  //       password,
+  //     }).unwrap();
 
-      if (response.success) {
-        dispatch(setCheckedPassword(true));
-        navigate('/profile/edit');
-      } else {
-        dispatch(
-          showSnackbar({ message: response.message, severity: 'error' }),
-        );
-      }
-    } catch (err) {
-      const error = err as FetchBaseQueryError;
+  //     if (response.success) {
+  //       dispatch(setCheckedPassword(true));
+  //       navigate('/profile/edit');
+  //     } else {
+  //       dispatch(
+  //         showSnackbar({ message: response.message, severity: 'error' }),
+  //       );
+  //     }
+  //   } catch (err) {
+  //     const error = err as FetchBaseQueryError;
 
-      dispatch(
-        showSnackbar({
-          message:
-            (error.data as { message: string }).message ||
-            '비밀번호 확인 중 오류가 발생했습니다.',
-          severity: 'error',
-        }),
-      );
-    }
-  };
+  //     dispatch(
+  //       showSnackbar({
+  //         message:
+  //           (error.data as { message: string }).message ||
+  //           '비밀번호 확인 중 오류가 발생했습니다.',
+  //         severity: 'error',
+  //       }),
+  //     );
+  //   }
+  // };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handlePasswordCheck();
-    }
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     handlePasswordCheck();
+  //   }
+  // };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPassword(e.target.value);
+  // };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handlePasswordCheck();
-  };
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   handlePasswordCheck();
+  // };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
-      <Stack textAlign="center" mb={4}>
+      {/* <Stack textAlign="center" mb={4}>
         <Avatar
           sx={{
             width: 96,
@@ -141,7 +141,7 @@ const PasswordChkPage = () => {
         >
           확인
         </Button>
-      </Stack>
+      </Stack> */}
     </Container>
   );
 };

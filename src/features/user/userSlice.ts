@@ -4,6 +4,7 @@ export interface UserInfo {
   id: string;
   email?: string;
   avatarUrl?: string;
+  isSocialLogin: boolean;
 }
 
 export interface UserState {
@@ -36,6 +37,11 @@ export const userSlice = createSlice({
       state.autoLogin = false;
       state.token = null;
     },
+    setAvatarUrl: (state, action: PayloadAction<string>) => {
+      if (state.userInfo) {
+        state.userInfo.avatarUrl = action.payload;
+      }
+    },
     setCheckedPassword(state, action: PayloadAction<boolean>) {
       state.checkedPassword = action.payload;
     },
@@ -51,6 +57,7 @@ export const userSlice = createSlice({
 export const {
   loginSuccess,
   logoutSuccess,
+  setAvatarUrl,
   setCheckedPassword,
   setAutoLogin,
   setToken,

@@ -44,6 +44,7 @@ const KakaoCallback = (): JSX.Element => {
               id: user.id,
               email: user.email,
               avatarUrl: avatar_url,
+              isSocialLogin: true,
             }),
           );
           dispatch(setToken(access_token));
