@@ -36,6 +36,7 @@ export const userSlice = createSlice({
       state.isLoggedIn = false;
       state.autoLogin = false;
       state.token = null;
+      state.checkedPassword = false;
     },
     setAvatarUrl: (state, action: PayloadAction<string>) => {
       if (state.userInfo) {

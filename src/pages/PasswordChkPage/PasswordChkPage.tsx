@@ -7,101 +7,86 @@ import {
   Stack,
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { supabase } from '@utils/supabaseClient';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@store/index';
 import { setCheckedPassword } from '@features/user/userSlice';
-// import { usePasswordCheckMutation } from '@features/user/userApi';
+import { useNavigate } from 'react-router-dom';
+import RoutePaths from 'src/routes/RoutePath';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
 const PasswordChkPage = () => {
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [passwordCheck] = usePasswordCheckMutation();
-  const dispatch = useDispatch<AppDispatch>();
 
-  const [userId, setUserId] = useState('');
+  const handlePasswordCheck = async () => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-  useEffect(() => {
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      const parsedUserInfo = JSON.parse(userInfo);
-      if (Array.isArray(parsedUserInfo) && parsedUserInfo.length > 0) {
-        setUserId(parsedUserInfo[0].userId); // 배열의 첫 번째 요소에서 userId 설정
-      } else {
+      if (!session?.user?.email) {
         dispatch(
           showSnackbar({
-            message: '사용자 정보를 찾을 수 없습니다.',
+            message: '사용자 정보를 가져올 수 없습니다.',
             severity: 'error',
           }),
         );
-        navigate('/login');
+        return;
       }
-    } else {
-      navigate('/login');
+
+      const email = session.user.email;
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        dispatch(
+          showSnackbar({
+            message: '비밀번호가 올바르지 않습니다.',
+            severity: 'error',
+          }),
+        );
+        return;
+      }
+
+      dispatch(setCheckedPassword(true));
+      navigate(RoutePaths.EDIT_ACCOUNT);
+    } catch (err) {
+      console.error('비밀번호 확인 중 오류 발생:', err);
+      dispatch(
+        showSnackbar({
+          message: '오류가 발생했습니다. 다시 시도해주세요.',
+          severity: 'error',
+        }),
+      );
     }
-  }, [navigate, dispatch]);
+  };
 
-  // const handlePasswordCheck = async () => {
-  //   console.log('Checking password for userId:', userId);
-  //   if (!userId) {
-  //     dispatch(
-  //       showSnackbar({
-  //         message: '사용자 정보를 찾을 수 없습니다.',
-  //         severity: 'error',
-  //       }),
-  //     );
-  //     return;
-  //   }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handlePasswordCheck();
+    }
+  };
 
-  //   try {
-  //     const response = await passwordCheck({
-  //       userId,
-  //       password,
-  //     }).unwrap();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setError('');
+  };
 
-  //     if (response.success) {
-  //       dispatch(setCheckedPassword(true));
-  //       navigate('/profile/edit');
-  //     } else {
-  //       dispatch(
-  //         showSnackbar({ message: response.message, severity: 'error' }),
-  //       );
-  //     }
-  //   } catch (err) {
-  //     const error = err as FetchBaseQueryError;
-
-  //     dispatch(
-  //       showSnackbar({
-  //         message:
-  //           (error.data as { message: string }).message ||
-  //           '비밀번호 확인 중 오류가 발생했습니다.',
-  //         severity: 'error',
-  //       }),
-  //     );
-  //   }
-  // };
-
-  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === 'Enter') {
-  //     handlePasswordCheck();
-  //   }
-  // };
-
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPassword(e.target.value);
-  // };
-
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   handlePasswordCheck();
-  // };
+  // 폼 제출 처리
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handlePasswordCheck();
+  };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
-      {/* <Stack textAlign="center" mb={4}>
+      <Stack textAlign="center" mb={4}>
         <Avatar
           sx={{
             width: 96,
@@ -130,6 +115,8 @@ const PasswordChkPage = () => {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           variant="outlined"
+          error={!!error}
+          helperText={error}
           sx={{ mb: 3 }}
         />
         <Button
@@ -141,7 +128,7 @@ const PasswordChkPage = () => {
         >
           확인
         </Button>
-      </Stack> */}
+      </Stack>
     </Container>
   );
 };
