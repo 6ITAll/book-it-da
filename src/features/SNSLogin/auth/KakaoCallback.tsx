@@ -19,36 +19,48 @@ const KakaoCallback = (): JSX.Element => {
         if (authData?.session) {
           const { user, access_token } = authData.session;
 
+          // Supabase에서 현재 사용자 정보 가져오기
+          const { data: currentUser, error: currentUserError } = await supabase
+            .from('user')
+            .select('avatar_url')
+            .eq('id', user.id)
+            .single();
+
+          if (currentUserError) throw currentUserError;
+
+          let avatar_url: string | undefined = currentUser?.avatar_url; // Supabase의 avatar_url 값
+
+          // 카카오톡 메타데이터에서 avatar_url 가져오기
           const { data: userData, error: userError } =
             await supabase.auth.getUser();
 
           if (userError) throw userError;
 
-          let avatar_url: string | undefined;
-
-          if (userData?.user?.user_metadata) {
+          // Supabase의 avatar_url이 없을 때만 카카오톡 메타데이터 값 적용
+          if (avatar_url === null && user.user_metadata?.avatar_url) {
             avatar_url = userData.user.user_metadata.avatar_url;
 
-            if (avatar_url) {
-              const { error: updateError } = await supabase
-                .from('user')
-                .update({ avatar_url: avatar_url })
-                .eq('id', user.id);
+            // Supabase의 avatar_url 업데이트
+            const { error: updateError } = await supabase
+              .from('user')
+              .update({ avatar_url })
+              .eq('id', user.id);
 
-              if (updateError) throw updateError;
-            }
+            if (updateError) throw updateError;
           }
 
+          // Redux 상태 업데이트
           dispatch(
             loginSuccess({
               id: user.id,
               email: user.email,
-              avatarUrl: avatar_url,
+              avatarUrl: avatar_url || '', // Redux 상태에 Supabase의 avatar_url 값 설정
               isSocialLogin: true,
             }),
           );
           dispatch(setToken(access_token));
 
+          // 추가 정보 확인
           const { data: userProfile, error: profileError } = await supabase
             .from('user')
             .select('username, gender, age')
