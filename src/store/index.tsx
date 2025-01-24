@@ -28,6 +28,7 @@ import { followApi } from '@features/commons/followApi';
 import feedReducer from '@features/FeedPage/slice/feedSlice';
 import { likeApi } from '@features/commons/likeApi';
 import { bookSearchByIsbnApi } from '@features/commons/bookSearchByIsbn';
+import { additionalInfoApi } from '@features/user/additionalInfoApi';
 
 export const store = configureStore({
   reducer: {
@@ -53,6 +54,7 @@ export const store = configureStore({
     [feedApi.reducerPath]: feedApi.reducer,
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [additionalInfoApi.reducerPath]: additionalInfoApi.reducer,
     [mypageFollowApi.reducerPath]: mypageFollowApi.reducer,
     [followApi.reducerPath]: followApi.reducer,
     [likeApi.reducerPath]: likeApi.reducer,
@@ -82,6 +84,7 @@ export const store = configureStore({
       postingWriteApi.middleware,
       mypageFollowApi.middleware,
       userApi.middleware,
+      additionalInfoApi.middleware,
       followApi.middleware,
       likeApi.middleware,
     ]),

@@ -24,6 +24,7 @@ import {
   SubmitButton,
   CheckDuplicateButton,
 } from './AdditionalInfo.styles';
+import { useUpdateUserInfoMutation } from '@features/user/additionalInfoApi';
 
 const additionalInfoSchema = yup.object().shape({
   userId: yup.string().required('아이디는 필수입니다'),
@@ -52,6 +53,8 @@ const AdditionalInfo = (): JSX.Element => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [updateUserInfo] = useUpdateUserInfoMutation();
+
   const onSubmit = async (formData: AdditionalInfoData) => {
     if (!isUserIdAvailable) {
       dispatch(
@@ -64,24 +67,17 @@ const AdditionalInfo = (): JSX.Element => {
     }
 
     try {
-      const { data: authData, error: authError } =
-        await supabase.auth.getSession();
+      const {
+        data: { session },
+        error: authError,
+      } = await supabase.auth.getSession();
 
       if (authError) throw authError;
 
-      const userId = authData?.session?.user?.id;
+      const userId = session?.user?.id;
       if (!userId) throw new Error('사용자 ID를 찾을 수 없습니다.');
 
-      const { error: updateError } = await supabase
-        .from('user')
-        .update({
-          username: formData.userId,
-          gender: formData.gender,
-          age: formData.age,
-        })
-        .eq('id', userId);
-
-      if (updateError) throw updateError;
+      await updateUserInfo({ userId, formData }).unwrap();
 
       dispatch(
         showSnackbar({
