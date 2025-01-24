@@ -64,7 +64,7 @@ const PasswordChkPage = () => {
 
       if (response.success) {
         dispatch(setCheckedPassword(true));
-        navigate('/edit-account');
+        navigate('/profile/edit');
       } else {
         dispatch(
           showSnackbar({ message: response.message, severity: 'error' }),
