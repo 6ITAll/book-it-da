@@ -78,7 +78,7 @@ const PostMoreTemplate = ({
         items={posts}
         hasMore={hasMore}
         fetchMore={fetchMoreData}
-        gridSize={{ xs: 12, md: 6 }}
+        gridSize={{ xs: 12, md: 12 }}
         renderItem={(post, index) => (
           <Box
             sx={{

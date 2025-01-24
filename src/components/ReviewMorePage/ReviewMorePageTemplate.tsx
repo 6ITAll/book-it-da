@@ -147,7 +147,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
         items={sortedReviews}
         hasMore={hasMore}
         fetchMore={fetchMoreData}
-        gridSize={{ xs: 12, md: 12 }}
+        gridSize={{ xs: 12, md: 6 }}
         renderItem={(review, index) => (
           <Box
             sx={{
