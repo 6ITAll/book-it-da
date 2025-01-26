@@ -155,52 +155,10 @@ const EditAccountPage = (): JSX.Element => {
       </Stack>
 
       {/* 개인정보 수정 섹션 */}
-      <Stack>
-        <Typography variant="h6" fontWeight="bold" mb={4}>
+      <Stack gap={3}>
+        <Typography variant="h6" fontWeight="bold">
           개인정보 수정
         </Typography>
-
-        {/* 닉네임 */}
-        <Stack direction="row" alignItems="center" spacing={1} mb={3}>
-          <TextField
-            fullWidth
-            label="닉네임"
-            name="username"
-            defaultValue={data.username || ''}
-            // onBlur={() => handleSubmit('username')}
-          />
-          <Button variant="contained" onClick={() => handleSubmit('username')}>
-            변경하기
-          </Button>
-        </Stack>
-
-        {/* 이름 */}
-        <Stack direction="row" alignItems="center" spacing={1} mb={3}>
-          <TextField
-            fullWidth
-            label="이름"
-            name="name"
-            defaultValue={data.name || ''}
-            // onBlur={() => handleSubmit('name')}
-          />
-          <Button variant="contained" onClick={() => handleSubmit('name')}>
-            변경하기
-          </Button>
-        </Stack>
-
-        {/* 전화번호 */}
-        <Stack direction="row" alignItems="center" spacing={1} mb={3}>
-          <TextField
-            fullWidth
-            label="휴대폰 번호"
-            name="phone"
-            defaultValue={data.phone || ''}
-            // onBlur={() => handleSubmit('phone')}
-          />
-          <Button variant="contained" onClick={() => handleSubmit('phone')}>
-            변경하기
-          </Button>
-        </Stack>
 
         {/* 이메일 (읽기 전용) */}
         <TextField
@@ -211,18 +169,68 @@ const EditAccountPage = (): JSX.Element => {
           disabled
         />
 
+        {/* 닉네임 */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <TextField
+            fullWidth
+            label="닉네임"
+            name="username"
+            defaultValue={data.username || ''}
+          />
+          <Button variant="contained" onClick={() => handleSubmit('username')}>
+            변경
+          </Button>
+        </Stack>
+
+        {/* 이름 */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <TextField
+            fullWidth
+            label="이름"
+            name="name"
+            defaultValue={data.name || ''}
+          />
+          <Button variant="contained" onClick={() => handleSubmit('name')}>
+            변경
+          </Button>
+        </Stack>
+
+        {/* 전화번호 */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <TextField
+            fullWidth
+            label="휴대폰 번호"
+            name="phone"
+            defaultValue={data.phone || ''}
+          />
+          <Button variant="contained" onClick={() => handleSubmit('phone')}>
+            변경
+          </Button>
+        </Stack>
+
         {/* 나이 */}
-        <Stack direction="row" alignItems="center" spacing={1} mt={3}>
+        <Stack direction="row" alignItems="center" spacing={1}>
           <TextField
             fullWidth
             label="나이"
             name="age"
             type="number"
             defaultValue={data.age ?? ''}
-            // onBlur={() => handleSubmit('age')}
           />
           <Button variant="contained" onClick={() => handleSubmit('age')}>
-            변경하기
+            변경
+          </Button>
+        </Stack>
+
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <TextField
+            fullWidth
+            label="소개"
+            name="about"
+            defaultValue={data.about || ''}
+          />
+          <Button variant="contained" onClick={() => handleSubmit('about')}>
+            변경
           </Button>
         </Stack>
       </Stack>
