@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import {
+  useDeleteAccountMutation,
   useDeleteAvatarFileMutation,
   useGetUserByIdQuery,
   useUpdateAvatarMutation,
@@ -32,6 +33,7 @@ const EditAccountPage = (): JSX.Element => {
   const [updateField] = useUpdateFieldMutation();
   const [updateAvatar] = useUpdateAvatarMutation();
   const [deleteAvatar] = useDeleteAvatarFileMutation();
+  const [deleteAccount] = useDeleteAccountMutation();
 
   // 단일 필드 업데이트 핸들러
   const handleSubmit = async (fieldName: keyof typeof data) => {
@@ -122,6 +124,39 @@ const EditAccountPage = (): JSX.Element => {
         }),
       );
       console.error('아바타 삭제 실패:', err);
+    }
+  };
+
+  const handleAccountDeletion = async () => {
+    if (!userId) return;
+
+    const confirmation = window.confirm(
+      '정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+    );
+
+    if (!confirmation) return;
+
+    try {
+      const result = await deleteAccount({ userId }).unwrap();
+
+      if (result) {
+        dispatch(
+          showSnackbar({
+            message: '계정이 성공적으로 삭제되었습니다.',
+            severity: 'success',
+          }),
+        );
+
+        window.location.href = '/';
+      }
+    } catch (err) {
+      dispatch(
+        showSnackbar({
+          message: '계정 삭제 중 오류가 발생했습니다.',
+          severity: 'error',
+        }),
+      );
+      console.error('계정 삭제 실패:', err);
     }
   };
 
@@ -233,6 +268,22 @@ const EditAccountPage = (): JSX.Element => {
             변경
           </Button>
         </Stack>
+        <Button
+          variant="outlined"
+          startIcon={<DeleteIcon />}
+          onClick={handleAccountDeletion}
+          // UI 수정 필요
+          sx={{
+            backgroundColor: '#ff0000',
+            border: 'none',
+            color: '#ffffff',
+            '&:hover': {
+              backgroundColor: '#cc0000',
+            },
+          }}
+        >
+          회원 탈퇴
+        </Button>
       </Stack>
     </Container>
   );
