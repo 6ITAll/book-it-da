@@ -16,9 +16,9 @@ export const useAuthStateChange = () => {
         const providerType = session.user.app_metadata.provider;
         const isSocialLogin = providerType === 'kakao';
 
-        const { data: currentUser, error: userError } = await supabase
+        const { data: userData, error: userError } = await supabase
           .from('user')
-          .select('avatar_url')
+          .select('username, avatar_url')
           .eq('id', session.user.id)
           .single();
 
@@ -30,17 +30,18 @@ export const useAuthStateChange = () => {
         let avatarUrl: string | undefined;
 
         if (
-          currentUser?.avatar_url === null &&
+          userData?.avatar_url === null &&
           session.user.user_metadata?.avatar_url
         ) {
           avatarUrl = session.user.user_metadata.avatar_url;
         } else {
-          avatarUrl = currentUser?.avatar_url || '';
+          avatarUrl = userData?.avatar_url || '';
         }
 
         dispatch(
           loginSuccess({
             id: session.user.id,
+            username: userData?.username || '',
             email: session.user.email ?? undefined,
             avatarUrl,
             isSocialLogin,
@@ -59,10 +60,10 @@ export const useAuthStateChange = () => {
 
           supabase
             .from('user')
-            .select('avatar_url')
+            .select('username, avatar_url')
             .eq('id', session.user.id)
             .single()
-            .then(({ data: currentUser, error: userError }) => {
+            .then(({ data: userData, error: userError }) => {
               if (userError) {
                 console.error('Error fetching user table:', userError);
                 return;
@@ -71,17 +72,18 @@ export const useAuthStateChange = () => {
               let avatarUrl: string | undefined;
 
               if (
-                currentUser?.avatar_url === null &&
+                userData?.avatar_url === null &&
                 session.user.user_metadata?.avatar_url
               ) {
                 avatarUrl = session.user.user_metadata.avatar_url;
               } else {
-                avatarUrl = currentUser?.avatar_url || '';
+                avatarUrl = userData?.avatar_url || '';
               }
 
               dispatch(
                 loginSuccess({
                   id: session.user.id,
+                  username: userData?.username || '',
                   email: session.user.email ?? undefined,
                   avatarUrl,
                   isSocialLogin,

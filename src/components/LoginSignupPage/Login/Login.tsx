@@ -66,10 +66,22 @@ const Login = (): JSX.Element => {
         }
 
         if (data.user && data.session) {
-          console.log(data.user);
+          const { data: userData, error: userError } = await supabase
+            .from('user')
+            .select('username, avatar_url')
+            .eq('id', data.user.id)
+            .single();
+
+          if (userError) {
+            console.error('Error fetching username:', userError);
+            throw new Error('사용자 정보를 가져오는 중 오류가 발생했습니다.');
+          }
+          console.log(userData?.username);
           dispatch(
             loginSuccess({
               id: data.user.id,
+              username: userData?.username ?? '',
+              avatarUrl: userData?.avatar_url ?? '',
               email: data.user.email ?? '',
               isSocialLogin: false,
             }),
