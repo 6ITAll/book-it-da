@@ -31,9 +31,8 @@ const AppRouter = () => {
       <Route path={RoutePaths.SIGNUP} element={<SignupPage />} />
       <Route path={RoutePaths.FEED} element={<FeedPage />} />
       <Route path={RoutePaths.SEARCH} element={<BookSearchPage />} />
-      <Route path={`${RoutePaths.MY_PAGE}/:userId?`} element={<MyPage />} />
+      <Route path={`${RoutePaths.MY_PAGE}/:username`} element={<MyPage />} />
       <Route path="/oauth/kakao" element={<KakaoCallback />} />
-      <Route path="/:userId" element={<MyPage />} />
       <Route
         path={RoutePaths.KAKAO_ADDITIONAL_INFO}
         element={<AdditionalInfoPage />}

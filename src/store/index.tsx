@@ -29,6 +29,7 @@ import feedReducer from '@features/FeedPage/slice/feedSlice';
 import { likeApi } from '@features/commons/likeApi';
 import { bookSearchByIsbnApi } from '@features/commons/bookSearchByIsbn';
 import { additionalInfoApi } from '@features/user/additionalInfoApi';
+import { userProfileStatsApi } from '@features/MyPage/api/userProfileStatsApi';
 
 export const store = configureStore({
   reducer: {
@@ -58,6 +59,7 @@ export const store = configureStore({
     [mypageFollowApi.reducerPath]: mypageFollowApi.reducer,
     [followApi.reducerPath]: followApi.reducer,
     [likeApi.reducerPath]: likeApi.reducer,
+    [userProfileStatsApi.reducerPath]: userProfileStatsApi.reducer,
     counter: counterReducer,
     user: userReducer,
     snackbar: snackbarReducer,
@@ -87,6 +89,7 @@ export const store = configureStore({
       additionalInfoApi.middleware,
       followApi.middleware,
       likeApi.middleware,
+      userProfileStatsApi.middleware,
     ]),
 });
 

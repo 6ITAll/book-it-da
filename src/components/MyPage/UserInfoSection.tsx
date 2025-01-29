@@ -1,33 +1,29 @@
 import { Stack, Typography, Avatar } from '@mui/material';
 import UserInfoSummary from './UserInfoSummary';
 
+interface UserStat {
+  count: number;
+  label: string;
+  isAction?: boolean;
+  type?: 'followers' | 'followings';
+}
+
 interface UserInfo {
   userId: string;
   name: string;
   avatarUrl: string;
+  about: string;
 }
 
 interface UserInfoSectionProps {
   userInfo: UserInfo;
+  userStats: UserStat[];
 }
 
-const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
-  const userStats = [
-    { count: 286, label: '피드' },
-    {
-      count: 842,
-      label: '팔로워',
-      isAction: true,
-      type: 'followers' as const,
-    }, // type 명시
-    {
-      count: 267,
-      label: '팔로잉',
-      isAction: true,
-      type: 'followings' as const,
-    },
-  ];
-
+const UserInfoSection = ({
+  userInfo,
+  userStats,
+}: UserInfoSectionProps): JSX.Element => {
   return (
     <Stack direction="row" alignItems="center" spacing={4} padding={4}>
       <Avatar
@@ -46,12 +42,12 @@ const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
               count={count}
               label={label}
               isAction={isAction}
-              type={type} // type prop 전달
+              type={type}
             />
           ))}
         </Stack>
         <Typography variant="body2" color="grey.700">
-          책을 사랑하는 독서가
+          {userInfo.about}
         </Typography>
       </Stack>
     </Stack>
