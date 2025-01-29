@@ -45,10 +45,14 @@ const AppRouter = () => {
       <Route
         path={RoutePaths.EDIT_ACCOUNT}
         element={
-          userInfo?.isSocialLogin || checkedPassword ? (
-            <EditAccountPage />
+          userInfo ? (
+            userInfo.isSocialLogin || checkedPassword ? (
+              <EditAccountPage />
+            ) : (
+              <Navigate to={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`} replace />
+            )
           ) : (
-            <Navigate to={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`} replace />
+            <div>Loading...</div>
           )
         }
       />
