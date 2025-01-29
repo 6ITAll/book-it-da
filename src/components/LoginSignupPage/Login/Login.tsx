@@ -25,9 +25,10 @@ import { useSetAutoLoginSettings } from '@hooks/useSetAutoLogin';
 import { useRememberMe } from '@hooks/useRemeberMe';
 
 const Login = (): JSX.Element => {
-  const { rememberMe, savedUserId, handleRememberMeChange } = useRememberMe();
+  const { rememberMe, savedUserEmail, handleRememberMeChange } =
+    useRememberMe();
 
-  const [userId, setUserId] = useState<string>(savedUserId || '');
+  const [userEmail, setUserEmail] = useState<string>(savedUserEmail || '');
   const [password, setPassword] = useState<string>('');
   const [loginMessage, setLoginMessage] = useState<LoginMessage>({
     content: '',
@@ -47,7 +48,7 @@ const Login = (): JSX.Element => {
       e.preventDefault();
       try {
         const { data, error } = await supabase.auth.signInWithPassword({
-          email: userId,
+          email: userEmail,
           password: password,
         });
         if (error) {
@@ -65,6 +66,7 @@ const Login = (): JSX.Element => {
         }
 
         if (data.user && data.session) {
+          console.log(data.user);
           dispatch(
             loginSuccess({
               id: data.user.id,
@@ -75,7 +77,7 @@ const Login = (): JSX.Element => {
           dispatch(setToken(data.session.access_token));
 
           if (rememberMe) {
-            localStorage.setItem('savedUserId', userId);
+            localStorage.setItem('savedUserEmail', userEmail);
           }
 
           if (autoLogin) {
@@ -97,7 +99,7 @@ const Login = (): JSX.Element => {
         });
       }
     },
-    [userId, password, dispatch, rememberMe, autoLogin, navigate],
+    [userEmail, password, dispatch, rememberMe, autoLogin, navigate],
   );
 
   const handleKakaoLogin = async () => {
@@ -144,8 +146,8 @@ const Login = (): JSX.Element => {
           variant="outlined"
           fullWidth
           margin="normal"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
+          value={userEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
         />
         <PasswordInput
           label="비밀번호"
@@ -162,7 +164,7 @@ const Login = (): JSX.Element => {
               <Checkbox
                 checked={rememberMe}
                 onChange={(e) =>
-                  handleRememberMeChange(userId, e.target.checked)
+                  handleRememberMeChange(userEmail, e.target.checked)
                 }
               />
             }
