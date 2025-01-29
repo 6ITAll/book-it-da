@@ -27,6 +27,19 @@ export interface User {
   isFollower?: boolean;
 }
 
+// UserInfo 인터페이스 정의
+export interface UserInfo {
+  id: string;
+  username: string;
+  name: string;
+  phone: string;
+  gender: string;
+  avatarUrl: string;
+  about: string;
+  age: number | null;
+  email: string;
+}
+
 // 게시물 interface
 export interface Post {
   id: string; // Supabase의 UUID

@@ -11,12 +11,39 @@ export const useAuthStateChange = () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       if (session) {
+        const providerType = session.user.app_metadata.provider;
+        const isSocialLogin = providerType === 'kakao';
+
+        const { data: currentUser, error: userError } = await supabase
+          .from('user')
+          .select('avatar_url')
+          .eq('id', session.user.id)
+          .single();
+
+        if (userError) {
+          console.error('Error fetching user table:', userError);
+          return;
+        }
+
+        let avatarUrl: string | undefined;
+
+        if (
+          currentUser?.avatar_url === null &&
+          session.user.user_metadata?.avatar_url
+        ) {
+          avatarUrl = session.user.user_metadata.avatar_url;
+        } else {
+          avatarUrl = currentUser?.avatar_url || '';
+        }
+
         dispatch(
           loginSuccess({
             id: session.user.id,
             email: session.user.email ?? undefined,
-            avatarUrl: session.user.user_metadata.avatar_url,
+            avatarUrl,
+            isSocialLogin,
           }),
         );
       }
@@ -27,13 +54,40 @@ export const useAuthStateChange = () => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === 'SIGNED_IN' && session) {
-          dispatch(
-            loginSuccess({
-              id: session.user.id,
-              email: session.user.email ?? undefined,
-              avatarUrl: session.user.user_metadata.avatar_url,
-            }),
-          );
+          const providerType = session.user.app_metadata.provider;
+          const isSocialLogin = providerType === 'kakao';
+
+          supabase
+            .from('user')
+            .select('avatar_url')
+            .eq('id', session.user.id)
+            .single()
+            .then(({ data: currentUser, error: userError }) => {
+              if (userError) {
+                console.error('Error fetching user table:', userError);
+                return;
+              }
+
+              let avatarUrl: string | undefined;
+
+              if (
+                currentUser?.avatar_url === null &&
+                session.user.user_metadata?.avatar_url
+              ) {
+                avatarUrl = session.user.user_metadata.avatar_url;
+              } else {
+                avatarUrl = currentUser?.avatar_url || '';
+              }
+
+              dispatch(
+                loginSuccess({
+                  id: session.user.id,
+                  email: session.user.email ?? undefined,
+                  avatarUrl,
+                  isSocialLogin,
+                }),
+              );
+            });
         } else if (event === 'SIGNED_OUT') {
           dispatch(logoutSuccess());
         }

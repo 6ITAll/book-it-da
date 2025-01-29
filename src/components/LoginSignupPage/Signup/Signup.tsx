@@ -18,7 +18,7 @@ import { useState } from 'react';
 import PasswordInput from '../PasswordInput';
 import { StyledTitle, StyledSubmitButton, signupStyles } from './Signup.styles';
 import { SignupData } from '@features/SignupPage/types';
-import { schema } from '@utils/SignupPage/yupSchema';
+import { signupSchema } from '@utils/SignupPage/yupSchema';
 import { supabase } from '@utils/supabaseClient';
 import {
   checkEmailDuplicate,
@@ -33,7 +33,7 @@ const Signup = (): JSX.Element => {
     watch,
     formState: { errors },
   } = useForm<SignupData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(signupSchema),
     mode: 'onChange',
   });
 

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginSignup from '@pages/LoginSignupPage/LoginPage';
 import SignupPage from '@pages/LoginSignupPage/SignupPage';
 import FeedPage from '@pages/MainPage/Main';
@@ -18,7 +18,12 @@ import LikedPostMorePage from '@pages/LikedPostMorePage/LikedPostMorePage';
 import LikedReviewMorePage from '@pages/LikedReviewMorePage/LikedReviewMorePage';
 import MyPage from '@pages/MyPage/MyPage';
 import AdditionalInfoPage from '@pages/AdditionalInfoPage/AdditionalInfoPage';
+import { RootState } from '@store/index';
+import { useSelector } from 'react-redux';
 const AppRouter = () => {
+  const { userInfo, checkedPassword } = useSelector(
+    (state: RootState) => state.user,
+  );
   return (
     <Routes>
       <Route path={RoutePaths.MAIN} element={<FeedPage />} />
@@ -38,8 +43,18 @@ const AppRouter = () => {
         element={<PasswordChkPage />}
       />
       <Route
-        path={`${RoutePaths.EDIT_ACCOUNT}`}
-        element={<EditAccountPage />}
+        path={RoutePaths.EDIT_ACCOUNT}
+        element={
+          userInfo ? (
+            userInfo.isSocialLogin || checkedPassword ? (
+              <EditAccountPage />
+            ) : (
+              <Navigate to={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`} replace />
+            )
+          ) : (
+            <div>Loading...</div>
+          )
+        }
       />
       <Route
         path={`${RoutePaths.BOOKDETAIL}/:isbn`}
