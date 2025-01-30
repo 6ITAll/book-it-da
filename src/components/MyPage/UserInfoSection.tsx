@@ -1,28 +1,19 @@
 import { Stack, Typography, Avatar } from '@mui/material';
 import UserInfoSummary from './UserInfoSummary';
-
-interface UserStat {
-  count: number;
-  label: string;
-  isAction?: boolean;
-  type?: 'followers' | 'followings';
-}
-
-interface UserInfo {
-  userId: string;
-  name: string;
-  avatarUrl: string;
-  about: string;
-}
+import { UserInfo, UserStat } from './types';
 
 interface UserInfoSectionProps {
   userInfo: UserInfo;
   userStats: UserStat[];
+  userId: string;
+  onRefetch: () => void;
 }
 
 const UserInfoSection = ({
   userInfo,
   userStats,
+  userId,
+  onRefetch,
 }: UserInfoSectionProps): JSX.Element => {
   return (
     <Stack direction="row" alignItems="center" spacing={4} padding={4}>
@@ -43,6 +34,8 @@ const UserInfoSection = ({
               label={label}
               isAction={isAction}
               type={type}
+              userId={userId}
+              onRefetch={onRefetch}
             />
           ))}
         </Stack>

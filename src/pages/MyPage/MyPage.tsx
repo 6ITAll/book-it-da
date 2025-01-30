@@ -2,14 +2,27 @@ import TabSection from '@components/MyPage/TabSection';
 import UserInfoSection from '@components/MyPage/UserInfoSection';
 import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
 import { Container, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { RootState } from '@store/index';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 
 const MyPage = (): JSX.Element => {
   const { username } = useParams<{ username: string }>();
+  const currentUsername = useSelector(
+    (state: RootState) => state.user.userInfo?.username,
+  );
+  const location = useLocation();
 
-  const { data, error, isLoading } = useGetUserProfileStatsQuery(
+  const { data, error, isLoading, refetch } = useGetUserProfileStatsQuery(
     username || '',
   );
+
+  useEffect(() => {
+    if (location.pathname === `/my-page/${currentUsername}`) {
+      refetch();
+    }
+  }, [location, currentUsername, refetch]);
 
   const userStats = [
     { count: data?.completed_books_count, label: '읽은책' },
@@ -54,7 +67,10 @@ const MyPage = (): JSX.Element => {
           about: data?.user_about,
         }}
         userStats={userStats}
+        userId={data?.user_id}
+        onRefetch={refetch}
       />
+      {/* TabSection props username으로 추후 교체 */}
       <TabSection userId={data?.user_id} />
     </Container>
   );

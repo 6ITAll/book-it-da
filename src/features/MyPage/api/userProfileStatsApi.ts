@@ -7,14 +7,12 @@ export const userProfileStatsApi = createApi({
   endpoints: (builder) => ({
     getUserProfileStats: builder.query({
       queryFn: async (username: string) => {
-        console.log('Query Function Called with username:', username);
         try {
           const { data, error } = await supabase
             .from('user_profile_stats')
             .select('*')
             .eq('user_username', username)
             .single();
-          console.log(data);
 
           if (error) {
             return { error };
