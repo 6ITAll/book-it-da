@@ -6,18 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import { Posting } from '../types';
 
 interface PostFeedSectionProps {
-  userId: string;
+  username: string;
   postings: Posting[];
   postingCount: number;
 }
 
 const PostFeedSection = ({
-  userId,
+  username,
   postings,
   postingCount,
 }: PostFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  const mockUser = { id: '1' };
 
   return (
     <Box>
@@ -37,7 +36,7 @@ const PostFeedSection = ({
           variant="text"
           sx={bookReviewTabStyles.moreButton}
           onClick={() => {
-            navigate(`/my-page/${userId}/feeds/posts`);
+            navigate(`/my-page/${username}/feeds/posts`);
           }}
         >
           더보기
@@ -54,8 +53,8 @@ const PostFeedSection = ({
               postId="postId"
               title={posting.title}
               content={posting.content}
-              cover="커버"
-              user={mockUser}
+              isbn={posting.book.isbn}
+              user={posting.user}
             />
           </Grid>
         ))}

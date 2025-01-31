@@ -27,7 +27,7 @@ const Feed = ({
         oneLineReviewCount={data?.total_reviews_count ?? 0}
       />
       <PostFeedSection
-        userId={userId}
+        username={username}
         postings={postings}
         postingCount={data?.total_postings_count ?? 0}
       />
