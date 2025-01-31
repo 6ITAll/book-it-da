@@ -7,13 +7,13 @@ import { formatDate } from '@shared/utils/dateUtils';
 import ReviewCard from '@components/commons/ReviewCard';
 
 interface OneLineReviewSectionProps {
-  userId: string;
+  username: string;
   oneLineReviews: OneLineReview[];
   oneLineReviewCount: number;
 }
 
 const OneLineReviewSection = ({
-  userId,
+  username,
   oneLineReviews,
   oneLineReviewCount,
 }: OneLineReviewSectionProps): JSX.Element => {
@@ -37,7 +37,7 @@ const OneLineReviewSection = ({
           variant="text"
           sx={bookReviewTabStyles.moreButton}
           onClick={() => {
-            navigate(`/my-page/${userId}/feeds/reviews`);
+            navigate(`/my-page/${username}/feeds/reviews`);
           }}
         >
           더보기

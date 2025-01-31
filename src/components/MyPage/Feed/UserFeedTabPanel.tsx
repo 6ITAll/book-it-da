@@ -7,9 +7,13 @@ import {
 
 interface UserFeedTabPanelProps {
   userId: string;
+  username: string;
 }
 
-const UserFeedTabPanel = ({ userId }: UserFeedTabPanelProps): JSX.Element => {
+const UserFeedTabPanel = ({
+  userId,
+  username,
+}: UserFeedTabPanelProps): JSX.Element => {
   const {
     data: oneLineReviewsData,
     error: oneLineReviewsError,
@@ -38,6 +42,7 @@ const UserFeedTabPanel = ({ userId }: UserFeedTabPanelProps): JSX.Element => {
     <>
       <Feed
         userId={userId}
+        username={username}
         postings={postingsData}
         oneLineReviews={oneLineReviewsData}
       />

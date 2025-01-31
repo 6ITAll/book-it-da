@@ -20,7 +20,7 @@ const TabSection = ({ userId, username }: TabSectionProps): JSX.Element => {
     {
       id: 2,
       label: '내 피드',
-      component: <UserFeedTabPanel userId={userId} />,
+      component: <UserFeedTabPanel userId={userId} username={username} />,
     },
     {
       id: 3,

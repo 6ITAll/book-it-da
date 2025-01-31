@@ -5,19 +5,24 @@ import PostFeedSection from './PostingSection';
 
 interface FeedProps {
   userId: string;
+  username: string;
   oneLineReviews: OneLineReview[];
   postings: Posting[];
 }
 
-const Feed = ({ userId, oneLineReviews, postings }: FeedProps): JSX.Element => {
+const Feed = ({
+  userId,
+  username,
+  oneLineReviews,
+  postings,
+}: FeedProps): JSX.Element => {
   const { data } = useGetUserPostingReviewCountsQuery({
     userId,
   });
-  console.log(data?.total_reviews_count);
   return (
     <>
       <OneLineReviewSection
-        userId={userId}
+        username={username}
         oneLineReviews={oneLineReviews}
         oneLineReviewCount={data?.total_reviews_count ?? 0}
       />
