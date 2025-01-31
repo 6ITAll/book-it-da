@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 import OneLineReviewDialog from '../OneLineReviewDialog/OneLineReviewDialog';
 import { PostType } from '@shared/types/type';
 import { POST_TYPE_OPTIONS } from 'src/constants';
@@ -17,15 +17,25 @@ const PostTypeSelectDialog = ({
 }: PostTypeSelectDialogProps): JSX.Element => {
   const [selectedType, setSelectedType] = useState<PostType>('선택안함');
 
-  const handleTypeSelect = (type: PostType) => {
-    setSelectedType(type);
-    setDialogOpen(false); // 첫 번째 모달 닫기
-  };
+  // 다이어로그 닫기
+  const handleDialogClose = useCallback(() => {
+    setDialogOpen(false);
+  }, [setDialogOpen]);
 
-  const handleBack = () => {
-    setSelectedType(() => '선택안함');
+  // 타입 선택 시 모달 닫기
+  const handleTypeSelect = useCallback(
+    (type: PostType) => {
+      setSelectedType(type);
+      handleDialogClose();
+    },
+    [handleDialogClose],
+  );
+
+  // 한줄평 모달에서 뒤로가기
+  const handleBack = useCallback(() => {
+    setSelectedType('선택안함');
     setDialogOpen(true);
-  };
+  }, [setDialogOpen]);
 
   const contentNode = (
     <Stack spacing={0}>
@@ -49,8 +59,6 @@ const PostTypeSelectDialog = ({
         contentNode={contentNode}
         maxWidth="xs"
       />
-
-      {/* 한줄평 작성 모달 */}
       <OneLineReviewDialog
         handleBack={handleBack}
         selectedType={selectedType}
@@ -60,4 +68,5 @@ const PostTypeSelectDialog = ({
   );
 };
 
-export default PostTypeSelectDialog;
+// React.memo 적용
+export default memo(PostTypeSelectDialog);
