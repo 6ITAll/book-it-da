@@ -38,7 +38,6 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
     (state: RootState) => state.user.userInfo?.id,
   );
 
-  // RTK Query를 사용하여 데이터 가져오기
   const followersResult = useFetchFollowersQuery({ userId, page });
   const followingsResult = useFetchFollowingsQuery({ userId, page });
 
@@ -68,7 +67,7 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
           }));
 
           setUsers((prevUsers) => [...prevUsers, ...updatedData]);
-          if (fetchedData.length < 5) {
+          if (fetchedData.length <= 5) {
             setHasMore(false);
           }
         } catch (error) {

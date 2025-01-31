@@ -1,6 +1,8 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
+import { PostgrestResponse } from '@supabase/supabase-js';
 
+// 사용자 정보 인터페이스
 export interface User {
   userId: string;
   username: string;
@@ -8,16 +10,35 @@ export interface User {
   avatarUrl: string;
 }
 
+interface FollowerData {
+  follower_id: {
+    id: string;
+    username: string;
+    name: string;
+    avatar_url: string;
+  };
+}
+
+interface FollowingData {
+  following_id: {
+    id: string;
+    username: string;
+    name: string;
+    avatar_url: string;
+  };
+}
+
 export const followListApi = createApi({
   reducerPath: 'followListApi',
   baseQuery: fakeBaseQuery(),
   tagTypes: ['FollowList'],
   endpoints: (builder) => ({
+    // 팔로워 목록 조회
     fetchFollowers: builder.query<User[], { userId: string; page: number }>({
       queryFn: async ({ userId, page }) => {
         try {
           const pageSize = 5; // 한 번에 가져올 데이터 개수
-          const { data, error } = await supabase
+          const { data, error } = (await supabase
             .from('user_follow')
             .select(
               `
@@ -25,11 +46,15 @@ export const followListApi = createApi({
             `,
             )
             .eq('following_id', userId)
-            .range((page - 1) * pageSize, page * pageSize - 1);
+            .range(
+              (page - 1) * pageSize,
+              page * pageSize - 1,
+            )) as PostgrestResponse<FollowerData>;
 
           if (error) throw error;
 
-          const followers = data.map((item: any) => ({
+          // 데이터 매핑
+          const followers = data.map((item) => ({
             userId: item.follower_id.id,
             username: item.follower_id.username,
             name: item.follower_id.name,
@@ -47,11 +72,12 @@ export const followListApi = createApi({
           : [],
     }),
 
+    // 팔로잉 목록 조회
     fetchFollowings: builder.query<User[], { userId: string; page: number }>({
       queryFn: async ({ userId, page }) => {
         try {
           const pageSize = 5; // 한 번에 가져올 데이터 개수
-          const { data, error } = await supabase
+          const { data, error } = (await supabase
             .from('user_follow')
             .select(
               `
@@ -59,11 +85,15 @@ export const followListApi = createApi({
             `,
             )
             .eq('follower_id', userId)
-            .range((page - 1) * pageSize, page * pageSize - 1);
+            .range(
+              (page - 1) * pageSize,
+              page * pageSize - 1,
+            )) as PostgrestResponse<FollowingData>;
 
           if (error) throw error;
 
-          const followings = data.map((item: any) => ({
+          // 데이터 매핑
+          const followings = data.map((item) => ({
             userId: item.following_id.id,
             username: item.following_id.username,
             name: item.following_id.name,
