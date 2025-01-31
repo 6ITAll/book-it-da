@@ -11,19 +11,18 @@ import {
 import BookShelfThumbnail from './BookShelfThumbnail';
 import { Bookshelf } from '../types';
 
-const BookshelfCard = ({
-  shelf,
-  userId,
-}: {
+interface BookshelfCardProps {
   shelf: Bookshelf;
-  userId: string;
-}) => {
+  username: string;
+}
+
+const BookshelfCard = ({ shelf, username }: BookshelfCardProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleClick = () => {
-    navigate(`/my-page/${userId}/bookshelves/${shelf.id}`);
+    navigate(`/my-page/${username}/bookshelves/${shelf.id}`);
   };
 
   return (

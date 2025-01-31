@@ -71,7 +71,7 @@ const MyPage = (): JSX.Element => {
         onRefetch={refetch}
       />
       {/* TabSection props username으로 추후 교체 */}
-      <TabSection userId={data?.user_id} />
+      <TabSection userId={data?.user_id} username={username || ''} />
     </Container>
   );
 };
