@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Stack } from '@mui/material';
+import { Box, Typography, Stack, Button, Checkbox } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import StarRating from '@components/commons/StarRating';
 import ReviewSortOptions from '@components/ReviewMorePage/ReviewSortOptions';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
@@ -24,10 +25,12 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
   fetchMoreData,
   bookDetails,
 }) => {
-  const [selectedRating, setSelectedRating] = useState<number>(0); // 별점 상태
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // 모달 상태
-  const [sortOption, setSortOption] = useState<string>('likes'); // 정렬 상태
-  const [sortedReviews, setSortedReviews] = useState<Review[]>(reviews); // 정렬된 리뷰
+  const [selectedRating, setSelectedRating] = useState<number>(0);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [sortOption, setSortOption] = useState<string>('likes');
+  const [sortedReviews, setSortedReviews] = useState<Review[]>(reviews);
+  const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
+  const [selectedReviews, setSelectedReviews] = useState<number[]>([]);
 
   useEffect(() => {
     const updatedReviews = [...reviews];
@@ -42,35 +45,44 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
       );
     }
-
     setSortedReviews(updatedReviews);
   }, [reviews, sortOption]);
 
-  // 별점 변경 처리
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
     setIsDialogOpen(true);
   };
 
-  // 모달 닫기 처리
   const handleModalClose = () => {
     setIsDialogOpen(false);
   };
 
-  // 정렬 옵션 변경 처리
   const handleSortChange = (option: string) => {
     setSortOption(option);
   };
 
+  const handleDeleteModeToggle = () => {
+    setIsDeleteMode(!isDeleteMode);
+    setSelectedReviews([]);
+  };
+
+  const handleReviewSelect = (index: number) => {
+    setSelectedReviews((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    );
+  };
+
+  const handleDeleteSelected = () => {
+    const updatedReviews = sortedReviews.filter(
+      (_, index) => !selectedReviews.includes(index),
+    );
+    setSortedReviews(updatedReviews);
+    setSelectedReviews([]);
+    setIsDeleteMode(false);
+  };
+
   return (
-    <Box
-      sx={{
-        padding: '1rem',
-        maxWidth: '800px',
-        margin: 'auto',
-      }}
-    >
-      {/* StarRating 박스 */}
+    <Box sx={{ padding: '1rem', maxWidth: '800px', margin: 'auto' }}>
       {bookDetails && (
         <Box
           sx={{
@@ -99,7 +111,6 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
         </Box>
       )}
 
-      {/* 제목 및 정렬 옵션 */}
       <Stack direction="row" justifyContent="space-between" marginBottom="1rem">
         <Typography
           variant="h5"
@@ -108,19 +119,57 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
         >
           한 줄 리뷰 {sortedReviews.length}
         </Typography>
-        <ReviewSortOptions value={sortOption} onChange={handleSortChange} />
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Button
+            startIcon={<DeleteIcon />}
+            onClick={handleDeleteModeToggle}
+            color={isDeleteMode ? 'secondary' : 'primary'}
+            variant={isDeleteMode ? 'contained' : 'outlined'}
+            size="small"
+          >
+            {isDeleteMode ? '취소' : '삭제'}
+          </Button>
+          {isDeleteMode && (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleDeleteSelected}
+              disabled={selectedReviews.length === 0}
+            >
+              선택 삭제 ({selectedReviews.length})
+            </Button>
+          )}
+          <ReviewSortOptions value={sortOption} onChange={handleSortChange} />
+        </Stack>
       </Stack>
 
-      {/* 무한 스크롤 */}
       <InfiniteScrollComponent
-        items={sortedReviews} // 정렬된 리뷰를 전달
+        items={sortedReviews}
         hasMore={hasMore}
         fetchMore={fetchMoreData}
-        gridSize={{ xs: 12, md: 12 }}
-        renderItem={(review) => <ReviewCard {...review} />}
+        gridSize={{ xs: 12, md: 6 }}
+        renderItem={(review, index) => (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              marginBottom: '1rem',
+            }}
+          >
+            {isDeleteMode && (
+              <Checkbox
+                checked={selectedReviews.includes(index)}
+                onChange={() => handleReviewSelect(index)}
+                sx={{ padding: '4px', marginRight: '8px' }}
+              />
+            )}
+            <Box sx={{ flexGrow: 1 }}>
+              <ReviewCard {...review} />
+            </Box>
+          </Box>
+        )}
       />
 
-      {/* 한 줄 리뷰 작성 모달 */}
       {bookDetails && (
         <OneLineReviewDialog
           isOpen={isDialogOpen}
