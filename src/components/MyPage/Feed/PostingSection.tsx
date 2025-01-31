@@ -2,17 +2,19 @@ import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.style
 import PostCard from '@components/commons/PostCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { BookDetailPost } from '@shared/types/type';
 import { useNavigate } from 'react-router-dom';
+import { Posting } from '../types';
 
 interface PostFeedSectionProps {
   userId: string;
-  posts: BookDetailPost[];
+  postings: Posting[];
+  postingCount: number;
 }
 
 const PostFeedSection = ({
   userId,
-  posts,
+  postings,
+  postingCount,
 }: PostFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
   const mockUser = { id: '1' };
@@ -28,7 +30,7 @@ const PostFeedSection = ({
         }}
       >
         <Typography variant="h6" fontWeight="bold">
-          이 책의 포스트 {posts.length}
+          포스팅 ({postingCount})
         </Typography>
         <Button
           size="small"
@@ -42,7 +44,7 @@ const PostFeedSection = ({
         </Button>
       </Box>
       <Grid container spacing={2}>
-        {posts.map((post, index) => (
+        {postings.map((posting, index) => (
           <Grid
             key={index}
             size={{ xs: 12, md: 4 }}
@@ -50,8 +52,8 @@ const PostFeedSection = ({
           >
             <PostCard
               postId="postId"
-              title={post.title}
-              content="내용"
+              title={posting.title}
+              content={posting.content}
               cover="커버"
               user={mockUser}
             />

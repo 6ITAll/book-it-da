@@ -1,22 +1,46 @@
-import { useGetUserFeedsQuery } from '@features/MyPage/api/userFeedsApi';
-import Feed from './Feed';
 import { Typography } from '@mui/material';
+import Feed from './Feed';
+import {
+  useGetLatestOneLineReviewsQuery,
+  useGetLatestPostingsQuery,
+} from '@features/MyPage/api/userFeedsApi';
 
 interface UserFeedTabPanelProps {
   userId: string;
 }
 
 const UserFeedTabPanel = ({ userId }: UserFeedTabPanelProps): JSX.Element => {
-  const { data: feeds, error, isLoading } = useGetUserFeedsQuery(userId);
+  const {
+    data: oneLineReviewsData,
+    error: oneLineReviewsError,
+    isLoading: isLoadingOneLineReviews,
+  } = useGetLatestOneLineReviewsQuery({ userId });
+  const {
+    data: postingsData,
+    error: postingsError,
+    isLoading: isLoadingPostings,
+  } = useGetLatestPostingsQuery({ userId });
 
-  if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;
+  if (isLoadingOneLineReviews || isLoadingPostings)
+    return <Typography>로딩 중...</Typography>;
+
+  if (oneLineReviewsError || postingsError)
+    return (
+      <Typography>
+        에러 발생: {JSON.stringify(oneLineReviewsError || postingsError)}
+      </Typography>
+    );
+
+  if (!oneLineReviewsData || !postingsData)
+    return <Typography>데이터가 없습니다.</Typography>;
 
   return (
     <>
-      {feeds && (
-        <Feed userId={userId} posts={feeds.posts} reviews={feeds.reviews} />
-      )}
+      <Feed
+        userId={userId}
+        postings={postingsData}
+        oneLineReviews={oneLineReviewsData}
+      />
     </>
   );
 };

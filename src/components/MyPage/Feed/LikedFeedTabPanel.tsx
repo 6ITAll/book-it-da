@@ -1,4 +1,4 @@
-import { useGetLikedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
+// import { useGetLikedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
 import Feed from './Feed';
 import { Typography } from '@mui/material';
 
@@ -7,7 +7,7 @@ interface LikedFeedTabPanelProps {
 }
 
 const LikedFeedTabPanel = ({ userId }: LikedFeedTabPanelProps): JSX.Element => {
-  const { data: feeds, error, isLoading } = useGetLikedFeedsQuery(userId);
+  // const { data: feeds, error, isLoading } = useGetLikedFeedsQuery(userId);
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
   if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;

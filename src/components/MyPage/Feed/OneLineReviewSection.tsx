@@ -1,21 +1,24 @@
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
-import ReviewCard from '@components/commons/ReviewCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { Review } from '@shared/types/type';
 import { useNavigate } from 'react-router-dom';
+import { OneLineReview } from '../types';
+import { formatDate } from '@shared/utils/dateUtils';
+import ReviewCard from '@components/commons/ReviewCard';
 
-interface ReviewFeedSectionProps {
+interface OneLineReviewSectionProps {
   userId: string;
-  reviews: Review[];
+  oneLineReviews: OneLineReview[];
+  oneLineReviewCount: number;
 }
 
-const ReviewFeedSection = ({
+const OneLineReviewSection = ({
   userId,
-  reviews,
-}: ReviewFeedSectionProps): JSX.Element => {
+  oneLineReviews,
+  oneLineReviewCount,
+}: OneLineReviewSectionProps): JSX.Element => {
   const navigate = useNavigate();
-
+  console.log(oneLineReviews);
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <Box
@@ -27,7 +30,7 @@ const ReviewFeedSection = ({
         }}
       >
         <Typography variant="h6" fontWeight="bold">
-          한 줄 리뷰 {reviews.length}
+          한줄평 ({oneLineReviewCount})
         </Typography>
         <Button
           size="small"
@@ -41,19 +44,19 @@ const ReviewFeedSection = ({
         </Button>
       </Box>
       <Grid container spacing={2}>
-        {reviews.map((review, index) => (
+        {oneLineReviews.map((oneLineReview, index) => (
           <Grid
             key={index}
             size={{ xs: 12, md: 4 }}
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <ReviewCard
-              rating={review.rating}
-              username={review.username}
-              date={review.date}
-              content={review.content}
-              likes={review.likes}
-              userId={review.userId}
+              rating={oneLineReview.rating ?? 0}
+              username={oneLineReview.user.username}
+              date={formatDate(oneLineReview.created_at)}
+              content={oneLineReview.review}
+              likes={oneLineReview.like_count}
+              isbn={oneLineReview.book.isbn}
             />
           </Grid>
         ))}
@@ -62,4 +65,4 @@ const ReviewFeedSection = ({
   );
 };
 
-export default ReviewFeedSection;
+export default OneLineReviewSection;

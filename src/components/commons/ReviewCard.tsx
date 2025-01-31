@@ -16,16 +16,15 @@ import { useNavigate } from 'react-router-dom';
 
 interface ReviewCardProps {
   username: string;
-  userId: string;
   date: string;
   content: string;
   likes: number;
-  rating: number; // 별점 추가
+  rating: number;
+  isbn: string;
 }
 
 const ReviewCard = ({
   username,
-  userId,
   date,
   content,
   likes,
@@ -42,7 +41,7 @@ const ReviewCard = ({
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar
-            onClick={() => navigateToUserPage(navigate, userId)}
+            onClick={() => navigateToUserPage(navigate, username)}
             sx={{ cursor: 'pointer' }}
           >
             {username.charAt(0)}
