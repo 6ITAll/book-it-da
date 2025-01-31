@@ -19,3 +19,17 @@ export interface FollowListUser {
   avatarUrl: string;
   isFollowing: boolean;
 }
+
+export interface Book {
+  isbn: string;
+}
+
+export interface Bookshelf {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  bookCount: number;
+  createdAt: string;
+  updatedAt: string;
+  books: Book[];
+}

@@ -1,7 +1,7 @@
 import { bookshelvesHandlers } from './bookshelves';
 import { libraryHandlers } from './library';
 import { kakaoHandlers } from './kakao';
-import { userHandlers } from './user';
+// import { userHandlers } from './user';
 
 import { genderAgeHandlers } from './genderAge';
 import { reviewHandlers } from './DetailPageReview';
@@ -12,7 +12,7 @@ export const handlers = [
   ...bookshelvesHandlers,
   ...postHandlers,
   ...kakaoHandlers,
-  ...userHandlers,
+  // ...userHandlers,
   ...genderAgeHandlers,
   ...reviewHandlers,
   ...addToLibraryHandlers,

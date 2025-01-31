@@ -94,27 +94,11 @@ export interface Book {
   imageUrl: string;
 }
 
-export interface Bookshelf {
-  id: number;
-  name: string; // 책장 이름
-  bookCount: number; // 책 개수
-  books: Book[]; // 책 목록
-}
-
 // 저장된 책 interface
 export interface SavedBook extends Book {
   bookshelfId: number; // 책장 ID
   savedAt: string; // 책장에 저장된 시간
   readingStatus: ReadingStatusType; // 독서 상태
-}
-
-// 책장 interface
-export interface Bookshelf {
-  id: number;
-  name: string; // 사용자가 지정한 책장 이름
-  createdAt: string;
-  updatedAt: string;
-  bookCount: number; // 책장에 저장된 책 수
 }
 
 // 리뷰 데이터 타입
@@ -131,10 +115,4 @@ export interface GenderAge {
   age: string;
   male: number;
   female: number;
-}
-
-//마이페이지 팔로우, 팔로잉
-export interface FollowRequest {
-  userId: string;
-  isFollowing: boolean;
 }
