@@ -1,7 +1,7 @@
 import { SignupData } from '@features/SignupPage/types';
 import * as yup from 'yup';
 
-export const schema = yup.object<SignupData>().shape({
+export const signupSchema = yup.object<SignupData>().shape({
   name: yup.string().required('이름을 입력해주세요'),
   userId: yup
     .string()
@@ -30,4 +30,14 @@ export const schema = yup.object<SignupData>().shape({
     .required('나이를 입력해주세요')
     .positive('나이는 양수여야 합니다')
     .integer('나이는 정수여야 합니다'),
+});
+
+export const additionalInfoSchema = yup.object().shape({
+  userId: yup.string().required('아이디는 필수입니다'),
+  gender: yup.string().required('성별을 선택해주세요'),
+  age: yup
+    .number()
+    .positive('나이는 양수여야 합니다')
+    .integer('나이는 정수여야 합니다')
+    .required('나이를 입력해주세요'),
 });

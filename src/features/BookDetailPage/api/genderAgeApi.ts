@@ -5,8 +5,8 @@ export const genderAgeApi = createApi({
   reducerPath: 'genderAgeApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   endpoints: (builder) => ({
-    getGenderAge: builder.query<GenderAge[], number>({
-      query: (itemId) => `gender-age/${itemId}`, // itemId를 경로에 반영
+    getGenderAge: builder.query<GenderAge[], string>({
+      query: (isbn) => `gender-age/${isbn}`,
     }),
   }),
 });

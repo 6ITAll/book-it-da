@@ -31,12 +31,15 @@ import {
 const Main = (): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch();
+
+  const { isLoggedIn } = useSelector((state: RootState) => state.user);
+
   const { page, postType, feedType, hasMore } = useSelector(
     (state: RootState) => state.feed,
   );
 
-  const { data, isLoading, isFetching, refetch } = useGetPostsQuery(
-    { page, postType: postType || undefined, feedType },
+  const { data, isLoading, isFetching } = useGetPostsQuery(
+    { page, postType, feedType },
     { refetchOnMountOrArgChange: true },
   );
 
@@ -50,13 +53,12 @@ const Main = (): JSX.Element => {
 
   // 포스트 타입 (한줄평 | 포스팅) 필터링 설정
   const handlePostTypeChange = useCallback(
-    (_event: React.MouseEvent<HTMLElement>, newValue: PostType | null) => {
+    (_event: React.MouseEvent<HTMLElement>, newValue: PostType) => {
       dispatch(setPostType(newValue));
       dispatch(setPage(1));
       window.scrollTo(0, 0);
-      refetch();
     },
-    [dispatch, refetch],
+    [dispatch],
   );
 
   // 피드 타입 (추천 | 팔로워 | 팔로잉) 필터링
@@ -65,9 +67,8 @@ const Main = (): JSX.Element => {
       dispatch(setFeedType(newValue));
       dispatch(setPage(1));
       window.scrollTo(0, 0);
-      refetch();
     },
-    [dispatch, refetch],
+    [dispatch],
   );
 
   const fetchMoreData = useCallback(() => {
@@ -113,13 +114,15 @@ const Main = (): JSX.Element => {
           feedType={feedType}
           onFeedTypeChange={handleFeedTypeChange}
         />
-        <Button
-          variant="outlined"
-          onClick={() => setDialogOpen(true)}
-          endIcon={<CreateIcon />}
-        >
-          글쓰기
-        </Button>
+        {isLoggedIn && (
+          <Button
+            variant="outlined"
+            onClick={() => setDialogOpen(true)}
+            endIcon={<CreateIcon />}
+          >
+            글쓰기
+          </Button>
+        )}
         <PostTypeSelectDialog
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
@@ -209,7 +212,7 @@ const Main = (): JSX.Element => {
                       createdAt={post.createdAt}
                       user={post.user}
                       book={post.book}
-                      postType="포스팅"
+                      postType={post.postType}
                       title={post.title}
                       content={post.content}
                     />
@@ -223,7 +226,7 @@ const Main = (): JSX.Element => {
                       createdAt={post.createdAt}
                       user={post.user}
                       book={post.book}
-                      postType="한줄평"
+                      postType={post.postType}
                       review={post.review}
                     />
                   </Box>

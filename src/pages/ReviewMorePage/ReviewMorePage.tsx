@@ -7,7 +7,7 @@ import ReviewMorePageTemplate from '@components/ReviewMorePage/ReviewMorePageTem
 const ReviewMorePage = (): JSX.Element => {
   const location = useLocation();
   const { bookDetails } = location.state || {};
-  const { title, imageUrl, author, itemId } = bookDetails || {};
+  const { title, imageUrl, author, isbn } = bookDetails || {};
 
   const [reviews, setReviews] = useState<Review[]>([]); // 가져온 리뷰 데이터
   const [page, setPage] = useState(1); // 현재 페이지
@@ -15,7 +15,7 @@ const ReviewMorePage = (): JSX.Element => {
 
   // 페이지네이션 데이터 가져오기
   const { data, isLoading, isError } = useGetPaginatedReviewsQuery({
-    itemId,
+    isbn,
     page,
   });
 
@@ -47,7 +47,7 @@ const ReviewMorePage = (): JSX.Element => {
         title,
         imageUrl,
         author,
-        itemId,
+        isbn,
       }}
     />
   );

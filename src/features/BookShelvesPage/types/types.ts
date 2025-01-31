@@ -2,7 +2,7 @@ import { SortOption, ViewMode } from '@components/BookShelvesPage/types';
 import { ReadingStatusType, SavedBook } from '@shared/types/type';
 
 export interface BookInfo {
-  itemId: number;
+  isbn: string;
   bookTitle: string;
   author: string;
   imageUrl: string;
@@ -10,7 +10,7 @@ export interface BookInfo {
 
 export interface UserBookStatus {
   id: number;
-  userId: number;
+  userId: string;
   bookshelfId: number;
   savedAt: string;
   readingStatus: ReadingStatusType;
@@ -24,7 +24,7 @@ export interface GetBookshelfResponse {
 }
 
 export interface GetBookshelfParams {
-  userId: number;
+  userId: string;
   bookshelfId: number;
 }
 
@@ -34,14 +34,14 @@ export interface BookshelvesState {
 }
 
 export interface UpdateReadingStatusRequest {
-  userId: number;
+  userId: string;
   bookshelfId: number;
   bookId: number;
   readingStatus: ReadingStatusType;
 }
 
 export interface DeleteBookFromShelfParams {
-  userId: number;
+  userId: string;
   bookshelfId: number;
   bookId: number;
 }

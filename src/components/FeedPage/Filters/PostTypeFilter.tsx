@@ -3,10 +3,10 @@ import { PostType } from '@shared/types/type';
 import styles from './PostTypeFilter.styles';
 
 interface PostTypeFilterProps {
-  postType: PostType | null;
+  postType: PostType;
   onPostTypeChange: (
     event: React.MouseEvent<HTMLElement>,
-    newValue: PostType | null,
+    newValue: PostType,
   ) => void;
 }
 
@@ -24,7 +24,9 @@ const PostTypeFilter = ({
           key={type}
           variant={postType === type ? 'contained' : 'outlined'}
           size="small"
-          onClick={(e) => onPostTypeChange(e, postType === type ? null : type)}
+          onClick={(e) =>
+            onPostTypeChange(e, postType === type ? '선택안함' : type)
+          }
           sx={styles.filterButton(theme, postType === type)} // isSelected 상태 전달
         >
           {type}

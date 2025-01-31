@@ -69,6 +69,7 @@ const Login = (): JSX.Element => {
             loginSuccess({
               id: data.user.id,
               email: data.user.email ?? '',
+              isSocialLogin: false,
             }),
           );
           dispatch(setToken(data.session.access_token));

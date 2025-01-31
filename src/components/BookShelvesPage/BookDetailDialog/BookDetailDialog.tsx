@@ -47,9 +47,9 @@ const BookShelvesDetailDialog = ({
 
     try {
       await updateStatus({
-        userId: 1,
+        userId: '1',
         bookshelfId: book.bookshelfId,
-        itemId: book.itemId,
+        isbn: book.isbn,
         readingStatus: newStatus,
       });
       setReadingStatus(newStatus);
@@ -60,7 +60,7 @@ const BookShelvesDetailDialog = ({
 
   const getShareUrl = () => {
     const baseUrl = window.location.origin;
-    return `${baseUrl}/bookDetail/${book?.itemId}`;
+    return `${baseUrl}/bookDetail/${book?.isbn}`;
   };
 
   const handleWriteClick = () => {
@@ -93,7 +93,7 @@ const BookShelvesDetailDialog = ({
         {book && (
           <CommonBookCard
             image={book.imageUrl}
-            title={book.bookTitle}
+            title={book.title}
             author={book.author}
             sx={bookDetailDialogStyles.bookCard}
           />
@@ -105,7 +105,7 @@ const BookShelvesDetailDialog = ({
           variant="outlined"
           startIcon={<BookIcon />}
           sx={bookDetailDialogStyles.mainButton}
-          onClick={() => navigateToBookDetailPage(navigate, book.itemId)}
+          onClick={() => navigateToBookDetailPage(navigate, book.isbn)}
         >
           책 정보
         </Button>
@@ -167,8 +167,8 @@ const BookShelvesDetailDialog = ({
       <AddToLibraryModal
         open={openAddToLibraryDialog}
         setOpen={handleCloseAddToLibrary}
-        itemId={book?.itemId}
-        title={book?.bookTitle}
+        isbn={book?.isbn}
+        title={book?.title}
         author={book?.author}
         imageUrl={book?.imageUrl}
       />

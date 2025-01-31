@@ -15,10 +15,13 @@ export const usePerformAutoLogin = () => {
             data: { user },
           } = await supabase.auth.getUser(token);
           if (user) {
+            const providerType = user.app_metadata.provider;
+            const isSocialLogin = providerType === 'kakao';
             dispatch(
               loginSuccess({
                 id: user.id,
                 email: user.email,
+                isSocialLogin,
               }),
             );
             dispatch(setToken(token));

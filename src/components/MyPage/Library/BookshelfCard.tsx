@@ -36,14 +36,14 @@ const BookshelfCard = ({
         <Grid2 container height={140} overflow="hidden">
           {shelf.books.map((book) => (
             <Grid2
-              key={`${book.itemId}-${shelf.id}`}
+              key={`${book.isbn}-${shelf.id}`}
               size={shelf.books.length === 1 ? 12 : 6}
               height={shelf.books.length > 2 ? '50%' : '100%'}
             >
               <CardMedia
                 component="img"
                 image={book.imageUrl}
-                alt={`${book.bookTitle} cover`}
+                alt={`${book.title} cover`}
               />
             </Grid2>
           ))}

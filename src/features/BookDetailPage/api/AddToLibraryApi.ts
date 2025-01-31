@@ -27,7 +27,7 @@ export const addToLibraryApi = createApi({
     addBookToBookshelf: builder.mutation<
       void,
       {
-        itemId: number;
+        isbn: string;
         userId: string;
         id: number;
         book: AddBookPayload;

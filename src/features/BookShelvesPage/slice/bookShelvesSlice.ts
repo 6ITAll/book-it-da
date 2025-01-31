@@ -37,21 +37,19 @@ export const bookShelvesSlice = createSlice({
     setBookshelfName: (state, action: PayloadAction<string>) => {
       state.bookshelfName = action.payload;
     },
-    deleteBook: (state, action: PayloadAction<number>) => {
-      state.books = state.books.filter(
-        (book) => book.itemId !== action.payload,
-      );
+    deleteBook: (state, action: PayloadAction<string>) => {
+      state.books = state.books.filter((book) => book.isbn !== action.payload);
       state.totalCount -= 1;
     },
     updateReadingStatus: (
       state,
       action: PayloadAction<{
-        itemId: number;
+        isbn: string;
         readingStatus: ReadingStatusType;
       }>,
     ) => {
       const book = state.books.find(
-        (book) => book.itemId === action.payload.itemId,
+        (book) => book.isbn === action.payload.isbn,
       );
       if (book) {
         book.readingStatus = action.payload.readingStatus;

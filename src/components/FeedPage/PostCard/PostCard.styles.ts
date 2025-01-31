@@ -25,7 +25,7 @@ const styles = {
       alignSelf: 'center',
     },
   },
-  followButton: (isFollowing: boolean) => (theme: Theme) => ({
+  followButton: (isFollowing: boolean | undefined) => (theme: Theme) => ({
     color: isFollowing
       ? theme.palette.getContrastText(theme.palette.secondary.main)
       : theme.palette.getContrastText(theme.palette.primary.main),

@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+
 const mockAddToLibraryBookshelves: Array<{
   userId: string;
   id: number;
@@ -11,14 +12,14 @@ const mockAddToLibraryBookshelves: Array<{
 ];
 
 interface BookLibraryData {
-  itemId: number;
+  isbn: string;
   libraryCount: number; // 서재 수
 }
 
 const mockBookLibraryData: BookLibraryData[] = [
-  { itemId: 40869703, libraryCount: 192 },
-  { itemId: 278770576, libraryCount: 132 },
-  { itemId: 354729513, libraryCount: 100 },
+  { isbn: '9784086970308', libraryCount: 192 },
+  { isbn: '9782787705765', libraryCount: 132 },
+  { isbn: '9783547295130', libraryCount: 100 },
 ];
 
 interface Bookshelf {
@@ -29,7 +30,7 @@ interface Bookshelf {
 }
 
 interface AddBookPayload {
-  itemId: number;
+  isbn: string; // ISBN
   title: string;
   author: string;
   imageUrl: string;
@@ -105,31 +106,20 @@ export const addToLibraryHandlers = [
   ),
 
   // 특정 책의 서재 수 조회
-  http.get('/api/books/:itemId/library-count', ({ params }) => {
-    const { itemId } = params as { itemId: string };
+  http.get('/api/books/:isbn/library-count', ({ params }) => {
+    const { isbn } = params as { isbn: string };
 
-    // itemId를 숫자로 변환
-    const numericItemId = Number(itemId);
-    if (isNaN(numericItemId)) {
-      return HttpResponse.json(
-        { message: '유효하지 않은 itemId입니다.' },
-        { status: 400 },
-      );
-    }
+    // 데이터에서 해당 ISBN을 가진 책 찾기
+    const bookData = mockBookLibraryData.find((book) => book.isbn === isbn);
 
-    // 데이터에서 해당 itemId를 가진 책 찾기
-    const bookData = mockBookLibraryData.find(
-      (book) => book.itemId === numericItemId,
-    );
-
-    // 데이터가 없을 경우 libraryCount 0으로 반환
+    // 데이터가 없을 경우 libraryCount를 0으로 반환
     const response = bookData
       ? {
-          itemId: bookData.itemId,
+          isbn: bookData.isbn,
           libraryCount: bookData.libraryCount,
         }
       : {
-          itemId: numericItemId,
+          isbn,
           libraryCount: 0,
         };
 

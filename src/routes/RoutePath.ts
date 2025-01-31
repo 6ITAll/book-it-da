@@ -5,7 +5,7 @@ const RoutePaths = {
   FEED: '/feed',
   SEARCH: '/search',
   MY_PAGE: '/my-page',
-  EDIT_ACCOUNT: '/edit-account',
+  EDIT_ACCOUNT: '/profile/edit',
   BOOKSHELVES: '/bookshelves',
   POSTING: '/posting',
   POSTING_WRITE: '/posting/write',
@@ -14,6 +14,7 @@ const RoutePaths = {
   BOOKDETAIL: '/bookDetail',
   REVIEWS: 'reviews',
   POSTS: 'posts',
+  KAKAO_ADDITIONAL_INFO: '/kakao/additional-info',
   // 추가시
   // ABOUT: '/about', 식으로 가능
 };

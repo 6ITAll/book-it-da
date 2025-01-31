@@ -78,8 +78,8 @@ const SearchResult = (): JSX.Element => {
         <Box sx={searchResultStyles.searchResultListBox}>
           {data?.item?.map((book) => (
             <SearchBookCard
-              key={book.itemId}
-              itemId={book.itemId}
+              key={book.isbn}
+              isbn={book.isbn}
               title={book.title}
               author={book.author}
               cover={book.cover}

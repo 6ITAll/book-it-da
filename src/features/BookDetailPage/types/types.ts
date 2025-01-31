@@ -10,7 +10,7 @@ export interface Bookshelf {
 
 // 책 추가 요청에 사용되는 데이터 타입
 export interface AddBookPayload {
-  itemId: number;
+  isbn: string;
   title: string;
   author: string;
   imageUrl: string;

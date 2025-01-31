@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginSignup from '@pages/LoginSignupPage/LoginPage';
 import SignupPage from '@pages/LoginSignupPage/SignupPage';
 import FeedPage from '@pages/MainPage/Main';
@@ -17,7 +17,13 @@ import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
 import LikedPostMorePage from '@pages/LikedPostMorePage/LikedPostMorePage';
 import LikedReviewMorePage from '@pages/LikedReviewMorePage/LikedReviewMorePage';
 import MyPage from '@pages/MyPage/MyPage';
+import AdditionalInfoPage from '@pages/AdditionalInfoPage/AdditionalInfoPage';
+import { RootState } from '@store/index';
+import { useSelector } from 'react-redux';
 const AppRouter = () => {
+  const { userInfo, checkedPassword } = useSelector(
+    (state: RootState) => state.user,
+  );
   return (
     <Routes>
       <Route path={RoutePaths.MAIN} element={<FeedPage />} />
@@ -29,23 +35,37 @@ const AppRouter = () => {
       <Route path="/oauth/kakao" element={<KakaoCallback />} />
       <Route path="/:userId" element={<MyPage />} />
       <Route
+        path={RoutePaths.KAKAO_ADDITIONAL_INFO}
+        element={<AdditionalInfoPage />}
+      />
+      <Route
         path={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`}
         element={<PasswordChkPage />}
       />
       <Route
-        path={`${RoutePaths.EDIT_ACCOUNT}`}
-        element={<EditAccountPage />}
+        path={RoutePaths.EDIT_ACCOUNT}
+        element={
+          userInfo ? (
+            userInfo.isSocialLogin || checkedPassword ? (
+              <EditAccountPage />
+            ) : (
+              <Navigate to={`${RoutePaths.EDIT_ACCOUNT}/passwordChk`} replace />
+            )
+          ) : (
+            <div>Loading...</div>
+          )
+        }
       />
       <Route
-        path={`${RoutePaths.BOOKDETAIL}/:itemId`}
+        path={`${RoutePaths.BOOKDETAIL}/:isbn`}
         element={<BookDetailPage />}
       />
       <Route
-        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.REVIEWS}`}
+        path={`${RoutePaths.BOOKDETAIL}/:isbn/${RoutePaths.REVIEWS}`}
         element={<ReviewMorePage />}
       />
       <Route
-        path={`${RoutePaths.BOOKDETAIL}/:itemId/${RoutePaths.POSTS}`}
+        path={`${RoutePaths.BOOKDETAIL}/:isbn/${RoutePaths.POSTS}`}
         element={<PostMorePage />}
       />
       <Route

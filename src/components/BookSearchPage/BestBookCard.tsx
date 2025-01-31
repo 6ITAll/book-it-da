@@ -3,20 +3,20 @@ import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import { bestBookStyles } from '@components/BookSearchPage/BookSearch.style';
 interface BestBookCardProps {
-  itemId: number;
+  isbn: string;
   image: string;
   title?: string;
 }
 
 const BestBookCard = ({
-  itemId,
+  isbn,
   image,
   title,
 }: BestBookCardProps): JSX.Element => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigateToBookDetailPage(navigate, itemId);
+    navigateToBookDetailPage(navigate, isbn);
   };
 
   return (

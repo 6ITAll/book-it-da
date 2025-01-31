@@ -9,22 +9,22 @@ export const navigateBack = (navigate: NavigateFunction) => {
 // 책 상세 페이지로 이동하는 함수
 export const navigateToBookDetailPage = (
   navigate: NavigateFunction,
-  itemId: number,
+  isbn: string,
 ) => {
-  navigate(`/bookDetail/${itemId}`);
+  navigate(`/bookDetail/${isbn}`);
 };
 
 // 포스팅 상세 페이지로 이동하는 함수
 export const navigateToPostingDetailPage = (
   navigate: NavigateFunction,
-  postId: number,
+  postId: string,
 ) => {
   navigate(`/posting/${postId}`);
 };
 
 export const navigateToUserPage = (
   navigate: NavigateFunction,
-  userId: string | number,
+  userId: string,
 ) => {
   if (!userId) {
     console.error('Invalid userId:', userId);

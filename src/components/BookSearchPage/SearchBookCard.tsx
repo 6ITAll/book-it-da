@@ -4,7 +4,7 @@ import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 
 interface SearchBookCardProps {
-  itemId: number;
+  isbn: string;
   title: string;
   author: string;
   cover: string;
@@ -13,7 +13,7 @@ interface SearchBookCardProps {
 }
 
 const SearchBookCard = ({
-  itemId,
+  isbn,
   title,
   author,
   cover,
@@ -21,12 +21,12 @@ const SearchBookCard = ({
   priceStandard,
 }: SearchBookCardProps): JSX.Element => {
   const navigate = useNavigate();
-  const { data } = useFetchRatingInfoQuery({ itemId });
+  const { data } = useFetchRatingInfoQuery({ isbn });
   const ratingCount = data?.item?.[0]?.subInfo?.ratingInfo?.ratingCount || 0;
 
   // 책 고유 id 값으로 상세페이지 이동
   const handleCardClick = () => {
-    navigateToBookDetailPage(navigate, itemId);
+    navigateToBookDetailPage(navigate, isbn);
   };
 
   return (

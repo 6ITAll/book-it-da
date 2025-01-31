@@ -64,14 +64,14 @@ const BookSearchAutoComplete = ({
       noOptionsText="검색 결과가 없습니다"
       options={allItems}
       getOptionLabel={(option) => option.title}
-      getOptionKey={(option) => `${option.itemId}-${option.title}`}
+      getOptionKey={(option) => `${option.isbn}-${option.title}`}
       onChange={(_, newValue) => {
         if (newValue) {
           const selectedBook: Book = {
-            bookTitle: newValue.title,
+            title: newValue.title,
             author: newValue.author,
             imageUrl: newValue.cover,
-            itemId: newValue.itemId,
+            isbn: newValue.isbn,
           };
           setSelectedBook(selectedBook);
         } else {

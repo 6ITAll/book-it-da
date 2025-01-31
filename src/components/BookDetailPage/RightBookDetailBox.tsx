@@ -6,7 +6,7 @@ import { useFetchLibraryCountQuery } from '@features/BookDetailPage/api/bookUser
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface RightBookBoxProps {
-  itemId: number;
+  isbn: string;
   title: string;
   subTitle: string;
   author: string;
@@ -20,7 +20,7 @@ interface RightBookBoxProps {
 }
 
 const RightBookBoxDetailBox = ({
-  itemId,
+  isbn,
   title,
   subTitle,
   author,
@@ -32,7 +32,7 @@ const RightBookBoxDetailBox = ({
   ratingCount,
   isLoading,
 }: RightBookBoxProps): JSX.Element => {
-  const { data } = useFetchLibraryCountQuery(itemId);
+  const { data } = useFetchLibraryCountQuery(isbn);
   return (
     <Box sx={bookDetailStyles.rightBox}>
       <Box sx={bookDetailStyles.rightBoxInfoBox}>
@@ -67,17 +67,17 @@ const RightBookBoxDetailBox = ({
           =
           <ActionButtons
             book={{
-              bookTitle: title,
+              title: title,
               author: author,
               imageUrl: imageUrl,
-              itemId: itemId,
+              isbn: isbn,
             }}
           />
         </Box>
       </Box>
 
       <FooterButtons
-        itemId={itemId}
+        isbn={isbn}
         title={title}
         author={author}
         imageUrl={imageUrl}

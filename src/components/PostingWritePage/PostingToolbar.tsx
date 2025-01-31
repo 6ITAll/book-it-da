@@ -1,13 +1,14 @@
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Button, Divider, Stack } from '@mui/material';
 import { postingWriteStyles } from './PostingWrite.styles';
-import { Book } from '@shared/types/type';
+import { Book, SavedPosting } from '@shared/types/type';
 import {
   useGetSavedPostingsQuery,
   useSavePostingMutation,
 } from '@features/PostingWritePage/api/postingWriteApi';
-import { useState } from 'react';
-import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
+
 import { PostingRequest } from '@features/PostingWritePage/types/types';
+import SavedPostingsDialog from './SavedPostingDialog';
 
 interface PostingToolbarProps {
   handleMaterialClick: (event: React.MouseEvent<HTMLElement>) => void;
@@ -15,16 +16,15 @@ interface PostingToolbarProps {
     title: string;
     content: string;
     book: Book;
-    userId: number;
   };
   onLoadPosting: (posting: PostingRequest) => void;
 }
 
-const PostingToolbar = ({
+const PostingToolbar: React.FC<PostingToolbarProps> = ({
   handleMaterialClick,
   currentPosting,
   onLoadPosting,
-}: PostingToolbarProps) => {
+}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { data: savedPostings, refetch } = useGetSavedPostingsQuery();
   const [savePosting] = useSavePostingMutation();
@@ -38,31 +38,13 @@ const PostingToolbar = ({
     }
   };
 
-  const handleOpenSavedList = () => {
-    setDialogOpen(true);
+  const handleLoadPosting = (posting: SavedPosting) => {
+    onLoadPosting({
+      title: posting.title || '',
+      content: posting.content || '',
+      book: { isbn: posting.isbn || '' } as Book,
+    });
   };
-
-  const handleLoadPosting = (posting: PostingRequest) => {
-    onLoadPosting(posting);
-    setDialogOpen(false);
-  };
-
-  const savedPostingsContent = (
-    <Stack spacing={2}>
-      {savedPostings?.map((posting, index) => (
-        <Box
-          key={index}
-          onClick={() => handleLoadPosting(posting)}
-          sx={postingWriteStyles.savedPostingBox}
-        >
-          <Typography variant="h6">{posting.title}</Typography>
-          <Typography variant="body2">
-            {posting.book?.bookTitle || '책 정보 없음'}
-          </Typography>
-        </Box>
-      ))}
-    </Stack>
-  );
 
   return (
     <>
@@ -90,18 +72,18 @@ const PostingToolbar = ({
           <Divider orientation="vertical" flexItem />
           <Button
             size="small"
-            onClick={handleOpenSavedList}
+            onClick={() => setDialogOpen(true)}
             sx={postingWriteStyles.postingLoadButton}
           >
             {savedPostings?.length || 0}
           </Button>
         </Box>
       </Stack>
-      <HybridDialog
+      <SavedPostingsDialog
         open={dialogOpen}
         setOpen={setDialogOpen}
-        title="저장된 글 목록"
-        contentNode={savedPostingsContent}
+        savedPostings={savedPostings}
+        onLoadPosting={handleLoadPosting}
       />
     </>
   );

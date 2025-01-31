@@ -10,6 +10,9 @@ export const useSetAutoLoginSettings = () => {
     const checkSettings = async () => {
       const session = await supabase.auth.getSession();
       if (session.data.session?.user) {
+        const providerType = session.data.session.user.app_metadata.provider;
+        const isSocialLogin = providerType === 'kakao';
+
         const { data: settings } = await supabase
           .from('user_settings')
           .select('auto_login')
@@ -21,6 +24,7 @@ export const useSetAutoLoginSettings = () => {
             loginSuccess({
               id: session.data.session.user.id,
               email: session.data.session.user.email ?? '',
+              isSocialLogin,
             }),
           );
           dispatch(setToken(session.data.session.access_token));

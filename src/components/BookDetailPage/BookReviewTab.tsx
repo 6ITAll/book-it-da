@@ -11,14 +11,14 @@ import { MoreType } from '@components/BookDetailPage/types';
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { useState } from 'react';
 interface BookReviewTabProps {
-  itemId: number;
+  isbn: string;
   title: string;
   author: string;
   imageUrl: string;
 }
 
 const BookReviewsTab = ({
-  itemId,
+  isbn,
   title,
   author,
   imageUrl,
@@ -28,11 +28,12 @@ const BookReviewsTab = ({
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
     useState<boolean>(false);
   const theme = useTheme();
+  const mockUser = { id: '1' };
 
   const { data: postData = { totalPosts: 0, topPosts: [] } } =
-    useGetPostsQuery(itemId);
+    useGetPostsQuery(isbn);
   const { data: reviewData = { totalReviews: 0, topReviews: [] } } =
-    useGetReviewsQuery(itemId);
+    useGetReviewsQuery(isbn);
 
   // 좋아요 높은 순 3개 리뷰
   const reviews = reviewData?.topReviews || [];
@@ -47,14 +48,14 @@ const BookReviewsTab = ({
   };
 
   const handleSeeMoreClick = (type: MoreType) => {
-    if (itemId) {
-      navigate(`/bookDetail/${itemId}/${type}`, {
+    if (isbn) {
+      navigate(`/bookDetail/${isbn}/${type}`, {
         state: {
           bookDetails: {
             title,
             imageUrl,
             author,
-            itemId,
+            isbn,
           },
         },
       });
@@ -156,11 +157,11 @@ const BookReviewsTab = ({
                 sx={bookReviewTabStyles.gridContainer}
               >
                 <PostCard
-                  userId={post.userId}
+                  postId="postId"
                   title={post.title}
-                  description={post.description}
-                  userName={post.userName}
-                  avatar={post.avatar}
+                  content="내용"
+                  cover="커버"
+                  user={mockUser}
                 />
               </Grid>
             ))}
@@ -186,10 +187,10 @@ const BookReviewsTab = ({
         isOpen={isOneLineReviewModalOpen}
         onClose={handleModalClose}
         receivedBook={{
-          bookTitle: title!,
+          title: title!,
           imageUrl: imageUrl!,
           author: author!,
-          itemId: itemId!,
+          isbn: isbn!,
         }}
         receivedRating={rating}
       />

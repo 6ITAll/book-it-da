@@ -25,8 +25,6 @@ const PostingWriteHeader = ({
 }: PostingWriteHeaderProps) => {
   const navigate = useNavigate();
   const { postingId } = useParams();
-  // 임의의 아이디 값
-  const userId = 3373;
   const [createPosting] = useCreatePostingMutation();
   const [updatePosting] = useUpdatePostingMutation();
 
@@ -37,7 +35,6 @@ const PostingWriteHeader = ({
     }
 
     const postData = {
-      userId,
       book: selectedBook,
       title,
       content,
@@ -46,7 +43,7 @@ const PostingWriteHeader = ({
     try {
       if (isEditing && postingId) {
         await updatePosting({
-          postingId: Number(postingId),
+          postingId,
           ...postData,
         }).unwrap();
       } else {
@@ -56,6 +53,7 @@ const PostingWriteHeader = ({
       navigate('/');
     } catch (error) {
       console.error('포스팅 저장 실패:', error);
+      // 에러 처리 (예: 사용자에게 에러 메시지 표시)
     }
   };
 
