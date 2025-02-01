@@ -3,6 +3,7 @@ import Feed from './Feed';
 import {
   useGetLatestOneLineReviewsQuery,
   useGetLatestPostingsQuery,
+  useGetUserPostingReviewCountsQuery,
 } from '@features/MyPage/api/userFeedsApi';
 
 interface UserFeedTabPanelProps {
@@ -25,6 +26,10 @@ const UserFeedTabPanel = ({
     isLoading: isLoadingPostings,
   } = useGetLatestPostingsQuery({ userId });
 
+  const { data: feedsCount } = useGetUserPostingReviewCountsQuery({
+    userId,
+  });
+
   if (isLoadingOneLineReviews || isLoadingPostings)
     return <Typography>로딩 중...</Typography>;
 
@@ -45,6 +50,8 @@ const UserFeedTabPanel = ({
         username={username}
         postings={postingsData}
         oneLineReviews={oneLineReviewsData}
+        postingsCount={feedsCount?.total_postings_count ?? 0}
+        oneLineReviewsCount={feedsCount?.total_reviews_count ?? 0}
       />
     </>
   );

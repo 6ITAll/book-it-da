@@ -25,7 +25,7 @@ const TabSection = ({ userId, username }: TabSectionProps): JSX.Element => {
     {
       id: 3,
       label: '좋아요한 피드',
-      component: <LikedFeedTabPanel userId={userId} />,
+      component: <LikedFeedTabPanel userId={userId} username={username} />,
     },
   ];
 

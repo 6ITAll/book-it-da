@@ -1,4 +1,3 @@
-import { useGetUserPostingReviewCountsQuery } from '@features/MyPage/api/userFeedsApi';
 import { OneLineReview, Posting } from '../types';
 import OneLineReviewSection from './OneLineReviewSection';
 import PostFeedSection from './PostingSection';
@@ -8,28 +7,28 @@ interface FeedProps {
   username: string;
   oneLineReviews: OneLineReview[];
   postings: Posting[];
+  oneLineReviewsCount: number;
+  postingsCount: number;
 }
 
 const Feed = ({
-  userId,
   username,
   oneLineReviews,
   postings,
+  oneLineReviewsCount,
+  postingsCount,
 }: FeedProps): JSX.Element => {
-  const { data } = useGetUserPostingReviewCountsQuery({
-    userId,
-  });
   return (
     <>
       <OneLineReviewSection
         username={username}
         oneLineReviews={oneLineReviews}
-        oneLineReviewCount={data?.total_reviews_count ?? 0}
+        oneLineReviewCount={oneLineReviewsCount}
       />
       <PostFeedSection
         username={username}
         postings={postings}
-        postingCount={data?.total_postings_count ?? 0}
+        postingCount={postingsCount}
       />
     </>
   );

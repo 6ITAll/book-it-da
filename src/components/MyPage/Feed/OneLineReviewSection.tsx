@@ -18,7 +18,6 @@ const OneLineReviewSection = ({
   oneLineReviewCount,
 }: OneLineReviewSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  console.log(oneLineReviews);
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <Box
@@ -51,11 +50,11 @@ const OneLineReviewSection = ({
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <ReviewCard
+              postId={oneLineReview.post_id}
               rating={oneLineReview.rating ?? 0}
               username={oneLineReview.user.username}
               date={formatDate(oneLineReview.created_at)}
               content={oneLineReview.review}
-              likes={oneLineReview.like_count}
               isbn={oneLineReview.book.isbn}
             />
           </Grid>

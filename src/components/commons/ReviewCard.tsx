@@ -8,30 +8,52 @@ import {
   Button,
   useTheme,
 } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import {
+  useCheckLikeStatusQuery,
+  useToggleLikeMutation,
+} from '@features/commons/likeApi';
 
 interface ReviewCardProps {
+  postId: string;
   username: string;
   date: string;
   content: string;
-  likes: number;
   rating: number;
   isbn: string;
 }
 
 const ReviewCard = ({
+  postId,
   username,
   date,
   content,
-  likes,
   rating,
 }: ReviewCardProps): JSX.Element => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const { data: likeStatus, refetch } = useCheckLikeStatusQuery(postId, {
+    skip: !isLoggedIn,
+  });
+  const [toggleLike] = useToggleLikeMutation();
+
+  const handleLike = async () => {
+    if (!isLoggedIn) return;
+    try {
+      await toggleLike(postId);
+      refetch();
+    } catch (error) {
+      console.error('좋아요 토글 실패:', error);
+    }
+  };
   return (
     <Card
       sx={{
@@ -75,7 +97,13 @@ const ReviewCard = ({
 
         <Button
           size="small"
-          startIcon={<FavoriteBorderIcon />}
+          startIcon={
+            likeStatus?.isLiked ? (
+              <FavoriteIcon color="error" />
+            ) : (
+              <FavoriteBorderIcon />
+            )
+          }
           sx={{
             marginTop: '0.5rem',
             bgcolor: theme.palette.background.paper,
@@ -84,8 +112,9 @@ const ReviewCard = ({
               bgcolor: 'transparent',
             },
           }}
+          onClick={handleLike}
         >
-          좋아요 {likes}
+          좋아요 {likeStatus?.likeCount || 0}
         </Button>
       </CardContent>
     </Card>

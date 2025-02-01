@@ -31,6 +31,7 @@ import { bookSearchByIsbnApi } from '@features/commons/bookSearchByIsbn';
 import { additionalInfoApi } from '@features/user/additionalInfoApi';
 import { userProfileStatsApi } from '@features/MyPage/api/userProfileStatsApi';
 import { followListApi } from '@features/MyPage/api/followListApi';
+import { userLikedFeedsApi } from '@features/MyPage/api/userLikedFeedsApi';
 
 export const store = configureStore({
   reducer: {
@@ -47,6 +48,7 @@ export const store = configureStore({
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
     [postingApi.reducerPath]: postingApi.reducer,
     [userFeedsApi.reducerPath]: userFeedsApi.reducer,
+    [userLikedFeedsApi.reducerPath]: userLikedFeedsApi.reducer,
     [genderAgeApi.reducerPath]: genderAgeApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
@@ -83,6 +85,7 @@ export const store = configureStore({
       addToLibraryApi.middleware,
       bookUserShelfCountApi.middleware,
       userFeedsApi.middleware,
+      userLikedFeedsApi.middleware,
       feedApi.middleware,
       oneLineReviewApi.middleware,
       postingWriteApi.middleware,

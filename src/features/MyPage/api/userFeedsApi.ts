@@ -3,7 +3,7 @@ import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { PostgrestResponse } from '@supabase/supabase-js';
 import { supabase } from '@utils/supabaseClient';
 
-interface UserPostingReviewCountsResponse {
+export interface UserPostingReviewCountsResponse {
   user_id: string;
   total_postings_count: number;
   total_reviews_count: number;

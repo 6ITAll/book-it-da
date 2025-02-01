@@ -50,7 +50,7 @@ const PostFeedSection = ({
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <PostCard
-              postId="postId"
+              postId={posting.post_id}
               title={posting.title}
               content={posting.content}
               isbn={posting.book.isbn}
