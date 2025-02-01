@@ -14,6 +14,60 @@ export const userFeedsApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ['UserFeeds'],
   endpoints: (builder) => ({
+    getAllOneLineReviews: builder.query<
+      OneLineReview[],
+      { username: string; page: number; limit: number }
+    >({
+      async queryFn({ username, page, limit }) {
+        try {
+          const offset = (page - 1) * limit;
+
+          const { data, error } = await supabase
+            .from('user_all_one_line_reviews')
+            .select('*') // 모든 필드 가져오기
+            .eq('username', username)
+            .order('created_at', { ascending: false }) // 최신순 정렬
+            .range(offset, offset + limit - 1); // 페이지네이션
+
+          if (error) throw error;
+
+          return { data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: (_, __, { username }) => [
+        { type: 'UserFeeds', id: `AllOneLineReviews-${username}` },
+      ],
+    }),
+
+    // 유저의 전체 포스팅 가져오기 (무한 스크롤)
+    getAllPostings: builder.query<
+      Posting[],
+      { username: string; page: number; limit: number }
+    >({
+      async queryFn({ username, page, limit }) {
+        try {
+          const offset = (page - 1) * limit;
+
+          const { data, error } = await supabase
+            .from('user_all_postings')
+            .select('*')
+            .eq('username', username)
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
+
+          if (error) throw error;
+
+          return { data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: (_, __, { username }) => [
+        { type: 'UserFeeds', id: `AllPostings-${username}` },
+      ],
+    }),
     getLatestOneLineReviews: builder.query<OneLineReview[], { userId: string }>(
       {
         async queryFn({ userId }) {
@@ -64,16 +118,16 @@ export const userFeedsApi = createApi({
 
     getUserPostingReviewCounts: builder.query<
       UserPostingReviewCountsResponse,
-      { userId: string }
+      { username: string }
     >({
-      async queryFn({ userId }) {
+      async queryFn({ username }) {
         try {
           const { data, error } = (await supabase
             .from('user_posting_review_counts')
             .select('*')
             .eq(
-              'user_id',
-              userId,
+              'username',
+              username,
             )) as PostgrestResponse<UserPostingReviewCountsResponse>;
 
           if (error) throw error;
@@ -83,15 +137,35 @@ export const userFeedsApi = createApi({
           return { error };
         }
       },
-      providesTags: (_, __, { userId }) => [
-        { type: 'UserFeeds', id: `Counts-${userId}` },
+      providesTags: (_, __, { username }) => [
+        { type: 'UserFeeds', id: `Counts-${username}` },
       ],
+    }),
+    deletePosts: builder.mutation<void, string[]>({
+      async queryFn(postIds) {
+        try {
+          const { error } = await supabase
+            .from('post')
+            .delete()
+            .in('id', postIds); // 여러 post_id를 삭제
+
+          if (error) throw error;
+
+          return { data: undefined }; // 성공 시 반환값 없음
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: [{ type: 'UserFeeds' }], // 삭제 후 캐시 무효화
     }),
   }),
 });
 
 export const {
+  useGetAllOneLineReviewsQuery,
+  useGetAllPostingsQuery,
   useGetLatestOneLineReviewsQuery,
   useGetLatestPostingsQuery,
   useGetUserPostingReviewCountsQuery,
+  useDeletePostsMutation,
 } = userFeedsApi;

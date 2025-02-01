@@ -27,8 +27,9 @@ const UserFeedTabPanel = ({
   } = useGetLatestPostingsQuery({ userId });
 
   const { data: feedsCount } = useGetUserPostingReviewCountsQuery({
-    userId,
+    username,
   });
+  console.log(feedsCount);
 
   if (isLoadingOneLineReviews || isLoadingPostings)
     return <Typography>로딩 중...</Typography>;

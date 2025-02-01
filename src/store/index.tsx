@@ -32,6 +32,8 @@ import { additionalInfoApi } from '@features/user/additionalInfoApi';
 import { userProfileStatsApi } from '@features/MyPage/api/userProfileStatsApi';
 import { followListApi } from '@features/MyPage/api/followListApi';
 import { userLikedFeedsApi } from '@features/MyPage/api/userLikedFeedsApi';
+import userPostingsReducer from '@features/MyPage/slice/userPostingMoreSlice';
+import userReviewsReducer from '@features/MyPage/slice/userReviewMoreSlice';
 
 export const store = configureStore({
   reducer: {
@@ -66,6 +68,8 @@ export const store = configureStore({
     [userProfileStatsApi.reducerPath]: userProfileStatsApi.reducer,
     counter: counterReducer,
     user: userReducer,
+    userPostings: userPostingsReducer,
+    userReviews: userReviewsReducer,
     snackbar: snackbarReducer,
     feed: feedReducer,
   },

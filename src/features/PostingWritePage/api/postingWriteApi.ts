@@ -60,6 +60,12 @@ export const postingWriteApi = createApi({
           // 유저 페이지 피드 리페치
           await dispatch(userFeedsApi.util.invalidateTags(['UserFeeds']));
           await dispatch(feedApi.util.invalidateTags(['Posts']));
+          await dispatch(
+            userFeedsApi.endpoints.getAllPostings.initiate({
+              username: '',
+              page: 1,
+            }),
+          );
           const feedTypes: FeedType[] = ['추천', '팔로잉', '팔로워'];
           const postTypes: PostType[] = ['선택안함', '한줄평', '포스팅'];
           for (const feedType of feedTypes) {
@@ -120,7 +126,14 @@ export const postingWriteApi = createApi({
               { type: 'Post', id: args.postingId },
             ]),
           );
+          await dispatch(userFeedsApi.util.invalidateTags(['UserFeeds']));
           await dispatch(feedApi.util.invalidateTags(['Posts']));
+          await dispatch(
+            userFeedsApi.endpoints.getAllPostings.initiate({
+              username: '',
+              page: 1,
+            }),
+          );
           const feedTypes: FeedType[] = ['추천', '팔로잉', '팔로워'];
           const postTypes: PostType[] = ['선택안함', '한줄평', '포스팅'];
           for (const feedType of feedTypes) {

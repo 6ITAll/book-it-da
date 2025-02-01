@@ -5,17 +5,17 @@ import Grid from '@mui/material/Grid2';
 import { useNavigate } from 'react-router-dom';
 import { Posting } from '../types';
 
-interface PostFeedSectionProps {
+interface PostingFeedSectionProps {
   username: string;
   postings: Posting[];
   postingCount: number;
 }
 
-const PostFeedSection = ({
+const PostingFeedSection = ({
   username,
   postings,
   postingCount,
-}: PostFeedSectionProps): JSX.Element => {
+}: PostingFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
 
   return (
@@ -36,7 +36,7 @@ const PostFeedSection = ({
           variant="text"
           sx={bookReviewTabStyles.moreButton}
           onClick={() => {
-            navigate(`/my-page/${username}/feeds/posts`);
+            navigate(`/my-page/${username}/feeds/postings`);
           }}
         >
           더보기
@@ -63,4 +63,4 @@ const PostFeedSection = ({
   );
 };
 
-export default PostFeedSection;
+export default PostingFeedSection;

@@ -1,6 +1,6 @@
 import { OneLineReview, Posting } from '../types';
 import OneLineReviewSection from './OneLineReviewSection';
-import PostFeedSection from './PostingSection';
+import PostingFeedSection from './PostingSection';
 
 interface FeedProps {
   userId: string;
@@ -25,7 +25,7 @@ const Feed = ({
         oneLineReviews={oneLineReviews}
         oneLineReviewCount={oneLineReviewsCount}
       />
-      <PostFeedSection
+      <PostingFeedSection
         username={username}
         postings={postings}
         postingCount={postingsCount}

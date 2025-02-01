@@ -23,6 +23,7 @@ const InfiniteScrollComponent = <T,>({
       dataLength={items.length}
       next={fetchMore}
       hasMore={hasMore}
+      scrollThreshold={0.99}
       loader={
         <Typography sx={{ textAlign: 'center', marginTop: '1rem' }}>
           Loading...

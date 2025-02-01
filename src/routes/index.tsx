@@ -20,6 +20,8 @@ import MyPage from '@pages/MyPage/MyPage';
 import AdditionalInfoPage from '@pages/AdditionalInfoPage/AdditionalInfoPage';
 import { RootState } from '@store/index';
 import { useSelector } from 'react-redux';
+import UserPostingMorePage from '@pages/UserPostingMorePage/UserPostingMorePage';
+import UserReviewMorePage from '@pages/UserReviewMorePage/UserReviewMorePage';
 const AppRouter = () => {
   const { userInfo, checkedPassword } = useSelector(
     (state: RootState) => state.user,
@@ -64,7 +66,7 @@ const AppRouter = () => {
         element={<ReviewMorePage />}
       />
       <Route
-        path={`${RoutePaths.BOOKDETAIL}/:isbn/${RoutePaths.POSTS}`}
+        path={`${RoutePaths.BOOKDETAIL}/:isbn/${RoutePaths.POSTINGS}`}
         element={<PostingMorePage />}
       />
       <Route
@@ -81,11 +83,19 @@ const AppRouter = () => {
         element={<PostingDetailPage />}
       />
       <Route
-        path={`${RoutePaths.MY_PAGE}/:userId?/feeds/${RoutePaths.POSTS}`}
+        path={`${RoutePaths.MY_PAGE}/:username?/feeds/${RoutePaths.POSTINGS}`}
+        element={<UserPostingMorePage />}
+      />
+      <Route
+        path={`${RoutePaths.MY_PAGE}/:username?/feeds/${RoutePaths.REVIEWS}`}
+        element={<UserReviewMorePage />}
+      />
+      <Route
+        path={`${RoutePaths.MY_PAGE}/:username?/liked/${RoutePaths.POSTINGS}`}
         element={<LikedPostMorePage />}
       />
       <Route
-        path={`${RoutePaths.MY_PAGE}/:userId?/feeds/${RoutePaths.REVIEWS}`}
+        path={`${RoutePaths.MY_PAGE}/:username?/liked/${RoutePaths.REVIEWS}`}
         element={<LikedReviewMorePage />}
       />
       <Route path="*" element={<NotFoundPage />} />
