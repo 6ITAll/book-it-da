@@ -5,39 +5,39 @@ import { Box, Typography, Button, Checkbox, Stack } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { BookDetailPost } from '@shared/types/type';
 
-interface PostMoreTemplateProps {
-  totalPosts?: number;
-  posts: BookDetailPost[];
+interface PostingMoreTemplateProps {
+  totalPostings?: number;
+  postings: BookDetailPost[];
   hasMore: boolean;
   fetchMoreData: () => void;
 }
 
-const PostMoreTemplate = ({
-  totalPosts,
-  posts,
+const PostingMoreTemplate = ({
+  totalPostings,
+  postings,
   hasMore,
   fetchMoreData,
-}: PostMoreTemplateProps) => {
+}: PostingMoreTemplateProps) => {
   const mockUser = { id: '1' };
   const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
-  const [selectedPosts, setSelectedPosts] = useState<number[]>([]);
+  const [selectedPostings, setSelectedPostings] = useState<number[]>([]);
 
   const handleDeleteModeToggle = () => {
     setIsDeleteMode(!isDeleteMode);
-    setSelectedPosts([]);
+    setSelectedPostings([]);
   };
 
-  const handlePostSelect = (index: number) => {
-    setSelectedPosts((prev) =>
+  const handlePostingsSelect = (index: number) => {
+    setSelectedPostings((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
   };
 
   const handleDeleteSelected = () => {
     // 여기에 실제 삭제 로직을 구현합니다.
-    console.log('Deleting posts:', selectedPosts);
+    console.log('Deleting postings:', selectedPostings);
     setIsDeleteMode(false);
-    setSelectedPosts([]);
+    setSelectedPostings([]);
   };
 
   return (
@@ -49,7 +49,7 @@ const PostMoreTemplate = ({
         marginBottom="1rem"
       >
         <Typography variant="h5" fontWeight="bold">
-          {`포스트 목록 (${totalPosts || 0}개)`}
+          {`포스트 목록 (${totalPostings || 0}개)`}
         </Typography>
         <Stack direction="row" spacing={2}>
           <Button
@@ -66,16 +66,16 @@ const PostMoreTemplate = ({
               variant="contained"
               color="error"
               onClick={handleDeleteSelected}
-              disabled={selectedPosts.length === 0}
+              disabled={selectedPostings.length === 0}
             >
-              선택 삭제 ({selectedPosts.length})
+              선택 삭제 ({selectedPostings.length})
             </Button>
           )}
         </Stack>
       </Stack>
 
       <InfiniteScrollComponent
-        items={posts}
+        items={postings}
         hasMore={hasMore}
         fetchMore={fetchMoreData}
         gridSize={{ xs: 12, md: 12 }}
@@ -89,8 +89,8 @@ const PostMoreTemplate = ({
           >
             {isDeleteMode && (
               <Checkbox
-                checked={selectedPosts.includes(index)}
-                onChange={() => handlePostSelect(index)}
+                checked={selectedPostings.includes(index)}
+                onChange={() => handlePostingsSelect(index)}
                 sx={{ padding: '4px', marginRight: '8px' }}
               />
             )}
@@ -110,4 +110,4 @@ const PostMoreTemplate = ({
   );
 };
 
-export default PostMoreTemplate;
+export default PostingMoreTemplate;

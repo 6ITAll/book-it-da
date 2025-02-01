@@ -12,7 +12,7 @@ export const postApi = createApi({
     }),
     // 포스트 더보기 페이지에서 페이지네이션 기반 포스트 조회
     getPaginatedPosts: builder.query<
-      { posts: BookDetailPost[]; totalPosts: number },
+      { postings: BookDetailPost[]; totalPostings: number },
       { isbn: string; page: number }
     >({
       query: ({ isbn, page }) => `posts/book/${isbn}?page=${page}`,

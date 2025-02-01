@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BookDetailPost } from '@shared/types/type';
-import PostMoreTemplate from '@components/PostMorePage/PostMoreTemplate';
+import PostingMoreTemplate from '@components/PostingMorePage/PostingMoreTemplate';
 // import { useGetLikedPaginatedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
 
 const LikedPostMorePage = (): JSX.Element => {
@@ -34,9 +34,9 @@ const LikedPostMorePage = (): JSX.Element => {
   // };
 
   return (
-    <PostMoreTemplate
-      totalPosts={data?.totalFeeds}
-      posts={posts}
+    <PostingMoreTemplate
+      totalPostings={data?.totalFeeds}
+      postings={posts}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}
     />

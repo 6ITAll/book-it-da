@@ -9,7 +9,7 @@ import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
 import PostingDetailPage from '@pages/PostingDetailPage/PostingDetailPage';
 import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
 import ReviewMorePage from '@pages/ReviewMorePage/ReviewMorePage';
-import PostMorePage from '@pages/PostMorePage/PostMorePage';
+import PostingMorePage from '@pages/PostingMorePage/PostMorePage';
 import EditAccountPage from '@pages/EditAccountPage.tsx/EditAccountPage';
 import PasswordChkPage from '@pages/PasswordChkPage/PasswordChkPage';
 import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
@@ -65,7 +65,7 @@ const AppRouter = () => {
       />
       <Route
         path={`${RoutePaths.BOOKDETAIL}/:isbn/${RoutePaths.POSTS}`}
-        element={<PostMorePage />}
+        element={<PostingMorePage />}
       />
       <Route
         path={`${RoutePaths.MY_PAGE}/:userId?${RoutePaths.BOOKSHELVES}/:bookShelvesId?`}

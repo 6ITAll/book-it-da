@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useGetPaginatedPostsQuery } from '@features/BookDetailPage/api/postApi';
 import { BookDetailPost } from '@shared/types/type';
-import PostMoreTemplate from '@components/PostMorePage/PostMoreTemplate';
+import PostingMoreTemplate from '@components/PostingMorePage/PostingMoreTemplate';
 
-const PostMorePage = (): JSX.Element => {
+const PostingMorePage = (): JSX.Element => {
   const location = useLocation();
   const { bookDetails } = location.state || {};
   const { isbn } = bookDetails || {};
 
-  const [posts, setPosts] = useState<BookDetailPost[]>([]);
+  const [posting, setPosting] = useState<BookDetailPost[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
@@ -19,9 +19,9 @@ const PostMorePage = (): JSX.Element => {
   });
 
   useEffect(() => {
-    if (data?.posts) {
-      setPosts((prevPosts) => [...prevPosts, ...data.posts]);
-      if (data.posts.length < 10) setHasMore(false);
+    if (data?.postings) {
+      setPosting((prevPostings) => [...prevPostings, ...data.postings]);
+      if (data.postings.length < 10) setHasMore(false);
     }
   }, [data]);
 
@@ -32,13 +32,13 @@ const PostMorePage = (): JSX.Element => {
   };
 
   return (
-    <PostMoreTemplate
-      totalPosts={data?.totalPosts}
-      posts={posts}
+    <PostingMoreTemplate
+      totalPostings={data?.totalPostings}
+      postings={posting}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}
     />
   );
 };
 
-export default PostMorePage;
+export default PostingMorePage;
