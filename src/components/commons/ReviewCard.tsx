@@ -24,6 +24,7 @@ import {
 interface ReviewCardProps {
   postId: string;
   username: string;
+  avatarUrl: string;
   date: string;
   content: string;
   rating: number;
@@ -33,6 +34,7 @@ interface ReviewCardProps {
 const ReviewCard = ({
   postId,
   username,
+  avatarUrl,
   date,
   content,
   rating,
@@ -63,11 +65,11 @@ const ReviewCard = ({
       <CardContent>
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar
+            src={avatarUrl}
+            alt={username}
             onClick={() => navigateToUserPage(navigate, username)}
             sx={{ cursor: 'pointer' }}
-          >
-            {username.charAt(0)}
-          </Avatar>
+          />
           <Box>
             <Typography variant="body2" fontWeight="bold">
               {username}

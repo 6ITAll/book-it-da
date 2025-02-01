@@ -187,6 +187,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
               <ReviewCard
                 postId={review.post_id}
                 username={review.user.username}
+                avatarUrl={review.user.avatar_url ?? ''}
                 date={formatDate(review.created_at)}
                 content={review.review}
                 rating={review.rating ?? 0}

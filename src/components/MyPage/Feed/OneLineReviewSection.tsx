@@ -53,6 +53,7 @@ const OneLineReviewSection = ({
               postId={oneLineReview.post_id}
               rating={oneLineReview.rating ?? 0}
               username={oneLineReview.user.username}
+              avatarUrl={oneLineReview.user.avatar_url ?? ''}
               date={formatDate(oneLineReview.created_at)}
               content={oneLineReview.review}
               isbn={oneLineReview.book.isbn}

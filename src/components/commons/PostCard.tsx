@@ -167,7 +167,7 @@ const PostCard = ({
           <Avatar
             onClick={(e) => {
               e.stopPropagation(); // 클릭 이벤트 전파 방지
-              navigateToUserPage(navigate, user.id);
+              navigateToUserPage(navigate, user?.username || '');
             }}
             src={user?.avatarUrl}
             alt={user?.username}
