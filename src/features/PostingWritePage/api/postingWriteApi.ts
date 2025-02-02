@@ -64,6 +64,7 @@ export const postingWriteApi = createApi({
             userFeedsApi.endpoints.getAllPostings.initiate({
               username: '',
               page: 1,
+              limit: 5,
             }),
           );
           const feedTypes: FeedType[] = ['추천', '팔로잉', '팔로워'];
@@ -132,6 +133,7 @@ export const postingWriteApi = createApi({
             userFeedsApi.endpoints.getAllPostings.initiate({
               username: '',
               page: 1,
+              limit: 5,
             }),
           );
           const feedTypes: FeedType[] = ['추천', '팔로잉', '팔로워'];

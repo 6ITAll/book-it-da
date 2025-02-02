@@ -107,10 +107,11 @@ const BookReviewsTab = ({
                 sx={bookReviewTabStyles.gridContainer}
               >
                 <ReviewCard
+                  postId=""
                   username={review.username}
-                  date={review.date}
-                  content={review.content}
-                  likes={review.likes}
+                  avatarUrl=""
+                  date=""
+                  content=""
                   rating={review.rating}
                   isbn={'0'}
                 />
