@@ -137,7 +137,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
           fontWeight="bold"
           sx={{ display: 'flex', alignItems: 'center' }}
         >
-          한 줄 리뷰 {totalReviews}
+          한줄평 {totalReviews}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
           <Button

@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Posting } from '@components/MyPage/types';
 
 export interface LikedPostingsState {
-  postings: Posting[]; // 포스팅 데이터 배열
-  hasMore: boolean; // 더 가져올 데이터가 있는지 여부
-  page: number; // 현재 페이지 번호
+  postings: Posting[];
+  hasMore: boolean;
+  page: number;
 }
 
 const initialState: LikedPostingsState = {

@@ -10,7 +10,6 @@ interface TabSectionProps {
 }
 
 const TabSection = ({ userId, username }: TabSectionProps): JSX.Element => {
-  /* TODO 탭 콘텐츠 제작 완료 후 userId 넘겨주기  */
   const tabs = [
     {
       id: 1,

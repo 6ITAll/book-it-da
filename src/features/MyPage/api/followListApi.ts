@@ -2,7 +2,6 @@ import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
 import { PostgrestResponse } from '@supabase/supabase-js';
 
-// 사용자 정보 인터페이스
 export interface User {
   userId: string;
   username: string;
@@ -34,11 +33,10 @@ export const followListApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ['FollowList'],
   endpoints: (builder) => ({
-    // 팔로워 목록 조회
     fetchFollowers: builder.query<User[], { userId: string; page: number }>({
       queryFn: async ({ userId, page }) => {
         try {
-          const limit = 5; // 한 번에 가져올 데이터 개수
+          const limit = 5;
           const offset = (page - 1) * limit;
           const { data, error } = (await supabase
             .from('user_follow')

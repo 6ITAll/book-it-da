@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OneLineReview } from '@components/MyPage/types';
 
 export interface LikedReviewsState {
-  reviews: OneLineReview[]; // 포스팅 데이터 배열
-  hasMore: boolean; // 더 가져올 데이터가 있는지 여부
-  page: number; // 현재 페이지 번호
+  reviews: OneLineReview[];
+  hasMore: boolean;
+  page: number;
 }
 
 const initialState: LikedReviewsState = {

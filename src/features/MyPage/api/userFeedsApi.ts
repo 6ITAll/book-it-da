@@ -24,10 +24,10 @@ export const userFeedsApi = createApi({
 
           const { data, error } = await supabase
             .from('user_all_one_line_reviews')
-            .select('*') // 모든 필드 가져오기
+            .select('*')
             .eq('username', username)
-            .order('created_at', { ascending: false }) // 최신순 정렬
-            .range(offset, offset + limit - 1); // 페이지네이션
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
 
           if (error) throw error;
 
@@ -40,8 +40,6 @@ export const userFeedsApi = createApi({
         { type: 'UserFeeds', id: `AllOneLineReviews-${username}` },
       ],
     }),
-
-    // 유저의 전체 포스팅 가져오기 (무한 스크롤)
     getAllPostings: builder.query<
       Posting[],
       { username: string; page: number; limit: number }
@@ -147,16 +145,16 @@ export const userFeedsApi = createApi({
           const { error } = await supabase
             .from('post')
             .delete()
-            .in('id', postIds); // 여러 post_id를 삭제
+            .in('id', postIds);
 
           if (error) throw error;
 
-          return { data: undefined }; // 성공 시 반환값 없음
+          return { data: undefined };
         } catch (error) {
           return { error };
         }
       },
-      invalidatesTags: [{ type: 'UserFeeds' }], // 삭제 후 캐시 무효화
+      invalidatesTags: [{ type: 'UserFeeds' }],
     }),
   }),
 });

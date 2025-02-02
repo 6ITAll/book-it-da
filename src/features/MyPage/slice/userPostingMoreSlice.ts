@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Posting } from '@components/MyPage/types';
 
 export interface UserPostingsState {
-  postings: Posting[]; // 포스팅 데이터 배열
-  hasMore: boolean; // 더 가져올 데이터가 있는지 여부
-  page: number; // 현재 페이지 번호
+  postings: Posting[];
+  hasMore: boolean;
+  page: number;
 }
 
 const initialState: UserPostingsState = {
@@ -38,7 +38,6 @@ const userPostingsSlice = createSlice({
       state.page = action.payload;
     },
     deletePostings(state, action: PayloadAction<string[]>) {
-      // 선택된 post_id를 기준으로 삭제
       state.postings = state.postings.filter(
         (posting) => !action.payload.includes(posting.post_id),
       );

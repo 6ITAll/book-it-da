@@ -69,7 +69,7 @@ const PostingMoreTemplate = ({
         marginBottom="1rem"
       >
         <Typography variant="h5" fontWeight="bold">
-          {`포스트 목록 (${totalPostings || 0}개)`}
+          {`포스팅 (${totalPostings || 0}개)`}
         </Typography>
         <Stack direction="row" spacing={2}>
           {currentUsername === username && !likedPosting && (
