@@ -70,7 +70,7 @@ const AppRouter = () => {
         element={<PostingMorePage />}
       />
       <Route
-        path={`${RoutePaths.MY_PAGE}/:userId?${RoutePaths.BOOKSHELVES}/:bookShelvesId?`}
+        path={`${RoutePaths.MY_PAGE}/:username?${RoutePaths.BOOKSHELVES}/:bookShelfId?`}
         element={<BookShelvesPage />}
       />
       <Route path={RoutePaths.POSTING_WRITE} element={<PostingWritePage />} />

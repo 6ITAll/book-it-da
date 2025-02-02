@@ -10,14 +10,20 @@ import BookIcon from '@mui/icons-material/Book';
 import EditIcon from '@mui/icons-material/Edit';
 import { bookDetailDialogStyles } from './BookDetailDialog.styles';
 import ReadingStatus from './BookReadingStatus';
-import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
+// import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
 import { ReadingStatusType } from '@shared/types/type';
 import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import URLShareDialog from '@components/commons/URLShareDialog';
+import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import { UserInfo } from '@features/user/userSlice';
+import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
 interface BookShelvesDetailDialogProps {
+  username: string;
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
   handleDeleteBook: () => void;
@@ -25,6 +31,7 @@ interface BookShelvesDetailDialogProps {
 }
 
 const BookShelvesDetailDialog = ({
+  username,
   openDialog,
   setOpenDialog,
   handleDeleteBook,
@@ -37,7 +44,13 @@ const BookShelvesDetailDialog = ({
   const [openAddToLibraryDialog, setOpenAddToLibraryDialog] = useState(false);
   const [openWriteDialog, setOpenWriteDialog] = useState(false);
   const [openShareDialog, setOpenShareDialog] = useState(false);
-  const [updateStatus] = useUpdateReadingStatusMutation();
+  const { data: bookInfo } = useSearchBookByIsbnQuery({ isbn: book?.isbn });
+
+  const { id: currentUserId, username: currentUsername } = useSelector(
+    (state: RootState) => state.user.userInfo as UserInfo,
+  );
+
+  const [updateReadingStatus] = useUpdateReadingStatusMutation();
 
   const handleReadingStatus = async (
     _: React.MouseEvent<HTMLElement>,
@@ -46,11 +59,10 @@ const BookShelvesDetailDialog = ({
     if (!book) return;
 
     try {
-      await updateStatus({
-        userId: '1',
-        bookshelfId: book.bookshelfId,
+      await updateReadingStatus({
+        userId: currentUserId,
         isbn: book.isbn,
-        readingStatus: newStatus,
+        status: newStatus,
       });
       setReadingStatus(newStatus);
     } catch (error) {
@@ -68,11 +80,11 @@ const BookShelvesDetailDialog = ({
   };
 
   const handleShareClick = () => {
-    setOpenShareDialog(true); // 공유 모달 열기
+    setOpenShareDialog(true);
   };
 
   const handleCloseShareDialog = () => {
-    setOpenShareDialog(false); // 공유 모달 닫기
+    setOpenShareDialog(false);
   };
 
   const handleCloseWrite = () => {
@@ -92,9 +104,9 @@ const BookShelvesDetailDialog = ({
       <Box sx={bookDetailDialogStyles.bookPreview}>
         {book && (
           <CommonBookCard
-            image={book.imageUrl}
-            title={book.title}
-            author={book.author}
+            image={bookInfo?.cover ?? ''}
+            title={bookInfo?.title ?? ''}
+            author={bookInfo?.author ?? ''}
             sx={bookDetailDialogStyles.bookCard}
           />
         )}
@@ -127,10 +139,12 @@ const BookShelvesDetailDialog = ({
         </Button>
       </Stack>
       <Stack>
-        <ReadingStatus
-          readingStatus={readingStatus}
-          handleReadingStatus={handleReadingStatus}
-        />
+        {currentUsername === username && (
+          <ReadingStatus
+            readingStatus={readingStatus}
+            handleReadingStatus={handleReadingStatus}
+          />
+        )}
         <Button
           fullWidth
           startIcon={<BookmarkBorderIcon />}
@@ -139,20 +153,22 @@ const BookShelvesDetailDialog = ({
         >
           책장에 담기
         </Button>
-        <Button
-          fullWidth
-          startIcon={<DeleteOutlineIcon />}
-          sx={(theme) => ({
-            ...bookDetailDialogStyles.subButtons(theme),
-            color: theme.palette.error.main, // 텍스트 색상
-          })}
-          onClick={() => {
-            handleDeleteBook();
-            setOpenDialog(false);
-          }}
-        >
-          책장에서 삭제
-        </Button>
+        {currentUsername === username && (
+          <Button
+            fullWidth
+            startIcon={<DeleteOutlineIcon />}
+            sx={(theme) => ({
+              ...bookDetailDialogStyles.subButtons(theme),
+              color: theme.palette.error.main, // 텍스트 색상
+            })}
+            onClick={() => {
+              handleDeleteBook();
+              setOpenDialog(false);
+            }}
+          >
+            책장에서 삭제
+          </Button>
+        )}
       </Stack>
     </Stack>
   );
@@ -168,9 +184,6 @@ const BookShelvesDetailDialog = ({
         open={openAddToLibraryDialog}
         setOpen={handleCloseAddToLibrary}
         isbn={book?.isbn}
-        title={book?.title}
-        author={book?.author}
-        imageUrl={book?.imageUrl}
       />
       <PostTypeSelectDialog
         dialogOpen={openWriteDialog}

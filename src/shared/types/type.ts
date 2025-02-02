@@ -89,15 +89,15 @@ export interface ReviewCard extends Review {
 // 책 interface
 export interface Book {
   isbn: string;
-  title: string;
-  author: string;
-  imageUrl: string;
+  title?: string;
+  author?: string;
+  imageUrl?: string;
 }
 
 // 저장된 책 interface
 export interface SavedBook extends Book {
-  bookshelfId: number; // 책장 ID
-  savedAt: string; // 책장에 저장된 시간
+  bookshelfId: string; // 책장 ID
+  addedAt: string; // 책장에 저장된 시간
   readingStatus: ReadingStatusType; // 독서 상태
 }
 

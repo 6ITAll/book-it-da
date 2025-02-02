@@ -37,7 +37,7 @@ export const bookShelvesSlice = createSlice({
     setBookshelfName: (state, action: PayloadAction<string>) => {
       state.bookshelfName = action.payload;
     },
-    deleteBook: (state, action: PayloadAction<string>) => {
+    deleteBookfromBookShelf: (state, action: PayloadAction<string>) => {
       state.books = state.books.filter((book) => book.isbn !== action.payload);
       state.totalCount -= 1;
     },
@@ -64,7 +64,7 @@ export const {
   setBooks,
   setTotalCount,
   setBookshelfName,
-  deleteBook,
+  deleteBookfromBookShelf,
   updateReadingStatus,
 } = bookShelvesSlice.actions;
 

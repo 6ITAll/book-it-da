@@ -4,7 +4,6 @@ import { Box, Container } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ShelvesBookCard from '@components/BookShelvesPage/ShelvesBookcard/ShelvesBookCard';
 import SortSelector from '@components/BookShelvesPage/SortSelector';
-
 import ViewToggle from '@components/BookShelvesPage/ViewToggle';
 import BookShelvesDetailDialog from '@components/BookShelvesPage/BookDetailDialog/BookDetailDialog';
 import { SavedBook } from '@shared/types/type';
@@ -19,7 +18,7 @@ import {
   setBooks,
   setTotalCount,
   setBookshelfName,
-  deleteBook as deleteBookAction,
+  deleteBookfromBookShelf,
 } from '@features/BookShelvesPage/slice/bookShelvesSlice';
 import type { RootState } from '@store/index';
 import { useParams } from 'react-router-dom';
@@ -35,12 +34,9 @@ const BookShelvesPage = () => {
   const [selectedBook, setSelectedBook] = useState<SavedBook | null>(null);
   const [deleteBook] = useDeleteBookMutation();
 
-  const { userId, bookshelfId } = useParams();
+  const { username, bookShelfId } = useParams();
 
-  const { data, error, isLoading } = useGetBookshelfQuery({
-    userId: userId!,
-    bookshelfId: Number(bookshelfId),
-  });
+  const { data, isLoading } = useGetBookshelfQuery(bookShelfId ?? '');
 
   useEffect(() => {
     if (data) {
@@ -52,10 +48,10 @@ const BookShelvesPage = () => {
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
-    bookId: string,
+    isbn: string,
   ) => {
     event.stopPropagation();
-    const book = books.find((book) => book.isbn === bookId);
+    const book = books.find((book) => book.isbn === isbn);
     setSelectedBook(book || null);
     setOpenDialog(true);
   };
@@ -65,11 +61,10 @@ const BookShelvesPage = () => {
 
     try {
       await deleteBook({
-        userId: userId!,
-        bookshelfId: Number(bookshelfId),
+        bookshelfId: bookShelfId ?? '',
         isbn: selectedBook.isbn,
       });
-      dispatch(deleteBookAction(selectedBook.isbn));
+      dispatch(deleteBookfromBookShelf(selectedBook.isbn));
       setOpenDialog(false);
     } catch (error) {
       console.error('Failed to delete book:', error);
@@ -85,7 +80,6 @@ const BookShelvesPage = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading bookshelf</div>;
   if (!data) return null;
 
   const sortedBooks = sortBooks(data.books, sortOption);
@@ -121,7 +115,8 @@ const BookShelvesPage = () => {
       </Grid>
 
       <BookShelvesDetailDialog
-        key={`${userId}-${selectedBook?.isbn}`}
+        key={`${username}-${selectedBook?.isbn}`}
+        username={username!}
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         handleDeleteBook={handleDeleteBook}

@@ -1,4 +1,4 @@
-import { bookshelvesHandlers } from './bookshelves';
+// import { bookshelvesHandlers } from './bookshelves';
 import { libraryHandlers } from './library';
 import { kakaoHandlers } from './kakao';
 import { userHandlers } from './user';
@@ -9,7 +9,7 @@ import { postHandlers } from './DetailPagePost';
 import { addToLibraryHandlers } from './addToLibrary';
 export const handlers = [
   ...libraryHandlers,
-  ...bookshelvesHandlers,
+  // ...bookshelvesHandlers,
   ...postHandlers,
   ...kakaoHandlers,
   ...userHandlers,

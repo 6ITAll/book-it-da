@@ -28,18 +28,12 @@ interface AddToLibraryModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isbn: string;
-  title: string;
-  author: string;
-  imageUrl: string;
 }
 
 const AddToLibraryModal = ({
   open,
   setOpen,
   isbn,
-  title,
-  author,
-  imageUrl,
 }: AddToLibraryModalProps): JSX.Element => {
   const [selectedBookshelf, setSelectedBookshelf] = useState<number | null>(
     null,
