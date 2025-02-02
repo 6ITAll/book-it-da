@@ -4,6 +4,7 @@ import { supabase } from '@utils/supabaseClient';
 export const userProfileStatsApi = createApi({
   reducerPath: 'userProfileStatsApi',
   baseQuery: fakeBaseQuery(),
+  tagTypes: ['UserProfileStats'],
   endpoints: (builder) => ({
     getUserProfileStats: builder.query({
       queryFn: async (username: string) => {

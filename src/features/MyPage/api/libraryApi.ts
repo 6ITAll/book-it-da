@@ -5,6 +5,7 @@ import { supabase } from '@utils/supabaseClient';
 export const libraryApi = createApi({
   reducerPath: 'libraryApi',
   baseQuery: fakeBaseQuery(),
+  tagTypes: ['Library'],
   endpoints: (builder) => ({
     getLibrary: builder.query<Bookshelf[], string>({
       queryFn: async (userId) => {
@@ -57,6 +58,7 @@ export const libraryApi = createApi({
           return { error: { status: 500, data: (err as Error).message } };
         }
       },
+      providesTags: ['Library'],
     }),
   }),
 });

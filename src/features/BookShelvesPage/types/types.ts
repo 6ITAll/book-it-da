@@ -40,3 +40,22 @@ export interface UpdateReadingStatusRequest {
   isbn: string;
   status: ReadingStatusType;
 }
+
+export interface Bookshelf {
+  id: string;
+  name: string;
+}
+
+export interface GetBookshelvesResponse {
+  bookshelves: Bookshelf[];
+}
+
+export interface CreateBookshelfRequest {
+  userId: string;
+  name: string;
+}
+
+export interface AddBookRequest {
+  bookshelfId: string;
+  isbn: string;
+}
