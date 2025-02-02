@@ -8,6 +8,7 @@ export interface User {
   username: string;
   name: string;
   avatarUrl: string;
+  isFollowing?: boolean;
 }
 
 interface FollowerData {
@@ -37,7 +38,8 @@ export const followListApi = createApi({
     fetchFollowers: builder.query<User[], { userId: string; page: number }>({
       queryFn: async ({ userId, page }) => {
         try {
-          const pageSize = 5; // 한 번에 가져올 데이터 개수
+          const limit = 5; // 한 번에 가져올 데이터 개수
+          const offset = (page - 1) * limit;
           const { data, error } = (await supabase
             .from('user_follow')
             .select(
@@ -47,8 +49,8 @@ export const followListApi = createApi({
             )
             .eq('following_id', userId)
             .range(
-              (page - 1) * pageSize,
-              page * pageSize - 1,
+              offset,
+              offset + limit - 1,
             )) as PostgrestResponse<FollowerData>;
 
           if (error) throw error;
@@ -76,7 +78,8 @@ export const followListApi = createApi({
     fetchFollowings: builder.query<User[], { userId: string; page: number }>({
       queryFn: async ({ userId, page }) => {
         try {
-          const pageSize = 5; // 한 번에 가져올 데이터 개수
+          const limit = 5; // 한 번에 가져올 데이터 개수
+          const offset = (page - 1) * limit;
           const { data, error } = (await supabase
             .from('user_follow')
             .select(
@@ -86,8 +89,8 @@ export const followListApi = createApi({
             )
             .eq('follower_id', userId)
             .range(
-              (page - 1) * pageSize,
-              page * pageSize - 1,
+              offset,
+              offset + limit - 1,
             )) as PostgrestResponse<FollowingData>;
 
           if (error) throw error;

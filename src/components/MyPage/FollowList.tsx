@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   List,
   ListItem,
@@ -7,6 +7,7 @@ import {
   ListItemText,
   Typography,
   Button,
+  Box,
 } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router-dom';
@@ -15,10 +16,16 @@ import {
   useFetchFollowingsQuery,
 } from '@features/MyPage/api/followListApi';
 import { useToggleFollowMutation } from '@features/commons/followApi';
-import { FollowListUser } from './types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { supabase } from '@utils/supabaseClient';
+import {
+  clearUsers,
+  setHasMore,
+  setPage,
+  setUsers,
+  toggleFollowStatus,
+} from '@features/MyPage/slice/followListSlice';
 
 interface FollowListProps {
   setOpen: (open: boolean) => void;
@@ -29,10 +36,12 @@ interface FollowListProps {
 
 const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const [users, setUsers] = useState<FollowListUser[]>([]);
-  const [hasMore, setHasMore] = useState(true);
   const [toggleFollow] = useToggleFollowMutation();
+  const dispatch = useDispatch();
+
+  const { users, hasMore, page } = useSelector(
+    (state: RootState) => state.followList,
+  );
 
   const currentUserId = useSelector(
     (state: RootState) => state.user.userInfo?.id,
@@ -48,6 +57,14 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
       ? followersResult.isFetching
       : followingsResult.isFetching;
 
+  // 초기화
+  useEffect(() => {
+    dispatch(clearUsers());
+    dispatch(setPage(1));
+    dispatch(setHasMore(true));
+  }, [type, userId, dispatch]);
+
+  // 데이터 업데이트
   useEffect(() => {
     if (fetchedData && currentUserId) {
       const checkFollowStatus = async () => {
@@ -66,10 +83,8 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
             isFollowing: followingIds.includes(user.userId),
           }));
 
-          setUsers((prevUsers) => [...prevUsers, ...updatedData]);
-          if (fetchedData.length <= 5) {
-            setHasMore(false);
-          }
+          dispatch(setUsers(updatedData)); // Redux 상태 업데이트
+          dispatch(setHasMore(fetchedData.length >= 5)); // 더 불러올 데이터가 있는지 확인
         } catch (error) {
           console.error('Failed to check follow status:', error);
         }
@@ -77,20 +92,13 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
 
       checkFollowStatus();
     }
-  }, [fetchedData, currentUserId]);
+  }, [fetchedData, currentUserId, dispatch]);
 
   // 팔로우/언팔로우 토글 함수
   const handleToggleFollow = async (targetUserId: string) => {
     try {
       await toggleFollow(targetUserId);
-
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.userId === targetUserId
-            ? { ...user, isFollowing: !user.isFollowing }
-            : user,
-        ),
-      );
+      dispatch(toggleFollowStatus(targetUserId)); // Redux 상태 업데이트
       if (currentUserId === userId) {
         onRefetch();
       }
@@ -104,37 +112,49 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
     setOpen(false);
   };
 
+  const fetchMoreData = useCallback(() => {
+    if (!isFetching && hasMore) {
+      dispatch(setPage(page + 1)); // 페이지 증가
+    }
+  }, [isFetching, hasMore, page, dispatch]);
+
   return (
-    <InfiniteScroll
-      dataLength={users.length}
-      next={() => setPage((prevPage) => prevPage + 1)}
-      hasMore={hasMore}
-      loader={<Typography>Loading...</Typography>}
+    <Box
+      id="FollowListBox"
+      sx={{ height: '250px', overflow: 'auto', position: 'relative' }}
     >
-      <List>
-        {users.map(({ userId, username, avatarUrl, isFollowing }) => (
-          <ListItem key={userId} sx={{ cursor: 'pointer' }}>
-            <ListItemAvatar onClick={() => handleUserClick(username)}>
-              <Avatar src={avatarUrl} />
-            </ListItemAvatar>
-            <ListItemText
-              primary={username}
-              onClick={() => handleUserClick(username)}
-            />
-            {currentUserId !== userId && (
-              <Button
-                variant="contained"
-                size="small"
-                onClick={() => handleToggleFollow(userId)}
-              >
-                {isFollowing ? '언팔로우' : '팔로우'}
-              </Button>
-            )}
-          </ListItem>
-        ))}
-        {isFetching && <Typography>Loading...</Typography>}
-      </List>
-    </InfiniteScroll>
+      <InfiniteScroll
+        dataLength={users.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<Typography>Loading...</Typography>}
+        scrollableTarget="FollowListBox"
+      >
+        <List>
+          {users.map(({ userId, username, avatarUrl, isFollowing }) => (
+            <ListItem key={userId} sx={{ cursor: 'pointer' }}>
+              <ListItemAvatar onClick={() => handleUserClick(username)}>
+                <Avatar src={avatarUrl} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={username}
+                onClick={() => handleUserClick(username)}
+              />
+              {currentUserId !== userId && (
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleToggleFollow(userId)}
+                >
+                  {isFollowing ? '언팔로우' : '팔로우'}
+                </Button>
+              )}
+            </ListItem>
+          ))}
+          {isFetching && <Typography>Loading...</Typography>}
+        </List>
+      </InfiniteScroll>
+    </Box>
   );
 };
 

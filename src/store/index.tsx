@@ -36,6 +36,7 @@ import userPostingsReducer from '@features/MyPage/slice/userPostingMoreSlice';
 import userReviewsReducer from '@features/MyPage/slice/userReviewMoreSlice';
 import likedPostingsReducer from '@features/MyPage/slice/likedPostingMoreSlice';
 import likedReviewsReducer from '@features/MyPage/slice/likedReviewMoreSlice';
+import followListReducer from '@features/MyPage/slice/followListSlice';
 
 export const store = configureStore({
   reducer: {
@@ -70,6 +71,7 @@ export const store = configureStore({
     [userProfileStatsApi.reducerPath]: userProfileStatsApi.reducer,
     counter: counterReducer,
     user: userReducer,
+    followList: followListReducer,
     likedPostings: likedPostingsReducer,
     likedReviews: likedReviewsReducer,
     userPostings: userPostingsReducer,
