@@ -9,11 +9,13 @@ import {
 interface UserFeedTabPanelProps {
   userId: string;
   username: string;
+  type: string;
 }
 
 const UserFeedTabPanel = ({
   userId,
   username,
+  type,
 }: UserFeedTabPanelProps): JSX.Element => {
   const {
     data: oneLineReviewsData,
@@ -29,7 +31,6 @@ const UserFeedTabPanel = ({
   const { data: feedsCount } = useGetUserPostingReviewCountsQuery({
     username,
   });
-  console.log(feedsCount);
 
   if (isLoadingOneLineReviews || isLoadingPostings)
     return <Typography>로딩 중...</Typography>;
@@ -53,6 +54,7 @@ const UserFeedTabPanel = ({
         oneLineReviews={oneLineReviewsData}
         postingsCount={feedsCount?.total_postings_count ?? 0}
         oneLineReviewsCount={feedsCount?.total_reviews_count ?? 0}
+        type={type}
       />
     </>
   );

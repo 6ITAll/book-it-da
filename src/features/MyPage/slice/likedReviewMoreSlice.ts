@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OneLineReview } from '@components/MyPage/types';
 
-export interface UserReviewsState {
+export interface LikedReviewsState {
   reviews: OneLineReview[]; // 포스팅 데이터 배열
   hasMore: boolean; // 더 가져올 데이터가 있는지 여부
   page: number; // 현재 페이지 번호
 }
 
-const initialState: UserReviewsState = {
+const initialState: LikedReviewsState = {
   reviews: [],
   hasMore: true,
   page: 1,
 };
 
-const userReviewsSlice = createSlice({
-  name: 'userReviews',
+const likedReviewsSlice = createSlice({
+  name: 'likedReviews',
   initialState,
   reducers: {
     setReviews(state, action: PayloadAction<OneLineReview[]>) {
@@ -37,16 +37,10 @@ const userReviewsSlice = createSlice({
     setPage(state, action: PayloadAction<number>) {
       state.page = action.payload;
     },
-    deleteReviews(state, action: PayloadAction<string[]>) {
-      // 선택된 post_id를 기준으로 삭제
-      state.reviews = state.reviews.filter(
-        (posting) => !action.payload.includes(posting.post_id),
-      );
-    },
   },
 });
 
-export const { setReviews, clearReviews, setHasMore, setPage, deleteReviews } =
-  userReviewsSlice.actions;
+export const { setReviews, clearReviews, setHasMore, setPage } =
+  likedReviewsSlice.actions;
 
-export default userReviewsSlice.reducer;
+export default likedReviewsSlice.reducer;

@@ -1,6 +1,6 @@
 import {
-  useGetLikedOneLineReviewsQuery,
-  useGetLikedPostingsQuery,
+  useGetLatestLikedPostingsQuery,
+  useGetLatestLikedReviewsQuery,
   useGetUserLikedCountsQuery,
 } from '@features/MyPage/api/userLikedFeedsApi';
 import Feed from './Feed';
@@ -9,26 +9,28 @@ import { Typography } from '@mui/material';
 interface LikedFeedTabPanelProps {
   userId: string;
   username: string;
+  type: string;
 }
 
 const LikedFeedTabPanel = ({
   userId,
   username,
+  type,
 }: LikedFeedTabPanelProps): JSX.Element => {
   const {
     data: likedOneLineReviews,
     error: likedOneLineReviewsError,
     isLoading: isLoadinglikedOneLineReviews,
-  } = useGetLikedOneLineReviewsQuery({ userId });
+  } = useGetLatestLikedReviewsQuery({ userId });
 
   const {
     data: likedPostings,
     error: likedPostingsError,
     isLoading: isLoadinglikedPostings,
-  } = useGetLikedPostingsQuery({ userId });
+  } = useGetLatestLikedPostingsQuery({ userId });
 
   const { data: likedFeedsCount } = useGetUserLikedCountsQuery({
-    userId,
+    username,
   });
 
   if (isLoadinglikedOneLineReviews || isLoadinglikedPostings)
@@ -54,6 +56,7 @@ const LikedFeedTabPanel = ({
         oneLineReviews={likedOneLineReviews}
         postingsCount={likedFeedsCount?.total_liked_postings_count ?? 0}
         oneLineReviewsCount={likedFeedsCount?.total_liked_reviews_count ?? 0}
+        type={type}
       />
     </>
   );

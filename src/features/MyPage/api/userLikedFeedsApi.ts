@@ -14,7 +14,59 @@ export const userLikedFeedsApi = createApi({
   baseQuery: fakeBaseQuery(),
   tagTypes: ['UserLikedFeeds'],
   endpoints: (builder) => ({
-    getLikedOneLineReviews: builder.query<OneLineReview[], { userId: string }>({
+    getLikedOneLineReviews: builder.query<
+      OneLineReview[],
+      { username: string; page: number; limit: number }
+    >({
+      async queryFn({ username, page, limit }) {
+        try {
+          const offset = (page - 1) * limit;
+
+          const { data, error } = await supabase
+            .from('user_liked_one_line_reviews')
+            .select('*')
+            .eq('username', username)
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
+
+          if (error) throw error;
+
+          return { data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: (_, __, { username }) => [
+        { type: 'UserLikedFeeds', id: `LikedOneLineReviews-${username}` },
+      ],
+    }),
+    getLikedPostings: builder.query<
+      Posting[],
+      { username: string; page: number; limit: number }
+    >({
+      async queryFn({ username, page, limit }) {
+        try {
+          const offset = (page - 1) * limit;
+
+          const { data, error } = await supabase
+            .from('user_liked_postings')
+            .select('*')
+            .eq('username', username)
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
+
+          if (error) throw error;
+
+          return { data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: (_, __, { username }) => [
+        { type: 'UserLikedFeeds', id: `LikedPostings-${username}` },
+      ],
+    }),
+    getLatestLikedReviews: builder.query<OneLineReview[], { userId: string }>({
       async queryFn({ userId }) {
         try {
           const { data, error } = (await supabase
@@ -37,7 +89,7 @@ export const userLikedFeedsApi = createApi({
       ],
     }),
 
-    getLikedPostings: builder.query<Posting[], { userId: string }>({
+    getLatestLikedPostings: builder.query<Posting[], { userId: string }>({
       async queryFn({ userId }) {
         try {
           const { data, error } = (await supabase
@@ -61,16 +113,16 @@ export const userLikedFeedsApi = createApi({
     }),
     getUserLikedCounts: builder.query<
       UserLikedCountsResponse,
-      { userId: string }
+      { username: string }
     >({
-      async queryFn({ userId }) {
+      async queryFn({ username }) {
         try {
           const { data, error } = (await supabase
             .from('user_liked_posting_review_counts')
             .select('*')
             .eq(
-              'user_id',
-              userId,
+              'username',
+              username,
             )) as PostgrestResponse<UserLikedCountsResponse>;
 
           if (error) throw error;
@@ -80,8 +132,8 @@ export const userLikedFeedsApi = createApi({
           return { error };
         }
       },
-      providesTags: (_, __, { userId }) => [
-        { type: 'UserLikedFeeds', id: `OneLineReviews-${userId}` },
+      providesTags: (_, __, { username }) => [
+        { type: 'UserLikedFeeds', id: `OneLineReviews-${username}` },
       ],
     }),
   }),
@@ -90,5 +142,7 @@ export const userLikedFeedsApi = createApi({
 export const {
   useGetLikedOneLineReviewsQuery,
   useGetLikedPostingsQuery,
+  useGetLatestLikedReviewsQuery,
+  useGetLatestLikedPostingsQuery,
   useGetUserLikedCountsQuery,
 } = userLikedFeedsApi;

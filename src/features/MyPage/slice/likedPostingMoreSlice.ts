@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Posting } from '@components/MyPage/types';
 
-export interface UserPostingsState {
+export interface LikedPostingsState {
   postings: Posting[]; // 포스팅 데이터 배열
   hasMore: boolean; // 더 가져올 데이터가 있는지 여부
   page: number; // 현재 페이지 번호
 }
 
-const initialState: UserPostingsState = {
+const initialState: LikedPostingsState = {
   postings: [],
   hasMore: true,
   page: 1,
 };
 
-const userPostingsSlice = createSlice({
+const likedPostingsSlice = createSlice({
   name: 'likedReviews',
   initialState,
   reducers: {
@@ -37,21 +37,10 @@ const userPostingsSlice = createSlice({
     setPage(state, action: PayloadAction<number>) {
       state.page = action.payload;
     },
-    deletePostings(state, action: PayloadAction<string[]>) {
-      // 선택된 post_id를 기준으로 삭제
-      state.postings = state.postings.filter(
-        (posting) => !action.payload.includes(posting.post_id),
-      );
-    },
   },
 });
 
-export const {
-  setPostings,
-  clearPostings,
-  setHasMore,
-  setPage,
-  deletePostings,
-} = userPostingsSlice.actions;
+export const { setPostings, clearPostings, setHasMore, setPage } =
+  likedPostingsSlice.actions;
 
-export default userPostingsSlice.reducer;
+export default likedPostingsSlice.reducer;

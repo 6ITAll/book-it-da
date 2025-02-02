@@ -1,47 +1,47 @@
-import ReviewMorePageTemplate from '@components/ReviewMorePage/ReviewMorePageTemplate';
+import PostingMoreTemplate from '@components/PostingMorePage/PostingMoreTemplate';
 import {
-  useGetLikedOneLineReviewsQuery,
+  useGetLikedPostingsQuery,
   useGetUserLikedCountsQuery,
 } from '@features/MyPage/api/userLikedFeedsApi';
 import {
-  clearReviews,
+  clearPostings,
   setHasMore,
   setPage,
-  setReviews,
-} from '@features/MyPage/slice/likedReviewMoreSlice';
+  setPostings,
+} from '@features/MyPage/slice/likedPostingMoreSlice';
 import { RootState } from '@store/index';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-const LikedReviewMorePage = (): JSX.Element => {
+const LikedPostingMorePage = (): JSX.Element => {
   const { username } = useParams<{ username: string }>();
   const dispatch = useDispatch();
 
-  const { reviews, hasMore, page } = useSelector(
-    (state: RootState) => state.likedReviews,
+  const { postings, hasMore, page } = useSelector(
+    (state: RootState) => state.likedPostings,
   );
 
-  const limit = 10;
+  const limit = 5;
 
   const { data: likedCount } = useGetUserLikedCountsQuery({
     username: username || '',
   });
 
-  const { data: fetchedData, isLoading } = useGetLikedOneLineReviewsQuery(
+  const { data: fetchedData, isLoading } = useGetLikedPostingsQuery(
     { username: username || '', page, limit },
     { skip: !username },
   );
 
   useEffect(() => {
-    dispatch(clearReviews());
+    dispatch(clearPostings());
     dispatch(setPage(1));
     dispatch(setHasMore(true));
   }, [username, dispatch]);
 
   useEffect(() => {
     if (fetchedData) {
-      dispatch(setReviews(fetchedData));
+      dispatch(setPostings(fetchedData));
       dispatch(setHasMore(fetchedData.length === limit));
     }
   }, [fetchedData, dispatch]);
@@ -53,13 +53,14 @@ const LikedReviewMorePage = (): JSX.Element => {
   }, [isLoading, hasMore, page, dispatch]);
 
   return (
-    <ReviewMorePageTemplate
-      totalReviews={likedCount?.total_liked_reviews_count ?? 0}
-      reviews={reviews}
+    <PostingMoreTemplate
+      totalPostings={likedCount?.total_liked_postings_count}
+      postings={postings}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}
+      likedPosting={true}
     />
   );
 };
 
-export default LikedReviewMorePage;
+export default LikedPostingMorePage;

@@ -10,14 +10,23 @@ interface OneLineReviewSectionProps {
   username: string;
   oneLineReviews: OneLineReview[];
   oneLineReviewCount: number;
+  type: string;
 }
 
 const OneLineReviewSection = ({
   username,
   oneLineReviews,
   oneLineReviewCount,
+  type,
 }: OneLineReviewSectionProps): JSX.Element => {
   const navigate = useNavigate();
+  const handleNavigate = () => {
+    if (type === '내 피드') {
+      navigate(`/my-page/${username}/feeds/reviews`);
+    } else if (type === '좋아요한 피드') {
+      navigate(`/my-page/${username}/liked/reviews`);
+    }
+  };
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <Box
@@ -35,9 +44,7 @@ const OneLineReviewSection = ({
           size="small"
           variant="text"
           sx={bookReviewTabStyles.moreButton}
-          onClick={() => {
-            navigate(`/my-page/${username}/feeds/reviews`);
-          }}
+          onClick={handleNavigate}
         >
           더보기
         </Button>

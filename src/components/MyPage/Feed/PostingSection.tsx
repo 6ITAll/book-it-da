@@ -9,15 +9,23 @@ interface PostingFeedSectionProps {
   username: string;
   postings: Posting[];
   postingCount: number;
+  type: string;
 }
 
 const PostingFeedSection = ({
   username,
   postings,
   postingCount,
+  type,
 }: PostingFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
-
+  const handleNavigate = () => {
+    if (type === '내 피드') {
+      navigate(`/my-page/${username}/feeds/postings`);
+    } else if (type === '좋아요한 피드') {
+      navigate(`/my-page/${username}/liked/postings`);
+    }
+  };
   return (
     <Box>
       <Box
@@ -35,9 +43,7 @@ const PostingFeedSection = ({
           size="small"
           variant="text"
           sx={bookReviewTabStyles.moreButton}
-          onClick={() => {
-            navigate(`/my-page/${username}/feeds/postings`);
-          }}
+          onClick={handleNavigate}
         >
           더보기
         </Button>

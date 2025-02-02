@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PostCard from '@components/commons/PostCard';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
 import { Box, Typography, Button, Checkbox, Stack } from '@mui/material';
@@ -14,6 +14,7 @@ interface PostingMoreTemplateProps {
   postings: Posting[];
   hasMore: boolean;
   fetchMoreData: () => void;
+  likedPosting?: boolean;
 }
 
 const PostingMoreTemplate = ({
@@ -21,6 +22,7 @@ const PostingMoreTemplate = ({
   postings,
   hasMore,
   fetchMoreData,
+  likedPosting = false,
 }: PostingMoreTemplateProps) => {
   const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
   const [selectedPostings, setSelectedPostings] = useState<string[]>([]);
@@ -44,10 +46,6 @@ const PostingMoreTemplate = ({
           : [...prev, postId], // 선택되지 않은 경우 추가
     );
   };
-
-  useEffect(() => {
-    console.log(selectedPostings);
-  }, [selectedPostings]);
 
   const handleDeleteSelected = async () => {
     try {
@@ -74,7 +72,7 @@ const PostingMoreTemplate = ({
           {`포스트 목록 (${totalPostings || 0}개)`}
         </Typography>
         <Stack direction="row" spacing={2}>
-          {currentUsername === username && (
+          {currentUsername === username && !likedPosting && (
             <>
               <Button
                 onClick={handleDeleteModeToggle}

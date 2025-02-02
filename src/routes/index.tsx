@@ -14,7 +14,7 @@ import EditAccountPage from '@pages/EditAccountPage.tsx/EditAccountPage';
 import PasswordChkPage from '@pages/PasswordChkPage/PasswordChkPage';
 import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
 import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
-import LikedPostMorePage from '@pages/LikedPostMorePage/LikedPostMorePage';
+import LikedPostingMorePage from '@pages/LikedPostingMorePage/LikedPostingMorePage';
 import LikedReviewMorePage from '@pages/LikedReviewMorePage/LikedReviewMorePage';
 import MyPage from '@pages/MyPage/MyPage';
 import AdditionalInfoPage from '@pages/AdditionalInfoPage/AdditionalInfoPage';
@@ -92,7 +92,7 @@ const AppRouter = () => {
       />
       <Route
         path={`${RoutePaths.MY_PAGE}/:username?/liked/${RoutePaths.POSTINGS}`}
-        element={<LikedPostMorePage />}
+        element={<LikedPostingMorePage />}
       />
       <Route
         path={`${RoutePaths.MY_PAGE}/:username?/liked/${RoutePaths.REVIEWS}`}

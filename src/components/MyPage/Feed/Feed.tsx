@@ -9,6 +9,7 @@ interface FeedProps {
   postings: Posting[];
   oneLineReviewsCount: number;
   postingsCount: number;
+  type: string;
 }
 
 const Feed = ({
@@ -17,6 +18,7 @@ const Feed = ({
   postings,
   oneLineReviewsCount,
   postingsCount,
+  type,
 }: FeedProps): JSX.Element => {
   return (
     <>
@@ -24,11 +26,13 @@ const Feed = ({
         username={username}
         oneLineReviews={oneLineReviews}
         oneLineReviewCount={oneLineReviewsCount}
+        type={type}
       />
       <PostingFeedSection
         username={username}
         postings={postings}
         postingCount={postingsCount}
+        type={type}
       />
     </>
   );
