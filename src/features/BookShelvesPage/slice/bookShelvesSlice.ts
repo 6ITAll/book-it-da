@@ -55,6 +55,24 @@ export const bookShelvesSlice = createSlice({
         book.readingStatus = action.payload.readingStatus;
       }
     },
+    updateBookInfo: (
+      state,
+      action: PayloadAction<{
+        isbn: string;
+        title: string;
+        author: string;
+        imageUrl: string;
+      }>,
+    ) => {
+      const book = state.books.find(
+        (book) => book.isbn === action.payload.isbn,
+      );
+      if (book) {
+        book.title = action.payload.title;
+        book.author = action.payload.author;
+        book.imageUrl = action.payload.imageUrl;
+      }
+    },
   },
 });
 
@@ -66,6 +84,7 @@ export const {
   setBookshelfName,
   deleteBookfromBookShelf,
   updateReadingStatus,
+  updateBookInfo,
 } = bookShelvesSlice.actions;
 
 export default bookShelvesSlice.reducer;

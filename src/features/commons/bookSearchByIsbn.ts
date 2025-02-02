@@ -26,13 +26,21 @@ export const bookSearchByIsbnApi = createApi({
         },
       }),
       transformResponse: (response: {
-        item: BookbyIsbnResponse[];
+        item?: BookbyIsbnResponse[];
       }): BookbyIsbnResponse => {
+        if (!response?.item?.[0]) {
+          return {
+            title: '',
+            author: '',
+            cover: '',
+          };
+        }
+
         const item = response.item[0];
         return {
-          title: item.title,
-          author: item.author,
-          cover: item.cover,
+          title: item.title || '',
+          author: item.author || '',
+          cover: item.cover || '',
         };
       },
     }),

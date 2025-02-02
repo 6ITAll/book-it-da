@@ -18,6 +18,9 @@ import {
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
+import { useEffect } from 'react';
+import { updateBookInfo } from '@features/BookShelvesPage/slice/bookShelvesSlice';
+import { useDispatch } from 'react-redux';
 
 interface BookCardProps {
   book: SavedBook;
@@ -27,9 +30,23 @@ interface BookCardProps {
 
 const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
   const formattedDate = formatDate(book.addedAt);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
   const { data: bookInfo } = useSearchBookByIsbnQuery({ isbn: book?.isbn });
+
+  useEffect(() => {
+    if (bookInfo) {
+      dispatch(
+        updateBookInfo({
+          isbn: book.isbn,
+          title: bookInfo.title,
+          author: bookInfo.author,
+          imageUrl: bookInfo.cover,
+        }),
+      );
+    }
+  }, [bookInfo, book.isbn, dispatch]);
 
   return (
     <>

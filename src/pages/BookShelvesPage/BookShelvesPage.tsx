@@ -82,7 +82,7 @@ const BookShelvesPage = () => {
   if (isLoading) return <div>Loading...</div>;
   if (!data) return null;
 
-  const sortedBooks = sortBooks(data.books, sortOption);
+  const sortedBooks = sortBooks(books, sortOption);
 
   return (
     <Container maxWidth="lg" sx={bookShelvesStyles.container}>
