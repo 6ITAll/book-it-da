@@ -28,8 +28,6 @@ const RightBookBoxDetailBox = ({
   pubDate,
   link,
   imageUrl,
-  customerReviewRank,
-  ratingCount,
   isLoading,
 }: RightBookBoxProps): JSX.Element => {
   const { data } = useFetchLibraryCountQuery(isbn);
@@ -51,8 +49,7 @@ const RightBookBoxDetailBox = ({
             author={author}
             categoryName={categoryName}
             pubDate={pubDate}
-            customerReviewRank={customerReviewRank}
-            ratingCount={ratingCount}
+            isbn={isbn}
           />
         )}
 

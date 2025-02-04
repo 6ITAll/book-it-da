@@ -5,6 +5,7 @@ import { bestBookGetApi } from '@features/BookSearchPage/api/bestBookGetApi';
 import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { kakaoApi } from '@features/SNSLogin/api/Kakaoapi';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
+import { bookDetailInfoApi } from '@features/BookDetailPage/api/bookDetailInfoApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
 import { postApi } from '@features/BookDetailPage/api/postApi';
@@ -41,6 +42,7 @@ export const store = configureStore({
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [kakaoApi.reducerPath]: kakaoApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
+    [bookDetailInfoApi.reducerPath]: bookDetailInfoApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
     [postingApi.reducerPath]: postingApi.reducer,
@@ -70,6 +72,7 @@ export const store = configureStore({
       bestBookGetApi.middleware,
       kakaoApi.middleware,
       bookDetailApi.middleware,
+      bookDetailInfoApi.middleware,
       libraryApi.middleware,
       bookShelvesApi.middleware,
       postingApi.middleware,
