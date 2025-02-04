@@ -1,10 +1,10 @@
-import { User } from '@features/user/types';
-
-export interface SignupData
-  extends Omit<
-    User,
-    'avatarUrl' | 'isFollowing' | 'isFollower' | 'userStats' | 'about'
-  > {
+export interface SignupData {
+  name: string;
+  userId: string;
+  phone: string;
+  password: string;
+  gender: string;
+  age: number;
   email: string;
   confirmPassword: string;
 }

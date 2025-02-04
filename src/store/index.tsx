@@ -3,7 +3,6 @@ import counterReducer from '../features/counter/counterSlice';
 import { bookSearchApi } from '@features/BookSearchPage/api/bookSearchApi';
 import { bestBookGetApi } from '@features/BookSearchPage/api/bestBookGetApi';
 import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
-import { kakaoApi } from '@features/SNSLogin/api/Kakaoapi';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
@@ -47,7 +46,6 @@ export const store = configureStore({
     [bookSearchApi.reducerPath]: bookSearchApi.reducer,
     [bookSearchByIsbnApi.reducerPath]: bookSearchByIsbnApi.reducer,
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
-    [kakaoApi.reducerPath]: kakaoApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
@@ -84,7 +82,6 @@ export const store = configureStore({
       bookSearchApi.middleware,
       bookSearchByIsbnApi.middleware,
       bestBookGetApi.middleware,
-      kakaoApi.middleware,
       bookDetailApi.middleware,
       libraryApi.middleware,
       bookShelvesApi.middleware,
