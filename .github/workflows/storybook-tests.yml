@@ -50,11 +50,6 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-      - name: Update Node.js dependencies
-        run: |
-          npm update
-          echo "Updated packages:"
-          npm list --depth=0
       - name: Check for Storybook stories
         id: check-stories
         run: |
@@ -168,11 +163,6 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-      - name: Update Node.js dependencies
-        run: |
-          npm update
-          echo "Updated packages:"
-          npm list --depth=0
       - name: Check for Storybook stories
         id: check-stories
         run: |
