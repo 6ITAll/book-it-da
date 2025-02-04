@@ -1,0 +1,18 @@
+{
+  "ignores": [
+    "@storybook/addon-*",
+    "@chromatic-com/storybook",
+    "esbuild",
+    "@pages/*",
+    "@features/*",
+    "@components/*",
+    "@shared/*",
+    "@store/*",
+    "@styles/*",
+    "@hooks/*",
+    "@utils/*",
+    "@constants/*",
+    "@assets/*",
+    "@mocks/*"
+  ]
+}

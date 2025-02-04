@@ -42,7 +42,16 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
         )}
       </Box>
       {/* 포스팅 내용 */}
-      <Box sx={{ whiteSpace: 'pre-wrap' }}>{parse(content)}</Box>
+      <Box
+        sx={{
+          whiteSpace: 'pre-wrap',
+          wordWrap: 'break-word',
+          overflowWrap: 'anywhere',
+          width: '100%',
+        }}
+      >
+        {parse(content)}
+      </Box>
     </>
   );
 };
