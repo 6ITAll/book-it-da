@@ -21,9 +21,7 @@ const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  const { data: likeStatus, refetch } = useCheckLikeStatusQuery(postId, {
-    skip: !isLoggedIn,
-  });
+  const { data: likeStatus, refetch } = useCheckLikeStatusQuery(postId);
   const [toggleLike] = useToggleLikeMutation();
 
   const handleLike = async () => {
