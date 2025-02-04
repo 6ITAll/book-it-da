@@ -58,6 +58,7 @@ const LikedReviewMorePage = (): JSX.Element => {
       reviews={reviews}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}
+      likedReview={true}
     />
   );
 };

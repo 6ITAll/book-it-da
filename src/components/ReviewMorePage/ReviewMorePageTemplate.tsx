@@ -10,8 +10,10 @@ import { Book } from '@shared/types/type';
 import { OneLineReview } from '@components/MyPage/types';
 import { formatDate } from '@shared/utils/dateUtils';
 import { deleteReviews } from '@features/MyPage/slice/userReviewMoreSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useDeletePostsMutation } from '@features/MyPage/api/userFeedsApi';
+import { RootState } from '@store/index';
+import { useParams } from 'react-router-dom';
 
 interface BookDetail extends Omit<Book, 'bookTitle'> {
   title: string;
@@ -23,6 +25,7 @@ interface ReviewMorePageTemplateProps {
   hasMore: boolean;
   fetchMoreData: () => void;
   bookDetails?: BookDetail;
+  likedReview?: boolean;
 }
 
 const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
@@ -31,6 +34,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
   hasMore,
   fetchMoreData,
   bookDetails,
+  likedReview = false,
 }) => {
   const [selectedRating, setSelectedRating] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -41,6 +45,11 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
 
   const dispatch = useDispatch();
   const [deletePosts] = useDeletePostsMutation();
+
+  const { username } = useParams<{ username: string }>();
+  const currentUsername = useSelector(
+    (state: RootState) => state.user.userInfo?.username,
+  );
 
   // useEffect(() => {
   //   const updatedReviews = [...reviews];
@@ -89,9 +98,8 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
 
   const handleDeleteSelected = async () => {
     try {
-      await deletePosts(selectedReviews); // 선택된 게시물 삭제
+      await deletePosts(selectedReviews);
 
-      // Redux 상태에서 삭제된 게시물 제거
       dispatch(deleteReviews(selectedReviews));
 
       setIsDeleteMode(false);
@@ -140,24 +148,28 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
           한줄평 {totalReviews}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Button
-            startIcon={<DeleteIcon />}
-            onClick={handleDeleteModeToggle}
-            color={isDeleteMode ? 'secondary' : 'primary'}
-            variant={isDeleteMode ? 'contained' : 'outlined'}
-            size="small"
-          >
-            {isDeleteMode ? '취소' : '삭제'}
-          </Button>
-          {isDeleteMode && (
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleDeleteSelected}
-              disabled={selectedReviews.length === 0}
-            >
-              선택 삭제 ({selectedReviews.length})
-            </Button>
+          {currentUsername === username && !likedReview && (
+            <>
+              <Button
+                startIcon={<DeleteIcon />}
+                onClick={handleDeleteModeToggle}
+                color={isDeleteMode ? 'secondary' : 'primary'}
+                variant={isDeleteMode ? 'contained' : 'outlined'}
+                size="small"
+              >
+                {isDeleteMode ? '취소' : '삭제'}
+              </Button>
+              {isDeleteMode && (
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDeleteSelected}
+                  disabled={selectedReviews.length === 0}
+                >
+                  선택 삭제 ({selectedReviews.length})
+                </Button>
+              )}
+            </>
           )}
           <ReviewSortOptions value={sortOption} onChange={handleSortChange} />
         </Stack>
