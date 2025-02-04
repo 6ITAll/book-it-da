@@ -54,7 +54,7 @@ const LikedPostingMorePage = (): JSX.Element => {
 
   return (
     <PostingMoreTemplate
-      totalPostings={likedCount?.total_liked_postings_count}
+      totalPostings={likedCount?.totalLikedPostingsCount}
       postings={postings}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}

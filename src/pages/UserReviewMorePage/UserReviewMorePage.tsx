@@ -54,7 +54,7 @@ const UserReviewMorePage = (): JSX.Element => {
 
   return (
     <ReviewMorePageTemplate
-      totalReviews={feedsCount?.total_reviews_count ?? 0}
+      totalReviews={feedsCount?.totalReviewsCount ?? 0}
       reviews={reviews}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}

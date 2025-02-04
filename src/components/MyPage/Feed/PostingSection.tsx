@@ -26,6 +26,7 @@ const PostingFeedSection = ({
       navigate(`/my-page/${username}/liked/postings`);
     }
   };
+  console.log(postings);
   return (
     <Box>
       <Box
@@ -56,7 +57,7 @@ const PostingFeedSection = ({
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <PostCard
-              postId={posting.post_id}
+              postId={posting.postId}
               title={posting.title}
               content={posting.content}
               isbn={posting.book.isbn}

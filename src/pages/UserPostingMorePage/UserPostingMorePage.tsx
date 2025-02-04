@@ -54,7 +54,7 @@ const UserPostingMorePage = (): JSX.Element => {
 
   return (
     <PostingMoreTemplate
-      totalPostings={feedsCount?.total_postings_count}
+      totalPostings={feedsCount?.totalPostingsCount}
       postings={postings}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}

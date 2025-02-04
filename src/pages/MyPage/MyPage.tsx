@@ -61,7 +61,7 @@ const MyPage = (): JSX.Element => {
     <Container maxWidth="md">
       <UserInfoSection
         userInfo={{
-          userId: data?.user_id,
+          id: data?.user_id,
           name: data?.user_name,
           avatarUrl: data?.user_avatar_url,
           about: data?.user_about,

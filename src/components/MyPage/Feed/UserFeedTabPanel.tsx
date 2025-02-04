@@ -52,8 +52,8 @@ const UserFeedTabPanel = ({
         username={username}
         postings={postingsData}
         oneLineReviews={oneLineReviewsData}
-        postingsCount={feedsCount?.total_postings_count ?? 0}
-        oneLineReviewsCount={feedsCount?.total_reviews_count ?? 0}
+        postingsCount={feedsCount?.totalPostingsCount ?? 0}
+        oneLineReviewsCount={feedsCount?.totalReviewsCount ?? 0}
         type={type}
       />
     </>

@@ -178,17 +178,17 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
           >
             {isDeleteMode && (
               <Checkbox
-                checked={selectedReviews.includes(review.post_id)}
-                onChange={() => handleReviewSelect(review.post_id)}
+                checked={selectedReviews.includes(review.postId)}
+                onChange={() => handleReviewSelect(review.postId)}
                 sx={{ padding: '4px', marginRight: '8px' }}
               />
             )}
             <Box sx={{ flexGrow: 1 }}>
               <ReviewCard
-                postId={review.post_id}
+                postId={review.postId}
                 username={review.user.username}
-                avatarUrl={review.user.avatar_url ?? ''}
-                date={formatDate(review.created_at)}
+                avatarUrl={review.user.avatarUrl ?? ''}
+                date={formatDate(review.createdAt)}
                 content={review.review}
                 rating={review.rating ?? 0}
                 isbn={review.book.isbn}

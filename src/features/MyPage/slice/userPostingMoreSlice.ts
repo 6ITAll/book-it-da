@@ -21,7 +21,7 @@ const userPostingsSlice = createSlice({
       const newPostings = action.payload.filter(
         (newPosting) =>
           !state.postings.some(
-            (posting) => posting.post_id === newPosting.post_id,
+            (posting) => posting.postId === newPosting.postId,
           ),
       );
       state.postings = [...state.postings, ...newPostings];
@@ -39,7 +39,7 @@ const userPostingsSlice = createSlice({
     },
     deletePostings(state, action: PayloadAction<string[]>) {
       state.postings = state.postings.filter(
-        (posting) => !action.payload.includes(posting.post_id),
+        (posting) => !action.payload.includes(posting.postId),
       );
     },
   },

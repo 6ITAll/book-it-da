@@ -112,14 +112,14 @@ const PostingMoreTemplate = ({
           >
             {isDeleteMode && (
               <Checkbox
-                checked={selectedPostings.includes(posting.post_id)}
-                onChange={() => handlePostingsSelect(posting.post_id)}
+                checked={selectedPostings.includes(posting.postId)}
+                onChange={() => handlePostingsSelect(posting.postId)}
                 sx={{ padding: '4px', marginRight: '8px' }}
               />
             )}
             <Box sx={{ flexGrow: 1 }}>
               <PostCard
-                postId={posting.post_id}
+                postId={posting.postId}
                 title={posting.title}
                 content={posting.content}
                 isbn={posting.book.isbn}

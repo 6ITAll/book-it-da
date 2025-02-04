@@ -57,11 +57,11 @@ const OneLineReviewSection = ({
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <ReviewCard
-              postId={oneLineReview.post_id}
+              postId={oneLineReview.postId}
               rating={oneLineReview.rating ?? 0}
               username={oneLineReview.user.username}
-              avatarUrl={oneLineReview.user.avatar_url ?? ''}
-              date={formatDate(oneLineReview.created_at)}
+              avatarUrl={oneLineReview.user.avatarUrl ?? ''}
+              date={formatDate(oneLineReview.createdAt)}
               content={oneLineReview.review}
               isbn={oneLineReview.book.isbn}
             />

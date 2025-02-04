@@ -22,9 +22,9 @@ export interface BookDetailPost {
 export interface User {
   id: string;
   username?: string;
+  name?: string;
   avatarUrl?: string;
   isFollowing?: boolean;
-  isFollower?: boolean;
 }
 
 // UserInfo 인터페이스 정의

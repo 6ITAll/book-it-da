@@ -19,8 +19,7 @@ const followListSlice = createSlice({
   reducers: {
     setUsers(state, action: PayloadAction<FollowListUser[]>) {
       const newUsers = action.payload.filter(
-        (newUser) =>
-          !state.users.some((user) => user.userId === newUser.userId),
+        (newUser) => !state.users.some((user) => user.id === newUser.id),
       );
       state.users = [...state.users, ...newUsers];
     },
@@ -36,7 +35,7 @@ const followListSlice = createSlice({
       state.page = action.payload;
     },
     toggleFollowStatus(state, action: PayloadAction<string>) {
-      const user = state.users.find((u) => u.userId === action.payload);
+      const user = state.users.find((u) => u.id === action.payload);
       if (user) {
         user.isFollowing = !user.isFollowing;
       }

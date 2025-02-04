@@ -1,32 +1,8 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
 import { PostgrestResponse } from '@supabase/supabase-js';
-
-export interface User {
-  userId: string;
-  username: string;
-  name: string;
-  avatarUrl: string;
-  isFollowing?: boolean;
-}
-
-interface FollowerData {
-  follower_id: {
-    id: string;
-    username: string;
-    name: string;
-    avatar_url: string;
-  };
-}
-
-interface FollowingData {
-  following_id: {
-    id: string;
-    username: string;
-    name: string;
-    avatar_url: string;
-  };
-}
+import { DbFollowerData, DbFollowingData } from '../types/types';
+import { User } from '@shared/types/type';
 
 export const followListApi = createApi({
   reducerPath: 'followListApi',
@@ -49,13 +25,13 @@ export const followListApi = createApi({
             .range(
               offset,
               offset + limit - 1,
-            )) as PostgrestResponse<FollowerData>;
+            )) as PostgrestResponse<DbFollowerData>;
 
           if (error) throw error;
 
           // 데이터 매핑
           const followers = data.map((item) => ({
-            userId: item.follower_id.id,
+            id: item.follower_id.id,
             username: item.follower_id.username,
             name: item.follower_id.name,
             avatarUrl: item.follower_id.avatar_url,
@@ -67,9 +43,7 @@ export const followListApi = createApi({
         }
       },
       providesTags: (result) =>
-        result
-          ? result.map(({ userId }) => ({ type: 'FollowList', id: userId }))
-          : [],
+        result ? result.map(({ id }) => ({ type: 'FollowList', id })) : [],
     }),
 
     // 팔로잉 목록 조회
@@ -89,13 +63,13 @@ export const followListApi = createApi({
             .range(
               offset,
               offset + limit - 1,
-            )) as PostgrestResponse<FollowingData>;
+            )) as PostgrestResponse<DbFollowingData>;
 
           if (error) throw error;
 
           // 데이터 매핑
           const followings = data.map((item) => ({
-            userId: item.following_id.id,
+            id: item.following_id.id,
             username: item.following_id.username,
             name: item.following_id.name,
             avatarUrl: item.following_id.avatar_url,
@@ -107,9 +81,7 @@ export const followListApi = createApi({
         }
       },
       providesTags: (result) =>
-        result
-          ? result.map(({ userId }) => ({ type: 'FollowList', id: userId }))
-          : [],
+        result ? result.map(({ id }) => ({ type: 'FollowList', id })) : [],
     }),
   }),
 });

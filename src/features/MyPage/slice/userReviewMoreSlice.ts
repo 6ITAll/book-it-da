@@ -20,9 +20,7 @@ const userReviewsSlice = createSlice({
     setReviews(state, action: PayloadAction<OneLineReview[]>) {
       const newReviews = action.payload.filter(
         (newReviews) =>
-          !state.reviews.some(
-            (review) => review.post_id === newReviews.post_id,
-          ),
+          !state.reviews.some((review) => review.postId === newReviews.postId),
       );
       state.reviews = [...state.reviews, ...newReviews];
     },
@@ -39,7 +37,7 @@ const userReviewsSlice = createSlice({
     },
     deleteReviews(state, action: PayloadAction<string[]>) {
       state.reviews = state.reviews.filter(
-        (posting) => !action.payload.includes(posting.post_id),
+        (posting) => !action.payload.includes(posting.postId),
       );
     },
   },

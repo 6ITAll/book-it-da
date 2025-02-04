@@ -1,13 +1,15 @@
-import { OneLineReview, Posting } from '@components/MyPage/types';
+import {
+  OneLineReview,
+  Posting,
+  UserPostingReviewCounts,
+} from '@components/MyPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { PostgrestResponse } from '@supabase/supabase-js';
 import { supabase } from '@utils/supabaseClient';
-
-export interface UserPostingReviewCountsResponse {
-  user_id: string;
-  total_postings_count: number;
-  total_reviews_count: number;
-}
+import {
+  DbOneLineReview,
+  DbPosting,
+  DbUserPostingReviewCounts,
+} from '../types/types';
 
 export const userFeedsApi = createApi({
   reducerPath: 'userFeedsApi',
@@ -31,7 +33,22 @@ export const userFeedsApi = createApi({
 
           if (error) throw error;
 
-          return { data };
+          const reviews: OneLineReview[] = (data as DbOneLineReview[]).map(
+            (review) => ({
+              postId: review.post_id,
+              review: review.review,
+              rating: review.rating,
+              book: review.book,
+              createdAt: review.created_at,
+              user: {
+                id: review.user.id,
+                username: review.user.username,
+                avatarUrl: review.user.avatar_url,
+              },
+            }),
+          );
+
+          return { data: reviews };
         } catch (error) {
           return { error };
         }
@@ -40,6 +57,7 @@ export const userFeedsApi = createApi({
         { type: 'UserFeeds', id: `AllOneLineReviews-${username}` },
       ],
     }),
+
     getAllPostings: builder.query<
       Posting[],
       { username: string; page: number; limit: number }
@@ -57,7 +75,20 @@ export const userFeedsApi = createApi({
 
           if (error) throw error;
 
-          return { data };
+          const postings: Posting[] = (data as DbPosting[]).map((posting) => ({
+            postId: posting.post_id,
+            title: posting.title,
+            content: posting.content,
+            book: posting.book,
+            createdAt: posting.created_at,
+            user: {
+              id: posting.user.id,
+              username: posting.user.username,
+              avatarUrl: posting.user.avatar_url,
+            },
+          }));
+
+          return { data: postings };
         } catch (error) {
           return { error };
         }
@@ -66,21 +97,35 @@ export const userFeedsApi = createApi({
         { type: 'UserFeeds', id: `AllPostings-${username}` },
       ],
     }),
+
     getLatestOneLineReviews: builder.query<OneLineReview[], { userId: string }>(
       {
         async queryFn({ userId }) {
           try {
-            const { data, error } = (await supabase
+            const { data, error } = await supabase
               .from('latest_user_one_line_reviews')
               .select('*')
-              .eq('user_id', userId)) as PostgrestResponse<{
-              user_id: string;
-              latest_reviews: OneLineReview[];
-            }>;
+              .eq('user_id', userId);
 
             if (error) throw error;
 
-            return { data: data[0]?.latest_reviews || [] };
+            const dbReviews = data[0]?.latest_reviews || [];
+            const reviews: OneLineReview[] = dbReviews.map(
+              (review: DbOneLineReview) => ({
+                postId: review.post_id,
+                review: review.review,
+                rating: review.rating,
+                book: review.book,
+                createdAt: review.created_at,
+                user: {
+                  id: review.user.id,
+                  username: review.user.username,
+                  avatarUrl: review.user.avatar_url,
+                },
+              }),
+            );
+
+            return { data: reviews };
           } catch (error) {
             return { error };
           }
@@ -94,17 +139,28 @@ export const userFeedsApi = createApi({
     getLatestPostings: builder.query<Posting[], { userId: string }>({
       async queryFn({ userId }) {
         try {
-          const { data, error } = (await supabase
+          const { data, error } = await supabase
             .from('latest_user_postings')
             .select('*')
-            .eq('user_id', userId)) as PostgrestResponse<{
-            user_id: string;
-            latest_postings: Posting[];
-          }>;
+            .eq('user_id', userId);
 
           if (error) throw error;
 
-          return { data: data[0]?.latest_postings || [] };
+          const dbPostings = data[0]?.latest_postings || [];
+          const postings: Posting[] = dbPostings.map((posting: DbPosting) => ({
+            postId: posting.post_id,
+            title: posting.title,
+            content: posting.content,
+            book: posting.book,
+            createdAt: posting.created_at,
+            user: {
+              id: posting.user.id,
+              username: posting.user.username,
+              avatarUrl: posting.user.avatar_url,
+            },
+          }));
+
+          return { data: postings };
         } catch (error) {
           return { error };
         }
@@ -115,22 +171,26 @@ export const userFeedsApi = createApi({
     }),
 
     getUserPostingReviewCounts: builder.query<
-      UserPostingReviewCountsResponse,
+      UserPostingReviewCounts,
       { username: string }
     >({
       async queryFn({ username }) {
         try {
-          const { data, error } = (await supabase
+          const { data, error } = await supabase
             .from('user_posting_review_counts')
             .select('*')
-            .eq(
-              'username',
-              username,
-            )) as PostgrestResponse<UserPostingReviewCountsResponse>;
+            .eq('username', username);
 
           if (error) throw error;
 
-          return { data: data[0] };
+          const dbCounts = data[0] as DbUserPostingReviewCounts;
+          return {
+            data: {
+              userId: dbCounts.user_id,
+              totalPostingsCount: dbCounts.total_postings_count,
+              totalReviewsCount: dbCounts.total_reviews_count,
+            },
+          };
         } catch (error) {
           return { error };
         }
@@ -139,6 +199,7 @@ export const userFeedsApi = createApi({
         { type: 'UserFeeds', id: `Counts-${username}` },
       ],
     }),
+
     deletePosts: builder.mutation<void, string[]>({
       async queryFn(postIds) {
         try {

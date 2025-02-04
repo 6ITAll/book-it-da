@@ -20,9 +20,7 @@ const likedReviewsSlice = createSlice({
     setReviews(state, action: PayloadAction<OneLineReview[]>) {
       const newReviews = action.payload.filter(
         (newReviews) =>
-          !state.reviews.some(
-            (review) => review.post_id === newReviews.post_id,
-          ),
+          !state.reviews.some((review) => review.postId === newReviews.postId),
       );
       state.reviews = [...state.reviews, ...newReviews];
     },

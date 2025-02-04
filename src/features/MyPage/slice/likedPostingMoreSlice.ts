@@ -21,7 +21,7 @@ const likedPostingsSlice = createSlice({
       const newPostings = action.payload.filter(
         (newPosting) =>
           !state.postings.some(
-            (posting) => posting.post_id === newPosting.post_id,
+            (posting) => posting.postId === newPosting.postId,
           ),
       );
       state.postings = [...state.postings, ...newPostings];

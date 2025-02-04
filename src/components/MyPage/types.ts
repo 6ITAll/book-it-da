@@ -1,7 +1,7 @@
 // 유저 정보 및 Stats
 
 export interface UserInfo {
-  userId: string;
+  id: string;
   name: string;
   avatarUrl: string;
   about: string;
@@ -15,7 +15,7 @@ export interface UserStat {
 }
 
 export interface FollowListUser {
-  userId: string;
+  id: string;
   username: string;
   name: string;
   avatarUrl: string;
@@ -41,33 +41,44 @@ export interface Bookshelf {
 // 내 피드 탭
 
 export interface OneLineReview {
-  post_id: string;
+  postId: string;
   review: string;
   rating: number | null;
   book: {
     isbn: string;
   };
-  created_at: string;
-  like_count: number;
+  createdAt: string;
   user: {
     id: string;
     username: string;
-    avatar_url: string | null;
+    avatarUrl: string;
   };
 }
 
 export interface Posting {
-  post_id: string;
+  postId: string;
   title: string;
   content: string;
   book: {
     isbn: string;
   };
-  created_at: string;
-  like_count: number;
+  createdAt: string;
   user: {
     id: string;
     username: string;
-    avatar_url: string | null;
+    avatarUrl: string;
   };
+}
+
+export interface UserPostingReviewCounts {
+  userId: string;
+  totalPostingsCount: number;
+  totalReviewsCount: number;
+}
+
+// 좋아요한 피드 탭
+export interface UserLikedCountsResponse {
+  userId: string;
+  totalLikedPostingsCount: number;
+  totalLikedReviewsCount: number;
 }

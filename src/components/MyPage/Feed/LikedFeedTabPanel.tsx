@@ -54,8 +54,8 @@ const LikedFeedTabPanel = ({
         username={username}
         postings={likedPostings}
         oneLineReviews={likedOneLineReviews}
-        postingsCount={likedFeedsCount?.total_liked_postings_count ?? 0}
-        oneLineReviewsCount={likedFeedsCount?.total_liked_reviews_count ?? 0}
+        postingsCount={likedFeedsCount?.totalLikedPostingsCount ?? 0}
+        oneLineReviewsCount={likedFeedsCount?.totalLikedReviewsCount ?? 0}
         type={type}
       />
     </>

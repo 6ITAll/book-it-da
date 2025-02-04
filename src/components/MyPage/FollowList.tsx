@@ -26,6 +26,7 @@ import {
   setUsers,
   toggleFollowStatus,
 } from '@features/MyPage/slice/followListSlice';
+import { FollowListUser } from './types';
 
 interface FollowListProps {
   setOpen: (open: boolean) => void;
@@ -78,13 +79,16 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
 
           const followingIds = followData.map((item) => item.following_id);
 
-          const updatedData = fetchedData.map((user) => ({
-            ...user,
-            isFollowing: followingIds.includes(user.userId),
+          const updatedData: FollowListUser[] = fetchedData.map((user) => ({
+            id: user.id,
+            username: user.username || user.id,
+            name: user.name || user.username || user.id,
+            avatarUrl: user.avatarUrl || '',
+            isFollowing: followingIds.includes(user.id),
           }));
 
-          dispatch(setUsers(updatedData)); // Redux 상태 업데이트
-          dispatch(setHasMore(fetchedData.length >= 5)); // 더 불러올 데이터가 있는지 확인
+          dispatch(setUsers(updatedData));
+          dispatch(setHasMore(fetchedData.length >= 5));
         } catch (error) {
           console.error('Failed to check follow status:', error);
         }
@@ -131,8 +135,8 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
         scrollableTarget="FollowListBox"
       >
         <List>
-          {users.map(({ userId, username, avatarUrl, isFollowing }) => (
-            <ListItem key={userId} sx={{ cursor: 'pointer' }}>
+          {users.map(({ id, username, avatarUrl, isFollowing }) => (
+            <ListItem key={id} sx={{ cursor: 'pointer' }}>
               <ListItemAvatar onClick={() => handleUserClick(username)}>
                 <Avatar src={avatarUrl} />
               </ListItemAvatar>

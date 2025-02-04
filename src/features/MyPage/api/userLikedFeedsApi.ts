@@ -1,13 +1,11 @@
-import { OneLineReview, Posting } from '@components/MyPage/types';
+import {
+  OneLineReview,
+  Posting,
+  UserLikedCountsResponse,
+} from '@components/MyPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { PostgrestResponse } from '@supabase/supabase-js';
 import { supabase } from '@utils/supabaseClient';
-
-export interface UserLikedCountsResponse {
-  user_id: string;
-  total_liked_postings_count: number;
-  total_liked_reviews_count: number;
-}
+import { DbOneLineReview, DbPosting, DbUserLikedCounts } from '../types/types';
 
 export const userLikedFeedsApi = createApi({
   reducerPath: 'userLikedFeedsApi',
@@ -31,7 +29,22 @@ export const userLikedFeedsApi = createApi({
 
           if (error) throw error;
 
-          return { data };
+          const reviews: OneLineReview[] = (data as DbOneLineReview[]).map(
+            (review) => ({
+              postId: review.post_id,
+              review: review.review,
+              rating: review.rating,
+              book: review.book,
+              createdAt: review.created_at,
+              user: {
+                id: review.user.id,
+                username: review.user.username,
+                avatarUrl: review.user.avatar_url,
+              },
+            }),
+          );
+
+          return { data: reviews };
         } catch (error) {
           return { error };
         }
@@ -40,6 +53,7 @@ export const userLikedFeedsApi = createApi({
         { type: 'UserLikedFeeds', id: `LikedOneLineReviews-${username}` },
       ],
     }),
+
     getLikedPostings: builder.query<
       Posting[],
       { username: string; page: number; limit: number }
@@ -57,7 +71,20 @@ export const userLikedFeedsApi = createApi({
 
           if (error) throw error;
 
-          return { data };
+          const postings: Posting[] = (data as DbPosting[]).map((posting) => ({
+            postId: posting.post_id,
+            title: posting.title,
+            content: posting.content,
+            book: posting.book,
+            createdAt: posting.created_at,
+            user: {
+              id: posting.user.id,
+              username: posting.user.username,
+              avatarUrl: posting.user.avatar_url,
+            },
+          }));
+
+          return { data: postings };
         } catch (error) {
           return { error };
         }
@@ -66,20 +93,34 @@ export const userLikedFeedsApi = createApi({
         { type: 'UserLikedFeeds', id: `LikedPostings-${username}` },
       ],
     }),
+
     getLatestLikedReviews: builder.query<OneLineReview[], { userId: string }>({
       async queryFn({ userId }) {
         try {
-          const { data, error } = (await supabase
+          const { data, error } = await supabase
             .from('latest_user_liked_one_line_reviews')
             .select('*')
-            .eq('liker_user_id', userId)) as PostgrestResponse<{
-            liker_user_id: string;
-            liked_reviews: OneLineReview[];
-          }>;
+            .eq('liker_user_id', userId);
 
           if (error) throw error;
 
-          return { data: data[0]?.liked_reviews || [] };
+          const dbReviews = data[0]?.liked_reviews || [];
+          const reviews: OneLineReview[] = dbReviews.map(
+            (review: DbOneLineReview) => ({
+              postId: review.post_id,
+              review: review.review,
+              rating: review.rating,
+              book: review.book,
+              createdAt: review.created_at,
+              user: {
+                id: review.user.id,
+                username: review.user.username,
+                avatarUrl: review.user.avatar_url,
+              },
+            }),
+          );
+
+          return { data: reviews };
         } catch (error) {
           return { error };
         }
@@ -92,17 +133,28 @@ export const userLikedFeedsApi = createApi({
     getLatestLikedPostings: builder.query<Posting[], { userId: string }>({
       async queryFn({ userId }) {
         try {
-          const { data, error } = (await supabase
+          const { data, error } = await supabase
             .from('latest_user_liked_postings')
             .select('*')
-            .eq('liker_user_id', userId)) as PostgrestResponse<{
-            liker_user_id: string;
-            liked_postings: Posting[];
-          }>;
+            .eq('liker_user_id', userId);
 
           if (error) throw error;
 
-          return { data: data[0]?.liked_postings || [] };
+          const dbPostings = data[0]?.liked_postings || [];
+          const postings: Posting[] = dbPostings.map((posting: DbPosting) => ({
+            postId: posting.post_id,
+            title: posting.title,
+            content: posting.content,
+            book: posting.book,
+            createdAt: posting.created_at,
+            user: {
+              id: posting.user.id,
+              username: posting.user.username,
+              avatarUrl: posting.user.avatar_url,
+            },
+          }));
+
+          return { data: postings };
         } catch (error) {
           return { error };
         }
@@ -111,23 +163,28 @@ export const userLikedFeedsApi = createApi({
         { type: 'UserLikedFeeds', id: `OneLineReviews-${userId}` },
       ],
     }),
+
     getUserLikedCounts: builder.query<
       UserLikedCountsResponse,
       { username: string }
     >({
       async queryFn({ username }) {
         try {
-          const { data, error } = (await supabase
+          const { data, error } = await supabase
             .from('user_liked_posting_review_counts')
             .select('*')
-            .eq(
-              'username',
-              username,
-            )) as PostgrestResponse<UserLikedCountsResponse>;
+            .eq('username', username);
 
           if (error) throw error;
 
-          return { data: data[0] || null };
+          const dbCounts = data[0] as DbUserLikedCounts;
+          return {
+            data: {
+              userId: dbCounts.user_id,
+              totalLikedPostingsCount: dbCounts.total_liked_postings_count,
+              totalLikedReviewsCount: dbCounts.total_liked_reviews_count,
+            },
+          };
         } catch (error) {
           return { error };
         }
