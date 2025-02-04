@@ -2,6 +2,9 @@ import { Stack, Button } from '@mui/material';
 import { useState } from 'react';
 import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 interface FooterButtonsProps {
   isbn: string;
   title: string;
@@ -18,6 +21,8 @@ const FooterButtons = ({
   link,
 }: FooterButtonsProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
 
   const handleGoToBuy = () => {
     if (link) {
@@ -27,26 +32,40 @@ const FooterButtons = ({
     }
   };
 
+  const handleAddToLibrary = () => {
+    if (!isLoggedIn) {
+      dispatch(
+        showSnackbar({
+          message: '로그인 후 이용해주세요.',
+          severity: 'error',
+        }),
+      );
+      return;
+    }
+    setIsModalOpen(true);
+  };
+
   return (
     <Stack direction="row" height="15%" borderTop="1px solid #e7e8e9">
       <Button onClick={handleGoToBuy} sx={bookDetailStyles.goToBuyButton}>
         사러 가기
       </Button>
       <Button
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleAddToLibrary}
         sx={{ flex: 1, borderRadius: '0 0 8px 0' }}
       >
         내 서재에 담기
       </Button>
-      {/* AddToLibraryModal 연결 */}
-      <AddToLibraryModal
-        isbn={isbn}
-        title={title}
-        author={author}
-        imageUrl={imageUrl}
-        open={isModalOpen}
-        setOpen={setIsModalOpen} // 상태 관리 함수 전달
-      />
+      {isLoggedIn && (
+        <AddToLibraryModal
+          isbn={isbn}
+          title={title}
+          author={author}
+          imageUrl={imageUrl}
+          open={isModalOpen}
+          setOpen={setIsModalOpen}
+        />
+      )}
     </Stack>
   );
 };
