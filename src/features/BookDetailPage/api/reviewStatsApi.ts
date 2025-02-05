@@ -13,10 +13,10 @@ export interface BookReviewStats {
   averageRating: number;
 }
 
-export const bookDetailInfoApi = createApi({
-  reducerPath: 'bookDetailInfoApi',
+export const reviewStatsApi = createApi({
+  reducerPath: 'reviewStatsApi',
   baseQuery: fakeBaseQuery(),
-  tagTypes: ['BookReviewStats'],
+  tagTypes: ['ReviewStats'],
   endpoints: (builder) => ({
     getBookReviewStats: builder.query<BookReviewStats, { isbn: string }>({
       async queryFn({ isbn }) {
@@ -30,7 +30,6 @@ export const bookDetailInfoApi = createApi({
           if (error) throw error;
 
           const stats = data as DbBookReviewStats;
-          console.log(stats);
           return {
             data: {
               isbn: stats.isbn,
@@ -42,11 +41,9 @@ export const bookDetailInfoApi = createApi({
           return { error };
         }
       },
-      providesTags: (_, __, { isbn }) => [
-        { type: 'BookReviewStats', id: isbn },
-      ],
+      providesTags: (_, __, { isbn }) => [{ type: 'ReviewStats', id: isbn }],
     }),
   }),
 });
 
-export const { useGetBookReviewStatsQuery } = bookDetailInfoApi;
+export const { useGetBookReviewStatsQuery } = reviewStatsApi;

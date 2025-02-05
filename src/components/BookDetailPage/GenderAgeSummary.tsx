@@ -1,21 +1,47 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { GenderAge } from '@shared/types/type';
 import { summaryStyles } from '@components/BookDetailPage/BookDetail.styles';
+import { RootState } from '@store/index';
+import { defaultReaderStats } from '@features/BookDetailPage/slice/readerStatsSlice';
+import { useSelector } from 'react-redux';
+// 타입 추후 components/BookDetailPage/types.ts 로
+type AgeGroup = '10s' | '20s' | '30s' | '40s' | '50s' | '60plus' | 'unknown';
 
-interface GenderAgeSummaryProps {
-  data: GenderAge[];
+const ageGroupLabels: Record<AgeGroup, string> = {
+  '10s': '10대',
+  '20s': '20대',
+  '30s': '30대',
+  '40s': '40대',
+  '50s': '50대',
+  '60plus': '60대 이상',
+  'unknown': '미상',
+};
+// 타입 추후 components/BookDetailPage/types.ts 로
+interface TransformedData {
+  age: AgeGroup;
+  gender: string;
+  value: number;
 }
 
-const GenderAgeSummary = ({
-  data = [],
-}: GenderAgeSummaryProps): JSX.Element => {
-  // 데이터가 모두 default 값인지 확인
-  const isDefaultData = data.every(
-    (item) => item.male === 0 && item.female === 0,
-  );
+const defaultData: TransformedData = {
+  age: 'unknown',
+  gender: 'unknown',
+  value: 0,
+};
 
-  // 만약 서재에 담은 사람이 없어서, data가 아예 없다면
-  if (isDefaultData) {
+const GenderAgeSummary = (): JSX.Element => {
+  const readerStats =
+    useSelector((state: RootState) => state.readerStats) || defaultReaderStats;
+  const isEmptyData =
+    !readerStats?.demographics ||
+    (Object.values(readerStats.demographics.gender.male).every(
+      (v) => v === 0,
+    ) &&
+      Object.values(readerStats.demographics.gender.female).every(
+        (v) => v === 0,
+      ) &&
+      readerStats.demographics.gender.unknown === 0);
+
+  if (isEmptyData) {
     return (
       <Box sx={summaryStyles.container}>
         <Stack sx={summaryStyles.emptyStack}>
@@ -27,18 +53,29 @@ const GenderAgeSummary = ({
     );
   }
 
-  // 데이터 변환: 성별과 연령을 각각의 객체로 분리
-  const transformedData = data.flatMap((item) => [
-    { age: item.age, gender: '남성', value: item.male },
-    { age: item.age, gender: '여성', value: item.female },
-  ]);
+  const transformedData: TransformedData[] = [
+    ...Object.entries(readerStats.demographics.gender.male).map(
+      ([age, value]) => ({
+        age: age as AgeGroup,
+        gender: '남성',
+        value,
+      }),
+    ),
+    ...Object.entries(readerStats.demographics.gender.female).map(
+      ([age, value]) => ({
+        age: age as AgeGroup,
+        gender: '여성',
+        value,
+      }),
+    ),
+  ].filter((item) => item.age !== 'unknown' && item.value > 0);
 
-  // value 기준으로 내림차순 정렬
-  const sortedData = transformedData.sort((a, b) => b.value - a.value);
+  const sortedData: TransformedData[] = transformedData.sort(
+    (a, b) => b.value - a.value,
+  );
 
-  // 상위 2개 항목 추출
-  const top1 = sortedData[0] || { age: '데이터 없음', gender: 'N/A', value: 0 };
-  const top2 = sortedData[1] || null; // 두 번째 항목이 없을 경우 null
+  const top1: TransformedData = sortedData[0] || defaultData;
+  const top2: TransformedData | null = sortedData[1] || null;
 
   return (
     <Box sx={summaryStyles.container}>
@@ -47,11 +84,11 @@ const GenderAgeSummary = ({
           이 책을 서재에 가장 많이 담은 회원
         </Typography>
         <Typography variant="body2">
-          <strong>1위</strong> {top1.age} {top1.gender}
-          {top2 && top2.value > 0 && (
+          <strong>1위</strong> {ageGroupLabels[top1.age]} {top1.gender}
+          {top2 && (
             <>
               {' '}
-              <strong>2위</strong> {top2.age} {top2.gender}
+              <strong>2위</strong> {ageGroupLabels[top2.age]} {top2.gender}
             </>
           )}
         </Typography>

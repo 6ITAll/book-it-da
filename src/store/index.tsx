@@ -5,9 +5,9 @@ import { bestBookGetApi } from '@features/BookSearchPage/api/bestBookGetApi';
 import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { kakaoApi } from '@features/SNSLogin/api/Kakaoapi';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
-import { bookDetailInfoApi } from '@features/BookDetailPage/api/bookDetailInfoApi';
+import { reviewStatsApi } from '@features/BookDetailPage/api/reviewStatsApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
-import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
+import { readerStatsApi } from '@features/BookDetailPage/api/readerStatsApi';
 import { postApi } from '@features/BookDetailPage/api/postApi';
 import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
 import userReducer from '@features/user/userSlice';
@@ -30,6 +30,7 @@ import feedReducer from '@features/FeedPage/slice/feedSlice';
 import { likeApi } from '@features/commons/likeApi';
 import { bookSearchByIsbnApi } from '@features/commons/bookSearchByIsbn';
 import { additionalInfoApi } from '@features/user/additionalInfoApi';
+import readerStatsReducer from '@features/BookDetailPage/slice/readerStatsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -42,12 +43,12 @@ export const store = configureStore({
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [kakaoApi.reducerPath]: kakaoApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
-    [bookDetailInfoApi.reducerPath]: bookDetailInfoApi.reducer,
+    [reviewStatsApi.reducerPath]: reviewStatsApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
     [postingApi.reducerPath]: postingApi.reducer,
     [userFeedsApi.reducerPath]: userFeedsApi.reducer,
-    [genderAgeApi.reducerPath]: genderAgeApi.reducer,
+    [readerStatsApi.reducerPath]: readerStatsApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
     [addToLibraryApi.reducerPath]: addToLibraryApi.reducer,
@@ -64,6 +65,7 @@ export const store = configureStore({
     user: userReducer,
     snackbar: snackbarReducer,
     feed: feedReducer,
+    readerStats: readerStatsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -72,11 +74,11 @@ export const store = configureStore({
       bestBookGetApi.middleware,
       kakaoApi.middleware,
       bookDetailApi.middleware,
-      bookDetailInfoApi.middleware,
+      reviewStatsApi.middleware,
       libraryApi.middleware,
       bookShelvesApi.middleware,
       postingApi.middleware,
-      genderAgeApi.middleware,
+      readerStatsApi.middleware,
       postApi.middleware,
       reviewApi.middleware,
       addToLibraryApi.middleware,

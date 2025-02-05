@@ -42,11 +42,7 @@ const BookDetailContent = ({
         />
         {/* 성별, 연령별 인기 분포 섹션 */}
         {currentTab === 0 && (
-          <BookIntroduceTab
-            isbn={isbn}
-            description={description}
-            isLoading={isLoading}
-          />
+          <BookIntroduceTab description={description} isLoading={isLoading} />
         )}
         {/* 리뷰 섹션 */}
         {currentTab === 1 && (

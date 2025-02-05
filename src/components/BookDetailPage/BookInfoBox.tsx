@@ -1,7 +1,7 @@
 import { Box, Typography, Rating, Stack } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
-import { useGetBookReviewStatsQuery } from '@features/BookDetailPage/api/bookDetailInfoApi';
+import { useGetBookReviewStatsQuery } from '@features/BookDetailPage/api/reviewStatsApi';
 interface BookInfoBoxProps {
   title: string;
   subTitle: string;

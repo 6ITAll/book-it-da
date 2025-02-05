@@ -14,6 +14,7 @@ interface BookDetailSectionProps {
   link: string;
   isbn: string;
   isLoading: boolean;
+  readerCount: number;
 }
 
 const BookDetailSection = ({
@@ -27,6 +28,7 @@ const BookDetailSection = ({
   link,
   isbn,
   isLoading,
+  readerCount,
 }: BookDetailSectionProps): JSX.Element => {
   return (
     <Box sx={bookDetailStyles.bookDetailSectionBox}>
@@ -42,6 +44,7 @@ const BookDetailSection = ({
         pubDate={pubDate}
         imageUrl={imageUrl}
         link={link}
+        readerCount={readerCount}
         isLoading={isLoading} // 로딩 상태 전달
       />
     </Box>

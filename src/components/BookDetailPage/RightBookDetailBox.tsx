@@ -2,7 +2,6 @@ import { Box, Typography, Skeleton } from '@mui/material';
 import BookInfoBox from '@components/BookDetailPage/BookInfoBox';
 import ActionButtons from '@components/BookDetailPage/ActionButtons';
 import FooterButtons from '@components/BookDetailPage/FooterButtons';
-import { useFetchLibraryCountQuery } from '@features/BookDetailPage/api/bookUserShelfCountApi';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 
 interface RightBookBoxProps {
@@ -14,6 +13,7 @@ interface RightBookBoxProps {
   pubDate: string;
   link: string;
   imageUrl: string;
+  readerCount: number;
   isLoading: boolean;
 }
 
@@ -26,9 +26,9 @@ const RightBookBoxDetailBox = ({
   pubDate,
   link,
   imageUrl,
+  readerCount,
   isLoading,
 }: RightBookBoxProps): JSX.Element => {
-  const { data } = useFetchLibraryCountQuery(isbn);
   return (
     <Box sx={bookDetailStyles.rightBox}>
       <Box sx={bookDetailStyles.rightBoxInfoBox}>
@@ -56,7 +56,7 @@ const RightBookBoxDetailBox = ({
             <Skeleton variant="text" width="25%" height="40px" />
           ) : (
             <Typography variant="body2" color="text.secondary">
-              이 책을 담은 사람 <strong>{data?.libraryCount || 0}명</strong>
+              이 책을 담은 사람 <strong>{readerCount}명</strong>
             </Typography>
           )}
           <ActionButtons
