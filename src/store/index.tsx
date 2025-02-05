@@ -21,8 +21,6 @@ import { postingWriteApi } from '@features/PostingWritePage/api/postingWriteApi'
 import { userApi } from '@features/user/userApi';
 // import { mypageFollowApi } from '@features/MyPage/api/followApi';
 import darkModeReducer from '@features/DarkMode/darkModeSlice';
-import { addToLibraryApi } from '@features/BookDetailPage/api/AddToLibraryApi';
-import { bookUserShelfCountApi } from '@features/BookDetailPage/api/bookUserShelfCountApi';
 import { followApi } from '@features/commons/followApi';
 import feedReducer from '@features/FeedPage/slice/feedSlice';
 import { likeApi } from '@features/commons/likeApi';
@@ -55,8 +53,6 @@ export const store = configureStore({
     [genderAgeApi.reducerPath]: genderAgeApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
-    [addToLibraryApi.reducerPath]: addToLibraryApi.reducer,
-    [bookUserShelfCountApi.reducerPath]: bookUserShelfCountApi.reducer,
     [oneLineReviewApi.reducerPath]: oneLineReviewApi.reducer,
     [feedApi.reducerPath]: feedApi.reducer,
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
@@ -89,8 +85,6 @@ export const store = configureStore({
       genderAgeApi.middleware,
       postApi.middleware,
       reviewApi.middleware,
-      addToLibraryApi.middleware,
-      bookUserShelfCountApi.middleware,
       userFeedsApi.middleware,
       userLikedFeedsApi.middleware,
       feedApi.middleware,

@@ -39,7 +39,7 @@ const AddToLibraryModal = ({
   );
 
   const { data: bookshelvesData, refetch } = useGetBookshelvesQuery(
-    userInfo.id,
+    userInfo.id || '',
   );
   const [createBookshelf] = useCreateBookshelfMutation();
   const [addBook] = useAddBookMutation();

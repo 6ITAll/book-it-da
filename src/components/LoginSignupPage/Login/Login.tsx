@@ -76,7 +76,6 @@ const Login = (): JSX.Element => {
             console.error('Error fetching username:', userError);
             throw new Error('사용자 정보를 가져오는 중 오류가 발생했습니다.');
           }
-          console.log(userData?.username);
           dispatch(
             loginSuccess({
               id: data.user.id,

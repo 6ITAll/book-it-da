@@ -10,7 +10,6 @@ import BookIcon from '@mui/icons-material/Book';
 import EditIcon from '@mui/icons-material/Edit';
 import { bookDetailDialogStyles } from './BookDetailDialog.styles';
 import ReadingStatus from './BookReadingStatus';
-// import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
 import { ReadingStatusType } from '@shared/types/type';
 import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';

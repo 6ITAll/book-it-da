@@ -33,6 +33,8 @@ const LikedFeedTabPanel = ({
     username,
   });
 
+  console.log(likedOneLineReviews, likedPostings);
+
   if (isLoadinglikedOneLineReviews || isLoadinglikedPostings)
     return <Typography>로딩 중...</Typography>;
 
@@ -44,8 +46,7 @@ const LikedFeedTabPanel = ({
       </Typography>
     );
 
-  if (!likedOneLineReviews || !likedPostings)
-    return <Typography>데이터가 없습니다.</Typography>;
+  if (!likedOneLineReviews || !likedPostings) return <></>;
 
   return (
     <>

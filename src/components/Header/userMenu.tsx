@@ -16,7 +16,6 @@ const UserMenu = () => {
   const { avatarUrl, username } = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
-  console.log(username);
 
   const handleProfileClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);

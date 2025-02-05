@@ -26,7 +26,6 @@ const PostingFeedSection = ({
       navigate(`/my-page/${username}/liked/postings`);
     }
   };
-  console.log(postings);
   return (
     <Box>
       <Box

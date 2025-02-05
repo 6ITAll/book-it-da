@@ -42,8 +42,7 @@ const UserFeedTabPanel = ({
       </Typography>
     );
 
-  if (!oneLineReviewsData || !postingsData)
-    return <Typography>데이터가 없습니다.</Typography>;
+  if (!oneLineReviewsData || !postingsData) return <></>;
 
   return (
     <>
