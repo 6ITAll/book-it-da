@@ -148,29 +148,31 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
           한줄평 {totalReviews}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
-          {currentUsername === username && !likedReview && (
-            <>
-              <Button
-                startIcon={<DeleteIcon />}
-                onClick={handleDeleteModeToggle}
-                color={isDeleteMode ? 'secondary' : 'primary'}
-                variant={isDeleteMode ? 'contained' : 'outlined'}
-                size="small"
-              >
-                {isDeleteMode ? '취소' : '삭제'}
-              </Button>
-              {isDeleteMode && (
+          {currentUsername === username &&
+            !likedReview &&
+            totalReviews === 0 && (
+              <>
                 <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleDeleteSelected}
-                  disabled={selectedReviews.length === 0}
+                  startIcon={<DeleteIcon />}
+                  onClick={handleDeleteModeToggle}
+                  color={isDeleteMode ? 'secondary' : 'primary'}
+                  variant={isDeleteMode ? 'contained' : 'outlined'}
+                  size="small"
                 >
-                  선택 삭제 ({selectedReviews.length})
+                  {isDeleteMode ? '취소' : '삭제'}
                 </Button>
-              )}
-            </>
-          )}
+                {isDeleteMode && (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleDeleteSelected}
+                    disabled={selectedReviews.length === 0}
+                  >
+                    선택 삭제 ({selectedReviews.length})
+                  </Button>
+                )}
+              </>
+            )}
           <ReviewSortOptions value={sortOption} onChange={handleSortChange} />
         </Stack>
       </Stack>
