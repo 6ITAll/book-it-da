@@ -39,19 +39,17 @@ const PostingMoreTemplate = ({
   };
 
   const handlePostingsSelect = (postId: string) => {
-    setSelectedPostings(
-      (prev) =>
-        prev.includes(postId)
-          ? prev.filter((id) => id !== postId) // 이미 선택된 경우 제거
-          : [...prev, postId], // 선택되지 않은 경우 추가
+    setSelectedPostings((prev) =>
+      prev.includes(postId)
+        ? prev.filter((id) => id !== postId)
+        : [...prev, postId],
     );
   };
 
   const handleDeleteSelected = async () => {
     try {
-      await deletePosts(selectedPostings).unwrap(); // 선택된 게시물 삭제
+      await deletePosts(selectedPostings).unwrap();
 
-      // Redux 상태에서 삭제된 게시물 제거
       dispatch(deletePostings(selectedPostings));
 
       setIsDeleteMode(false);
@@ -72,28 +70,30 @@ const PostingMoreTemplate = ({
           {`포스팅 (${totalPostings || 0}개)`}
         </Typography>
         <Stack direction="row" spacing={2}>
-          {currentUsername === username && !likedPosting && (
-            <>
-              <Button
-                onClick={handleDeleteModeToggle}
-                color={isDeleteMode ? 'secondary' : 'primary'}
-                variant={isDeleteMode ? 'contained' : 'outlined'}
-                size="small"
-              >
-                {isDeleteMode ? '취소' : '편집'}
-              </Button>
-              {isDeleteMode && (
+          {currentUsername === username &&
+            !likedPosting &&
+            totalPostings === 0 && (
+              <>
                 <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleDeleteSelected}
-                  disabled={selectedPostings.length === 0}
+                  onClick={handleDeleteModeToggle}
+                  color={isDeleteMode ? 'secondary' : 'primary'}
+                  variant={isDeleteMode ? 'contained' : 'outlined'}
+                  size="small"
                 >
-                  선택 삭제 ({selectedPostings.length})
+                  {isDeleteMode ? '취소' : '편집'}
                 </Button>
-              )}
-            </>
-          )}
+                {isDeleteMode && (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleDeleteSelected}
+                    disabled={selectedPostings.length === 0}
+                  >
+                    선택 삭제 ({selectedPostings.length})
+                  </Button>
+                )}
+              </>
+            )}
         </Stack>
       </Stack>
 

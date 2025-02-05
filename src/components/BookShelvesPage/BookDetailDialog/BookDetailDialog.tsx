@@ -101,11 +101,11 @@ const BookShelvesDetailDialog = ({
   const contentNode = (
     <Stack sx={{ width: '100%', boxSizing: 'border-box' }}>
       <Box sx={bookDetailDialogStyles.bookPreview}>
-        {book && (
+        {book && bookInfo && (
           <CommonBookCard
-            image={bookInfo?.cover ?? ''}
-            title={bookInfo?.title ?? ''}
-            author={bookInfo?.author ?? ''}
+            image={bookInfo.cover}
+            title={bookInfo.title}
+            author={bookInfo.author}
             sx={bookDetailDialogStyles.bookCard}
           />
         )}
