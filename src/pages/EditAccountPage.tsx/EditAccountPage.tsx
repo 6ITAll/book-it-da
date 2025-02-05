@@ -6,6 +6,7 @@ import {
   Button,
   Stack,
   IconButton,
+  Input,
 } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -20,6 +21,7 @@ import {
 } from '@features/user/userApi';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { setAvatarUrl } from '@features/user/userSlice';
+import BirthDatePicker from '@components/LoginSignupPage/Signup/BirthDatePicker';
 
 const EditAccountPage = (): JSX.Element => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -245,14 +247,26 @@ const EditAccountPage = (): JSX.Element => {
 
         {/* 나이 */}
         <Stack direction="row" alignItems="center" spacing={1}>
-          <TextField
-            fullWidth
-            label="나이"
-            name="age"
-            type="number"
-            defaultValue={data.age ?? ''}
+          <BirthDatePicker
+            value={data.birth_date || ''}
+            onChange={(newDate) => {
+              const input = document.querySelector(
+                '[name="birth_date"]',
+              ) as HTMLInputElement;
+              if (input) {
+                input.value = newDate;
+              }
+            }}
           />
-          <Button variant="contained" onClick={() => handleSubmit('age')}>
+          <Input
+            type="hidden"
+            name="birth_date"
+            defaultValue={data.birth_date || ''}
+          />
+          <Button
+            variant="contained"
+            onClick={() => handleSubmit('birth_date')}
+          >
             변경
           </Button>
         </Stack>

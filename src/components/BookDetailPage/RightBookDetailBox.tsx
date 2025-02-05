@@ -58,7 +58,7 @@ const RightBookBoxDetailBox = ({
             <Skeleton variant="text" width="25%" height="40px" />
           ) : (
             <Typography variant="body2" color="text.secondary">
-              이 책이 담긴 서재 <strong>{data?.libraryCount || 0}명</strong>
+              이 책을 담은 사람 <strong>{data?.libraryCount || 0}명</strong>
             </Typography>
           )}
           =
