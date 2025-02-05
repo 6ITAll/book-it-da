@@ -14,8 +14,6 @@ interface RightBookBoxProps {
   pubDate: string;
   link: string;
   imageUrl: string;
-  customerReviewRank: number;
-  ratingCount: number;
   isLoading: boolean;
 }
 
@@ -61,7 +59,6 @@ const RightBookBoxDetailBox = ({
               이 책을 담은 사람 <strong>{data?.libraryCount || 0}명</strong>
             </Typography>
           )}
-          =
           <ActionButtons
             book={{
               title: title,

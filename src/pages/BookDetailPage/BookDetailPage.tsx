@@ -10,6 +10,8 @@ const BookDetailPage = (): JSX.Element => {
   const { data, isLoading } = useFetchBookDetailQuery({
     isbn: isbn!,
   });
+  console.log(data?.item);
+  console.log(data?.item[0].subInfo.subTitle);
 
   return (
     <Container maxWidth="lg" disableGutters sx={bookDetailStyles.container}>
@@ -24,8 +26,6 @@ const BookDetailPage = (): JSX.Element => {
         pubDate={data?.item[0]?.pubDate || ''}
         imageUrl={data?.item[0]?.cover || ''}
         link={data?.item[0]?.link || ''}
-        customerReviewRank={data?.item[0]?.customerReviewRank || 0}
-        ratingCount={data?.item[0]?.subInfo?.ratingInfo?.ratingCount || 0}
       />
 
       <BookDetailContent

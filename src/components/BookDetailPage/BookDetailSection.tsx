@@ -12,8 +12,6 @@ interface BookDetailSectionProps {
   pubDate: string;
   imageUrl: string;
   link: string;
-  customerReviewRank: number;
-  ratingCount: number;
   isbn: string;
   isLoading: boolean;
 }
@@ -27,8 +25,6 @@ const BookDetailSection = ({
   pubDate,
   imageUrl,
   link,
-  customerReviewRank,
-  ratingCount,
   isbn,
   isLoading,
 }: BookDetailSectionProps): JSX.Element => {
@@ -46,8 +42,6 @@ const BookDetailSection = ({
         pubDate={pubDate}
         imageUrl={imageUrl}
         link={link}
-        customerReviewRank={customerReviewRank}
-        ratingCount={ratingCount}
         isLoading={isLoading} // 로딩 상태 전달
       />
     </Box>
