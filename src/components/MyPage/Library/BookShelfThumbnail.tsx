@@ -43,16 +43,7 @@ const BookShelfThumbnail = ({ isbn }: BookShelfThumbnailProps) => {
   }
 
   return (
-    <CardMedia
-      component="img"
-      image={data.cover}
-      alt={`${data.title} cover`}
-      sx={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-      }}
-    />
+    <CardMedia component="img" image={data.cover} alt={`${data.title} cover`} />
   );
 };
 
