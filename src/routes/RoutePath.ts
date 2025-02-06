@@ -13,7 +13,7 @@ const RoutePaths = {
   EDIT: 'EDIT',
   BOOKDETAIL: '/bookDetail',
   REVIEWS: 'reviews',
-  POSTS: 'posts',
+  POSTINGS: 'postings',
   KAKAO_ADDITIONAL_INFO: '/kakao/additional-info',
   // 추가시
   // ABOUT: '/about', 식으로 가능

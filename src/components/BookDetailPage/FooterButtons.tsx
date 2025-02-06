@@ -13,13 +13,7 @@ interface FooterButtonsProps {
   link?: string;
 }
 
-const FooterButtons = ({
-  isbn,
-  title,
-  author,
-  imageUrl,
-  link,
-}: FooterButtonsProps): JSX.Element => {
+const FooterButtons = ({ isbn, link }: FooterButtonsProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch = useDispatch();

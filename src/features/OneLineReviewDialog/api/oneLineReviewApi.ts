@@ -3,6 +3,7 @@ import { OneLineReviewRequest, OneLineReviewResponse } from '../types/types';
 import { supabase } from '@utils/supabaseClient';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { FeedType, PostType } from '@shared/types/type';
+import { userFeedsApi } from '@features/MyPage/api/userFeedsApi';
 
 export const oneLineReviewApi = createApi({
   reducerPath: 'oneLineReviewApi',
@@ -43,6 +44,8 @@ export const oneLineReviewApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          // 유저 페이지 피드 리페치
+          await dispatch(userFeedsApi.util.invalidateTags(['UserFeeds']));
           // 피드 데이터 리페치
           await dispatch(feedApi.util.invalidateTags(['Posts']));
           // 강제로 리페치 트리거 (모든 가능한 feedType과 postType 조합에 대해)

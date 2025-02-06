@@ -1,18 +1,39 @@
-import { BookDetailPost, Review } from '@shared/types/type';
-import ReviewFeedSection from './ReviewFeedSection';
-import PostFeedSection from './PostFeedSection';
+import { OneLineReview, Posting } from '../types';
+import OneLineReviewSection from './OneLineReviewSection';
+import PostingFeedSection from './PostingSection';
 
 interface FeedProps {
   userId: string;
-  reviews: Review[];
-  posts: BookDetailPost[];
+  username: string;
+  oneLineReviews: OneLineReview[];
+  postings: Posting[];
+  oneLineReviewsCount: number;
+  postingsCount: number;
+  type: string;
 }
 
-const Feed = ({ userId, reviews, posts }: FeedProps): JSX.Element => {
+const Feed = ({
+  username,
+  oneLineReviews,
+  postings,
+  oneLineReviewsCount,
+  postingsCount,
+  type,
+}: FeedProps): JSX.Element => {
   return (
     <>
-      <ReviewFeedSection userId={userId} reviews={reviews} />
-      <PostFeedSection userId={userId} posts={posts} />
+      <OneLineReviewSection
+        username={username}
+        oneLineReviews={oneLineReviews}
+        oneLineReviewCount={oneLineReviewsCount}
+        type={type}
+      />
+      <PostingFeedSection
+        username={username}
+        postings={postings}
+        postingCount={postingsCount}
+        type={type}
+      />
     </>
   );
 };

@@ -22,12 +22,13 @@ import {
 } from '@features/commons/followApi';
 import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
+import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
 
 interface PostCardProps {
   postId: string;
   title: string;
   content: string;
-  cover?: string;
+  isbn: string;
   user: User;
 }
 
@@ -61,11 +62,13 @@ const PostCard = ({
   postId,
   title,
   content,
-  cover,
+  isbn,
   user,
 }: PostCardProps): JSX.Element => {
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const { data: bookInfo } = useSearchBookByIsbnQuery({ isbn });
 
   const { isLoggedIn, userInfo } = useSelector(
     (state: RootState) => state.user,
@@ -110,7 +113,7 @@ const PostCard = ({
       <Stack direction="row" spacing={2} sx={{ padding: '16px' }}>
         {/* 책 이미지 */}
         <img
-          src={cover}
+          src={bookInfo?.cover}
           alt={title}
           style={{
             width: '20%',
@@ -164,7 +167,7 @@ const PostCard = ({
           <Avatar
             onClick={(e) => {
               e.stopPropagation(); // 클릭 이벤트 전파 방지
-              navigateToUserPage(navigate, user.id);
+              navigateToUserPage(navigate, user?.username || '');
             }}
             src={user?.avatarUrl}
             alt={user?.username}

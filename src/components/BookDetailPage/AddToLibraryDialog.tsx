@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
 import {
   Typography,
@@ -9,68 +9,58 @@ import {
   Stack,
   Button,
 } from '@mui/material';
-import {
-  useGetBookshelvesQuery,
-  useAddBookToBookshelfMutation,
-  useAddBookshelfMutation,
-} from '@features/BookDetailPage/api/AddToLibraryApi';
-import { ResponseBookshelf } from '@components/BookDetailPage/types';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
-
-const getUserId = (): string | null => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo') || '[]');
-  return Array.isArray(userInfo) && userInfo.length > 0
-    ? userInfo[0].userId
-    : null;
-};
+import { useSelector } from 'react-redux';
+import { RootState } from '@store/index';
+import { UserInfo } from '@features/user/userSlice';
+import {
+  useAddBookMutation,
+  useCreateBookshelfMutation,
+  useGetBookshelvesQuery,
+} from '@features/BookShelvesPage/api/bookShelvesApi';
 
 interface AddToLibraryModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isbn: string;
-  title: string;
-  author: string;
-  imageUrl: string;
 }
 
 const AddToLibraryModal = ({
   open,
   setOpen,
   isbn,
-  title,
-  author,
-  imageUrl,
 }: AddToLibraryModalProps): JSX.Element => {
-  const [selectedBookshelf, setSelectedBookshelf] = useState<number | null>(
-    null,
-  );
+  const [selectedBookshelf, setSelectedBookshelf] = useState<string>('');
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [newBookshelfName, setNewBookshelfName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  const userId = getUserId();
-
-  // 책장 목록 가져오기
-  const { data: bookshelves = [], refetch } = useGetBookshelvesQuery(
-    userId || '',
-    { skip: !userId },
+  const userInfo = useSelector(
+    (state: RootState) => state.user.userInfo as UserInfo,
   );
+  console.log(userInfo);
+  const { data: bookshelvesData, refetch } = useGetBookshelvesQuery(
+    userInfo?.id || '',
+    {
+      skip: !userInfo?.id,
+    },
+  );
+  const [createBookshelf] = useCreateBookshelfMutation();
+  const [addBook] = useAddBookMutation();
 
-  // 책장 추가 API 호출
-  const [addBookshelf] = useAddBookshelfMutation();
-
-  // 책 추가 API 호출
-  const [addBookToBookshelf] = useAddBookToBookshelfMutation();
+  useEffect(() => {
+    if (userInfo?.id) {
+      setIsLoading(false);
+    }
+  }, [userInfo]);
 
   // 책 추가 함수
   const handleAddBook = async () => {
     if (selectedBookshelf) {
-      const newBook = { isbn, title, author, imageUrl };
       try {
-        await addBookToBookshelf({
-          isbn: isbn || '',
-          userId: userId || '',
-          id: selectedBookshelf,
-          book: newBook,
+        await addBook({
+          bookshelfId: selectedBookshelf,
+          isbn,
         }).unwrap();
         setOpen(false);
       } catch (error) {
@@ -83,11 +73,11 @@ const AddToLibraryModal = ({
   const handleAddBookshelf = async () => {
     if (newBookshelfName.trim()) {
       try {
-        await addBookshelf({
-          userId: userId || '',
-          name: newBookshelfName, // 요청 필드
+        await createBookshelf({
+          userId: userInfo.id,
+          name: newBookshelfName.trim(),
         }).unwrap();
-        refetch();
+        await refetch();
         setNewBookshelfName('');
         setIsCreating(false);
       } catch (error) {
@@ -129,10 +119,10 @@ const AddToLibraryModal = ({
       </Typography>
       <RadioGroup
         value={selectedBookshelf}
-        onChange={(e) => setSelectedBookshelf(Number(e.target.value))}
+        onChange={(e) => setSelectedBookshelf(e.target.value)}
       >
-        {bookshelves.length > 0 ? (
-          bookshelves.map((shelf: ResponseBookshelf) => (
+        {(bookshelvesData?.bookshelves ?? []).length > 0 ? (
+          bookshelvesData?.bookshelves?.map((shelf) => (
             <FormControlLabel
               key={shelf.id}
               value={shelf.id}
@@ -151,6 +141,10 @@ const AddToLibraryModal = ({
       </RadioGroup>
     </>
   );
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <HybridDialog

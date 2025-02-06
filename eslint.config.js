@@ -19,14 +19,6 @@ export default tseslint.config(
       'react-refresh': reactRefresh,
       prettier: prettierPlugin,
     },
-    settings: {
-      // import/resolver 설정 추가
-      'import/resolver': {
-        typescript: {
-          project: './tsconfig.json', // TypeScript 설정 파일
-        },
-      },
-    },
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [

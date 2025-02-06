@@ -1,22 +1,60 @@
-import { useGetUserFeedsQuery } from '@features/MyPage/api/userFeedsApi';
-import Feed from './Feed';
 import { Typography } from '@mui/material';
+import Feed from './Feed';
+import {
+  useGetLatestOneLineReviewsQuery,
+  useGetLatestPostingsQuery,
+  useGetUserPostingReviewCountsQuery,
+} from '@features/MyPage/api/userFeedsApi';
 
 interface UserFeedTabPanelProps {
   userId: string;
+  username: string;
+  type: string;
 }
 
-const UserFeedTabPanel = ({ userId }: UserFeedTabPanelProps): JSX.Element => {
-  const { data: feeds, error, isLoading } = useGetUserFeedsQuery(userId);
+const UserFeedTabPanel = ({
+  userId,
+  username,
+  type,
+}: UserFeedTabPanelProps): JSX.Element => {
+  const {
+    data: oneLineReviewsData,
+    error: oneLineReviewsError,
+    isLoading: isLoadingOneLineReviews,
+  } = useGetLatestOneLineReviewsQuery({ userId });
+  const {
+    data: postingsData,
+    error: postingsError,
+    isLoading: isLoadingPostings,
+  } = useGetLatestPostingsQuery({ userId });
 
-  if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;
+  const { data: feedsCount } = useGetUserPostingReviewCountsQuery({
+    username,
+  });
+
+  if (isLoadingOneLineReviews || isLoadingPostings)
+    return <Typography>로딩 중...</Typography>;
+
+  if (oneLineReviewsError || postingsError)
+    return (
+      <Typography>
+        에러 발생: {JSON.stringify(oneLineReviewsError || postingsError)}
+      </Typography>
+    );
+
+  if (!oneLineReviewsData || !postingsData) return <></>;
 
   return (
     <>
-      {feeds && (
-        <Feed userId={userId} posts={feeds.posts} reviews={feeds.reviews} />
-      )}
+      <Feed
+        userId={userId}
+        username={username}
+        postings={postingsData}
+        oneLineReviews={oneLineReviewsData}
+        postingsCount={feedsCount?.totalPostingsCount ?? 0}
+        oneLineReviewsCount={feedsCount?.totalReviewsCount ?? 0}
+        type={type}
+      />
     </>
   );
 };
