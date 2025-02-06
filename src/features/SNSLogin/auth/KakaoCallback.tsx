@@ -20,25 +20,25 @@ const KakaoCallback = (): JSX.Element => {
           const { user, access_token } = authData.session;
 
           // Supabase에서 현재 사용자 정보 가져오기
-          const { data: currentUser, error: currentUserError } = await supabase
+          const { data: userData, error: currentUserError } = await supabase
             .from('user')
-            .select('avatar_url')
+            .select('username, avatar_url')
             .eq('id', user.id)
             .single();
 
           if (currentUserError) throw currentUserError;
 
-          let avatar_url: string | undefined = currentUser?.avatar_url; // Supabase의 avatar_url 값
+          let avatar_url: string | undefined = userData?.avatar_url; // Supabase의 avatar_url 값
 
           // 카카오톡 메타데이터에서 avatar_url 가져오기
-          const { data: userData, error: userError } =
+          const { data: kakaoUserData, error: userError } =
             await supabase.auth.getUser();
 
           if (userError) throw userError;
 
           // Supabase의 avatar_url이 없을 때만 카카오톡 메타데이터 값 적용
           if (avatar_url === null && user.user_metadata?.avatar_url) {
-            avatar_url = userData.user.user_metadata.avatar_url;
+            avatar_url = kakaoUserData.user.user_metadata.avatar_url;
 
             // Supabase의 avatar_url 업데이트
             const { error: updateError } = await supabase
@@ -53,6 +53,7 @@ const KakaoCallback = (): JSX.Element => {
           dispatch(
             loginSuccess({
               id: user.id,
+              username: userData?.username ?? '',
               email: user.email,
               avatarUrl: avatar_url || '', // Redux 상태에 Supabase의 avatar_url 값 설정
               isSocialLogin: true,

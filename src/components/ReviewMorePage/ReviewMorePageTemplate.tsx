@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Stack, Button, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import StarRating from '@components/commons/StarRating';
@@ -6,47 +6,68 @@ import ReviewSortOptions from '@components/ReviewMorePage/ReviewSortOptions';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
 import ReviewCard from '@components/commons/ReviewCard';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
-import { Book, Review } from '@shared/types/type';
+import { Book } from '@shared/types/type';
+import { OneLineReview } from '@components/MyPage/types';
+import { formatDate } from '@shared/utils/dateUtils';
+import { deleteReviews } from '@features/MyPage/slice/userReviewMoreSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDeletePostsMutation } from '@features/MyPage/api/userFeedsApi';
+import { RootState } from '@store/index';
+import { useParams } from 'react-router-dom';
 
 interface BookDetail extends Omit<Book, 'bookTitle'> {
   title: string;
 }
 
 interface ReviewMorePageTemplateProps {
-  reviews: Review[];
+  totalReviews: number;
+  reviews: OneLineReview[];
   hasMore: boolean;
   fetchMoreData: () => void;
   bookDetails?: BookDetail;
+  likedReview?: boolean;
 }
 
 const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
+  totalReviews,
   reviews,
   hasMore,
   fetchMoreData,
   bookDetails,
+  likedReview = false,
 }) => {
   const [selectedRating, setSelectedRating] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [sortOption, setSortOption] = useState<string>('likes');
-  const [sortedReviews, setSortedReviews] = useState<Review[]>(reviews);
+  // const [sortedReviews, setSortedReviews] = useState<OneLineReview[]>(reviews);
   const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
-  const [selectedReviews, setSelectedReviews] = useState<number[]>([]);
+  const [selectedReviews, setSelectedReviews] = useState<string[]>([]);
 
-  useEffect(() => {
-    const updatedReviews = [...reviews];
-    if (sortOption === 'likes') {
-      updatedReviews.sort((a, b) => b.likes - a.likes);
-    } else if (sortOption === 'ratingHigh') {
-      updatedReviews.sort((a, b) => b.rating - a.rating);
-    } else if (sortOption === 'ratingLow') {
-      updatedReviews.sort((a, b) => a.rating - b.rating);
-    } else if (sortOption === 'latest') {
-      updatedReviews.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-      );
-    }
-    setSortedReviews(updatedReviews);
-  }, [reviews, sortOption]);
+  const dispatch = useDispatch();
+  const [deletePosts] = useDeletePostsMutation();
+
+  const { username } = useParams<{ username: string }>();
+  const currentUsername = useSelector(
+    (state: RootState) => state.user.userInfo?.username,
+  );
+
+  // useEffect(() => {
+  //   const updatedReviews = [...reviews];
+  //   if (sortOption === 'likes') {
+  //     updatedReviews.sort((a, b) => b.likes - a.likes);
+  //   } else if (sortOption === 'ratingHigh') {
+  //     updatedReviews.sort((a, b) => b.rating - a.rating);
+  //   } else if (sortOption === 'ratingLow') {
+  //     updatedReviews.sort((a, b) => a.rating - b.rating);
+  //   } else if (sortOption === 'latest') {
+  //     updatedReviews.sort(
+  //       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  //     );
+  //   }
+  //   setSortedReviews(updatedReviews);
+  // }, [reviews, sortOption]);
+
+  console.log(reviews);
 
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
@@ -66,19 +87,26 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
     setSelectedReviews([]);
   };
 
-  const handleReviewSelect = (index: number) => {
-    setSelectedReviews((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+  const handleReviewSelect = (postId: string) => {
+    setSelectedReviews(
+      (prev) =>
+        prev.includes(postId)
+          ? prev.filter((id) => id !== postId) // 이미 선택된 경우 제거
+          : [...prev, postId], // 선택되지 않은 경우 추가
     );
   };
 
-  const handleDeleteSelected = () => {
-    const updatedReviews = sortedReviews.filter(
-      (_, index) => !selectedReviews.includes(index),
-    );
-    setSortedReviews(updatedReviews);
-    setSelectedReviews([]);
-    setIsDeleteMode(false);
+  const handleDeleteSelected = async () => {
+    try {
+      await deletePosts(selectedReviews);
+
+      dispatch(deleteReviews(selectedReviews));
+
+      setIsDeleteMode(false);
+      setSelectedReviews([]);
+    } catch (error) {
+      console.error('Failed to delete posts:', error);
+    }
   };
 
   return (
@@ -117,38 +145,44 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
           fontWeight="bold"
           sx={{ display: 'flex', alignItems: 'center' }}
         >
-          한 줄 리뷰 {sortedReviews.length}
+          한줄평 {totalReviews}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Button
-            startIcon={<DeleteIcon />}
-            onClick={handleDeleteModeToggle}
-            color={isDeleteMode ? 'secondary' : 'primary'}
-            variant={isDeleteMode ? 'contained' : 'outlined'}
-            size="small"
-          >
-            {isDeleteMode ? '취소' : '삭제'}
-          </Button>
-          {isDeleteMode && (
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleDeleteSelected}
-              disabled={selectedReviews.length === 0}
-            >
-              선택 삭제 ({selectedReviews.length})
-            </Button>
-          )}
+          {currentUsername === username &&
+            !likedReview &&
+            totalReviews === 0 && (
+              <>
+                <Button
+                  startIcon={<DeleteIcon />}
+                  onClick={handleDeleteModeToggle}
+                  color={isDeleteMode ? 'secondary' : 'primary'}
+                  variant={isDeleteMode ? 'contained' : 'outlined'}
+                  size="small"
+                >
+                  {isDeleteMode ? '취소' : '삭제'}
+                </Button>
+                {isDeleteMode && (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleDeleteSelected}
+                    disabled={selectedReviews.length === 0}
+                  >
+                    선택 삭제 ({selectedReviews.length})
+                  </Button>
+                )}
+              </>
+            )}
           <ReviewSortOptions value={sortOption} onChange={handleSortChange} />
         </Stack>
       </Stack>
 
       <InfiniteScrollComponent
-        items={sortedReviews}
+        items={reviews}
         hasMore={hasMore}
         fetchMore={fetchMoreData}
         gridSize={{ xs: 12, md: 6 }}
-        renderItem={(review, index) => (
+        renderItem={(review) => (
           <Box
             sx={{
               display: 'flex',
@@ -158,13 +192,21 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
           >
             {isDeleteMode && (
               <Checkbox
-                checked={selectedReviews.includes(index)}
-                onChange={() => handleReviewSelect(index)}
+                checked={selectedReviews.includes(review.postId)}
+                onChange={() => handleReviewSelect(review.postId)}
                 sx={{ padding: '4px', marginRight: '8px' }}
               />
             )}
             <Box sx={{ flexGrow: 1 }}>
-              <ReviewCard {...review} />
+              <ReviewCard
+                postId={review.postId}
+                username={review.user.username}
+                avatarUrl={review.user.avatarUrl ?? ''}
+                date={formatDate(review.createdAt)}
+                content={review.review}
+                rating={review.rating ?? 0}
+                isbn={review.book.isbn}
+              />
             </Box>
           </Box>
         )}

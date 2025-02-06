@@ -3,27 +3,26 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
   Grid2,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Bookshelf } from '@shared/types/type';
+import BookShelfThumbnail from './BookShelfThumbnail';
+import { Bookshelf } from '../types';
 
-const BookshelfCard = ({
-  shelf,
-  userId,
-}: {
+interface BookshelfCardProps {
   shelf: Bookshelf;
-  userId: string;
-}) => {
+  username: string;
+}
+
+const BookshelfCard = ({ shelf, username }: BookshelfCardProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleClick = () => {
-    navigate(`/my-page/${userId}/bookshelves/${shelf.id}`);
+    navigate(`/my-page/${username}/bookshelves/${shelf.id}`);
   };
 
   return (
@@ -40,11 +39,7 @@ const BookshelfCard = ({
               size={shelf.books.length === 1 ? 12 : 6}
               height={shelf.books.length > 2 ? '50%' : '100%'}
             >
-              <CardMedia
-                component="img"
-                image={book.imageUrl}
-                alt={`${book.title} cover`}
-              />
+              <BookShelfThumbnail isbn={book.isbn} />
             </Grid2>
           ))}
         </Grid2>

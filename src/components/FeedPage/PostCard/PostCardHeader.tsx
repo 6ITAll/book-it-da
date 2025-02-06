@@ -40,7 +40,7 @@ const PostCardHeader = ({
   const [toggleFollow] = useToggleFollowMutation();
 
   const handleAvatarClick = () => {
-    navigateToUserPage(navigate, user.id);
+    navigateToUserPage(navigate, user.username ?? '');
   };
 
   const handleFollowClick = async () => {

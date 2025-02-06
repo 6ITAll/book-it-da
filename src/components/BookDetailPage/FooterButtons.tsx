@@ -10,13 +10,7 @@ interface FooterButtonsProps {
   link?: string;
 }
 
-const FooterButtons = ({
-  isbn,
-  title,
-  author,
-  imageUrl,
-  link,
-}: FooterButtonsProps): JSX.Element => {
+const FooterButtons = ({ isbn, link }: FooterButtonsProps): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleGoToBuy = () => {
@@ -41,9 +35,6 @@ const FooterButtons = ({
       {/* AddToLibraryModal 연결 */}
       <AddToLibraryModal
         isbn={isbn}
-        title={title}
-        author={author}
-        imageUrl={imageUrl}
         open={isModalOpen}
         setOpen={setIsModalOpen} // 상태 관리 함수 전달
       />
