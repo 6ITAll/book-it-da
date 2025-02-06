@@ -53,9 +53,6 @@ const FooterButtons = ({ isbn, link }: FooterButtonsProps): JSX.Element => {
       {isLoggedIn && (
         <AddToLibraryModal
           isbn={isbn}
-          title={title}
-          author={author}
-          imageUrl={imageUrl}
           open={isModalOpen}
           setOpen={setIsModalOpen}
         />
