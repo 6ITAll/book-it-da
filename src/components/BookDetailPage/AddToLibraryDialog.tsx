@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
 import {
   Typography,
@@ -33,16 +33,26 @@ const AddToLibraryModal = ({
   const [selectedBookshelf, setSelectedBookshelf] = useState<string>('');
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [newBookshelfName, setNewBookshelfName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const userInfo = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
-
+  console.log(userInfo);
   const { data: bookshelvesData, refetch } = useGetBookshelvesQuery(
-    userInfo.id || '',
+    userInfo?.id || '',
+    {
+      skip: !userInfo?.id,
+    },
   );
   const [createBookshelf] = useCreateBookshelfMutation();
   const [addBook] = useAddBookMutation();
+
+  useEffect(() => {
+    if (userInfo?.id) {
+      setIsLoading(false);
+    }
+  }, [userInfo]);
 
   // 책 추가 함수
   const handleAddBook = async () => {
@@ -131,6 +141,10 @@ const AddToLibraryModal = ({
       </RadioGroup>
     </>
   );
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <HybridDialog
