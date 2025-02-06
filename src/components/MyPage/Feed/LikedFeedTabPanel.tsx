@@ -33,8 +33,6 @@ const LikedFeedTabPanel = ({
     username,
   });
 
-  console.log(likedOneLineReviews, likedPostings);
-
   if (isLoadinglikedOneLineReviews || isLoadinglikedPostings)
     return <Typography>로딩 중...</Typography>;
 
