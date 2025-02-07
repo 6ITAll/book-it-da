@@ -1,15 +1,15 @@
-import { Box, Typography, Button, Stack, useTheme } from '@mui/material';
+import { Box, Typography, Button, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ReviewCard from '@components/commons/ReviewCard';
 import PostCard from '@components/commons/PostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
-import StarRating from '@components/commons/StarRating';
 import { useGetPostsQuery } from '@features/BookDetailPage/api/postApi';
 import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 import { MoreType } from '@components/BookDetailPage/types';
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { useState } from 'react';
+import BookMyReview from './BookMyReview';
 interface BookFeedTabProps {
   isbn: string;
   title: string;
@@ -66,24 +66,12 @@ const BookFeedTab = ({
     <Box sx={bookReviewTabStyles.container}>
       {/* 리뷰 섹션 */}
       <Box sx={bookReviewTabStyles.reviewSection}>
-        <Box sx={bookReviewTabStyles.sectionHeader}></Box>
-        <Box sx={bookReviewTabStyles.reviewBox}>
-          <Stack direction="row" spacing={1}>
-            <StarRating
-              rating={rating}
-              onRatingChange={setRating}
-              isDialog={false}
-              openDialog={setIsOneLineReviewModalOpen}
-            />
-          </Stack>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ marginTop: '0.5rem' }}
-          >
-            이 책은 어떠셨나요? 별점을 남겨주세요
-          </Typography>
-        </Box>
+        <BookMyReview
+          isbn={isbn}
+          rating={rating}
+          onRatingChange={setRating}
+          openDialog={setIsOneLineReviewModalOpen}
+        />
         <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
             한줄평 ({totalReviews})

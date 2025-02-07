@@ -36,6 +36,7 @@ import likedPostingsReducer from '@features/MyPage/slice/likedPostingMoreSlice';
 import likedReviewsReducer from '@features/MyPage/slice/likedReviewMoreSlice';
 import followListReducer from '@features/MyPage/slice/followListSlice';
 import readerStatsReducer from '@features/BookDetailPage/slice/readerStatsSlice';
+import { bookOwnReviewApi } from '@features/BookDetailPage/api/bookOwnReviewApi';
 
 export const store = configureStore({
   reducer: {
@@ -66,6 +67,7 @@ export const store = configureStore({
     [followApi.reducerPath]: followApi.reducer,
     [likeApi.reducerPath]: likeApi.reducer,
     [userProfileStatsApi.reducerPath]: userProfileStatsApi.reducer,
+    [bookOwnReviewApi.reducerPath]: bookOwnReviewApi.reducer,
     counter: counterReducer,
     user: userReducer,
     followList: followListReducer,
@@ -102,6 +104,7 @@ export const store = configureStore({
       followApi.middleware,
       likeApi.middleware,
       userProfileStatsApi.middleware,
+      bookOwnReviewApi.middleware,
     ]),
 });
 

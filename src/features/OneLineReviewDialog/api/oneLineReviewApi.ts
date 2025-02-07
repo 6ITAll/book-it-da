@@ -4,6 +4,7 @@ import { supabase } from '@utils/supabaseClient';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { FeedType, PostType } from '@shared/types/type';
 import { userFeedsApi } from '@features/MyPage/api/userFeedsApi';
+import { bookOwnReviewApi } from '@features/BookDetailPage/api/bookOwnReviewApi';
 
 export const oneLineReviewApi = createApi({
   reducerPath: 'oneLineReviewApi',
@@ -44,6 +45,10 @@ export const oneLineReviewApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          // 책 상세 페이지 본인 리뷰 리페치
+          await dispatch(
+            bookOwnReviewApi.util.invalidateTags(['BookOwnReview']),
+          );
           // 유저 페이지 피드 리페치
           await dispatch(userFeedsApi.util.invalidateTags(['UserFeeds']));
           // 피드 데이터 리페치
