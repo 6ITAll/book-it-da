@@ -14,7 +14,7 @@ export default [
         project: './tsconfig.json',
       },
     },
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    extends: [js.configs.recommended, '@typescript-eslint/recommended', ...tseslint.configs.recommended],
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
