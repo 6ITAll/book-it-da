@@ -1,4 +1,4 @@
-import { Box, Typography, Stack } from '@mui/material';
+import { Box, Typography, Stack, Skeleton } from '@mui/material';
 import StarRating from '@components/commons/StarRating';
 import ReviewCard from '@components/commons/ReviewCard';
 import { useSelector } from 'react-redux';
@@ -26,14 +26,40 @@ const BookMyReview = ({
     (state: RootState) => state.user.userInfo as UserInfo,
   );
 
-  const { data: userReview, isLoading } = useGetBookOwnReviewQuery({
-    userId: currentUserId,
-    isbn,
-  });
+  const {
+    data: userReview,
+    isLoading,
+    error,
+  } = useGetBookOwnReviewQuery(
+    { userId: currentUserId, isbn },
+    {
+      skip: !currentUserId || !isbn,
+    },
+  );
 
   console.log(userReview);
 
-  if (isLoading) return <Box>sdas</Box>;
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          ...bookReviewTabStyles.reviewBox,
+          padding: 1,
+          mb: '2rem',
+        }}
+      >
+        <Skeleton variant="rectangular" width="100%" height={50} />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={bookReviewTabStyles.reviewBox}>
+        <Typography color="error">리뷰를 불러오는데 실패했습니다.</Typography>
+      </Box>
+    );
+  }
 
   if (!userReview) {
     return (

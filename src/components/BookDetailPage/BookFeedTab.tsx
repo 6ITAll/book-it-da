@@ -66,6 +66,11 @@ const BookFeedTab = ({
     <Box sx={bookReviewTabStyles.container}>
       {/* 리뷰 섹션 */}
       <Box sx={bookReviewTabStyles.reviewSection}>
+        <Box sx={bookReviewTabStyles.sectionHeader}>
+          <Typography variant="h6" fontWeight="bold">
+            나의 한줄평
+          </Typography>
+        </Box>
         <BookMyReview
           isbn={isbn}
           rating={rating}
