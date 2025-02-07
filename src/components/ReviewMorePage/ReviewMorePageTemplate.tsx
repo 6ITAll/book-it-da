@@ -150,7 +150,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
         <Stack direction="row" spacing={2} alignItems="center">
           {currentUsername === username &&
             !likedReview &&
-            totalReviews === 0 && (
+            totalReviews !== 0 && (
               <>
                 <Button
                   startIcon={<DeleteIcon />}

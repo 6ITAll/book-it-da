@@ -72,7 +72,7 @@ const PostingMoreTemplate = ({
         <Stack direction="row" spacing={2}>
           {currentUsername === username &&
             !likedPosting &&
-            totalPostings === 0 && (
+            totalPostings !== 0 && (
               <>
                 <Button
                   onClick={handleDeleteModeToggle}
