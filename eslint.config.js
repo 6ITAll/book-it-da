@@ -1,20 +1,23 @@
-import { config as tseslint } from 'typescript-eslint';
 import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
 
-export default [
+export default tseslint.config(
+  { ignores: ['dist'] },
   {
+    extends: [
+      js.configs.recommended,
+      '@typescript-eslint/recommended',
+      ...tseslint.configs.recommended,
+    ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parser: '@typescript-eslint/parser',
-      parserOptions: {
-        project: './tsconfig.json',
-      },
+      ecmaVersion: 2020,
+      globals: globals.browser,
     },
-    extends: [js.configs.recommended, '@typescript-eslint/recommended', ...tseslint.configs.recommended],
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
@@ -22,10 +25,9 @@ export default [
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unsafe-assignment': 'error',
-      '@typescript-eslint/no-unsafe-call': 'error',
-      '@typescript-eslint/no-unsafe-member-access': 'error',
+      '@typescript-eslint/no-explicit-any': 'error', // any 타입 사용 금지
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }], // 사용하지 않는 변수 경고
+      '@typescript-eslint/explicit-function-return-type': 'warn', // 함수 반환 타입 명시
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
@@ -43,4 +45,4 @@ export default [
       },
     },
   },
-];
+);
