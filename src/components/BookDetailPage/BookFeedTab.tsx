@@ -106,12 +106,13 @@ const BookFeedTab = ({
                 sx={bookReviewTabStyles.gridContainer}
               >
                 <ReviewCard
+                  postId=""
                   username={review.username}
-                  userId={review.userId || ''}
-                  date={review.date}
-                  content={review.content}
-                  likes={review.likes}
+                  avatarUrl=""
+                  date=""
+                  content=""
                   rating={review.rating}
+                  isbn={'0'}
                 />
               </Grid>
             ))}
@@ -159,7 +160,7 @@ const BookFeedTab = ({
                   postId="postId"
                   title={post.title}
                   content="내용"
-                  cover="커버"
+                  isbn="0"
                   user={mockUser}
                 />
               </Grid>

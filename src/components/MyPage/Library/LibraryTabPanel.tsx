@@ -4,9 +4,10 @@ import { useGetLibraryQuery } from '@features/MyPage/api/libraryApi';
 
 interface LibraryTabPanelProps {
   userId: string;
+  username: string;
 }
 
-const LibraryTabPanel = ({ userId }: LibraryTabPanelProps) => {
+const LibraryTabPanel = ({ userId, username }: LibraryTabPanelProps) => {
   const { data: bookShelves, error, isLoading } = useGetLibraryQuery(userId);
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
@@ -21,7 +22,7 @@ const LibraryTabPanel = ({ userId }: LibraryTabPanelProps) => {
       spacing={3}
     >
       {bookShelves?.map((shelf) => (
-        <BookshelfCard key={shelf.id} shelf={shelf} userId={userId} />
+        <BookshelfCard key={shelf.id} shelf={shelf} username={username} />
       ))}
     </Stack>
   );

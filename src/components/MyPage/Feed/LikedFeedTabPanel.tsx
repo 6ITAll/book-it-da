@@ -1,22 +1,62 @@
-import { useGetLikedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
+import {
+  useGetLatestLikedPostingsQuery,
+  useGetLatestLikedReviewsQuery,
+  useGetUserLikedCountsQuery,
+} from '@features/MyPage/api/userLikedFeedsApi';
 import Feed from './Feed';
 import { Typography } from '@mui/material';
 
 interface LikedFeedTabPanelProps {
   userId: string;
+  username: string;
+  type: string;
 }
 
-const LikedFeedTabPanel = ({ userId }: LikedFeedTabPanelProps): JSX.Element => {
-  const { data: feeds, error, isLoading } = useGetLikedFeedsQuery(userId);
+const LikedFeedTabPanel = ({
+  userId,
+  username,
+  type,
+}: LikedFeedTabPanelProps): JSX.Element => {
+  const {
+    data: likedOneLineReviews,
+    error: likedOneLineReviewsError,
+    isLoading: isLoadinglikedOneLineReviews,
+  } = useGetLatestLikedReviewsQuery({ userId });
 
-  if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (error) return <Typography>에러 발생: {JSON.stringify(error)}</Typography>;
+  const {
+    data: likedPostings,
+    error: likedPostingsError,
+    isLoading: isLoadinglikedPostings,
+  } = useGetLatestLikedPostingsQuery({ userId });
+
+  const { data: likedFeedsCount } = useGetUserLikedCountsQuery({
+    username,
+  });
+
+  if (isLoadinglikedOneLineReviews || isLoadinglikedPostings)
+    return <Typography>로딩 중...</Typography>;
+
+  if (likedOneLineReviewsError || likedPostingsError)
+    return (
+      <Typography>
+        에러 발생:{' '}
+        {JSON.stringify(likedOneLineReviewsError || likedPostingsError)}
+      </Typography>
+    );
+
+  if (!likedOneLineReviews || !likedPostings) return <></>;
 
   return (
     <>
-      {feeds && (
-        <Feed userId={userId} posts={feeds.posts} reviews={feeds.reviews} />
-      )}
+      <Feed
+        userId={userId}
+        username={username}
+        postings={likedPostings}
+        oneLineReviews={likedOneLineReviews}
+        postingsCount={likedFeedsCount?.totalLikedPostingsCount ?? 0}
+        oneLineReviewsCount={likedFeedsCount?.totalLikedReviewsCount ?? 0}
+        type={type}
+      />
     </>
   );
 };

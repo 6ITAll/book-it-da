@@ -13,7 +13,7 @@ const UserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const open = Boolean(anchorEl);
-  const { avatarUrl } = useSelector(
+  const { avatarUrl, username } = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
 
@@ -63,7 +63,7 @@ const UserMenu = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleNavigation('/my-page')}>
+        <MenuItem onClick={() => handleNavigation(`/my-page/${username}`)}>
           마이페이지
         </MenuItem>
         <MenuItem onClick={() => handleNavigation('/profile/edit')}>
