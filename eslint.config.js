@@ -36,6 +36,10 @@ export default tseslint.config(
         },
       ],
     },
+    parserOptions: {
+      parser: '@typescript-eslint/parser',
+      project: './tsconfig.json',
+    },
     settings: {
       prettier: {
         ...prettierPlugin.configs.recommended, // Prettier 권장 설정
