@@ -8,12 +8,7 @@ import prettierPlugin from 'eslint-plugin-prettier';
 export default tseslint.config(
   { ignores: ['dist'] },
   {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-      'plugin:prettier/recommended',
-      'plugin:react-hooks/recommended',
-    ],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -23,10 +18,13 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       prettier: prettierPlugin,
-      '@typescript-eslint': tseslint,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unsafe-assignment': 'error',
+      '@typescript-eslint/no-unsafe-call': 'error',
+      '@typescript-eslint/no-unsafe-member-access': 'error',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
@@ -36,16 +34,6 @@ export default tseslint.config(
         {
           endOfLine: 'auto',
         },
-      ],
-      '@typescript-eslint/no-explicit-any': 'error',
-      camelcase: 'error',
-      'no-unused-vars': [
-        'error',
-        { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
-      ],
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
       ],
     },
     settings: {
