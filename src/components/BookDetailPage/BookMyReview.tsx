@@ -37,8 +37,6 @@ const BookMyReview = ({
     },
   );
 
-  console.log(userReview);
-
   if (isLoading) {
     return (
       <Box
@@ -49,14 +47,6 @@ const BookMyReview = ({
         }}
       >
         <Skeleton variant="rectangular" width="100%" height={50} />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={bookReviewTabStyles.reviewBox}>
-        <Typography color="error">리뷰를 불러오는데 실패했습니다.</Typography>
       </Box>
     );
   }
@@ -79,6 +69,14 @@ const BookMyReview = ({
         >
           이 책은 어떠셨나요? 별점을 남겨주세요
         </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={bookReviewTabStyles.reviewBox}>
+        <Typography color="error">리뷰를 불러오는데 실패했습니다.</Typography>
       </Box>
     );
   }

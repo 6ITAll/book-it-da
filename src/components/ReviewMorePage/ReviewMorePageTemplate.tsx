@@ -67,8 +67,6 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
   //   setSortedReviews(updatedReviews);
   // }, [reviews, sortOption]);
 
-  console.log(reviews);
-
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
     setIsDialogOpen(true);
