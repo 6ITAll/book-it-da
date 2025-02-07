@@ -10,19 +10,19 @@ import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 import { MoreType } from '@components/BookDetailPage/types';
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { useState } from 'react';
-interface BookReviewTabProps {
+interface BookFeedTabProps {
   isbn: string;
   title: string;
   author: string;
   imageUrl: string;
 }
 
-const BookReviewsTab = ({
+const BookFeedTab = ({
   isbn,
   title,
   author,
   imageUrl,
-}: BookReviewTabProps): JSX.Element => {
+}: BookFeedTabProps): JSX.Element => {
   const [rating, setRating] = useState<number>(0);
   const navigate = useNavigate();
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
@@ -66,11 +66,7 @@ const BookReviewsTab = ({
     <Box sx={bookReviewTabStyles.container}>
       {/* 리뷰 섹션 */}
       <Box sx={bookReviewTabStyles.reviewSection}>
-        <Box sx={bookReviewTabStyles.sectionHeader}>
-          <Typography variant="h6" fontWeight="bold">
-            한 줄 리뷰 {totalReviews}
-          </Typography>
-        </Box>
+        <Box sx={bookReviewTabStyles.sectionHeader}></Box>
         <Box sx={bookReviewTabStyles.reviewBox}>
           <Stack direction="row" spacing={1}>
             <StarRating
@@ -88,7 +84,10 @@ const BookReviewsTab = ({
             이 책은 어떠셨나요? 별점을 남겨주세요
           </Typography>
         </Box>
-        <Box display="flex" padding="1rem 0rem" justifyContent="flex-end">
+        <Box sx={bookReviewTabStyles.sectionHeader}>
+          <Typography variant="h6" fontWeight="bold">
+            한줄평 ({totalReviews})
+          </Typography>
           <Button
             size="small"
             variant="text"
@@ -137,7 +136,7 @@ const BookReviewsTab = ({
       <Box>
         <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
-            이 책의 포스트 {totalPosts}
+            포스팅 ({totalPosts})
           </Typography>
           <Button
             size="small"
@@ -198,4 +197,4 @@ const BookReviewsTab = ({
   );
 };
 
-export default BookReviewsTab;
+export default BookFeedTab;
