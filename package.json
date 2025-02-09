@@ -11,9 +11,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "test-storybook": "test-storybook",
-    "build-storybook": "storybook build",
-    "swagger": "node swagger-server.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run swagger\""
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
