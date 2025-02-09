@@ -31,8 +31,6 @@ const BookReviewMorePage = (): JSX.Element => {
     { skip: !isbn },
   );
 
-  console.log(fetchedReviews);
-
   useEffect(() => {
     dispatch(clearReviews());
     dispatch(setPage(1));

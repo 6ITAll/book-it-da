@@ -31,11 +31,7 @@ export const bookOwnReviewApi = createApi({
             .limit(1)
             .single()) as PostgrestSingleResponse<DbUserReview>;
 
-          console.log('Query params:', userId, isbn);
-          console.log('Raw data:', data);
-
           if (error) throw error;
-          console.log(error);
           if (!data) return { data: null };
 
           const transformedReview: UserReview = {

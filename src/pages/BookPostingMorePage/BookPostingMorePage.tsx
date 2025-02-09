@@ -14,7 +14,6 @@ import { useGetAllBookPostingsQuery } from '@features/BookDetailPage/api/bookPos
 
 const BookPostingMorePage = (): JSX.Element => {
   const { isbn } = useParams<{ isbn: string }>();
-  console.log(isbn);
   const dispatch = useDispatch();
 
   const { postings, hasMore, page } = useSelector(
@@ -31,8 +30,6 @@ const BookPostingMorePage = (): JSX.Element => {
     { isbn: isbn || '', page, limit },
     { skip: !isbn },
   );
-
-  console.log(fetchedPostings);
 
   useEffect(() => {
     dispatch(clearPostings());

@@ -23,7 +23,6 @@ export const bookReviewsApi = createApi({
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
-          console.log(data);
           if (error) throw error;
 
           const reviews: OneLineReview[] = (data as DbOneLineReview[]).map(
@@ -40,7 +39,6 @@ export const bookReviewsApi = createApi({
               },
             }),
           );
-          console.log(reviews);
 
           return { data: reviews };
         } catch (error) {

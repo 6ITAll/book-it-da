@@ -23,8 +23,6 @@ export const bookPostingsApi = createApi({
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1);
 
-          console.log(data);
-
           if (error) throw error;
 
           const postings: Posting[] = (data as DbPosting[]).map((posting) => ({
