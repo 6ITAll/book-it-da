@@ -78,8 +78,6 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "eslint-plugin-storybook": "^0.11.1",
     "globals": "^15.12.0",
-    "msw": "^2.7.0",
-    "msw-storybook-addon": "^2.0.4",
     "playwright": "^1.49.1",
     "prettier": "^3.4.2",
     "storybook": "^8.4.7",
@@ -92,11 +90,6 @@
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
-    ]
-  },
-  "msw": {
-    "workerDirectory": [
-      "public"
     ]
   },
   "optionalDependencies": {
