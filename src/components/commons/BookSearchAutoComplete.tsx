@@ -27,7 +27,7 @@ const BookSearchAutoComplete = ({
     {
       query: searchQuery,
       page,
-      sort: 'Accuracy',
+      sort: 'SortAccuracy',
     },
     {
       skip: !searchQuery,
@@ -40,15 +40,14 @@ const BookSearchAutoComplete = ({
   }, [searchQuery]);
 
   useEffect(() => {
-    if (searchResults?.item) {
+    if (searchResults?.allBooks) {
       if (page === 1) {
-        setAllItems(searchResults.item);
+        setAllItems(searchResults.allBooks);
         setPage(2);
       } else {
-        setAllItems((prev) => [...prev, ...searchResults.item]);
+        setAllItems((prev) => [...prev, ...searchResults.allBooks]);
       }
     }
-    // 의존성 배열 경고 메시지 무시
     // eslint-disable-next-line
   }, [searchResults]);
 
@@ -82,7 +81,7 @@ const BookSearchAutoComplete = ({
             if (
               listboxNode.scrollTop + listboxNode.clientHeight >=
                 listboxNode.scrollHeight - 20 &&
-              searchResults?.item.length === 4 &&
+              searchResults?.allBooks.length === 4 &&
               !isLoading
             ) {
               setPage((prev) => prev + 1);
