@@ -10,8 +10,8 @@ interface BookPreviewSectionProps {
 const BookPreviewSection = ({ book }: BookPreviewSectionProps): JSX.Element => (
   <Box sx={styles.bookPreviewBox}>
     <CommonBookCard
-      image={book.imageUrl}
-      title={book.title}
+      image={book.imageUrl ?? ''}
+      title={book.title ?? ''}
       author={book.author}
       sx={styles.bookCard}
     />

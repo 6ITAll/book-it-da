@@ -6,21 +6,33 @@ import LikedFeedTabPanel from './Feed/LikedFeedTabPanel';
 
 interface TabSectionProps {
   userId: string;
+  username: string;
 }
 
-const TabSection = ({ userId }: TabSectionProps): JSX.Element => {
-  /* TODO 탭 콘텐츠 제작 완료 후 userId 넘겨주기  */
+const TabSection = ({ userId, username }: TabSectionProps): JSX.Element => {
   const tabs = [
-    { id: 1, label: '내 서재', component: <LibraryTabPanel userId={userId} /> },
+    {
+      id: 1,
+      label: '내 서재',
+      component: <LibraryTabPanel userId={userId} username={username} />,
+    },
     {
       id: 2,
       label: '내 피드',
-      component: <UserFeedTabPanel userId={userId} />,
+      component: (
+        <UserFeedTabPanel userId={userId} username={username} type="내 피드" />
+      ),
     },
     {
       id: 3,
       label: '좋아요한 피드',
-      component: <LikedFeedTabPanel userId={userId} />,
+      component: (
+        <LikedFeedTabPanel
+          userId={userId}
+          username={username}
+          type="좋아요한 피드"
+        />
+      ),
     },
   ];
 

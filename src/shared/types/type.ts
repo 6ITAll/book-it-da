@@ -22,9 +22,9 @@ export interface BookDetailPost {
 export interface User {
   id: string;
   username?: string;
+  name?: string;
   avatarUrl?: string;
   isFollowing?: boolean;
-  isFollower?: boolean;
 }
 
 // UserInfo 인터페이스 정의
@@ -89,32 +89,16 @@ export interface ReviewCard extends Review {
 // 책 interface
 export interface Book {
   isbn: string;
-  title: string;
-  author: string;
-  imageUrl: string;
-}
-
-export interface Bookshelf {
-  id: number;
-  name: string; // 책장 이름
-  bookCount: number; // 책 개수
-  books: Book[]; // 책 목록
+  title?: string;
+  author?: string;
+  imageUrl?: string;
 }
 
 // 저장된 책 interface
 export interface SavedBook extends Book {
-  bookshelfId: number; // 책장 ID
-  savedAt: string; // 책장에 저장된 시간
+  bookshelfId: string; // 책장 ID
+  addedAt: string; // 책장에 저장된 시간
   readingStatus: ReadingStatusType; // 독서 상태
-}
-
-// 책장 interface
-export interface Bookshelf {
-  id: number;
-  name: string; // 사용자가 지정한 책장 이름
-  createdAt: string;
-  updatedAt: string;
-  bookCount: number; // 책장에 저장된 책 수
 }
 
 // 리뷰 데이터 타입
@@ -131,10 +115,4 @@ export interface GenderAge {
   age: string;
   male: number;
   female: number;
-}
-
-//마이페이지 팔로우, 팔로잉
-export interface FollowRequest {
-  userId: string;
-  isFollowing: boolean;
 }

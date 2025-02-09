@@ -5,11 +5,11 @@ export const sortBooks = (books: SavedBook[], sortOption: SortOption) => {
   return [...books].sort((a, b) => {
     switch (sortOption) {
       case 'recent':
-        return new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime();
+        return new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
       case 'title':
-        return a.title.localeCompare(b.title);
+        return (a.title ?? '').localeCompare(b.title ?? '');
       case 'author':
-        return a.author.localeCompare(b.author);
+        return (a.author ?? '').localeCompare(b.author ?? '');
       default:
         return 0;
     }

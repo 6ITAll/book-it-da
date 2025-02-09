@@ -2,21 +2,30 @@ import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.style
 import PostCard from '@components/commons/PostCard';
 import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { BookDetailPost } from '@shared/types/type';
 import { useNavigate } from 'react-router-dom';
+import { Posting } from '../types';
 
-interface PostFeedSectionProps {
-  userId: string;
-  posts: BookDetailPost[];
+interface PostingFeedSectionProps {
+  username: string;
+  postings: Posting[];
+  postingCount: number;
+  type: string;
 }
 
-const PostFeedSection = ({
-  userId,
-  posts,
-}: PostFeedSectionProps): JSX.Element => {
+const PostingFeedSection = ({
+  username,
+  postings,
+  postingCount,
+  type,
+}: PostingFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  const mockUser = { id: '1' };
-
+  const handleNavigate = () => {
+    if (type === '내 피드') {
+      navigate(`/my-page/${username}/feeds/postings`);
+    } else if (type === '좋아요한 피드') {
+      navigate(`/my-page/${username}/liked/postings`);
+    }
+  };
   return (
     <Box>
       <Box
@@ -28,32 +37,30 @@ const PostFeedSection = ({
         }}
       >
         <Typography variant="h6" fontWeight="bold">
-          이 책의 포스트 {posts.length}
+          포스팅 ({postingCount})
         </Typography>
         <Button
           size="small"
           variant="text"
           sx={bookReviewTabStyles.moreButton}
-          onClick={() => {
-            navigate(`/my-page/${userId}/feeds/posts`);
-          }}
+          onClick={handleNavigate}
         >
           더보기
         </Button>
       </Box>
       <Grid container spacing={2}>
-        {posts.map((post, index) => (
+        {postings.map((posting, index) => (
           <Grid
             key={index}
             size={{ xs: 12, md: 4 }}
             sx={{ display: 'flex', flexDirection: 'column' }}
           >
             <PostCard
-              postId="postId"
-              title={post.title}
-              content="내용"
-              cover="커버"
-              user={mockUser}
+              postId={posting.postId}
+              title={posting.title}
+              content={posting.content}
+              isbn={posting.book.isbn}
+              user={posting.user}
             />
           </Grid>
         ))}
@@ -62,4 +69,4 @@ const PostFeedSection = ({
   );
 };
 
-export default PostFeedSection;
+export default PostingFeedSection;
