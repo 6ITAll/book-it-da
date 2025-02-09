@@ -16,9 +16,8 @@ import {
   useCreateBookshelfMutation,
   useGetBookshelvesQuery,
 } from '@features/BookShelvesPage/api/bookShelvesApi';
-import { ResponseBookshelf } from '@components/BookDetailPage/types';
-import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
-import BookshelfCreate from './BookShelfCreate';
+
+import BookshelfCreate from '@components/BookDetailPage/BookshelfCreate';
 
 interface AddToLibraryModalProps {
   open: boolean;
@@ -33,7 +32,6 @@ const AddToLibraryModal = ({
 }: AddToLibraryModalProps): JSX.Element => {
   const [selectedBookshelf, setSelectedBookshelf] = useState<string>('');
   const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [newBookshelfName, setNewBookshelfName] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
   const userInfo = useSelector(
@@ -81,7 +79,7 @@ const AddToLibraryModal = ({
           name: newBookshelfName.trim(),
         }).unwrap();
         await refetch();
-        setNewBookshelfName('');
+
         setIsCreating(false);
       } catch (error) {
         console.error('책장 추가 중 오류 발생:', error);
