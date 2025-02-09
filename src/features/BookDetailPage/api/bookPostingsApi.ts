@@ -1,21 +1,7 @@
 import { Posting } from '@components/BookDetailPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
-
-export interface DbPosting {
-  post_id: string;
-  title: string;
-  content: string;
-  book: {
-    isbn: string;
-  };
-  created_at: string;
-  user: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
-}
+import { DbPosting } from '../types/types';
 
 export const bookPostingsApi = createApi({
   reducerPath: 'bookPostingsApi',

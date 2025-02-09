@@ -1,36 +1,8 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
 import { supabase } from '@utils/supabaseClient';
-
-export interface DbUserReview {
-  id: string;
-  created_at: string;
-  user: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
-  one_line_review: {
-    review: string;
-    rating: number;
-  };
-  isbn: string;
-}
-
-export interface UserReview {
-  postId: string;
-  review: string;
-  rating: number | null;
-  book: {
-    isbn: string;
-  };
-  createdAt: string;
-  user: {
-    id: string;
-    username: string;
-    avatarUrl: string;
-  };
-}
+import { DbUserReview } from '../types/types';
+import { UserReview } from '@components/BookDetailPage/types';
 
 export const bookOwnReviewApi = createApi({
   reducerPath: 'bookOwnReviewApi',

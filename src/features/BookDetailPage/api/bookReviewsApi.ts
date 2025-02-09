@@ -1,21 +1,7 @@
 import { OneLineReview } from '@components/BookDetailPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
-
-export interface DbOneLineReview {
-  post_id: string;
-  review: string;
-  rating: number | null;
-  book: {
-    isbn: string;
-  };
-  created_at: string;
-  user: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
-}
+import { DbOneLineReview } from '../types/types';
 
 export const bookReviewsApi = createApi({
   reducerPath: 'bookReviewsApi',

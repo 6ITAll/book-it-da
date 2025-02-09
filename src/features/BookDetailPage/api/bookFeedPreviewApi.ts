@@ -1,42 +1,7 @@
 import { OneLineReview, Posting } from '@components/MyPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
-
-export interface DbOneLineReview {
-  post_id: string;
-  review: string;
-  rating: number | null;
-  book: {
-    isbn: string;
-  };
-  created_at: string;
-  user: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
-}
-
-export interface DbPosting {
-  post_id: string;
-  title: string;
-  content: string;
-  book: {
-    isbn: string;
-  };
-  created_at: string;
-  user: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
-}
-
-export interface BookPostCount {
-  isbn: string;
-  review_count: number;
-  posting_count: number;
-}
+import { BookPostCount, DbOneLineReview, DbPosting } from '../types/types';
 
 export const bookFeedPreviewApi = createApi({
   reducerPath: 'bookFeedPreviewApi',

@@ -9,6 +9,21 @@ export const BOOK_TABS = {
 
 export type BookTabType = (typeof BOOK_TABS)[keyof typeof BOOK_TABS];
 
+export interface UserReview {
+  postId: string;
+  review: string;
+  rating: number | null;
+  book: {
+    isbn: string;
+  };
+  createdAt: string;
+  user: {
+    id: string;
+    username: string;
+    avatarUrl: string;
+  };
+}
+
 export interface OneLineReview {
   postId: string;
   review: string;
