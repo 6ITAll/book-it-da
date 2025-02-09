@@ -1,11 +1,5 @@
-// AddToLibraryDialog.tsx 인터페이스
-export interface ResponseBookshelf {
-  id: number;
-  name: string;
-}
-
 // BookReviewTab.tsx 타입
-export type MoreType = 'posts' | 'reviews';
+export type MoreType = 'postings' | 'reviews';
 
 // 책 상세 페이지 탭
 export const BOOK_TABS = {
@@ -14,3 +8,33 @@ export const BOOK_TABS = {
 } as const;
 
 export type BookTabType = (typeof BOOK_TABS)[keyof typeof BOOK_TABS];
+
+export interface OneLineReview {
+  postId: string;
+  review: string;
+  rating: number | null;
+  book: {
+    isbn: string;
+  };
+  createdAt: string;
+  user: {
+    id: string;
+    username: string;
+    avatarUrl: string;
+  };
+}
+
+export interface Posting {
+  postId: string;
+  title: string;
+  content: string;
+  book: {
+    isbn: string;
+  };
+  createdAt: string;
+  user: {
+    id: string;
+    username: string;
+    avatarUrl: string;
+  };
+}

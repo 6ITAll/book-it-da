@@ -7,8 +7,8 @@ import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
 import { reviewStatsApi } from '@features/BookDetailPage/api/reviewStatsApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
 import { readerStatsApi } from '@features/BookDetailPage/api/readerStatsApi';
-import { postApi } from '@features/BookDetailPage/api/postApi';
-import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
+import { bookPostingsApi } from '@features/BookDetailPage/api/bookPostingsApi';
+import { bookReviewsApi } from '@features/BookDetailPage/api/bookReviewsApi';
 import userReducer from '@features/user/userSlice';
 import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
 import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
@@ -38,6 +38,8 @@ import followListReducer from '@features/MyPage/slice/followListSlice';
 import readerStatsReducer from '@features/BookDetailPage/slice/readerStatsSlice';
 import { bookOwnReviewApi } from '@features/BookDetailPage/api/bookOwnReviewApi';
 import { bookFeedPreviewApi } from '@features/BookDetailPage/api/bookFeedPreviewApi';
+import bookPostingsReducer from '@features/BookDetailPage/slice/bookPostingMoreSlice';
+import bookReviewsReducer from '@features/BookDetailPage/slice/bookReviewMoreSlice';
 
 export const store = configureStore({
   reducer: {
@@ -56,8 +58,8 @@ export const store = configureStore({
     [userFeedsApi.reducerPath]: userFeedsApi.reducer,
     [userLikedFeedsApi.reducerPath]: userLikedFeedsApi.reducer,
     [readerStatsApi.reducerPath]: readerStatsApi.reducer,
-    [postApi.reducerPath]: postApi.reducer,
-    [reviewApi.reducerPath]: reviewApi.reducer,
+    [bookPostingsApi.reducerPath]: bookPostingsApi.reducer,
+    [bookReviewsApi.reducerPath]: bookReviewsApi.reducer,
     [oneLineReviewApi.reducerPath]: oneLineReviewApi.reducer,
     [feedApi.reducerPath]: feedApi.reducer,
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
@@ -80,6 +82,8 @@ export const store = configureStore({
     snackbar: snackbarReducer,
     feed: feedReducer,
     readerStats: readerStatsReducer,
+    bookPostings: bookPostingsReducer,
+    bookReviews: bookReviewsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -92,8 +96,8 @@ export const store = configureStore({
       bookShelvesApi.middleware,
       postingApi.middleware,
       readerStatsApi.middleware,
-      postApi.middleware,
-      reviewApi.middleware,
+      bookPostingsApi.middleware,
+      bookReviewsApi.middleware,
       userFeedsApi.middleware,
       userLikedFeedsApi.middleware,
       feedApi.middleware,

@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Posting } from '@components/MyPage/types';
 
-export interface LikedPostingsState {
+export interface BookPostingsState {
   postings: Posting[];
   hasMore: boolean;
   page: number;
 }
 
-const initialState: LikedPostingsState = {
+const initialState: BookPostingsState = {
   postings: [],
   hasMore: true,
   page: 1,
 };
 
-const likedPostingsSlice = createSlice({
-  name: 'likedPostings',
+const bookPostingsSlice = createSlice({
+  name: 'bookPostings',
   initialState,
   reducers: {
     setPostings(state, action: PayloadAction<Posting[]>) {
@@ -41,6 +41,6 @@ const likedPostingsSlice = createSlice({
 });
 
 export const { setPostings, clearPostings, setHasMore, setPage } =
-  likedPostingsSlice.actions;
+  bookPostingsSlice.actions;
 
-export default likedPostingsSlice.reducer;
+export default bookPostingsSlice.reducer;

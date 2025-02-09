@@ -43,16 +43,7 @@ const BookFeedTab = ({
 
   const handleSeeMoreClick = (type: MoreType) => {
     if (isbn) {
-      navigate(`/bookDetail/${isbn}/${type}`, {
-        state: {
-          bookDetails: {
-            title,
-            imageUrl,
-            author,
-            isbn,
-          },
-        },
-      });
+      navigate(`/bookDetail/${isbn}/${type}`);
     }
   };
 
@@ -129,7 +120,7 @@ const BookFeedTab = ({
           <Button
             size="small"
             variant="text"
-            onClick={() => handleSeeMoreClick('posts')}
+            onClick={() => handleSeeMoreClick('postings')}
             sx={bookReviewTabStyles.moreButton}
           >
             더보기
