@@ -25,6 +25,7 @@ export const postingDetailStyles = {
     alignItems: 'center',
     bgcolor: theme.palette.background.paper,
     boxSizing: 'border-box',
+    mb: '2rem',
   }),
   postingHeader: (theme: Theme) => ({
     width: '100%',

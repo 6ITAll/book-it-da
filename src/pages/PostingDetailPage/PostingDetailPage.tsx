@@ -6,7 +6,7 @@ import PostingUserInfo from '@components/PostingDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostingDetailPage/PostingContent';
 import PostingHeader from '@components/PostingDetailPage/PostingHeader';
 import OtherPostingGrid from '@components/PostingDetailPage/OtherPostingGrid';
-import CommentSection from '@components/PostingDetailPage/CommentSection';
+import CommentSection from '@components/PostingDetailPage/Comment/CommentSection';
 import { useGetPostByIdQuery } from '@features/PostDetailPage/api/postingApi';
 import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
 
@@ -40,9 +40,6 @@ const PostingDetailPage = () => {
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />
       </Stack>
-
-      {/* 간격 추가 */}
-      <Box sx={{ height: '20px' }} />
 
       {/* 댓글 섹션 */}
       <Box sx={postingDetailStyles.CommentSectionWrapper}>
