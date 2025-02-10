@@ -1,3 +1,4 @@
+<<<<<<<< HEAD:src/components/NotFoundPage/NotFoundContent.tsx
 import { Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import BestBookCarousel from '@components/BookSearchPage/BestBookCarousel';
@@ -31,6 +32,26 @@ const NotFoundContent = (): JSX.Element => {
         <BestBookCarousel />
       </Box>
     </>
+========
+import NotFoundContent from '@components/NotFoundPage/NotFoundContent';
+import { Box } from '@mui/material';
+
+const NotFoundPage = (): JSX.Element => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: '2rem',
+        backgroundColor: '#ffffff',
+      }}
+    >
+      <NotFoundContent />
+    </Box>
+>>>>>>>> f488e60 (🎨refactor: Split NotFoundPage into Components):src/pages/NotFoundPage/NotFound.tsx
   );
 };
 
