@@ -17,7 +17,7 @@ import UserMenu from './userMenu';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [localSearchQuery, setLocalSearchQuery] = useState('');
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
