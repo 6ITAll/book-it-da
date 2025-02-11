@@ -21,7 +21,7 @@ const ViewOptionSelector: React.FC<ViewOptionSelectorProps> = ({
       onChange={handleChange}
       variant="outlined"
       size="small"
-      sx={{ minWidth: 120, height: 52, marginLeft: 3 }}
+      sx={{}}
     >
       <MenuItem value="4">4개 보기</MenuItem>
       <MenuItem value="8">8개 보기</MenuItem>

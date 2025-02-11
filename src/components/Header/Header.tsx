@@ -1,5 +1,5 @@
-import { useState, KeyboardEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, KeyboardEvent, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
 import { Box, Button, InputBase } from '@mui/material';
@@ -17,11 +17,18 @@ import UserMenu from './userMenu';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [localSearchQuery, setLocalSearchQuery] = useState('');
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
+
+  useEffect(() => {
+    if (searchParams.get('query')) {
+      dispatch(setSearchQuery(searchParams.get('query') || ''));
+    }
+  }, [searchParams, dispatch]);
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
@@ -34,14 +41,13 @@ const Header = (): JSX.Element => {
   const handleSearch = () => {
     const trimmedQuery = localSearchQuery.trim();
     if (trimmedQuery) {
-      dispatch(setSearchQuery(trimmedQuery)); // Redux에 검색어 업데이트
-      navigate('/search'); // 검색 페이지로 이동
-      setLocalSearchQuery(''); // 로컬 상태 초기화
-      setShowSearchBar(false); // 검색바 닫기
+      navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
+      dispatch(setSearchQuery(trimmedQuery)); // Redux 상태 업데이트
     } else {
-      navigate('/search'); // 검색어가 없으면 검색 페이지로 이동
-      setShowSearchBar(false);
+      navigate('/search'); // 검색어 없으면 그냥 검색 페이지 이동
     }
+    setLocalSearchQuery(''); // 검색창 입력값 초기화
+    setShowSearchBar(false); // 검색바 닫기
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {

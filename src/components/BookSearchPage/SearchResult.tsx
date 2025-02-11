@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, SelectChangeEvent } from '@mui/material';
+import { Box, Typography, SelectChangeEvent, Stack } from '@mui/material';
 import SortSelector from '@components/BookSearchPage/SortSelector';
 import Pagination from '@components/BookSearchPage/Pagination';
 import SearchBookCard from '@components/BookSearchPage/SearchBookCard';
@@ -28,7 +28,7 @@ const SearchResult = (): JSX.Element => {
     (state: RootState) => state.bookSearch,
   );
 
-  // viewMode가 바로 한 페이지당 보여줄 결과 수로 사용됩니다.
+  // viewMode가 한 페이지당 보여줄 결과 수 (4 또는 8)
   const [viewMode, setViewMode] = useState<4 | 8>(8);
   const handleViewChange = (mode: 4 | 8) => {
     setViewMode(mode);
@@ -41,7 +41,7 @@ const SearchResult = (): JSX.Element => {
   });
   const books = data?.allBooks ?? [];
 
-  // 클라이언트 사이드 페이지네이션 처리: 현재 페이지에 해당하는 아이템 슬라이스
+  // 클라이언트 사이드 페이지네이션: 현재 페이지에 해당하는 아이템 슬라이스
   const startIndex = (currentPage - 1) * viewMode;
   const paginatedBooks = books.slice(startIndex, startIndex + viewMode);
 
@@ -56,8 +56,61 @@ const SearchResult = (): JSX.Element => {
   return (
     <>
       <Box sx={searchResultStyles.searchResultBox}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h3" fontWeight="bold">
+        {/* 검색어와 결과 건수를 한 줄에 표시 */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexShrink: 1,
+            maxWidth: '100%',
+            overflow: 'hidden',
+          }}
+        >
+          {searchQuery && (
+            <>
+              <Typography
+                variant="h3"
+                fontWeight="bold"
+                sx={{
+                  color: 'primary.main',
+                  flexShrink: 1,
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                '
+              </Typography>
+              <Typography
+                variant="h3"
+                fontWeight="bold"
+                sx={{
+                  color: 'primary.main',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  flexShrink: 1,
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                {searchQuery}
+              </Typography>
+              <Typography
+                variant="h3"
+                fontWeight="bold"
+                sx={{
+                  color: 'primary.main',
+                  flexShrink: 1,
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                '
+              </Typography>
+            </>
+          )}
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            sx={{ marginLeft: 1, whiteSpace: 'nowrap' }}
+          >
             검색 결과
           </Typography>
           <Typography
@@ -67,16 +120,18 @@ const SearchResult = (): JSX.Element => {
           >
             {books.length || 0}
           </Typography>
-          <Typography variant="h3" fontWeight="bold">
+          <Typography variant="h3" fontWeight="bold" sx={{ flexShrink: 1 }}>
             건
           </Typography>
-          <ViewOptionSelector viewMode={viewMode} onChange={handleViewChange} />
         </Box>
-        <SortSelector
-          value={sortOption}
-          onChange={handleSortChange}
-          options={sortOptions}
-        />
+        <Stack direction="row" spacing={2}>
+          <ViewOptionSelector viewMode={viewMode} onChange={handleViewChange} />
+          <SortSelector
+            value={sortOption}
+            onChange={handleSortChange}
+            options={sortOptions}
+          />
+        </Stack>
       </Box>
 
       {isFetching ? (
