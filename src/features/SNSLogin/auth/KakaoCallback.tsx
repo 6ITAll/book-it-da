@@ -64,7 +64,7 @@ const KakaoCallback = (): JSX.Element => {
           // 추가 정보 확인
           const { data: userProfile, error: profileError } = await supabase
             .from('user')
-            .select('username, gender, age')
+            .select('username, gender, birth_date')
             .eq('id', user.id)
             .single();
 
@@ -73,7 +73,7 @@ const KakaoCallback = (): JSX.Element => {
           if (
             !userProfile?.username ||
             !userProfile?.gender ||
-            !userProfile?.age
+            !userProfile?.birth_date
           ) {
             navigate('/kakao/additional-info');
             return;
