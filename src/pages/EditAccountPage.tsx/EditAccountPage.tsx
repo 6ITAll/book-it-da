@@ -19,7 +19,7 @@ import {
   useUpdateFieldMutation,
 } from '@features/user/userApi';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
-import { setAvatarUrl } from '@features/user/userSlice';
+import { setAvatarUrl, setUsername } from '@features/user/userSlice';
 
 const EditAccountPage = (): JSX.Element => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -54,6 +54,9 @@ const EditAccountPage = (): JSX.Element => {
       }).unwrap();
 
       if (result) {
+        if (fieldName === 'username') {
+          dispatch(setUsername(newValue));
+        }
         dispatch(
           showSnackbar({
             message: `${stringFieldName}이(가) 성공적으로 업데이트되었습니다.`,

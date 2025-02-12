@@ -5,7 +5,7 @@ import { Container, Typography } from '@mui/material';
 import { RootState } from '@store/index';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 
 const MyPage = (): JSX.Element => {
   const { username } = useParams<{ username: string }>();
@@ -13,10 +13,16 @@ const MyPage = (): JSX.Element => {
     (state: RootState) => state.user.userInfo?.username,
   );
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { data, error, isLoading, refetch } = useGetUserProfileStatsQuery(
     username || '',
   );
+  useEffect(() => {
+    if (currentUsername && username !== currentUsername) {
+      navigate(`/my-page/${currentUsername}`, { replace: true });
+    }
+  }, [currentUsername, username, navigate]);
 
   useEffect(() => {
     if (location.pathname === `/my-page/${currentUsername}`) {
