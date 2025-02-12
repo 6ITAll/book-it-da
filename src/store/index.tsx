@@ -34,6 +34,8 @@ import userReviewsReducer from '@features/MyPage/slice/userReviewMoreSlice';
 import likedPostingsReducer from '@features/MyPage/slice/likedPostingMoreSlice';
 import likedReviewsReducer from '@features/MyPage/slice/likedReviewMoreSlice';
 import followListReducer from '@features/MyPage/slice/followListSlice';
+import { commentApi } from '@features/PostDetailPage/api/commentApi';
+import postingCommentsReducer from '@features/PostDetailPage/slice/commentSlice';
 
 export const store = configureStore({
   reducer: {
@@ -48,6 +50,7 @@ export const store = configureStore({
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
     [postingApi.reducerPath]: postingApi.reducer,
+    [commentApi.reducerPath]: commentApi.reducer,
     [userFeedsApi.reducerPath]: userFeedsApi.reducer,
     [userLikedFeedsApi.reducerPath]: userLikedFeedsApi.reducer,
     [genderAgeApi.reducerPath]: genderAgeApi.reducer,
@@ -72,6 +75,7 @@ export const store = configureStore({
     userReviews: userReviewsReducer,
     snackbar: snackbarReducer,
     feed: feedReducer,
+    postingComments: postingCommentsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -82,6 +86,7 @@ export const store = configureStore({
       libraryApi.middleware,
       bookShelvesApi.middleware,
       postingApi.middleware,
+      commentApi.middleware,
       genderAgeApi.middleware,
       postApi.middleware,
       reviewApi.middleware,

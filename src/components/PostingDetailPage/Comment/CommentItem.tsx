@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Box,
   Avatar,
@@ -12,32 +12,94 @@ import {
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { CommentItemProps } from './types';
+import { Comment, CommentItemProps } from './types';
 import CommentInput from './CommentInput';
+import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
+import {
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
+  useToggleCommentLikeMutation,
+  useUpdateCommentMutation,
+} from '@features/PostDetailPage/api/commentApi';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { UserInfo } from '@features/user/userSlice';
-import { useSelector } from 'react-redux';
-import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
+import { toggleCommentLike } from '@features/PostDetailPage/slice/commentSlice';
 
 const CommentItem = ({
   comment,
-  onReply,
-  onToggleReplies,
-  onLike,
-  onEdit,
-  onDelete,
+  postId,
+  setShowRepliesFor,
 }: CommentItemProps) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const dispatch = useDispatch();
+
+  const [createComment] = useCreateCommentMutation();
+  const [updateComment] = useUpdateCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const [toggleLike] = useToggleCommentLikeMutation();
 
   const { id: currentUserId } = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
 
-  const isOwner = currentUserId === comment.userId;
-  const open = Boolean(anchorEl);
+  const handleReply = async (content: string, parentId: string) => {
+    try {
+      await createComment({ postId, content, userId: currentUserId, parentId });
+    } catch (error) {
+      console.error('답글 작성 실패:', error);
+    }
+  };
+
+  // 답글 보기 토글
+  const handleToggleReplies = (commentId: string) => {
+    setShowRepliesFor((prev) => {
+      const next = new Set(prev);
+      if (next.has(commentId)) {
+        next.delete(commentId);
+      } else {
+        next.add(commentId);
+      }
+      return next;
+    });
+  };
+
+  const isLiked = useMemo(() => {
+    return currentUserId ? comment.likes.includes(currentUserId) : false;
+  }, [comment.likes, currentUserId]);
+
+  // 좋아요 토글
+  const handleLike = async (comment: Comment, postId: string) => {
+    try {
+      await toggleLike({ commentId: comment.id, postId }).unwrap();
+      dispatch(
+        toggleCommentLike({ commentId: comment.id, userId: currentUserId }),
+      );
+    } catch (error) {
+      console.error('좋아요 토글 실패:', error);
+    }
+  };
+
+  // 댓글 수정
+  const handleEdit = async (commentId: string, newContent: string) => {
+    try {
+      await updateComment({ commentId, content: newContent, postId });
+    } catch (error) {
+      console.error('댓글 수정 실패:', error);
+    }
+  };
+
+  // 댓글 삭제
+  const handleDelete = async (commentId: string) => {
+    try {
+      await deleteComment({ commentId, postId });
+    } catch (error) {
+      console.error('댓글 삭제 실패:', error);
+    }
+  };
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -52,14 +114,9 @@ const CommentItem = ({
     handleMenuClose();
   };
 
-  const handleDeleteClick = () => {
-    onDelete(comment.id);
-    handleMenuClose();
-  };
-
   const handleEditSubmit = () => {
     if (editContent.trim() !== comment.content) {
-      onEdit(comment.id, editContent);
+      handleEdit(comment.id, editContent);
     }
     setIsEditing(false);
   };
@@ -74,13 +131,15 @@ const CommentItem = ({
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ width: 32, height: 32 }}>{comment.userId[0]}</Avatar>
+        <Avatar sx={{ width: 32, height: 32 }}>
+          {comment.user.username[0]}
+        </Avatar>
       </Box>
 
       <Box sx={{ flex: 1, ml: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-            {comment.username}
+            {comment.user.username}
           </Typography>
           <Typography variant="caption" color="text.secondary">
             {formatTimeAgo(comment.createdAt)}
@@ -112,7 +171,6 @@ const CommentItem = ({
                   textTransform: 'none',
                   color: 'text.secondary',
                   bgcolor: 'transparent',
-                  border: 'none',
                   '&:hover': {
                     bgcolor: 'transparent',
                   },
@@ -165,7 +223,7 @@ const CommentItem = ({
             >
               답글 달기
             </Button>
-            {comment.parentId === null && comment.replyCount! > 0 && (
+            {comment.parentId === null && (
               <Button
                 size="small"
                 sx={{
@@ -178,7 +236,7 @@ const CommentItem = ({
                     bgcolor: 'transparent',
                   },
                 }}
-                onClick={() => onToggleReplies?.(comment.id)}
+                onClick={() => handleToggleReplies?.(comment.id)}
               >
                 답글 보기
               </Button>
@@ -190,7 +248,7 @@ const CommentItem = ({
           <Box sx={{ mt: 1 }}>
             <CommentInput
               onSubmit={(content) => {
-                onReply(content, comment.id);
+                handleReply(content, comment.id);
                 setShowReplyInput(false);
               }}
               placeholder="답글을 입력하세요..."
@@ -211,27 +269,36 @@ const CommentItem = ({
           }}
         >
           <IconButton
-            onClick={() => onLike(comment.id)}
-            sx={{ color: comment.isLiked ? 'error.main' : 'inherit' }}
+            onClick={() => handleLike(comment, postId)}
+            sx={{ color: isLiked ? 'error.main' : 'inherit' }}
           >
-            {comment.isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
-          {comment.likes > 0 && (
-            <Typography variant="caption">{comment.likes}</Typography>
+          {comment.likesCount > 0 && (
+            <Typography variant="caption">{comment.likesCount}</Typography>
           )}
         </Box>
 
-        {isOwner && !isEditing && (
-          <Box>
-            <IconButton onClick={handleMenuClick}>
-              <MoreVertIcon />
-            </IconButton>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-              <MenuItem onClick={handleEditClick}>수정</MenuItem>
-              <MenuItem onClick={handleDeleteClick}>삭제</MenuItem>
-            </Menu>
-          </Box>
-        )}
+        <Box>
+          <IconButton onClick={handleMenuClick}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleEditClick}>수정</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleDelete(comment.id);
+                handleMenuClose();
+              }}
+            >
+              삭제
+            </MenuItem>
+          </Menu>
+        </Box>
       </Box>
     </Box>
   );

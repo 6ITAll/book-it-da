@@ -1,124 +1,133 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Box, Typography, Divider } from '@mui/material';
 import CommentItem from './CommentItem';
 import CommentInput from './CommentInput';
-import { Comment } from './types';
-import { RootState } from '@store/index';
-import { UserInfo } from '@features/user/userSlice';
 
-const CommentSection = () => {
-  const { id: currentUserId, username: currentUsername } = useSelector(
+import { RootState } from '@store/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserInfo } from '@features/user/userSlice';
+import {
+  useCreateCommentMutation,
+  useGetCommentsQuery,
+} from '@features/PostDetailPage/api/commentApi';
+import {
+  clearComments,
+  setComments,
+  setHasMore,
+  setPage,
+} from '@features/PostDetailPage/slice/commentSlice';
+import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+
+export interface Like {
+  userId: string;
+}
+
+export interface Comment {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  postId: string;
+  userId: string;
+  content: string;
+  parentId: string | null;
+  isEdited: boolean;
+  user: {
+    id: string;
+    username: string;
+    avatarUrl: string | null;
+  };
+  likesCount: number;
+  likes: string[];
+  isLiked: boolean;
+}
+
+const ITEMS_PER_PAGE = 10;
+
+const CommentSection = ({ postId }: { postId: string }) => {
+  const { id: currentUserId } = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
-  const [comments, setComments] = useState<Comment[]>([]);
+  const dispatch = useDispatch();
+
+  const { comments, hasMore, page } = useSelector(
+    (state: RootState) => state.postingComments,
+  );
+
   const [showRepliesFor, setShowRepliesFor] = useState<Set<string>>(new Set());
 
-  const handleNewComment = (content: string) => {
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      userId: currentUserId,
-      username: currentUsername,
-      content,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      isEdited: false,
-      parentId: null,
-      likes: 0,
-      isLiked: false,
-      replyCount: 0,
-    };
-    setComments((prev) => [...prev, newComment]);
-  };
+  const { data: fetchedComments = [], isLoading } = useGetCommentsQuery(
+    {
+      postId,
+      page,
+      limit: ITEMS_PER_PAGE,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: false,
+      refetchOnFocus: false,
+    },
+  );
+  const [createComment] = useCreateCommentMutation();
 
-  const handleReply = (content: string, parentId: string) => {
-    const newReply: Comment = {
-      id: Date.now().toString(),
-      userId: currentUserId,
-      username: currentUsername,
-      content,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      isEdited: false,
-      parentId,
-      likes: 0,
-      isLiked: false,
-    };
-    setComments((prev) => {
-      const updatedComments = [...prev, newReply];
-      return updatedComments.map((comment) =>
-        comment.id === parentId
-          ? { ...comment, replyCount: (comment.replyCount || 0) + 1 }
-          : comment,
+  useEffect(() => {
+    dispatch(clearComments());
+    dispatch(setPage(1));
+    dispatch(setHasMore(true));
+  }, [postId, dispatch]);
+
+  useEffect(() => {
+    if (fetchedComments && fetchedComments.length > 0) {
+      const hasNewComments = fetchedComments.some(
+        (newComment) =>
+          !comments.some((comment) => comment.id === newComment.id),
       );
-    });
-  };
-
-  const handleToggleReplies = (commentId: string) => {
-    setShowRepliesFor((prev) => {
-      const next = new Set(prev);
-      if (next.has(commentId)) {
-        next.delete(commentId);
-      } else {
-        next.add(commentId);
+      if (hasNewComments) {
+        dispatch(setComments(fetchedComments));
+        dispatch(setHasMore(fetchedComments.length === ITEMS_PER_PAGE));
       }
-      return next;
-    });
-  };
+    }
+  }, [fetchedComments, comments, dispatch]);
 
-  const handleLike = (commentId: string) => {
-    setComments((prev) =>
-      prev.map((comment) => {
-        if (comment.id === commentId) {
-          return {
-            ...comment,
-            likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1,
-            isLiked: !comment.isLiked,
-          };
-        }
-        return comment;
-      }),
-    );
-  };
+  const fetchMoreData = useCallback(() => {
+    if (!isLoading && hasMore) {
+      dispatch(setPage(page + 1));
+    }
+  }, [isLoading, hasMore, page, dispatch]);
 
-  const handleEdit = (commentId: string, newContent: string) => {
-    setComments((prev) =>
-      prev.map((comment) => {
-        if (comment.id === commentId) {
-          return {
-            ...comment,
-            content: newContent,
-            isEdited: true,
-            updatedAt: new Date().toISOString(),
-          };
-        }
-        return comment;
-      }),
-    );
-  };
+  const parentComments = useMemo(() => {
+    return comments.filter((comment) => !comment.parentId);
+  }, [comments]);
 
-  const handleDelete = (commentId: string) => {
-    setComments((prev) => {
-      const commentToDelete = prev.find((c) => c.id === commentId);
-      if (!commentToDelete) return prev;
+  const getReplies = useCallback(
+    (parentId: string) => {
+      return comments.filter((comment) => comment.parentId === parentId);
+    },
+    [comments],
+  );
 
-      const updatedComments = prev
-        .filter((c) => c.id !== commentId)
-        .map((comment) => {
-          if (
-            commentToDelete.parentId &&
-            comment.id === commentToDelete.parentId
-          ) {
-            return {
-              ...comment,
-              replyCount: (comment.replyCount || 0) - 1,
-            };
-          }
-          return comment;
-        });
+  // 댓글 작성
+  const handleNewComment = async (content: string) => {
+    if (!currentUserId) {
+      dispatch(
+        showSnackbar({
+          message: '로그인 후 이용해 주세요.',
+          severity: 'error',
+        }),
+      );
+      return;
+    }
 
-      return updatedComments.filter((c) => c.parentId !== commentId);
-    });
+    try {
+      const result = await createComment({
+        postId,
+        content,
+        userId: currentUserId,
+      });
+      console.log('댓글 작성 성공:', result);
+    } catch (error) {
+      console.error('댓글 작성 실패:', error);
+    }
   };
 
   return (
@@ -126,51 +135,44 @@ const CommentSection = () => {
       <Typography variant="h6" sx={{ mb: 2 }}>
         댓글
       </Typography>
+      <Box sx={{ my: 2 }}>
+        <CommentInput onSubmit={handleNewComment} />
+      </Box>
       <Divider sx={{ mb: 2 }} />
 
-      {comments
-        .filter((comment) => !comment.parentId)
-        .sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        )
-        .map((comment) => (
-          <Box key={comment.id}>
-            <CommentItem
-              comment={comment}
-              onReply={handleReply}
-              onToggleReplies={handleToggleReplies}
-              onLike={handleLike}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-            {showRepliesFor.has(comment.id) && (
-              <Box sx={{ ml: 5 }}>
-                {comments
-                  .filter((reply) => reply.parentId === comment.id)
-                  .sort(
-                    (a, b) =>
-                      new Date(a.createdAt).getTime() -
-                      new Date(b.createdAt).getTime(),
-                  )
-                  .map((reply) => (
+      {isLoading ? (
+        <Typography>댓글을 불러오는 중...</Typography>
+      ) : (
+        <InfiniteScrollComponent
+          items={parentComments}
+          hasMore={hasMore}
+          fetchMore={fetchMoreData}
+          endMessage="더 이상 댓글이 없습니다."
+          gridSize={{ xs: 12, md: 12 }}
+          renderItem={(comment) => (
+            <>
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+                postId={postId}
+                setShowRepliesFor={setShowRepliesFor}
+              />
+              {showRepliesFor.has(comment.id) && (
+                <Box sx={{ ml: 5 }}>
+                  {getReplies(comment.id).map((reply) => (
                     <CommentItem
                       key={reply.id}
                       comment={reply}
-                      onReply={handleReply}
-                      onLike={handleLike}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
+                      postId={postId}
+                      setShowRepliesFor={setShowRepliesFor}
                     />
                   ))}
-              </Box>
-            )}
-          </Box>
-        ))}
-
-      <Box sx={{ mt: 2 }}>
-        <CommentInput onSubmit={handleNewComment} />
-      </Box>
+                </Box>
+              )}
+            </>
+          )}
+        />
+      )}
     </Box>
   );
 };

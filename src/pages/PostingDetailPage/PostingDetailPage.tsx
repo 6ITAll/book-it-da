@@ -41,11 +41,6 @@ const PostingDetailPage = () => {
         <PostingContent content={post.content} book={post.book} />
       </Stack>
 
-      {/* 댓글 섹션 */}
-      <Box sx={postingDetailStyles.CommentSectionWrapper}>
-        <CommentSection />
-      </Box>
-
       <Stack sx={{ width: '80%', mt: '1rem', boxSizing: 'border-box' }}>
         <OtherPostingGrid
           type="BookOtherPosting"
@@ -58,6 +53,10 @@ const PostingDetailPage = () => {
           postingId={post.id}
         />
       </Stack>
+      {/* 댓글 섹션 */}
+      <Box sx={postingDetailStyles.CommentSectionWrapper}>
+        <CommentSection postId={post.id} />
+      </Box>
       <URLShareDialog open={openShareDialog} handleClose={setOpenShareDialog} />
     </Container>
   );

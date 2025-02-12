@@ -1,15 +1,22 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export interface Comment {
   id: string;
-  userId: string;
-  username: string;
-  content: string;
   createdAt: string;
   updatedAt: string;
-  isEdited: boolean;
+  postId: string;
+  userId: string;
+  content: string;
   parentId: string | null;
-  likes: number;
+  isEdited: boolean;
+  user: {
+    id: string;
+    username: string;
+    avatarUrl: string | null;
+  };
+  likesCount: number;
+  likes: string[];
   isLiked: boolean;
-  replyCount?: number;
 }
 
 export interface CommentInputProps {
@@ -19,9 +26,6 @@ export interface CommentInputProps {
 
 export interface CommentItemProps {
   comment: Comment;
-  onReply: (content: string, parentId: string) => void;
-  onToggleReplies?: (commentId: string) => void;
-  onLike: (commentId: string) => void;
-  onEdit: (commentId: string, newContent: string) => void;
-  onDelete: (commentId: string) => void;
+  postId: string;
+  setShowRepliesFor: Dispatch<SetStateAction<Set<string>>>;
 }

@@ -1,17 +1,24 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Box, TextField, Button } from '@mui/material';
 import { CommentInputProps } from './types';
 
 const CommentInput = ({ onSubmit, placeholder }: CommentInputProps) => {
   const [content, setContent] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (content.trim()) {
-      onSubmit(content);
-      setContent('');
-    }
-  };
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
+  }, []);
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (content.trim()) {
+        onSubmit(content);
+        setContent('');
+      }
+    },
+    [content, onSubmit],
+  );
 
   return (
     <Box
@@ -28,13 +35,9 @@ const CommentInput = ({ onSubmit, placeholder }: CommentInputProps) => {
         multiline
         rows={1}
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={handleChange}
         placeholder={placeholder || '댓글을 입력하세요...'}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            fontSize: '0.875rem',
-          },
-        }}
+        sx={{ '& .MuiOutlinedInput-root': { fontSize: '0.875rem' } }}
       />
       <Button
         type="submit"
