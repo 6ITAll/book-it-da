@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { RootState } from '@store/index';
-import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
 import TabSection from '@components/MyPage/TabSection';
 import UserInfoSection from '@components/MyPage/UserInfoSection';
+import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
 import { Container, Typography } from '@mui/material';
+import { RootState } from '@store/index';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 
 const MyPage = (): JSX.Element => {
   const { username } = useParams<{ username: string }>();
@@ -14,23 +14,19 @@ const MyPage = (): JSX.Element => {
   );
   const location = useLocation();
   const navigate = useNavigate();
-  const [isCurrentUser, setIsCurrentUser] = useState(false);
 
   const { data, error, isLoading, refetch } = useGetUserProfileStatsQuery(
     username || '',
   );
 
   useEffect(() => {
-    if (currentUsername && username) {
-      setIsCurrentUser(currentUsername === username);
+    if (currentUsername && username !== currentUsername) {
+      if (currentUsername === username) return;
+      if (username === currentUsername) {
+        navigate(`/my-page/${currentUsername}`, { replace: true });
+      }
     }
-  }, [currentUsername, username]);
-
-  useEffect(() => {
-    if (isCurrentUser && currentUsername && username !== currentUsername) {
-      navigate(`/my-page/${currentUsername}`, { replace: true });
-    }
-  }, [isCurrentUser, currentUsername, username, navigate]);
+  }, [currentUsername, username, navigate]);
 
   useEffect(() => {
     refetch();
@@ -84,6 +80,7 @@ const MyPage = (): JSX.Element => {
         showFollowButton={username !== currentUsername}
         userIdForFollow={data?.user_id.toString()}
       />
+      {/* TabSection props username으로 추후 교체 */}
       <TabSection userId={data?.user_id} username={username || ''} />
     </Container>
   );
