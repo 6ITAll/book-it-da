@@ -5,12 +5,14 @@ export interface PostingCommentsState {
   comments: Comment[];
   hasMore: boolean;
   page: number;
+  tempNewReplies: { [key: string]: Comment };
 }
 
 const initialState: PostingCommentsState = {
   comments: [],
   hasMore: true,
   page: 1,
+  tempNewReplies: {},
 };
 
 const postingCommentsSlice = createSlice({
@@ -108,6 +110,17 @@ const postingCommentsSlice = createSlice({
         }
       }
     },
+    setTempNewReply(
+      state,
+      action: PayloadAction<{ parentId: string; reply: Comment }>,
+    ) {
+      const { parentId, reply } = action.payload;
+      state.tempNewReplies[parentId] = reply;
+    },
+
+    clearTempNewReply(state, action: PayloadAction<string>) {
+      delete state.tempNewReplies[action.payload];
+    },
   },
 });
 
@@ -119,6 +132,8 @@ export const {
   removeComment,
   toggleCommentLike,
   editComment,
+  setTempNewReply,
+  clearTempNewReply,
 } = postingCommentsSlice.actions;
 
 export default postingCommentsSlice.reducer;

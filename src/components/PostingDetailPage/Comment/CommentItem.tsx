@@ -28,6 +28,7 @@ import {
   editComment,
   removeComment,
   setComments,
+  setTempNewReply,
   toggleCommentLike,
 } from '@features/PostDetailPage/slice/commentSlice';
 
@@ -41,6 +42,7 @@ const CommentItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const dispatch = useDispatch();
 
   const [createComment] = useCreateCommentMutation();
@@ -71,7 +73,18 @@ const CommentItem = ({
         userId: currentUserId,
         parentId,
       }).unwrap();
+
+      dispatch(setTempNewReply({ parentId, reply: result }));
       dispatch(setComments([result]));
+
+      // 답글 작성 후 답글 보기 켜기
+      if (!showRepliesFor.has(comment.id)) {
+        setShowRepliesFor((prev) => {
+          const next = new Set(prev);
+          next.add(comment.id);
+          return next;
+        });
+      }
       console.log('성공');
     } catch (error) {
       console.error('답글 작성 실패:', error);
