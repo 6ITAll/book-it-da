@@ -9,6 +9,7 @@ export interface Comment {
   content: string;
   parentId: string | null;
   isEdited: boolean;
+  isDeleted: boolean;
   user: {
     id: string;
     username: string;

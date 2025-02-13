@@ -120,8 +120,22 @@ const CommentItem = ({
   // 댓글 삭제
   const handleDelete = async (commentId: string) => {
     try {
-      await deleteComment({ commentId, postId });
-      dispatch(removeComment(commentId));
+      const hasReplies =
+        comment.parentId === null
+          ? currentComments.some((c) => c.parentId === commentId)
+          : false;
+
+      const result = await deleteComment({ commentId, postId }).unwrap();
+      dispatch(
+        removeComment({
+          commentId,
+          hasReplies,
+          parentId: comment.parentId,
+          isParentDeleted: result.isParentDeleted,
+        }),
+      );
+
+      handleMenuClose();
     } catch (error) {
       console.error('댓글 삭제 실패:', error);
     }
@@ -230,8 +244,14 @@ const CommentItem = ({
             </Box>
           </Box>
         ) : (
-          <Typography variant="body2" sx={{ my: 1 }}>
-            {comment.content}
+          <Typography
+            variant="body2"
+            sx={{
+              my: 1,
+              color: comment.isDeleted ? 'text.secondary' : 'inherit', // 삭제된 댓글은 회색으로
+            }}
+          >
+            {comment.isDeleted ? '삭제된 댓글입니다' : comment.content}
           </Typography>
         )}
 

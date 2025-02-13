@@ -44,6 +44,7 @@ export const commentApi = createApi({
             content: comment.content,
             parentId: comment.parent_id,
             isEdited: comment.is_edited,
+            isDeleted: comment.is_deleted,
             user: {
               id: comment.user.id,
               username: comment.user.username,
@@ -104,6 +105,7 @@ export const commentApi = createApi({
               content: comment.content,
               parentId: comment.parent_id,
               isEdited: comment.is_edited,
+              isDeleted: comment.is_deleted,
               user: {
                 id: comment.user.id,
                 username: comment.user.username,
@@ -152,25 +154,104 @@ export const commentApi = createApi({
     }),
     // 댓글 삭제
     deleteComment: builder.mutation<
-      void,
+      { isParentDeleted: boolean },
       { commentId: string; postId: string }
     >({
       async queryFn({ commentId }) {
         try {
-          const { error } = await supabase
+          // 현재 댓글이 부모 댓글인지, 답글이 있는지 확인
+          const { data: currentComment, error: commentError } = await supabase
             .from('posting_comment')
-            .delete()
-            .eq('id', commentId);
+            .select('parent_id')
+            .eq('id', commentId)
+            .single();
 
-          if (error) throw error;
-          return { data: undefined };
+          if (commentError) throw commentError;
+
+          let isParentDeleted = false;
+
+          // 부모 댓글인 경우
+          if (!currentComment.parent_id) {
+            // 답글이 있는지 확인
+            const { count, error: countError } = await supabase
+              .from('posting_comment')
+              .select('*', { count: 'exact' })
+              .eq('parent_id', commentId);
+
+            if (countError) throw countError;
+
+            const replyCount = count ?? 0;
+
+            if (replyCount > 0) {
+              // 답글이 있으면 is_deleted만 true로 설정
+              const { error } = await supabase
+                .from('posting_comment')
+                .update({ is_deleted: true })
+                .eq('id', commentId);
+
+              if (error) throw error;
+            } else {
+              // 답글이 없으면 완전 삭제
+              const { error } = await supabase
+                .from('posting_comment')
+                .delete()
+                .eq('id', commentId);
+
+              if (error) throw error;
+            }
+          } else {
+            // 답글인 경우 삭제 처리
+            const { error: deleteError } = await supabase
+              .from('posting_comment')
+              .delete()
+              .eq('id', commentId);
+
+            if (deleteError) throw deleteError;
+
+            // 부모 댓글이 is_deleted=true인지 확인하고, 다른 답글이 있는지 확인
+            const { data: parentComment, error: parentError } = await supabase
+              .from('posting_comment')
+              .select('is_deleted')
+              .eq('id', currentComment.parent_id)
+              .single();
+
+            if (parentError) throw parentError;
+
+            if (parentComment.is_deleted) {
+              // 다른 답글이 있는지 확인
+              const { count: remainingCount, error: countError } =
+                await supabase
+                  .from('posting_comment')
+                  .select('*', { count: 'exact' })
+                  .eq('parent_id', currentComment.parent_id);
+
+              if (countError) throw countError;
+
+              // 다른 답글이 없으면 부모 댓글도 삭제
+              if ((remainingCount ?? 0) === 0) {
+                const { error } = await supabase
+                  .from('posting_comment')
+                  .delete()
+                  .eq('id', currentComment.parent_id);
+
+                if (error) throw error;
+                isParentDeleted = true;
+              }
+            }
+          }
+
+          return { data: { isParentDeleted } };
         } catch (error) {
           return { error };
         }
       },
-      invalidatesTags: (_, __, { postId }) => [
-        { type: 'Comments', id: postId },
-        { type: 'CommentCount', id: postId },
+      invalidatesTags: (result, _, { postId }) => [
+        { type: 'Comments' as const, id: postId },
+        { type: 'CommentCount' as const, id: postId },
+        // 부모 댓글도 삭제된 경우 추가로 무효화
+        ...(result?.isParentDeleted
+          ? [{ type: 'CommentCount' as const, id: postId }]
+          : []),
       ],
     }),
 

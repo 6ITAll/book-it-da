@@ -55,11 +55,39 @@ const postingCommentsSlice = createSlice({
         comment.updatedAt = new Date().toISOString();
       }
     },
-    removeComment(state, action: PayloadAction<string>) {
-      state.comments = state.comments.filter(
-        (comment) => comment.id !== action.payload,
-      );
+    removeComment(
+      state,
+      action: PayloadAction<{
+        commentId: string;
+        hasReplies: boolean;
+        parentId: string | null;
+        isParentDeleted?: boolean; // 부모 댓글도 삭제되었는지 여부
+      }>,
+    ) {
+      if (!action.payload.hasReplies) {
+        // 일반 삭제
+        state.comments = state.comments.filter(
+          (c) => c.id !== action.payload.commentId,
+        );
+
+        // 부모 댓글도 삭제된 경우
+        if (action.payload.isParentDeleted && action.payload.parentId) {
+          state.comments = state.comments.filter(
+            (c) => c.id !== action.payload.parentId,
+          );
+        }
+      } else {
+        // 답글이 있는 경우 삭제 상태로 변경
+        const comment = state.comments.find(
+          (c) => c.id === action.payload.commentId,
+        );
+        if (comment) {
+          comment.isDeleted = true;
+          comment.content = '삭제된 댓글입니다';
+        }
+      }
     },
+
     toggleCommentLike(
       state,
       action: PayloadAction<{ commentId: string; userId: string }>,

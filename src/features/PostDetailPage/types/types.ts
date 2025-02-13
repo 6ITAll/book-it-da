@@ -20,6 +20,7 @@ export interface DbComment {
   content: string;
   parent_id: string | null;
   is_edited: boolean;
+  is_deleted: boolean;
   user: {
     id: string;
     username: string;
@@ -44,6 +45,7 @@ export interface Comment {
   content: string;
   parentId: string | null;
   isEdited: boolean;
+  isDeleted: boolean;
   user: {
     id: string;
     username: string;
