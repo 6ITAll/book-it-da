@@ -21,8 +21,12 @@ export interface Comment {
 }
 
 export interface CommentInputProps {
-  onSubmit: (content: string, parentId?: string) => void;
+  onSubmit: (content: string, hasTag: boolean) => void;
   placeholder?: string;
+  mentionedUser?: {
+    username: string;
+    id: string;
+  };
 }
 
 export interface CommentItemProps {
@@ -30,4 +34,8 @@ export interface CommentItemProps {
   postId: string;
   showRepliesFor: Set<string>;
   setShowRepliesFor: Dispatch<SetStateAction<Set<string>>>;
+}
+
+export interface TagCommentProps {
+  content: string;
 }

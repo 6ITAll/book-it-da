@@ -31,6 +31,7 @@ import {
   setTempNewReply,
   toggleCommentLike,
 } from '@features/PostDetailPage/slice/commentSlice';
+import TagComment from './TagComment';
 
 const CommentItem = ({
   comment,
@@ -62,14 +63,21 @@ const CommentItem = ({
     console.log(currentComments);
   }, [currentComments]);
 
-  const handleReply = async (content: string, comment: Comment) => {
+  const handleReply = async (
+    content: string,
+    comment: Comment,
+    hasTag: boolean,
+  ) => {
     try {
+      const fullContent = hasTag
+        ? `@${comment.user.username} ${content}`
+        : content;
       // 현재 댓글의 parentId가 있다면 그게 최상위 부모댓글
       // 없다면 현재 댓글이 부모댓글
       const parentId = comment.parentId || comment.id;
       const result = await createComment({
         postId,
-        content,
+        content: fullContent,
         userId: currentUserId,
         parentId,
       }).unwrap();
@@ -261,10 +269,14 @@ const CommentItem = ({
             variant="body2"
             sx={{
               my: 1,
-              color: comment.isDeleted ? 'text.secondary' : 'inherit', // 삭제된 댓글은 회색으로
+              color: comment.isDeleted ? 'text.secondary' : 'inherit',
             }}
           >
-            {comment.isDeleted ? '삭제된 댓글입니다' : comment.content}
+            {comment.isDeleted ? (
+              '삭제된 댓글입니다'
+            ) : (
+              <TagComment content={comment.content} />
+            )}
           </Typography>
         )}
 
@@ -311,11 +323,15 @@ const CommentItem = ({
         {showReplyInput && (
           <Box sx={{ mt: 1 }}>
             <CommentInput
-              onSubmit={(content) => {
-                handleReply(content, comment);
+              onSubmit={(content, hasTag) => {
+                handleReply(content, comment, hasTag);
                 setShowReplyInput(false);
               }}
               placeholder="답글을 입력하세요..."
+              mentionedUser={{
+                username: comment.user.username,
+                id: comment.userId,
+              }}
             />
           </Box>
         )}
