@@ -20,7 +20,7 @@ const FollowButton = ({ userId }: FollowButtonProps) => {
 
   return (
     <Button onClick={handleClick} disabled={isToggling}>
-      {data?.isFollowing ? '팔로잉' : '팔로워'}
+      {data?.isFollowing ? '팔로잉' : '팔로우'}
     </Button>
   );
 };
