@@ -3,7 +3,7 @@ import LoginSignup from '@pages/LoginSignupPage/LoginPage';
 import SignupPage from '@pages/LoginSignupPage/SignupPage';
 import FeedPage from '@pages/MainPage/Main';
 import BookSearchPage from '@pages/BookSearchPage/BookSearch';
-import NotFoundPage from '@pages/NotFoundPage/NotFound';
+import NotFoundPage from '@pages/NotFoundPage/NotFoundPage';
 import RoutePaths from './RoutePath';
 import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
 import PostingDetailPage from '@pages/PostingDetailPage/PostingDetailPage';
