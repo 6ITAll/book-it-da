@@ -30,7 +30,7 @@ export const commentApi = createApi({
         `,
             )
             .eq('post_id', postId)
-            .order('created_at', { ascending: true })
+            .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1)) as PostgrestResponse<DbComment>;
 
           if (error) throw error;
@@ -118,17 +118,15 @@ export const commentApi = createApi({
           return { error };
         }
       },
-      // invalidatesTags: (_, __, { postId, parentId }) => [
-      //   { type: 'Comments', id: postId },
-      //   { type: 'CommentCount', id: postId },
-      //   ...(parentId ? [{ type: 'Replies', id: parentId }] : []),
-      // ],
+      invalidatesTags: (_, __, { postId }) => [
+        { type: 'Comments', id: `Comments-${postId}` },
+      ],
     }),
 
     // 댓글 수정
     updateComment: builder.mutation<
       void,
-      { commentId: string; content: string; postId?: string }
+      { commentId: string; content: string; postId: string }
     >({
       async queryFn({ commentId, content }) {
         try {
@@ -147,9 +145,9 @@ export const commentApi = createApi({
           return { error };
         }
       },
-      // invalidatesTags(result, error, arg) {
-      //   return [{ type: 'Comments', id: arg.postID }];
-      // },
+      invalidatesTags: (_, __, { postId }) => [
+        { type: 'Comments', id: `Comments-${postId}` },
+      ],
     }),
     // 댓글 삭제
     deleteComment: builder.mutation<

@@ -22,7 +22,7 @@ const postingCommentsSlice = createSlice({
         (newComment) =>
           !state.comments.some((comment) => comment.id === newComment.id),
       );
-      state.comments = [...state.comments, ...newComments];
+      state.comments = [...newComments, ...state.comments];
     },
     clearComments(state) {
       state.comments = [];

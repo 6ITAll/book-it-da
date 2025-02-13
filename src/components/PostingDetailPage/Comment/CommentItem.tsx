@@ -27,6 +27,7 @@ import { UserInfo } from '@features/user/userSlice';
 import {
   editComment,
   removeComment,
+  setComments,
   toggleCommentLike,
 } from '@features/PostDetailPage/slice/commentSlice';
 
@@ -58,9 +59,19 @@ const CommentItem = ({
     console.log(currentComments);
   }, [currentComments]);
 
-  const handleReply = async (content: string, parentId: string) => {
+  const handleReply = async (content: string, comment: Comment) => {
     try {
-      await createComment({ postId, content, userId: currentUserId, parentId });
+      // 현재 댓글의 parentId가 있다면 그게 최상위 부모댓글
+      // 없다면 현재 댓글이 부모댓글
+      const parentId = comment.parentId || comment.id;
+      const result = await createComment({
+        postId,
+        content,
+        userId: currentUserId,
+        parentId,
+      }).unwrap();
+      dispatch(setComments([result]));
+      console.log('성공');
     } catch (error) {
       console.error('답글 작성 실패:', error);
     }
@@ -262,7 +273,7 @@ const CommentItem = ({
           <Box sx={{ mt: 1 }}>
             <CommentInput
               onSubmit={(content) => {
-                handleReply(content, comment.id);
+                handleReply(content, comment);
                 setShowReplyInput(false);
               }}
               placeholder="답글을 입력하세요..."

@@ -5,7 +5,6 @@ import CommentInput from './CommentInput';
 
 import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserInfo } from '@features/user/userSlice';
 import {
   useCreateCommentMutation,
   useGetCommentsQuery,
@@ -45,8 +44,8 @@ export interface Comment {
 const ITEMS_PER_PAGE = 10;
 
 const CommentSection = ({ postId }: { postId: string }) => {
-  const { id: currentUserId } = useSelector(
-    (state: RootState) => state.user.userInfo as UserInfo,
+  const currentUserId = useSelector(
+    (state: RootState) => state.user.userInfo?.id,
   );
   const dispatch = useDispatch();
 
@@ -123,7 +122,8 @@ const CommentSection = ({ postId }: { postId: string }) => {
         postId,
         content,
         userId: currentUserId,
-      });
+      }).unwrap();
+      dispatch(setComments([result]));
       console.log('댓글 작성 성공:', result);
     } catch (error) {
       console.error('댓글 작성 실패:', error);
