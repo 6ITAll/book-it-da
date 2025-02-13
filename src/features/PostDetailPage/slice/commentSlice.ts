@@ -22,7 +22,12 @@ const postingCommentsSlice = createSlice({
         (newComment) =>
           !state.comments.some((comment) => comment.id === newComment.id),
       );
-      state.comments = [...newComments, ...state.comments];
+      // 날짜순으로 정렬하여 합치기
+      const allComments = [...state.comments, ...newComments].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+      state.comments = allComments;
     },
     clearComments(state) {
       state.comments = [];

@@ -21,16 +21,16 @@ export const commentApi = createApi({
             .from('posting_comment_with_likes')
             .select(
               `
-          *,
-          user:user_id (
-            id,
-            username,
-            avatar_url
-          )
-        `,
+                *,
+                user:user_id (
+                  id,
+                  username,
+                  avatar_url
+                )
+              `,
             )
             .eq('post_id', postId)
-            .order('created_at', { ascending: true })
+            .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1)) as PostgrestResponse<DbComment>;
 
           if (error) throw error;
