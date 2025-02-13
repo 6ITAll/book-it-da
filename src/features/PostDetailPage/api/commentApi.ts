@@ -30,7 +30,7 @@ export const commentApi = createApi({
         `,
             )
             .eq('post_id', postId)
-            .order('created_at', { ascending: false })
+            .order('created_at', { ascending: true })
             .range(offset, offset + limit - 1)) as PostgrestResponse<DbComment>;
 
           if (error) throw error;

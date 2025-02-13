@@ -27,5 +27,6 @@ export interface CommentInputProps {
 export interface CommentItemProps {
   comment: Comment;
   postId: string;
+  showRepliesFor: Set<string>;
   setShowRepliesFor: Dispatch<SetStateAction<Set<string>>>;
 }

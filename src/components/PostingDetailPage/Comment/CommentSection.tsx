@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography, Divider, Button } from '@mui/material';
 import CommentItem from './CommentItem';
 import CommentInput from './CommentInput';
 
@@ -42,6 +42,7 @@ export interface Comment {
 }
 
 const ITEMS_PER_PAGE = 10;
+const REPLIES_PER_PAGE = 5;
 
 const CommentSection = ({ postId }: { postId: string }) => {
   const currentUserId = useSelector(
@@ -54,6 +55,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
   );
 
   const [showRepliesFor, setShowRepliesFor] = useState<Set<string>>(new Set());
+  const [replyPages, setReplyPages] = useState<{ [key: string]: number }>({});
 
   const { data: fetchedComments = [], isLoading } = useGetCommentsQuery(
     {
@@ -98,12 +100,12 @@ const CommentSection = ({ postId }: { postId: string }) => {
     return comments.filter((comment) => !comment.parentId);
   }, [comments]);
 
-  const getReplies = useCallback(
-    (parentId: string) => {
-      return comments.filter((comment) => comment.parentId === parentId);
-    },
-    [comments],
-  );
+  // const getReplies = useCallback(
+  //   (parentId: string) => {
+  //     return comments.filter((comment) => comment.parentId === parentId);
+  //   },
+  //   [comments],
+  // );
 
   // 댓글 작성
   const handleNewComment = async (content: string) => {
@@ -130,6 +132,34 @@ const CommentSection = ({ postId }: { postId: string }) => {
     }
   };
 
+  const getReplies = useCallback(
+    (parentId: string) => {
+      const currentPage = replyPages[parentId] || 1;
+      return comments
+        .filter((comment) => comment.parentId === parentId)
+        .sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        ) // 오래된 순으로 정렬
+        .slice(0, currentPage * REPLIES_PER_PAGE);
+    },
+    [comments, replyPages],
+  );
+
+  const handleLoadMoreReplies = useCallback((commentId: string) => {
+    setReplyPages((prev) => ({
+      ...prev,
+      [commentId]: (prev[commentId] || 1) + 1,
+    }));
+  }, []);
+
+  const getTotalReplies = useCallback(
+    (parentId: string) => {
+      return comments.filter((comment) => comment.parentId === parentId).length;
+    },
+    [comments],
+  );
+
   return (
     <Box sx={{ mt: 4, p: 2, borderRadius: 2, width: '100%' }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
@@ -155,6 +185,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
                 key={comment.id}
                 comment={comment}
                 postId={postId}
+                showRepliesFor={showRepliesFor}
                 setShowRepliesFor={setShowRepliesFor}
               />
               {showRepliesFor.has(comment.id) && (
@@ -164,9 +195,29 @@ const CommentSection = ({ postId }: { postId: string }) => {
                       key={reply.id}
                       comment={reply}
                       postId={postId}
+                      showRepliesFor={showRepliesFor}
                       setShowRepliesFor={setShowRepliesFor}
                     />
                   ))}
+                  {getTotalReplies(comment.id) >
+                    (replyPages[comment.id] || 1) * REPLIES_PER_PAGE && (
+                    <Button
+                      onClick={() => handleLoadMoreReplies(comment.id)}
+                      sx={{
+                        mt: 1,
+                        color: 'text.secondary',
+                        backgroundColor: 'transparent',
+                        '&:hover': {
+                          backgroundColor: 'transparent',
+                        },
+                      }}
+                    >
+                      답글{' '}
+                      {getTotalReplies(comment.id) -
+                        (replyPages[comment.id] || 1) * REPLIES_PER_PAGE}
+                      개 더보기
+                    </Button>
+                  )}
                 </Box>
               )}
             </>

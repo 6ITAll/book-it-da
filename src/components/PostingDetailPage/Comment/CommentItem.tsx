@@ -34,6 +34,7 @@ import {
 const CommentItem = ({
   comment,
   postId,
+  showRepliesFor,
   setShowRepliesFor,
 }: CommentItemProps) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
@@ -146,6 +147,10 @@ const CommentItem = ({
     setIsEditing(false);
   };
 
+  const replyCount = useMemo(() => {
+    return currentComments.filter((c) => c.parentId === comment.id).length;
+  }, [currentComments, comment.id]);
+
   return (
     <Box sx={{ display: 'flex', mb: 2, width: '100%' }}>
       <Box
@@ -248,7 +253,7 @@ const CommentItem = ({
             >
               답글 달기
             </Button>
-            {comment.parentId === null && (
+            {comment.parentId === null && replyCount > 0 && (
               <Button
                 size="small"
                 sx={{
@@ -263,7 +268,8 @@ const CommentItem = ({
                 }}
                 onClick={() => handleToggleReplies?.(comment.id)}
               >
-                답글 보기
+                답글 {replyCount}개{' '}
+                {showRepliesFor.has(comment.id) ? '숨기기' : '보기'}
               </Button>
             )}
           </Box>
