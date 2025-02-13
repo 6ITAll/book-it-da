@@ -35,9 +35,24 @@ const postingCommentsSlice = createSlice({
     setPage(state, action: PayloadAction<number>) {
       state.page = action.payload;
     },
-    deleteComments(state, action: PayloadAction<string[]>) {
+    editComment(
+      state,
+      action: PayloadAction<{ commentId: string; content: string }>,
+    ) {
+      const { commentId, content } = action.payload;
+      const comment = state.comments.find(
+        (comment) => comment.id === commentId,
+      );
+
+      if (comment) {
+        comment.content = content;
+        comment.isEdited = true;
+        comment.updatedAt = new Date().toISOString();
+      }
+    },
+    removeComment(state, action: PayloadAction<string>) {
       state.comments = state.comments.filter(
-        (comment) => !action.payload.includes(comment.id),
+        (comment) => comment.id !== action.payload,
       );
     },
     toggleCommentLike(
@@ -68,8 +83,9 @@ export const {
   clearComments,
   setHasMore,
   setPage,
-  deleteComments,
+  removeComment,
   toggleCommentLike,
+  editComment,
 } = postingCommentsSlice.actions;
 
 export default postingCommentsSlice.reducer;

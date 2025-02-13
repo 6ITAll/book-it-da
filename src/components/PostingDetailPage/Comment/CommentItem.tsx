@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Avatar,
@@ -24,7 +24,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { UserInfo } from '@features/user/userSlice';
-import { toggleCommentLike } from '@features/PostDetailPage/slice/commentSlice';
+import {
+  editComment,
+  removeComment,
+  toggleCommentLike,
+} from '@features/PostDetailPage/slice/commentSlice';
 
 const CommentItem = ({
   comment,
@@ -45,6 +49,14 @@ const CommentItem = ({
   const { id: currentUserId } = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
+
+  const { comments: currentComments } = useSelector(
+    (state: RootState) => state.postingComments,
+  );
+
+  useEffect(() => {
+    console.log(currentComments);
+  }, [currentComments]);
 
   const handleReply = async (content: string, parentId: string) => {
     try {
@@ -87,6 +99,7 @@ const CommentItem = ({
   const handleEdit = async (commentId: string, newContent: string) => {
     try {
       await updateComment({ commentId, content: newContent, postId });
+      dispatch(editComment({ commentId: comment.id, content: editContent }));
     } catch (error) {
       console.error('댓글 수정 실패:', error);
     }
@@ -96,6 +109,7 @@ const CommentItem = ({
   const handleDelete = async (commentId: string) => {
     try {
       await deleteComment({ commentId, postId });
+      dispatch(removeComment(commentId));
     } catch (error) {
       console.error('댓글 삭제 실패:', error);
     }
