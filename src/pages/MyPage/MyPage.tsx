@@ -1,11 +1,11 @@
-import TabSection from '@components/MyPage/TabSection';
-import UserInfoSection from '@components/MyPage/UserInfoSection';
-import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
-import { Container, Typography } from '@mui/material';
-import { RootState } from '@store/index';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { RootState } from '@store/index';
+import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
+import TabSection from '@components/MyPage/TabSection';
+import UserInfoSection from '@components/MyPage/UserInfoSection';
+import { Container, Typography } from '@mui/material';
 
 const MyPage = (): JSX.Element => {
   const { username } = useParams<{ username: string }>();
@@ -14,21 +14,27 @@ const MyPage = (): JSX.Element => {
   );
   const location = useLocation();
   const navigate = useNavigate();
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
 
   const { data, error, isLoading, refetch } = useGetUserProfileStatsQuery(
     username || '',
   );
-  useEffect(() => {
-    if (currentUsername && username !== currentUsername) {
-      navigate(`/my-page/${currentUsername}`, { replace: true });
-    }
-  }, [currentUsername, username, navigate]);
 
   useEffect(() => {
-    if (location.pathname === `/my-page/${currentUsername}`) {
-      refetch();
+    if (currentUsername && username) {
+      setIsCurrentUser(currentUsername === username);
     }
-  }, [location, currentUsername, refetch]);
+  }, [currentUsername, username]);
+
+  useEffect(() => {
+    if (isCurrentUser && currentUsername && username !== currentUsername) {
+      navigate(`/my-page/${currentUsername}`, { replace: true });
+    }
+  }, [isCurrentUser, currentUsername, username, navigate]);
+
+  useEffect(() => {
+    refetch();
+  }, [location, username, refetch]);
 
   const userStats = [
     { count: data?.completed_books_count, label: '읽은책' },
@@ -76,7 +82,6 @@ const MyPage = (): JSX.Element => {
         userId={data?.user_id}
         onRefetch={refetch}
       />
-      {/* TabSection props username으로 추후 교체 */}
       <TabSection userId={data?.user_id} username={username || ''} />
     </Container>
   );
