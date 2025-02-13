@@ -344,9 +344,12 @@ const CommentItem = ({
         </Box>
 
         <Box>
-          <IconButton onClick={handleMenuClick}>
-            <MoreVertIcon />
-          </IconButton>
+          {currentUserId === comment.userId && (
+            <IconButton onClick={handleMenuClick}>
+              <MoreVertIcon />
+            </IconButton>
+          )}
+
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
