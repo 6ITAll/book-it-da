@@ -120,6 +120,7 @@ export const commentApi = createApi({
       },
       invalidatesTags: (_, __, { postId }) => [
         { type: 'Comments', id: `Comments-${postId}` },
+        { type: 'CommentCount', id: postId },
       ],
     }),
 
@@ -208,7 +209,8 @@ export const commentApi = createApi({
           if (error) throw error;
 
           const count = data as DbCommentCount;
-          return { data: count.comments_count };
+          console.log(count);
+          return { data: count.total_comments_count };
         } catch (error) {
           return { error };
         }

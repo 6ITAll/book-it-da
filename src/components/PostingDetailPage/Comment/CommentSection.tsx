@@ -7,6 +7,7 @@ import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useCreateCommentMutation,
+  useGetCommentCountQuery,
   useGetCommentsQuery,
 } from '@features/PostDetailPage/api/commentApi';
 import {
@@ -69,6 +70,8 @@ const CommentSection = ({ postId }: { postId: string }) => {
       refetchOnFocus: false,
     },
   );
+  const { data: commentCount = 0 } = useGetCommentCountQuery({ postId });
+  console.log(commentCount);
   const [createComment] = useCreateCommentMutation();
 
   useEffect(() => {
@@ -163,7 +166,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
   return (
     <Box sx={{ mt: 4, p: 2, borderRadius: 2, width: '100%' }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
-        댓글
+        댓글 {commentCount}
       </Typography>
       <Box sx={{ my: 2 }}>
         <CommentInput onSubmit={handleNewComment} />

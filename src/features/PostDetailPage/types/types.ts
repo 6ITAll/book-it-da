@@ -31,7 +31,7 @@ export interface DbComment {
 
 export interface DbCommentCount {
   post_id: string;
-  comments_count: number;
+  total_comments_count: number;
 }
 
 // 프론트엔드 타입 (카멜 케이스)
