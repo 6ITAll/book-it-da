@@ -332,15 +332,27 @@ const CommentItem = ({
             justifyContent: 'center',
           }}
         >
-          <IconButton
-            onClick={() => handleLike(comment, postId)}
-            sx={{ color: isLiked ? 'error.main' : 'inherit' }}
-          >
-            {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-          </IconButton>
-          {comment.likesCount > 0 && (
-            <Typography variant="caption">{comment.likesCount}</Typography>
-          )}
+          <Box sx={{ position: 'relative' }}>
+            <IconButton
+              onClick={() => handleLike(comment, postId)}
+              sx={{ color: isLiked ? 'error.main' : 'inherit' }}
+            >
+              {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            </IconButton>
+            {comment.likesCount > 0 && (
+              <Typography
+                variant="caption"
+                sx={{
+                  position: 'absolute',
+                  bottom: -15,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                }}
+              >
+                {comment.likesCount}
+              </Typography>
+            )}
+          </Box>
         </Box>
 
         <Box>
