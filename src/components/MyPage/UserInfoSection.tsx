@@ -1,5 +1,6 @@
 import { Stack, Typography, Avatar } from '@mui/material';
 import UserInfoSummary from './UserInfoSummary';
+import FollowButton from './FollowButton';
 import { UserInfo, UserStat } from './types';
 
 interface UserInfoSectionProps {
@@ -7,6 +8,8 @@ interface UserInfoSectionProps {
   userStats: UserStat[];
   userId: string;
   onRefetch: () => void;
+  showFollowButton: boolean;
+  userIdForFollow: string;
 }
 
 const UserInfoSection = ({
@@ -14,6 +17,8 @@ const UserInfoSection = ({
   userStats,
   userId,
   onRefetch,
+  showFollowButton,
+  userIdForFollow,
 }: UserInfoSectionProps): JSX.Element => {
   return (
     <Stack direction="row" alignItems="center" spacing={4} padding={4}>
@@ -23,9 +28,12 @@ const UserInfoSection = ({
         sx={{ width: 100, height: 100 }}
       />
       <Stack spacing={1}>
-        <Typography variant="h6" fontWeight="bold">
-          {userInfo.name}
-        </Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="h6" fontWeight="bold">
+            {userInfo.name}
+          </Typography>
+          {showFollowButton && <FollowButton userId={userIdForFollow} />}
+        </Stack>
         <Stack direction="row" spacing={2} alignItems="center">
           {userStats.map(({ count, label, isAction, type }) => (
             <UserInfoSummary
