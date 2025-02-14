@@ -12,10 +12,10 @@ interface BookDetailSectionProps {
   pubDate: string;
   imageUrl: string;
   link: string;
-  customerReviewRank: number;
-  ratingCount: number;
   isbn: string;
-  isLoading: boolean;
+  readerCount: number;
+  bookInfoLoading: boolean;
+  readerStatsLoading: boolean;
 }
 
 const BookDetailSection = ({
@@ -27,15 +27,19 @@ const BookDetailSection = ({
   pubDate,
   imageUrl,
   link,
-  customerReviewRank,
-  ratingCount,
   isbn,
-  isLoading,
+  readerCount,
+  bookInfoLoading,
+  readerStatsLoading,
 }: BookDetailSectionProps): JSX.Element => {
   return (
     <Box sx={bookDetailStyles.bookDetailSectionBox}>
       {/* 왼쪽 박스 (책 이미지) */}
-      <LeftBookDetailBox cover={cover} title={title} isLoading={isLoading} />
+      <LeftBookDetailBox
+        cover={cover}
+        title={title}
+        isLoading={bookInfoLoading}
+      />
       {/* 오른쪽 박스 (책 정보) */}
       <RightBookDetailBox
         isbn={isbn}
@@ -46,9 +50,9 @@ const BookDetailSection = ({
         pubDate={pubDate}
         imageUrl={imageUrl}
         link={link}
-        customerReviewRank={customerReviewRank}
-        ratingCount={ratingCount}
-        isLoading={isLoading} // 로딩 상태 전달
+        readerCount={readerCount}
+        bookInfoLoading={bookInfoLoading}
+        readerStatsLoading={readerStatsLoading}
       />
     </Box>
   );

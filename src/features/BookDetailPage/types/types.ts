@@ -1,38 +1,50 @@
-/** AddToLibraryApi.ts 관련 타입 */
-import { BookInfo } from '@features/BookShelvesPage/types/types';
-
-// 책장 데이터 타입
-export interface Bookshelf {
-  id: number;
-  name: string;
-  books: BookInfo[];
-}
-
-// 책 추가 요청에 사용되는 데이터 타입
-export interface AddBookPayload {
-  isbn: string;
+export interface DbPosting {
+  post_id: string;
   title: string;
-  author: string;
-  imageUrl: string;
+  content: string;
+  book: {
+    isbn: string;
+  };
+  created_at: string;
+  user: {
+    id: string;
+    username: string;
+    avatar_url: string;
+  };
 }
 
-/** postApi.ts에 관련 타입 */
-import { BookDetailPost, ReviewCard } from '@shared/types/type';
-
-// 포스트 응답 데이터 타입
-export interface PostResponse {
-  totalPosts: number;
-  topPosts: BookDetailPost[];
+export interface DbOneLineReview {
+  post_id: string;
+  review: string;
+  rating: number | null;
+  book: {
+    isbn: string;
+  };
+  created_at: string;
+  user: {
+    id: string;
+    username: string;
+    avatar_url: string;
+  };
 }
 
-/** reviewApi.ts 관련 타입 */
-import { Review } from '@shared/types/type';
-
-export interface ReviewResponse {
-  totalReviews: number;
-  topReviews: ReviewCard[];
+export interface DbUserReview {
+  id: string;
+  created_at: string;
+  user: {
+    id: string;
+    username: string;
+    avatar_url: string;
+  };
+  one_line_review: {
+    review: string;
+    rating: number;
+  };
+  isbn: string;
 }
 
-export interface PaginatedReviewResponse {
-  reviews: Review[];
+export interface BookPostCount {
+  isbn: string;
+  review_count: number;
+  posting_count: number;
 }

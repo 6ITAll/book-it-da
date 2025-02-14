@@ -14,7 +14,7 @@ export const additionalInfoApi = createApi({
             .update({
               username: formData.userId,
               gender: formData.gender,
-              age: formData.age,
+              birth_date: formData.birthDate,
             })
             .eq('id', userId);
 

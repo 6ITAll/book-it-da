@@ -4,7 +4,7 @@ export interface SignupData {
   phone: string;
   password: string;
   gender: string;
-  age: number;
+  birthDate: string;
   email: string;
   confirmPassword: string;
 }

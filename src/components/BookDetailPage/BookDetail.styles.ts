@@ -225,6 +225,9 @@ export const bookReviewTabStyles = {
     borderRadius: '8px',
     marginBottom: '1.5rem',
   }),
+  myReviewBox: {
+    marginBottom: '1.5rem',
+  },
   moreButton: (theme: Theme) => ({
     bgcolor: theme.palette.background.default,
     color: theme.palette.text.primary,

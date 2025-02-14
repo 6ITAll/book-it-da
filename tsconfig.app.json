@@ -38,5 +38,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "swagger.js"]
+  "include": ["src"]
 }

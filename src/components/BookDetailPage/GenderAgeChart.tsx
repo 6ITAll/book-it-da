@@ -1,21 +1,54 @@
 import { Box, Typography, Stack, LinearProgress } from '@mui/material';
-import { GenderAge } from '@shared/types/type';
 import { chartStyles } from '@components/BookDetailPage/BookDetail.styles';
-
-interface GenderAgeChartProps {
-  data: GenderAge[];
+import { RootState } from '@store/index';
+import { defaultReaderStats } from '@features/BookDetailPage/slice/readerStatsSlice';
+import { useSelector } from 'react-redux';
+import { transformDemographicsData } from '@utils/BookDetailPage/transformDemographicsData';
+// 타입 추후 components/BookDetailPage/types.ts 로
+export type AgeGroup =
+  | '10s'
+  | '20s'
+  | '30s'
+  | '40s'
+  | '50s'
+  | '60plus'
+  | 'unknown';
+// 타입 추후 components/BookDetailPage/types.ts 로
+export interface AgeGroupData {
+  ageGroup: AgeGroup;
+  male: number;
+  female: number;
 }
 
-const GenderAgeChart = ({ data }: GenderAgeChartProps): JSX.Element => {
+const ageGroupLabels: Record<AgeGroup, string> = {
+  '10s': '10대',
+  '20s': '20대',
+  '30s': '30대',
+  '40s': '40대',
+  '50s': '50대',
+  '60plus': '60대 이상',
+  'unknown': 'unknown',
+};
+
+const GenderAgeChart = (): JSX.Element => {
+  const readerStats =
+    useSelector((state: RootState) => state.readerStats) || defaultReaderStats;
+  const chartData: AgeGroupData[] = transformDemographicsData(readerStats);
+
   return (
     <Box sx={chartStyles.GenderAgeChartBox}>
       <Typography variant="h6" fontWeight="bold">
         성별·연령별 인기 분포
       </Typography>
-      {data.map((row, index) => (
-        <Stack key={index} direction="row" alignItems="center" spacing={2}>
+      {chartData.map((row: AgeGroupData) => (
+        <Stack
+          key={row.ageGroup}
+          direction="row"
+          alignItems="center"
+          spacing={2}
+        >
           <Typography variant="body2" sx={{ width: '10%' }}>
-            {row.age}
+            {ageGroupLabels[row.ageGroup]}
           </Typography>
           <LinearProgress
             variant="determinate"
@@ -23,7 +56,7 @@ const GenderAgeChart = ({ data }: GenderAgeChartProps): JSX.Element => {
             sx={chartStyles.progressMale}
           />
           <Typography variant="body2" sx={chartStyles.percentageText}>
-            {row.male}%
+            {row.male.toFixed(1)}%
           </Typography>
           <LinearProgress
             variant="determinate"
@@ -31,7 +64,7 @@ const GenderAgeChart = ({ data }: GenderAgeChartProps): JSX.Element => {
             sx={chartStyles.progressFemale}
           />
           <Typography variant="body2" sx={chartStyles.percentageText}>
-            {row.female}%
+            {row.female.toFixed(1)}%
           </Typography>
         </Stack>
       ))}

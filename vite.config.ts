@@ -9,10 +9,6 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tsconfigPaths()],
     server: {
       proxy: {
-        '/api-docs': {
-          target: 'http://localhost:5174',
-          changeOrigin: true,
-        },
         '/api': {
           target: env.VITE_ALADIN_BASEURL,
           changeOrigin: true,

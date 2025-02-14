@@ -1,47 +1,41 @@
-import { Box, Typography, Button, Stack, useTheme } from '@mui/material';
+import { Box, Typography, Button, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import ReviewCard from '@components/commons/ReviewCard';
 import PostCard from '@components/commons/PostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
-import StarRating from '@components/commons/StarRating';
-import { useGetPostsQuery } from '@features/BookDetailPage/api/postApi';
-import { useGetReviewsQuery } from '@features/BookDetailPage/api/reviewApi';
 import { MoreType } from '@components/BookDetailPage/types';
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { useState } from 'react';
-interface BookReviewTabProps {
+import BookMyReview from './BookMyReview';
+import {
+  useGetBookPostCountQuery,
+  useGetLatestBookPostingsQuery,
+  useGetLatestBookReviewsQuery,
+} from '@features/BookDetailPage/api/bookFeedPreviewApi';
+import { formatDate } from '@shared/utils/dateUtils';
+interface BookFeedTabProps {
   isbn: string;
   title: string;
   author: string;
   imageUrl: string;
 }
 
-const BookReviewsTab = ({
+const BookFeedTab = ({
   isbn,
   title,
   author,
   imageUrl,
-}: BookReviewTabProps): JSX.Element => {
+}: BookFeedTabProps): JSX.Element => {
   const [rating, setRating] = useState<number>(0);
   const navigate = useNavigate();
   const [isOneLineReviewModalOpen, setIsOneLineReviewModalOpen] =
     useState<boolean>(false);
   const theme = useTheme();
-  const mockUser = { id: '1' };
 
-  const { data: postData = { totalPosts: 0, topPosts: [] } } =
-    useGetPostsQuery(isbn);
-  const { data: reviewData = { totalReviews: 0, topReviews: [] } } =
-    useGetReviewsQuery(isbn);
-
-  // 좋아요 높은 순 3개 리뷰
-  const reviews = reviewData?.topReviews || [];
-  const totalReviews = reviewData?.totalReviews || 0;
-
-  // 상위 3개 포스트
-  const totalPosts = postData?.totalPosts || 0;
-  const topPosts = postData?.topPosts || [];
+  const { data: latestPostings } = useGetLatestBookPostingsQuery({ isbn });
+  const { data: latestReviews } = useGetLatestBookReviewsQuery({ isbn });
+  const { data: bookPostCount } = useGetBookPostCountQuery({ isbn });
 
   const handleModalClose = () => {
     setIsOneLineReviewModalOpen(false);
@@ -49,16 +43,7 @@ const BookReviewsTab = ({
 
   const handleSeeMoreClick = (type: MoreType) => {
     if (isbn) {
-      navigate(`/bookDetail/${isbn}/${type}`, {
-        state: {
-          bookDetails: {
-            title,
-            imageUrl,
-            author,
-            isbn,
-          },
-        },
-      });
+      navigate(`/bookDetail/${isbn}/${type}`);
     }
   };
 
@@ -68,27 +53,19 @@ const BookReviewsTab = ({
       <Box sx={bookReviewTabStyles.reviewSection}>
         <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
-            한 줄 리뷰 {totalReviews}
+            나의 한줄평
           </Typography>
         </Box>
-        <Box sx={bookReviewTabStyles.reviewBox}>
-          <Stack direction="row" spacing={1}>
-            <StarRating
-              rating={rating}
-              onRatingChange={setRating}
-              isDialog={false}
-              openDialog={setIsOneLineReviewModalOpen}
-            />
-          </Stack>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ marginTop: '0.5rem' }}
-          >
-            이 책은 어떠셨나요? 별점을 남겨주세요
+        <BookMyReview
+          isbn={isbn}
+          rating={rating}
+          onRatingChange={setRating}
+          openDialog={setIsOneLineReviewModalOpen}
+        />
+        <Box sx={bookReviewTabStyles.sectionHeader}>
+          <Typography variant="h6" fontWeight="bold">
+            한줄평 ({bookPostCount?.review_count})
           </Typography>
-        </Box>
-        <Box display="flex" padding="1rem 0rem" justifyContent="flex-end">
           <Button
             size="small"
             variant="text"
@@ -98,22 +75,22 @@ const BookReviewsTab = ({
             더보기
           </Button>
         </Box>
-        {reviews.length > 0 ? (
+        {latestReviews ? (
           <Grid container spacing={2}>
-            {reviews.map((review, index) => (
+            {latestReviews.map((review, index) => (
               <Grid
                 key={index}
                 size={{ xs: 12, md: 4 }}
                 sx={bookReviewTabStyles.gridContainer}
               >
                 <ReviewCard
-                  postId=""
-                  username={review.username}
-                  avatarUrl=""
-                  date=""
-                  content=""
-                  rating={review.rating}
-                  isbn={'0'}
+                  postId={review.postId}
+                  username={review.user.username}
+                  avatarUrl={review.user.avatarUrl}
+                  date={formatDate(review.createdAt)}
+                  content={review.review}
+                  rating={review.rating ?? 0}
+                  isbn={isbn}
                 />
               </Grid>
             ))}
@@ -138,31 +115,31 @@ const BookReviewsTab = ({
       <Box>
         <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
-            이 책의 포스트 {totalPosts}
+            포스팅 ({bookPostCount?.posting_count})
           </Typography>
           <Button
             size="small"
             variant="text"
-            onClick={() => handleSeeMoreClick('posts')}
+            onClick={() => handleSeeMoreClick('postings')}
             sx={bookReviewTabStyles.moreButton}
           >
             더보기
           </Button>
         </Box>
-        {topPosts.length > 0 ? (
+        {latestPostings ? (
           <Grid container spacing={2}>
-            {topPosts.map((post, index) => (
+            {latestPostings.map((posting, index) => (
               <Grid
                 key={index}
                 size={{ xs: 12, md: 4 }}
                 sx={bookReviewTabStyles.gridContainer}
               >
                 <PostCard
-                  postId="postId"
-                  title={post.title}
-                  content="내용"
-                  isbn="0"
-                  user={mockUser}
+                  postId={posting.postId}
+                  title={posting.title}
+                  content={posting.content}
+                  isbn={isbn}
+                  user={posting.user}
                 />
               </Grid>
             ))}
@@ -188,10 +165,10 @@ const BookReviewsTab = ({
         isOpen={isOneLineReviewModalOpen}
         onClose={handleModalClose}
         receivedBook={{
-          title: title!,
-          imageUrl: imageUrl!,
-          author: author!,
-          isbn: isbn!,
+          title,
+          imageUrl,
+          author,
+          isbn,
         }}
         receivedRating={rating}
       />
@@ -199,4 +176,4 @@ const BookReviewsTab = ({
   );
 };
 
-export default BookReviewsTab;
+export default BookFeedTab;
