@@ -144,11 +144,11 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
                 primary={username}
                 onClick={() => handleUserClick(username)}
               />
-              {currentUserId !== userId && (
+              {currentUserId !== id && (
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={() => handleToggleFollow(userId)}
+                  onClick={() => handleToggleFollow(id)}
                 >
                   {isFollowing ? '언팔로우' : '팔로우'}
                 </Button>
