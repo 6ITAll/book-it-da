@@ -56,6 +56,17 @@ const postingCommentsSlice = createSlice({
         comment.isEdited = true;
         comment.updatedAt = new Date().toISOString();
       }
+
+      Object.entries(state.tempNewReplies).forEach(([parentId, reply]) => {
+        if (reply.id === commentId) {
+          state.tempNewReplies[parentId] = {
+            ...reply,
+            content,
+            isEdited: true,
+            updatedAt: new Date().toISOString(),
+          };
+        }
+      });
     },
     removeComment(
       state,
@@ -71,6 +82,13 @@ const postingCommentsSlice = createSlice({
         state.comments = state.comments.filter(
           (c) => c.id !== action.payload.commentId,
         );
+
+        // 임시 댓글 삭제
+        Object.keys(state.tempNewReplies).forEach((parentId) => {
+          if (state.tempNewReplies[parentId].id === action.payload.commentId) {
+            delete state.tempNewReplies[parentId];
+          }
+        });
 
         // 부모 댓글도 삭제된 경우
         if (action.payload.isParentDeleted && action.payload.parentId) {
@@ -98,7 +116,7 @@ const postingCommentsSlice = createSlice({
       const comment = state.comments.find(
         (comment) => comment.id === commentId,
       );
-
+      // 실제 댓글 업데이트
       if (comment) {
         const likeIndex = comment.likes.indexOf(userId);
         if (likeIndex === -1) {
@@ -109,6 +127,25 @@ const postingCommentsSlice = createSlice({
           comment.likesCount -= 1;
         }
       }
+      // 임시 댓글 업데이트
+      Object.entries(state.tempNewReplies).forEach(([parentId, reply]) => {
+        if (reply.id === commentId) {
+          const likeIndex = reply.likes.indexOf(userId);
+          if (likeIndex === -1) {
+            state.tempNewReplies[parentId] = {
+              ...reply,
+              likes: [...reply.likes, userId],
+              likesCount: reply.likesCount + 1,
+            };
+          } else {
+            state.tempNewReplies[parentId] = {
+              ...reply,
+              likes: reply.likes.filter((id) => id !== userId),
+              likesCount: reply.likesCount - 1,
+            };
+          }
+        }
+      });
     },
     setTempNewReply(
       state,
