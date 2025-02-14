@@ -36,6 +36,7 @@ import likedReviewsReducer from '@features/MyPage/slice/likedReviewMoreSlice';
 import followListReducer from '@features/MyPage/slice/followListSlice';
 import { commentApi } from '@features/PostDetailPage/api/commentApi';
 import postingCommentsReducer from '@features/PostDetailPage/slice/commentSlice';
+import { avatarUrlApi } from '@features/user/avatarUrlApi';
 
 export const store = configureStore({
   reducer: {
@@ -66,6 +67,7 @@ export const store = configureStore({
     [followApi.reducerPath]: followApi.reducer,
     [likeApi.reducerPath]: likeApi.reducer,
     [userProfileStatsApi.reducerPath]: userProfileStatsApi.reducer,
+    [avatarUrlApi.reducerPath]: avatarUrlApi.reducer,
     counter: counterReducer,
     user: userReducer,
     followList: followListReducer,
@@ -102,6 +104,7 @@ export const store = configureStore({
       followApi.middleware,
       likeApi.middleware,
       userProfileStatsApi.middleware,
+      avatarUrlApi.middleware,
     ]),
 });
 

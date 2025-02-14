@@ -32,6 +32,9 @@ import {
   toggleCommentLike,
 } from '@features/PostDetailPage/slice/commentSlice';
 import TagComment from './TagComment';
+import { useGetAvatarUrlQuery } from '@features/user/avatarUrlApi';
+import { navigateToUserPage } from '@shared/utils/navigation';
+import { useNavigate } from 'react-router-dom';
 
 const CommentItem = ({
   comment,
@@ -45,6 +48,7 @@ const CommentItem = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [createComment] = useCreateCommentMutation();
   const [updateComment] = useUpdateCommentMutation();
@@ -58,6 +62,8 @@ const CommentItem = ({
   const { comments: currentComments } = useSelector(
     (state: RootState) => state.postingComments,
   );
+
+  const { data: avatarUrl } = useGetAvatarUrlQuery(comment.userId);
 
   useEffect(() => {
     console.log(currentComments);
@@ -196,9 +202,12 @@ const CommentItem = ({
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ width: 32, height: 32 }}>
-          {comment.user.username[0]}
-        </Avatar>
+        <Avatar
+          onClick={() => navigateToUserPage(navigate, comment.user.username)}
+          sx={{ cursor: 'pointer', width: 32, height: 32 }}
+          src={avatarUrl || ''}
+          alt={comment.user.username}
+        />
       </Box>
 
       <Box sx={{ flex: 1, ml: 1 }}>
