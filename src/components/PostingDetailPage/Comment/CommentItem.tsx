@@ -274,8 +274,7 @@ const CommentItem = ({
             </Box>
           </Box>
         ) : (
-          <Typography
-            variant="body2"
+          <Box
             sx={{
               my: 1,
               color: comment.isDeleted ? 'text.secondary' : 'inherit',
@@ -284,9 +283,9 @@ const CommentItem = ({
             {comment.isDeleted ? (
               '삭제된 댓글입니다'
             ) : (
-              <TagComment content={comment.content} />
+              <TagComment key={comment.id} content={comment.content} />
             )}
-          </Typography>
+          </Box>
         )}
 
         {!isEditing && (
