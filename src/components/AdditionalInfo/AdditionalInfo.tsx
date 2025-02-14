@@ -25,6 +25,7 @@ import {
 } from './AdditionalInfo.styles';
 import { useUpdateUserInfoMutation } from '@features/user/additionalInfoApi';
 import { additionalInfoSchema } from '@utils/SignupPage/yupSchema';
+import BirthDatePicker from '@components/LoginSignupPage/Signup/BirthDatePicker';
 
 const AdditionalInfo = (): JSX.Element => {
   const {
@@ -172,23 +173,15 @@ const AdditionalInfo = (): JSX.Element => {
             )}
           />
           <Controller
-            name="age"
+            name="birthDate"
             control={control}
-            defaultValue={0}
+            defaultValue=""
             render={({ field }): JSX.Element => (
-              <TextField
-                {...field}
-                label="나이"
-                type="number"
-                variant="outlined"
-                fullWidth
-                error={!!errors.age}
-                helperText={errors.age?.message}
-                onChange={(e) =>
-                  field.onChange(
-                    e.target.value === '' ? '' : Number(e.target.value),
-                  )
-                }
+              <BirthDatePicker
+                value={field.value}
+                onChange={field.onChange}
+                error={!!errors.birthDate}
+                helperText={errors.birthDate?.message}
               />
             )}
           />

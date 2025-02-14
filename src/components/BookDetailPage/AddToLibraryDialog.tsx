@@ -38,7 +38,6 @@ const AddToLibraryModal = ({
   const userInfo = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
-  console.log(userInfo);
   const { data: bookshelvesData, refetch } = useGetBookshelvesQuery(
     userInfo?.id || '',
     {

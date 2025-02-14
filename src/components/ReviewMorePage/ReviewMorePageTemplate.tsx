@@ -67,8 +67,6 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
   //   setSortedReviews(updatedReviews);
   // }, [reviews, sortOption]);
 
-  console.log(reviews);
-
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
     setIsDialogOpen(true);
@@ -150,7 +148,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
         <Stack direction="row" spacing={2} alignItems="center">
           {currentUsername === username &&
             !likedReview &&
-            totalReviews === 0 && (
+            totalReviews !== 0 && (
               <>
                 <Button
                   startIcon={<DeleteIcon />}

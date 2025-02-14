@@ -24,6 +24,7 @@ import {
   checkEmailDuplicate,
   checkUserIdDuplicate,
 } from '@utils/SignupPage/checkDuplicate';
+import BirthDatePicker from './BirthDatePicker';
 
 const Signup = (): JSX.Element => {
   const {
@@ -74,7 +75,7 @@ const Signup = (): JSX.Element => {
             name: formData.name,
             phone: formData.phone,
             gender: formData.gender,
-            age: formData.age,
+            birth_date: formData.birthDate,
           },
         },
       });
@@ -321,24 +322,15 @@ const Signup = (): JSX.Element => {
           )}
         />
         <Controller
-          name="age"
+          name="birthDate"
           control={control}
-          defaultValue={0}
+          defaultValue=""
           render={({ field }) => (
-            <TextField
-              {...field}
-              label="나이"
-              type="number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              error={!!errors.age}
-              helperText={errors.age?.message}
-              onChange={(e) =>
-                field.onChange(
-                  e.target.value === '' ? '' : Number(e.target.value),
-                )
-              }
+            <BirthDatePicker
+              value={field.value}
+              onChange={field.onChange}
+              error={!!errors.birthDate}
+              helperText={errors.birthDate?.message}
             />
           )}
         />

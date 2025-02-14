@@ -9,6 +9,7 @@ import { feedApi } from '@features/FeedPage/api/feedApi';
 import { FeedType, PostType, SavedPosting } from '@shared/types/type';
 import { postingApi } from '@features/PostDetailPage/api/postingApi';
 import { userFeedsApi } from '@features/MyPage/api/userFeedsApi';
+import { bookFeedPreviewApi } from '@features/BookDetailPage/api/bookFeedPreviewApi';
 
 export const postingWriteApi = createApi({
   reducerPath: 'postingWriteApi',
@@ -57,6 +58,10 @@ export const postingWriteApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          // 책 한줄평 미리보기 리페치
+          await dispatch(
+            bookFeedPreviewApi.util.invalidateTags(['BookFeedPreview']),
+          );
           // 유저 페이지 피드 리페치
           await dispatch(userFeedsApi.util.invalidateTags(['UserFeeds']));
           await dispatch(feedApi.util.invalidateTags(['Posts']));

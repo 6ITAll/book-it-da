@@ -23,12 +23,8 @@ export interface BookDetailResponse {
     pubDate: string;
     cover: string;
     link: string;
-    customerReviewRank?: number;
     subInfo: {
       subTitle: string;
-      ratingInfo?: {
-        ratingCount: number;
-      };
     };
   }>;
 }

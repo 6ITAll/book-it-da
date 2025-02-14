@@ -24,20 +24,23 @@ export const signupSchema = yup.object<SignupData>().shape({
     .required('비밀번호 확인을 입력해주세요')
     .oneOf([yup.ref('password')], '비밀번호가 일치하지 않습니다'),
   gender: yup.string().required('성별을 선택해주세요'),
-  age: yup
-    .number()
-    .typeError('나이를 입력해주세요')
-    .required('나이를 입력해주세요')
-    .positive('나이는 양수여야 합니다')
-    .integer('나이는 정수여야 합니다'),
+  birthDate: yup
+    .string()
+    .required('생년월일을 선택해주세요')
+    .matches(
+      /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
+      '올바른 날짜 형식이 아닙니다',
+    ),
 });
 
 export const additionalInfoSchema = yup.object().shape({
   userId: yup.string().required('아이디는 필수입니다'),
   gender: yup.string().required('성별을 선택해주세요'),
-  age: yup
-    .number()
-    .positive('나이는 양수여야 합니다')
-    .integer('나이는 정수여야 합니다')
-    .required('나이를 입력해주세요'),
+  birthDate: yup
+    .string()
+    .required('생년월일을 선택해주세요')
+    .matches(
+      /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
+      '올바른 날짜 형식이 아닙니다',
+    ),
 });
