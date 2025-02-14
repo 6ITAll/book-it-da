@@ -253,9 +253,7 @@ const EditAccountPage = (): JSX.Element => {
               const input = document.querySelector(
                 '[name="birth_date"]',
               ) as HTMLInputElement;
-              if (input) {
-                input.value = newDate;
-              }
+              input.value = newDate;
             }}
           />
           <Input

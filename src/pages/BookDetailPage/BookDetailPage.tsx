@@ -39,7 +39,8 @@ const BookDetailPage = (): JSX.Element => {
   return (
     <Container maxWidth="lg" disableGutters sx={bookDetailStyles.container}>
       <BookDetailSection
-        isLoading={bookInfoLoading && readerStatsLoading}
+        bookInfoLoading={bookInfoLoading}
+        readerStatsLoading={readerStatsLoading}
         isbn={bookInfo?.item[0].isbn || ''}
         cover={bookInfo?.item[0]?.cover || ''}
         title={bookInfo?.item[0]?.title || ''}
@@ -55,7 +56,7 @@ const BookDetailPage = (): JSX.Element => {
       />
 
       <BookDetailContent
-        isLoading={bookInfoLoading && readerStatsLoading}
+        isLoading={bookInfoLoading}
         isbn={bookInfo?.item[0].isbn || ''}
         title={bookInfo?.item[0]?.title || ''}
         description={bookInfo?.item[0]?.description || ''}

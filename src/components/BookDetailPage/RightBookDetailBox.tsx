@@ -14,7 +14,8 @@ interface RightBookBoxProps {
   link: string;
   imageUrl: string;
   readerCount: number;
-  isLoading: boolean;
+  bookInfoLoading: boolean;
+  readerStatsLoading: boolean;
 }
 
 const RightBookBoxDetailBox = ({
@@ -27,12 +28,13 @@ const RightBookBoxDetailBox = ({
   link,
   imageUrl,
   readerCount,
-  isLoading,
+  bookInfoLoading,
+  readerStatsLoading,
 }: RightBookBoxProps): JSX.Element => {
   return (
     <Box sx={bookDetailStyles.rightBox}>
       <Box sx={bookDetailStyles.rightBoxInfoBox}>
-        {isLoading ? (
+        {bookInfoLoading ? (
           <>
             <Skeleton variant="text" width="60%" height="40px" />
             <Skeleton variant="text" width="40%" height="30px" />
@@ -52,7 +54,7 @@ const RightBookBoxDetailBox = ({
         )}
 
         <Box sx={bookDetailStyles.rightBoxBottom}>
-          {isLoading ? (
+          {readerStatsLoading ? (
             <Skeleton variant="text" width="25%" height="40px" />
           ) : (
             <Typography variant="body2" color="text.secondary">

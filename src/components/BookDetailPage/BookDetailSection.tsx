@@ -13,8 +13,9 @@ interface BookDetailSectionProps {
   imageUrl: string;
   link: string;
   isbn: string;
-  isLoading: boolean;
   readerCount: number;
+  bookInfoLoading: boolean;
+  readerStatsLoading: boolean;
 }
 
 const BookDetailSection = ({
@@ -27,13 +28,18 @@ const BookDetailSection = ({
   imageUrl,
   link,
   isbn,
-  isLoading,
   readerCount,
+  bookInfoLoading,
+  readerStatsLoading,
 }: BookDetailSectionProps): JSX.Element => {
   return (
     <Box sx={bookDetailStyles.bookDetailSectionBox}>
       {/* 왼쪽 박스 (책 이미지) */}
-      <LeftBookDetailBox cover={cover} title={title} isLoading={isLoading} />
+      <LeftBookDetailBox
+        cover={cover}
+        title={title}
+        isLoading={bookInfoLoading}
+      />
       {/* 오른쪽 박스 (책 정보) */}
       <RightBookDetailBox
         isbn={isbn}
@@ -45,7 +51,8 @@ const BookDetailSection = ({
         imageUrl={imageUrl}
         link={link}
         readerCount={readerCount}
-        isLoading={isLoading} // 로딩 상태 전달
+        bookInfoLoading={bookInfoLoading}
+        readerStatsLoading={readerStatsLoading}
       />
     </Box>
   );
