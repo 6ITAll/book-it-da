@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Box,
   Avatar,
@@ -35,6 +35,7 @@ import TagComment from './TagComment';
 import { useGetAvatarUrlQuery } from '@features/user/avatarUrlApi';
 import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 
 const CommentItem = ({
   comment,
@@ -64,10 +65,6 @@ const CommentItem = ({
   );
 
   const { data: avatarUrl } = useGetAvatarUrlQuery(comment.userId);
-
-  useEffect(() => {
-    console.log(currentComments);
-  }, [currentComments]);
 
   const handleReply = async (
     content: string,
@@ -99,8 +96,11 @@ const CommentItem = ({
           return next;
         });
       }
-      console.log('성공');
     } catch (error) {
+      showSnackbar({
+        message: '답글 작성에 실패했습니다. 다시 시도해주세요.',
+        severity: 'error',
+      });
       console.error('답글 작성 실패:', error);
     }
   };
@@ -130,6 +130,10 @@ const CommentItem = ({
         toggleCommentLike({ commentId: comment.id, userId: currentUserId }),
       );
     } catch (error) {
+      showSnackbar({
+        message: '좋아요 실패했습니다. 다시 시도해주세요.',
+        severity: 'error',
+      });
       console.error('좋아요 토글 실패:', error);
     }
   };
@@ -140,6 +144,10 @@ const CommentItem = ({
       await updateComment({ commentId, content: newContent, postId });
       dispatch(editComment({ commentId: comment.id, content: editContent }));
     } catch (error) {
+      showSnackbar({
+        message: '댓글 수정에 실패했습니다. 다시 시도해주세요.',
+        severity: 'error',
+      });
       console.error('댓글 수정 실패:', error);
     }
   };
@@ -164,6 +172,10 @@ const CommentItem = ({
 
       handleMenuClose();
     } catch (error) {
+      showSnackbar({
+        message: '댓글 삭제에 실패했습니다. 다시 시도해주세요.',
+        severity: 'error',
+      });
       console.error('댓글 삭제 실패:', error);
     }
   };
@@ -274,7 +286,8 @@ const CommentItem = ({
             </Box>
           </Box>
         ) : (
-          <Box
+          <Typography
+            variant="body2"
             sx={{
               my: 1,
               color: comment.isDeleted ? 'text.secondary' : 'inherit',
@@ -285,7 +298,7 @@ const CommentItem = ({
             ) : (
               <TagComment key={comment.id} content={comment.content} />
             )}
-          </Box>
+          </Typography>
         )}
 
         {!isEditing && (

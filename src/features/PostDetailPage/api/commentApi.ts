@@ -290,7 +290,6 @@ export const commentApi = createApi({
           if (error) throw error;
 
           const count = data as DbCommentCount;
-          console.log(count);
           return { data: count.total_comments_count };
         } catch (error) {
           return { error };

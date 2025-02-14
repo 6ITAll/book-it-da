@@ -1,4 +1,5 @@
-import { Box, Typography } from '@mui/material';
+import { Fragment } from 'react';
+import { Box } from '@mui/material';
 import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import { TagCommentProps } from './types';
@@ -13,9 +14,9 @@ const TagComment = ({ content }: TagCommentProps) => {
   const tags = content.match(tagRegex) || [];
 
   return (
-    <Typography variant="body2" sx={{ my: 1 }}>
+    <>
       {parts.map((part, index) => (
-        <>
+        <Fragment key={`${part}-${index}`}>
           {part}
           {tags[index] && (
             <Box
@@ -34,9 +35,9 @@ const TagComment = ({ content }: TagCommentProps) => {
               {tags[index]}
             </Box>
           )}
-        </>
+        </Fragment>
       ))}
-    </Typography>
+    </>
   );
 };
 

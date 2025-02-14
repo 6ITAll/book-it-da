@@ -76,7 +76,6 @@ const CommentSection = ({ postId }: { postId: string }) => {
     },
   );
   const { data: commentCount = 0 } = useGetCommentCountQuery({ postId });
-  console.log(commentCount);
   const [createComment] = useCreateCommentMutation();
 
   useEffect(() => {
@@ -127,8 +126,11 @@ const CommentSection = ({ postId }: { postId: string }) => {
         userId: currentUserId,
       }).unwrap();
       dispatch(setComments([result]));
-      console.log('댓글 작성 성공:', result);
     } catch (error) {
+      showSnackbar({
+        message: '댓글 작성에 실패했습니다. 다시 시도해주세요.',
+        severity: 'error',
+      });
       console.error('댓글 작성 실패:', error);
     }
   };
