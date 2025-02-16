@@ -3,7 +3,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  Grid2,
+  Grid,
   Typography,
   useMediaQuery,
   useTheme,
@@ -28,21 +28,49 @@ const BookshelfCard = ({ shelf, username }: BookshelfCardProps) => {
   return (
     <Card
       sx={{
-        maxWidth: sm ? 200 : '100%',
+        width: sm ? 200 : '100%',
+        maxWidth: 200,
       }}
     >
       <CardActionArea onClick={handleClick}>
-        <Grid2 container height={140} overflow="hidden">
-          {shelf.books.map((book) => (
-            <Grid2
-              key={`${book.isbn}-${shelf.id}`}
-              size={shelf.books.length === 1 ? 12 : 6}
-              height={shelf.books.length > 2 ? '50%' : '100%'}
+        <Grid
+          container
+          height={140}
+          overflow="hidden"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {shelf.books.length > 0 ? (
+            shelf.books.map((book) => (
+              <Grid
+                item
+                key={`${book.isbn}-${shelf.id}`}
+                xs={shelf.books.length === 1 ? 12 : 6}
+                sx={{ height: shelf.books.length > 2 ? '50%' : '100%' }}
+              >
+                <BookShelfThumbnail isbn={book.isbn} />
+              </Grid>
+            ))
+          ) : (
+            <Grid
+              item
+              xs={12}
+              sx={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
             >
-              <BookShelfThumbnail isbn={book.isbn} />
-            </Grid2>
-          ))}
-        </Grid2>
+              <Typography variant="body2" color="text.secondary">
+                책이 없습니다
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
         <CardContent>
           <Typography gutterBottom>{shelf.name}</Typography>
           <Typography variant="body2" color="text.secondary">
