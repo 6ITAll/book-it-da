@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import HybridDialog from '@components/commons/HybridDialog/HybridDialog';
 import {
   Typography,
-  TextField,
   RadioGroup,
   FormControlLabel,
   Radio,
-  Stack,
   Button,
 } from '@mui/material';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
@@ -18,6 +16,8 @@ import {
   useCreateBookshelfMutation,
   useGetBookshelvesQuery,
 } from '@features/BookShelvesPage/api/bookShelvesApi';
+
+import BookshelfCreate from '@components/BookDetailPage/BookshelfCreate';
 
 interface AddToLibraryModalProps {
   open: boolean;
@@ -32,7 +32,6 @@ const AddToLibraryModal = ({
 }: AddToLibraryModalProps): JSX.Element => {
   const [selectedBookshelf, setSelectedBookshelf] = useState<string>('');
   const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [newBookshelfName, setNewBookshelfName] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
   const userInfo = useSelector(
@@ -69,7 +68,9 @@ const AddToLibraryModal = ({
   };
 
   // 책장 추가 함수
-  const handleAddBookshelf = async () => {
+  const handleOnAddBookshelf = async (
+    newBookshelfName: string,
+  ): Promise<void> => {
     if (newBookshelfName.trim()) {
       try {
         await createBookshelf({
@@ -77,7 +78,7 @@ const AddToLibraryModal = ({
           name: newBookshelfName.trim(),
         }).unwrap();
         await refetch();
-        setNewBookshelfName('');
+
         setIsCreating(false);
       } catch (error) {
         console.error('책장 추가 중 오류 발생:', error);
@@ -95,23 +96,7 @@ const AddToLibraryModal = ({
           + 책장 만들기
         </Button>
       ) : (
-        <Stack direction="row" alignItems="center" spacing={2} mb={2}>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="새 책장 이름 입력"
-            value={newBookshelfName}
-            onChange={(e) => setNewBookshelfName(e.target.value)}
-            sx={{ '& .MuiOutlinedInput-root': { height: 48 } }}
-          />
-          <Button
-            variant="contained"
-            onClick={handleAddBookshelf}
-            sx={{ height: '48px' }}
-          >
-            추가
-          </Button>
-        </Stack>
+        <BookshelfCreate onAdd={handleOnAddBookshelf} />
       )}
       <Typography variant="body2" color="text.secondary" mt={2} mb={2}>
         책장을 선택하면 함께 담을 수 있어요

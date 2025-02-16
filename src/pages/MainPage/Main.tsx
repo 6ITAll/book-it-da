@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   Box,
-  Button,
   CircularProgress,
   Container,
   Divider,
@@ -14,8 +13,6 @@ import ScrollToTop from '@components/commons/ScrollToTop';
 import FeedTypeFilter from '@components/FeedPage/Filters/FeedTypeFilter';
 import PostTypeFilter from '@components/FeedPage/Filters/PostTypeFilter';
 import { PostType, FeedType, OneLinePost, Posting } from '@shared/types/type';
-import CreateIcon from '@mui/icons-material/Create';
-import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
 import { useGetPostsQuery } from '@features/FeedPage/api/feedApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
@@ -27,9 +24,9 @@ import {
   setHasMore,
   setTotalCount,
 } from '@features/FeedPage/slice/feedSlice';
+import WriteButton from '@components/FeedPage/WriteButton';
 
 const Main = (): JSX.Element => {
-  const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch();
 
   const { isLoggedIn } = useSelector((state: RootState) => state.user);
@@ -114,19 +111,7 @@ const Main = (): JSX.Element => {
           feedType={feedType}
           onFeedTypeChange={handleFeedTypeChange}
         />
-        {isLoggedIn && (
-          <Button
-            variant="outlined"
-            onClick={() => setDialogOpen(true)}
-            endIcon={<CreateIcon />}
-          >
-            글쓰기
-          </Button>
-        )}
-        <PostTypeSelectDialog
-          dialogOpen={dialogOpen}
-          setDialogOpen={setDialogOpen}
-        />
+        {isLoggedIn && <WriteButton />}
       </Stack>
       <Divider
         sx={{
