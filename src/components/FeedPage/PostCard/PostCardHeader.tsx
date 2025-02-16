@@ -1,4 +1,12 @@
-import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  CardHeader,
+  Typography,
+  IconButton,
+} from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './PostCard.styles';
 import { PostType } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
@@ -27,16 +35,13 @@ const PostCardHeader = ({
   postType,
 }: PostCardHeaderProps): JSX.Element => {
   const navigate = useNavigate();
-
   const { isLoggedIn, userInfo } = useSelector(
     (state: RootState) => state.user,
   );
   const isOwnPost = userInfo?.id === user.id;
-
   const { data: followStatus, refetch } = useCheckFollowStatusQuery(user.id, {
     skip: !isLoggedIn || isOwnPost,
   });
-
   const [toggleFollow] = useToggleFollowMutation();
 
   const handleAvatarClick = () => {
@@ -67,14 +72,25 @@ const PostCardHeader = ({
       action={
         isLoggedIn &&
         !isOwnPost && (
-          <Button
-            variant="outlined"
-            size="small"
-            sx={styles.followButton(followStatus?.isFollowing)}
-            onClick={handleFollowClick}
-          >
-            {followStatus?.isFollowing ? '팔로잉' : '팔로우'}
-          </Button>
+          <>
+            {followStatus?.isFollowing ? (
+              <IconButton
+                sx={{ backgroundColor: 'transparent' }}
+                onClick={handleFollowClick}
+              >
+                <CheckCircleIcon sx={{ color: '#0095f6', fontSize: 32 }} />
+              </IconButton>
+            ) : (
+              <Button
+                variant="outlined"
+                size="small"
+                sx={styles.followButton(followStatus?.isFollowing)}
+                onClick={handleFollowClick}
+              >
+                팔로우
+              </Button>
+            )}
+          </>
         )
       }
       title={
