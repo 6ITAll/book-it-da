@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PostType } from '@shared/types/type';
 import BookSearchAutoComplete from '@components/commons/BookSearchAutoComplete';
 import { Book } from '@shared/types/type';
@@ -36,28 +36,26 @@ const OneLineReviewDialog = ({
   onClose,
 }: OneLineReviewDialogProps) => {
   const dispatch = useDispatch();
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedBook, setSelectedBook] = useState<Book | null>(
     receivedBook || null,
   );
-  const [review, setReview] = useState('');
-  const [starRating, setStarRating] = useState<number>(
+  const starRatingRef = useRef<number>(
     receivedRating || REVIEW_DIALOG.DEFAULT_STAR_RATING,
   );
-
   const [error, setError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createOneLineReview] = useCreateOneLineReviewMutation();
 
   const dialogOpen = selectedType ? selectedType === '한줄평' : !!isOpen;
 
+  // inputRef를 생성해 ReviewTextField의 내부 DOM에 접근
+  const reviewInputRef = useRef<HTMLInputElement>(null);
+
   // 다이얼로그 초기화 함수
   const resetState = () => {
     setSelectedBook(null);
-    setSearchQuery('');
-    setReview('');
     setError('');
-    setStarRating(REVIEW_DIALOG.DEFAULT_STAR_RATING);
+    starRatingRef.current = REVIEW_DIALOG.DEFAULT_STAR_RATING;
   };
 
   // 다이얼로그 닫히면 책 검색 결과 초기화
@@ -67,16 +65,25 @@ const OneLineReviewDialog = ({
     }
   }, [selectedType, receivedBook, selectedBook]);
 
-  // 상세 페이지에서 가져온 별점 적용
+  // 상세 페이지에서 가져온 별점이 있다면 ref에 적용
   useEffect(() => {
     if (receivedRating) {
-      setStarRating(receivedRating);
+      starRatingRef.current = receivedRating;
     }
   }, [receivedRating]);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    const validation = validateOneLineReview(selectedBook, starRating, review);
+
+    // 부모는 ref를 통해 ReviewTextField의 입력값을 직접 읽어옵니다.
+    const reviewValue = reviewInputRef.current
+      ? reviewInputRef.current.value
+      : '';
+    const validation = validateOneLineReview(
+      selectedBook,
+      starRatingRef.current,
+      reviewValue,
+    );
 
     if (!validation.isValid) {
       setError(validation.error);
@@ -87,8 +94,8 @@ const OneLineReviewDialog = ({
     try {
       const result = await createOneLineReview({
         book: selectedBook!,
-        rating: starRating,
-        review: review.trim(),
+        rating: starRatingRef.current,
+        review: reviewValue.trim(),
       }).unwrap();
 
       if (result.success) {
@@ -139,8 +146,6 @@ const OneLineReviewDialog = ({
       {/* 상세 페이지에서 넘어갈 시 책 검색 기능 표시하지 않음 */}
       {!receivedBook && (
         <BookSearchAutoComplete
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
           selectedBook={selectedBook}
           setSelectedBook={setSelectedBook}
         />
@@ -149,12 +154,14 @@ const OneLineReviewDialog = ({
       {selectedBook && <BookPreviewSection book={selectedBook} />}
       {/* 별점 기능 */}
       <StarRating
-        rating={starRating}
-        onRatingChange={setStarRating}
+        rating={starRatingRef.current}
+        onRatingChange={(newRating) => {
+          starRatingRef.current = newRating;
+        }}
         isDialog={true}
       />
       {/* 한줄평 작성 영역 */}
-      <ReviewTextField review={review} setReview={setReview} />
+      <ReviewTextField inputRef={reviewInputRef} />
     </Stack>
   );
 

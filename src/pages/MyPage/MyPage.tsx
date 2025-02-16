@@ -67,8 +67,10 @@ const MyPage = (): JSX.Element => {
           about: data?.user_about,
         }}
         userStats={userStats}
-        userId={data?.user_id}
+        userId={data?.user_id.toString()}
         onRefetch={refetch}
+        showFollowButton={username !== currentUsername}
+        userIdForFollow={data?.user_id.toString()}
       />
       {/* TabSection props username으로 추후 교체 */}
       <TabSection userId={data?.user_id} username={username || ''} />

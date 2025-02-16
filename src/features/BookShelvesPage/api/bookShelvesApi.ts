@@ -14,6 +14,7 @@ import {
 } from '../types/types';
 import { libraryApi } from '@features/MyPage/api/libraryApi';
 import { userProfileStatsApi } from '@features/MyPage/api/userProfileStatsApi';
+import { readerStatsApi } from '@features/BookDetailPage/api/readerStatsApi';
 
 export const bookShelvesApi = createApi({
   reducerPath: 'bookShelvesApi',
@@ -255,6 +256,9 @@ export const bookShelvesApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          await dispatch(
+            readerStatsApi.util.invalidateTags(['BookReaderStats']),
+          );
           await dispatch(libraryApi.util.invalidateTags(['Library']));
         } catch (error) {
           console.error('책 담기 후 서재 업데이트 실패:', error);

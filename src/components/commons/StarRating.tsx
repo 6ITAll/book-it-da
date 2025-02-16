@@ -1,6 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface StarRatingProps {
   rating: number;
@@ -15,13 +16,25 @@ const StarRating = ({
   isDialog,
   openDialog,
 }: StarRatingProps) => {
-  const handleStarClick = (index: number) => {
-    onRatingChange(index + 1);
-    // 상세페이지에서 클릭할 경우 다이얼로그 열기
-    if (!isDialog && openDialog) {
-      openDialog(true);
-    }
-  };
+  const [localRating, setLocalRating] = useState(rating);
+
+  // 부모에서 전달된 rating이 변경되면 내부 상태도 동기화
+  useEffect(() => {
+    setLocalRating(rating);
+  }, [rating]);
+
+  const handleStarClick = useCallback(
+    (index: number) => {
+      const newRating = index + 1;
+      setLocalRating(newRating);
+
+      onRatingChange(newRating);
+      if (!isDialog && openDialog) {
+        openDialog(true);
+      }
+    },
+    [onRatingChange, isDialog, openDialog],
+  );
 
   return (
     <Stack direction="row" spacing={1} sx={{ justifyContent: 'center' }}>
@@ -31,10 +44,10 @@ const StarRating = ({
           onClick={() => handleStarClick(index)}
           sx={{
             cursor: 'pointer',
-            color: index < rating ? 'gold' : '#ccc',
+            color: index < localRating ? 'gold' : '#ccc',
           }}
         >
-          {index < rating ? (
+          {index < localRating ? (
             <StarIcon fontSize="large" />
           ) : (
             <StarOutlineIcon fontSize="large" />

@@ -23,12 +23,8 @@ export interface BookDetailResponse {
     pubDate: string;
     cover: string;
     link: string;
-    customerReviewRank?: number;
     subInfo: {
       subTitle: string;
-      ratingInfo?: {
-        ratingCount: number;
-      };
     };
   }>;
 }
@@ -55,6 +51,7 @@ export interface SearchBooksParams {
   query: string; // 사용자 검색어
   page: number; // 페이지 넘버
   sort: string; // 정렬 기준
+  maxResults?: number;
 }
 
 // 상품 조회 관련 인터페이스

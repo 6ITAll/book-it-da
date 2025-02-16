@@ -3,7 +3,7 @@ import { Control, FieldErrors } from 'react-hook-form';
 export interface AdditionalInfoData {
   userId: string;
   gender: string;
-  age: number;
+  birthDate: string;
 }
 
 export interface AdditionalInfoProps {

@@ -13,9 +13,9 @@ interface RightBookBoxProps {
   pubDate: string;
   link: string;
   imageUrl: string;
-  customerReviewRank: number;
-  ratingCount: number;
-  isLoading: boolean;
+  readerCount: number;
+  bookInfoLoading: boolean;
+  readerStatsLoading: boolean;
 }
 
 const RightBookBoxDetailBox = ({
@@ -27,14 +27,14 @@ const RightBookBoxDetailBox = ({
   pubDate,
   link,
   imageUrl,
-  customerReviewRank,
-  ratingCount,
-  isLoading,
+  readerCount,
+  bookInfoLoading,
+  readerStatsLoading,
 }: RightBookBoxProps): JSX.Element => {
   return (
     <Box sx={bookDetailStyles.rightBox}>
       <Box sx={bookDetailStyles.rightBoxInfoBox}>
-        {isLoading ? (
+        {bookInfoLoading ? (
           <>
             <Skeleton variant="text" width="60%" height="40px" />
             <Skeleton variant="text" width="40%" height="30px" />
@@ -49,20 +49,18 @@ const RightBookBoxDetailBox = ({
             author={author}
             categoryName={categoryName}
             pubDate={pubDate}
-            customerReviewRank={customerReviewRank}
-            ratingCount={ratingCount}
+            isbn={isbn}
           />
         )}
 
         <Box sx={bookDetailStyles.rightBoxBottom}>
-          {isLoading ? (
+          {readerStatsLoading ? (
             <Skeleton variant="text" width="25%" height="40px" />
           ) : (
             <Typography variant="body2" color="text.secondary">
-              이 책이 담긴 서재 <strong>명</strong>
+              이 책을 담은 사람 <strong>{readerCount}명</strong>
             </Typography>
           )}
-          =
           <ActionButtons
             book={{
               title: title,

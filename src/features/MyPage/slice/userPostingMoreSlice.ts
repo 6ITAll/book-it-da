@@ -14,7 +14,7 @@ const initialState: UserPostingsState = {
 };
 
 const userPostingsSlice = createSlice({
-  name: 'likedReviews',
+  name: 'userPostings',
   initialState,
   reducers: {
     setPostings(state, action: PayloadAction<Posting[]>) {
