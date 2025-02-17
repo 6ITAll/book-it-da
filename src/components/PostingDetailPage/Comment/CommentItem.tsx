@@ -18,6 +18,7 @@ import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 import {
   useCreateCommentMutation,
   useDeleteCommentMutation,
+  useGetRepliesCountQuery,
   useToggleCommentLikeMutation,
   useUpdateCommentMutation,
 } from '@features/PostDetailPage/api/commentApi';
@@ -30,6 +31,7 @@ import {
   setComments,
   setTempNewReply,
   toggleCommentLike,
+  toggleShowReplies,
 } from '@features/PostDetailPage/slice/commentSlice';
 import TagComment from './TagComment';
 import { useGetAvatarUrlQuery } from '@features/user/avatarUrlApi';
@@ -37,12 +39,7 @@ import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 
-const CommentItem = ({
-  comment,
-  postId,
-  showRepliesFor,
-  setShowRepliesFor,
-}: CommentItemProps) => {
+const CommentItem = ({ comment, postId }: CommentItemProps) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
@@ -60,11 +57,21 @@ const CommentItem = ({
     (state: RootState) => state.user.userInfo as UserInfo,
   );
 
-  const { comments: currentComments } = useSelector(
-    (state: RootState) => state.postingComments,
-  );
+  const {
+    comments: currentComments,
+    showRepliesFor,
+    visibleReplies,
+    replyPages,
+  } = useSelector((state: RootState) => state.postingComments);
 
   const { data: avatarUrl } = useGetAvatarUrlQuery(comment.userId);
+
+  const { data: repliesCount = 0 } = useGetRepliesCountQuery(
+    { parentId: comment.id },
+    {
+      skip: comment.parentId !== null,
+    },
+  );
 
   const handleReply = async (
     content: string,
@@ -85,17 +92,25 @@ const CommentItem = ({
         parentId,
       }).unwrap();
 
-      dispatch(setTempNewReply({ parentId, reply: result }));
+      const currentVisibleCount = (replyPages[parentId] || 1) * 5;
+
+      if (
+        !visibleReplies[parentId] ||
+        visibleReplies[parentId].length < currentVisibleCount
+      ) {
+        dispatch(setTempNewReply({ parentId, reply: result }));
+      }
       dispatch(setComments([result]));
 
       // 답글 작성 후 답글 보기 켜기
-      if (!showRepliesFor.has(comment.id)) {
-        setShowRepliesFor((prev) => {
-          const next = new Set(prev);
-          next.add(comment.id);
-          return next;
-        });
+      if (!showRepliesFor.includes(comment.id)) {
+        dispatch(toggleShowReplies(comment.id));
       }
+
+      showSnackbar({
+        message: '답글 작성에 성공했습니다.',
+        severity: 'success',
+      });
     } catch (error) {
       showSnackbar({
         message: '답글 작성에 실패했습니다. 다시 시도해주세요.',
@@ -107,15 +122,7 @@ const CommentItem = ({
 
   // 답글 보기 토글
   const handleToggleReplies = (commentId: string) => {
-    setShowRepliesFor((prev) => {
-      const next = new Set(prev);
-      if (next.has(commentId)) {
-        next.delete(commentId);
-      } else {
-        next.add(commentId);
-      }
-      return next;
-    });
+    dispatch(toggleShowReplies(commentId));
   };
 
   const isLiked = useMemo(() => {
@@ -199,10 +206,6 @@ const CommentItem = ({
     }
     setIsEditing(false);
   };
-
-  const replyCount = useMemo(() => {
-    return currentComments.filter((c) => c.parentId === comment.id).length;
-  }, [currentComments, comment.id]);
 
   return (
     <Box sx={{ display: 'flex', mb: 2, width: '100%' }}>
@@ -319,7 +322,7 @@ const CommentItem = ({
             >
               답글 달기
             </Button>
-            {comment.parentId === null && replyCount > 0 && (
+            {comment.parentId === null && repliesCount > 0 && (
               <Button
                 size="small"
                 sx={{
@@ -334,8 +337,8 @@ const CommentItem = ({
                 }}
                 onClick={() => handleToggleReplies?.(comment.id)}
               >
-                답글 {replyCount}개{' '}
-                {showRepliesFor.has(comment.id) ? '숨기기' : '보기'}
+                답글 {repliesCount}개{' '}
+                {showRepliesFor.includes(comment.id) ? '숨기기' : '보기'}
               </Button>
             )}
           </Box>

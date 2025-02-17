@@ -6,6 +6,11 @@ export interface PostingCommentsState {
   hasMore: boolean;
   page: number;
   tempNewReplies: { [key: string]: Comment };
+  showRepliesFor: string[];
+  replyPages: { [key: string]: number };
+  visibleReplies: {
+    [parentId: string]: Comment[];
+  };
 }
 
 const initialState: PostingCommentsState = {
@@ -13,6 +18,9 @@ const initialState: PostingCommentsState = {
   hasMore: true,
   page: 1,
   tempNewReplies: {},
+  showRepliesFor: [],
+  replyPages: {},
+  visibleReplies: {},
 };
 
 const postingCommentsSlice = createSlice({
@@ -158,6 +166,48 @@ const postingCommentsSlice = createSlice({
     clearTempNewReply(state, action: PayloadAction<string>) {
       delete state.tempNewReplies[action.payload];
     },
+
+    toggleShowReplies(state, action: PayloadAction<string>) {
+      const commentId = action.payload;
+      const index = state.showRepliesFor.indexOf(commentId);
+      console.log('toggle');
+
+      if (index === -1) {
+        state.showRepliesFor.push(commentId);
+        // 답글 페이지 초기화
+        state.replyPages[commentId] = 1;
+        state.visibleReplies[commentId] = [];
+      } else {
+        state.showRepliesFor.splice(index, 1);
+        // 답글 페이지 상태 제거
+        delete state.replyPages[commentId];
+        delete state.visibleReplies[commentId];
+      }
+    },
+    incrementReplyPage(state, action: PayloadAction<string>) {
+      const commentId = action.payload;
+      state.replyPages[commentId] = (state.replyPages[commentId] || 1) + 1;
+    },
+
+    clearRepliesState(state) {
+      state.showRepliesFor = [];
+      state.replyPages = {};
+      state.visibleReplies = {};
+    },
+
+    updateVisibleReplies(
+      state,
+      action: PayloadAction<{ parentId: string; replies: Comment[] }>,
+    ) {
+      const { parentId, replies } = action.payload;
+      const existingReplies = state.visibleReplies[parentId] || [];
+      // 새로운 답글만 추가
+      const newReplies = replies.filter(
+        (newReply) =>
+          !existingReplies.some((existing) => existing.id === newReply.id),
+      );
+      state.visibleReplies[parentId] = [...existingReplies, ...newReplies];
+    },
   },
 });
 
@@ -171,6 +221,10 @@ export const {
   editComment,
   setTempNewReply,
   clearTempNewReply,
+  toggleShowReplies,
+  incrementReplyPage,
+  clearRepliesState,
+  updateVisibleReplies,
 } = postingCommentsSlice.actions;
 
 export default postingCommentsSlice.reducer;

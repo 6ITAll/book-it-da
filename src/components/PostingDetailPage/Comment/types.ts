@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 export interface Comment {
   id: string;
   createdAt: string;
@@ -32,8 +30,6 @@ export interface CommentInputProps {
 export interface CommentItemProps {
   comment: Comment;
   postId: string;
-  showRepliesFor: Set<string>;
-  setShowRepliesFor: Dispatch<SetStateAction<Set<string>>>;
 }
 
 export interface TagCommentProps {

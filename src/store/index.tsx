@@ -117,6 +117,7 @@ export const store = configureStore({
       followApi.middleware,
       likeApi.middleware,
       userProfileStatsApi.middleware,
+      avatarUrlApi.middleware,
     ]),
 });
 

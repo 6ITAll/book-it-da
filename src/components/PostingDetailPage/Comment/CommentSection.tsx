@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Box, Typography, Divider, Button } from '@mui/material';
+import { useEffect, useCallback, useMemo } from 'react';
+import { Box, Typography, Divider } from '@mui/material';
 import CommentItem from './CommentItem';
 import CommentInput from './CommentInput';
 
@@ -12,13 +12,17 @@ import {
 } from '@features/PostDetailPage/api/commentApi';
 import {
   clearComments,
-  clearTempNewReply,
+  clearRepliesState,
+  incrementReplyPage,
   setComments,
   setHasMore,
   setPage,
 } from '@features/PostDetailPage/slice/commentSlice';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import LoadMoreRepliesButton from './LoadMoreRepliesButton';
+import CommentReplies from './CommentReplies';
+import TempNewReply from './TempNewReply';
 
 export interface Like {
   userId: string;
@@ -33,6 +37,7 @@ export interface Comment {
   content: string;
   parentId: string | null;
   isEdited: boolean;
+  isDeleted: boolean;
   user: {
     id: string;
     username: string;
@@ -43,8 +48,8 @@ export interface Comment {
   isLiked: boolean;
 }
 
-const ITEMS_PER_PAGE = 10;
-const REPLIES_PER_PAGE = 5;
+const COMMENTS_PER_PAGE = 10;
+// const REPLIES_PER_PAGE = 5;
 
 const CommentSection = ({ postId }: { postId: string }) => {
   const currentUserId = useSelector(
@@ -52,22 +57,15 @@ const CommentSection = ({ postId }: { postId: string }) => {
   );
   const dispatch = useDispatch();
 
-  const { comments, hasMore, page } = useSelector(
+  const { comments, hasMore, page, showRepliesFor, replyPages } = useSelector(
     (state: RootState) => state.postingComments,
   );
-
-  const { tempNewReplies } = useSelector(
-    (state: RootState) => state.postingComments,
-  );
-
-  const [showRepliesFor, setShowRepliesFor] = useState<Set<string>>(new Set());
-  const [replyPages, setReplyPages] = useState<{ [key: string]: number }>({});
 
   const { data: fetchedComments = [], isLoading } = useGetCommentsQuery(
     {
       postId,
       page,
-      limit: ITEMS_PER_PAGE,
+      limit: COMMENTS_PER_PAGE,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -82,6 +80,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
     dispatch(clearComments());
     dispatch(setPage(1));
     dispatch(setHasMore(true));
+    dispatch(clearRepliesState());
   }, [postId, dispatch]);
 
   useEffect(() => {
@@ -92,7 +91,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
       );
       if (hasNewComments) {
         dispatch(setComments(fetchedComments));
-        dispatch(setHasMore(fetchedComments.length === ITEMS_PER_PAGE));
+        dispatch(setHasMore(fetchedComments.length === COMMENTS_PER_PAGE));
       }
     }
   }, [fetchedComments, comments, dispatch]);
@@ -135,54 +134,11 @@ const CommentSection = ({ postId }: { postId: string }) => {
     }
   };
 
-  const getReplies = useCallback(
-    (parentId: string) => {
-      const currentPage = replyPages[parentId] || 1;
-      return comments
-        .filter((comment) => comment.parentId === parentId)
-        .sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        ) // 오래된 순으로 정렬
-        .slice(0, currentPage * REPLIES_PER_PAGE);
-    },
-    [comments, replyPages],
-  );
-
   const handleLoadMoreReplies = useCallback(
     (commentId: string) => {
-      const nextPage = (replyPages[commentId] || 1) + 1;
-      const willBeVisibleReplies = comments
-        .filter((c) => c.parentId === commentId)
-        .sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        )
-        .slice(0, nextPage * REPLIES_PER_PAGE);
-
-      // 임시 답글이 이제 보이게 되는지 확인
-      if (
-        tempNewReplies[commentId] &&
-        willBeVisibleReplies.some(
-          (reply) => reply.id === tempNewReplies[commentId].id,
-        )
-      ) {
-        dispatch(clearTempNewReply(commentId));
-      }
-
-      setReplyPages((prev) => ({
-        ...prev,
-        [commentId]: nextPage,
-      }));
+      dispatch(incrementReplyPage(commentId));
     },
-    [comments, replyPages, tempNewReplies, dispatch],
-  );
-
-  const getTotalReplies = useCallback(
-    (parentId: string) => {
-      return comments.filter((comment) => comment.parentId === parentId).length;
-    },
-    [comments],
+    [dispatch],
   );
 
   return (
@@ -206,63 +162,23 @@ const CommentSection = ({ postId }: { postId: string }) => {
           gridSize={{ xs: 12, md: 12 }}
           renderItem={(comment) => (
             <>
-              <CommentItem
-                key={comment.id}
-                comment={comment}
-                postId={postId}
-                showRepliesFor={showRepliesFor}
-                setShowRepliesFor={setShowRepliesFor}
-              />
-              {showRepliesFor.has(comment.id) && (
+              <CommentItem key={comment.id} comment={comment} postId={postId} />
+              {showRepliesFor.includes(comment.id) && (
                 <Box sx={{ ml: 5 }}>
-                  {/* 임시로 보여주는 새 댓글 (답글이 많아서 내 댓글이 가려졌을 때만*/}
-                  {tempNewReplies[comment.id] &&
-                    comments
-                      .filter((c) => c.parentId === comment.id)
-                      .sort(
-                        (a, b) =>
-                          new Date(a.createdAt).getTime() -
-                          new Date(b.createdAt).getTime(),
-                      )
-                      .findIndex(
-                        (reply) => reply.id === tempNewReplies[comment.id].id,
-                      ) >=
-                      (replyPages[comment.id] || 1) * REPLIES_PER_PAGE && (
-                      <CommentItem
-                        key={`temp-${tempNewReplies[comment.id].id}`}
-                        comment={tempNewReplies[comment.id]}
+                  {!comment.parentId && (
+                    <>
+                      <TempNewReply
+                        parentId={comment.id}
                         postId={postId}
-                        showRepliesFor={showRepliesFor}
-                        setShowRepliesFor={setShowRepliesFor}
+                        currentPage={replyPages[comment.id] || 1}
                       />
-                    )}
-                  {getReplies(comment.id).map((reply) => (
-                    <CommentItem
-                      key={reply.id}
-                      comment={reply}
-                      postId={postId}
-                      showRepliesFor={showRepliesFor}
-                      setShowRepliesFor={setShowRepliesFor}
-                    />
-                  ))}
-                  {getTotalReplies(comment.id) >
-                    (replyPages[comment.id] || 1) * REPLIES_PER_PAGE && (
-                    <Button
-                      onClick={() => handleLoadMoreReplies(comment.id)}
-                      sx={{
-                        mt: 1,
-                        color: 'text.secondary',
-                        backgroundColor: 'transparent',
-                        '&:hover': {
-                          backgroundColor: 'transparent',
-                        },
-                      }}
-                    >
-                      답글{' '}
-                      {getTotalReplies(comment.id) -
-                        (replyPages[comment.id] || 1) * REPLIES_PER_PAGE}
-                      개 더보기
-                    </Button>
+                      <CommentReplies parentId={comment.id} postId={postId} />
+                      <LoadMoreRepliesButton
+                        parentId={comment.id}
+                        currentPage={replyPages[comment.id] || 1}
+                        onLoadMore={handleLoadMoreReplies}
+                      />
+                    </>
                   )}
                 </Box>
               )}

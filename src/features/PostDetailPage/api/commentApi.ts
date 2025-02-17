@@ -6,7 +6,7 @@ import { DbComment, DbCommentCount, Comment } from '../types/types';
 export const commentApi = createApi({
   reducerPath: 'commentApi',
   baseQuery: fakeBaseQuery(),
-  tagTypes: ['Comments', 'CommentCount', 'CommentLike'],
+  tagTypes: ['Comments', 'CommentCount', 'CommentLike', 'Replies'],
   endpoints: (builder) => ({
     // 댓글 조회
     getComments: builder.query<
@@ -30,6 +30,7 @@ export const commentApi = createApi({
               `,
             )
             .eq('post_id', postId)
+            .is('parent_id', null)
             .order('created_at', { ascending: false })
             .range(offset, offset + limit - 1)) as PostgrestResponse<DbComment>;
 
@@ -62,6 +63,84 @@ export const commentApi = createApi({
       },
       providesTags: (_, __, { postId }) => [
         { type: 'Comments', id: `Comments-${postId}` },
+      ],
+    }),
+
+    getReplies: builder.query<
+      Comment[],
+      { postId: string; parentId: string; page: number; limit: number }
+    >({
+      async queryFn({ postId, parentId, page, limit }) {
+        try {
+          const offset = (page - 1) * limit;
+
+          const { data, error } = (await supabase
+            .from('posting_comment_with_likes')
+            .select(
+              `
+                *,
+                user:user_id (
+                  id,
+                  username,
+                  avatar_url
+                )
+              `,
+            )
+            .eq('post_id', postId)
+            .eq('parent_id', parentId)
+            .order('created_at', { ascending: true })
+            .range(offset, offset + limit - 1)) as PostgrestResponse<DbComment>;
+
+          if (error) throw error;
+
+          const replies: Comment[] = (data as DbComment[]).map((comment) => ({
+            id: comment.id,
+            createdAt: comment.created_at,
+            updatedAt: comment.updated_at,
+            postId: comment.post_id,
+            userId: comment.user_id,
+            content: comment.content,
+            parentId: comment.parent_id,
+            isEdited: comment.is_edited,
+            isDeleted: comment.is_deleted,
+            user: {
+              id: comment.user.id,
+              username: comment.user.username,
+              avatarUrl: comment.user.avatar_url,
+            },
+            likesCount: comment.likes_count || 0,
+            likes: comment.likes || [],
+            isLiked: false,
+          }));
+
+          return { data: replies };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: (_, __, { postId, parentId }) => [
+        { type: 'Comments', id: `Replies-${postId}-${parentId}` },
+      ],
+    }),
+
+    getRepliesCount: builder.query<number, { parentId: string }>({
+      async queryFn({ parentId }) {
+        try {
+          const { count, error } = await supabase
+            .from('posting_comment')
+            .select('*', { count: 'exact', head: true })
+            .eq('parent_id', parentId)
+            .not('is_deleted', 'eq', true);
+
+          if (error) throw error;
+
+          return { data: count || 0 };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: (_, __, { parentId }) => [
+        { type: 'CommentCount', id: `RepliesCount-${parentId}` },
       ],
     }),
 
@@ -120,9 +199,11 @@ export const commentApi = createApi({
           return { error };
         }
       },
-      invalidatesTags: (_, __, { postId }) => [
+      invalidatesTags: (_, __, { postId, parentId }) => [
         { type: 'Comments', id: `Comments-${postId}` },
+        { type: 'Comments', id: `Replies-${postId}-${parentId}` },
         { type: 'CommentCount', id: postId },
+        { type: 'CommentCount', id: `RepliesCount-${parentId}` },
       ],
     }),
 
@@ -304,6 +385,8 @@ export const commentApi = createApi({
 
 export const {
   useGetCommentsQuery,
+  useGetRepliesQuery,
+  useGetRepliesCountQuery,
   useCreateCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
