@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { UserInfo } from '@features/user/userSlice';
 import {
+  clearTempNewReply,
   editComment,
   removeComment,
   setComments,
@@ -104,9 +105,11 @@ const CommentItem = ({ comment, postId, isTemp = false }: CommentItemProps) => {
       const currentVisibleCount =
         (replyPages[parentId] || 1) * REPLIES_PER_PAGE;
 
+      dispatch(clearTempNewReply(parentId));
+
       if (
-        !visibleReplies[parentId] ||
-        visibleReplies[parentId].length < currentVisibleCount
+        visibleReplies[parentId] &&
+        visibleReplies[parentId].length >= currentVisibleCount
       ) {
         dispatch(setTempNewReply({ parentId, reply: result }));
       }
