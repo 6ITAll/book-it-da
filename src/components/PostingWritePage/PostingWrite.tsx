@@ -20,7 +20,6 @@ const PostingWrite = () => {
   const isEditing = location.pathname.includes('/posting/edit');
   // 상세페이지에서 포스팅 작성 누를 시 책 정보 가져옴
   const bookFromDetail = location.state?.book as Book;
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedBook, setSelectedBook] = useState<Book | null>(
     bookFromDetail || null,
   );
@@ -111,8 +110,6 @@ const PostingWrite = () => {
         <BookSearchPopover
           anchorEl={anchorEl}
           onClose={handleClose}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
           selectedBook={selectedBook}
           setSelectedBook={setSelectedBook}
         />
