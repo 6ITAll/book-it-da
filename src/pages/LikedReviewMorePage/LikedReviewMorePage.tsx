@@ -1,41 +1,64 @@
-import { useState, useEffect } from 'react';
-import { Review } from '@shared/types/type';
 import ReviewMorePageTemplate from '@components/ReviewMorePage/ReviewMorePageTemplate';
-import { useGetLikedPaginatedFeedsQuery } from '@features/MyPage/api/userFeedsApi';
+import {
+  useGetLikedOneLineReviewsQuery,
+  useGetUserLikedCountsQuery,
+} from '@features/MyPage/api/userLikedFeedsApi';
+import {
+  clearReviews,
+  setHasMore,
+  setPage,
+  setReviews,
+} from '@features/MyPage/slice/likedReviewMoreSlice';
+import { RootState } from '@store/index';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 const LikedReviewMorePage = (): JSX.Element => {
-  const [reviews, setReviews] = useState<Review[]>([]); // 가져온 리뷰 데이터
-  const [page, setPage] = useState(1); // 현재 페이지
-  const [hasMore, setHasMore] = useState(true); // 추가 데이터 여부
+  const { username } = useParams<{ username: string }>();
+  const dispatch = useDispatch();
 
-  const { data, isLoading, isError } = useGetLikedPaginatedFeedsQuery({
-    userId: 'user',
-    feedType: 'review',
-    page,
+  const { reviews, hasMore, page } = useSelector(
+    (state: RootState) => state.likedReviews,
+  );
+
+  const limit = 10;
+
+  const { data: likedCount } = useGetUserLikedCountsQuery({
+    username: username || '',
   });
 
-  useEffect(() => {
-    if (data?.feeds) {
-      const newReviews = data.feeds.filter(
-        (feed): feed is Review => 'username' in feed,
-      );
-      setReviews((prevReviews) => [...prevReviews, ...newReviews]);
-      setHasMore(reviews.length + newReviews.length < data.totalFeeds);
-    }
-    // eslint-disable-next-line
-  }, [data]);
+  const { data: fetchedData, isLoading } = useGetLikedOneLineReviewsQuery(
+    { username: username || '', page, limit },
+    { skip: !username },
+  );
 
-  const fetchMoreData = () => {
-    if (!isLoading && !isError && hasMore) {
-      setPage((prevPage) => prevPage + 1);
+  useEffect(() => {
+    dispatch(clearReviews());
+    dispatch(setPage(1));
+    dispatch(setHasMore(true));
+  }, [username, dispatch]);
+
+  useEffect(() => {
+    if (fetchedData) {
+      dispatch(setReviews(fetchedData));
+      dispatch(setHasMore(fetchedData.length === limit));
     }
-  };
+  }, [fetchedData, dispatch]);
+
+  const fetchMoreData = useCallback(() => {
+    if (!isLoading && hasMore) {
+      dispatch(setPage(page + 1));
+    }
+  }, [isLoading, hasMore, page, dispatch]);
 
   return (
     <ReviewMorePageTemplate
+      totalReviews={likedCount?.totalLikedReviewsCount ?? 0}
       reviews={reviews}
       hasMore={hasMore}
       fetchMoreData={fetchMoreData}
+      likedReview={true}
     />
   );
 };

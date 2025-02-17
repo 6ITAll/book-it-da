@@ -1,4 +1,4 @@
-import { Button, Stack, Typography, useTheme, Divider } from '@mui/material';
+import { Button, Stack, Typography, useTheme, Box } from '@mui/material';
 import HybridDialog from '../commons/HybridDialog/HybridDialog';
 import { useState } from 'react';
 import FollowList from './FollowList';
@@ -8,7 +8,9 @@ interface UserInfoSummaryProps {
   count: number;
   label: string;
   isAction?: boolean;
-  type?: 'followers' | 'followings'; //추가
+  type?: 'followers' | 'followings';
+  userId: string;
+  onRefetch: () => void;
 }
 
 const UserInfoSummary = ({
@@ -16,23 +18,29 @@ const UserInfoSummary = ({
   label,
   isAction,
   type,
+  userId,
+  onRefetch,
 }: UserInfoSummaryProps) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
 
   return (
     <Stack
-      divider={<Divider orientation="vertical" flexItem />}
       direction="row"
       alignItems="center"
+      justifyContent="center"
       sx={{
-        margin: '0 !important', // 최상위 Stack margin 제거
+        margin: '0 !important',
+        width: '60px',
+        height: '60px',
+        textAlign: 'center',
       }}
     >
       <Stack
-        component={isAction ? Button : 'div'}
+        component={isAction ? Button : Box}
         alignItems="center"
-        minWidth={64}
+        justifyContent="center"
+        minWidth={60}
         onClick={
           isAction
             ? () => {
@@ -40,23 +48,32 @@ const UserInfoSummary = ({
               }
             : undefined
         }
-        sx={
-          isAction
+        sx={{
+          width: '100%',
+          height: '100%',
+          ...(isAction
             ? label === '팔로잉'
               ? userInfoStyles.userInfoButtonFollowing(theme)
               : userInfoStyles.userInfoButtonFollower(theme)
-            : {}
-        }
+            : {}),
+        }}
       >
-        <Typography>{count}</Typography>
-        <Typography>{label}</Typography>
+        <Typography variant="h6">{count}</Typography>
+        <Typography variant="body2">{label}</Typography>
       </Stack>
       {isAction && type && (
         <HybridDialog
           open={open}
           setOpen={setOpen}
           title={label}
-          contentNode={<FollowList setOpen={setOpen} type={type} />}
+          contentNode={
+            <FollowList
+              setOpen={setOpen}
+              type={type}
+              userId={userId}
+              onRefetch={onRefetch}
+            />
+          }
         />
       )}
     </Stack>

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   Container,
   Typography,
@@ -7,164 +6,182 @@ import {
   Button,
   Stack,
   IconButton,
-  styled,
+  Input,
 } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@store/index';
-import { Account } from '@features/user/types';
+import { RootState } from '@store/index';
 import {
-  useDeleteAvatarMutation,
-  useGetUserInfoQuery,
-  useUpdateUserInfoMutation,
-  useUploadAvatarMutation,
+  useDeleteAccountMutation,
+  useDeleteAvatarFileMutation,
+  useGetUserByIdQuery,
+  useUpdateAvatarMutation,
+  useUpdateFieldMutation,
 } from '@features/user/userApi';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
+import { setAvatarUrl } from '@features/user/userSlice';
+import BirthDatePicker from '@components/LoginSignupPage/Signup/BirthDatePicker';
 
 const EditAccountPage = (): JSX.Element => {
-  const mockUserId = 'user';
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userId = userInfo?.id;
+  const dispatch = useDispatch();
 
-  const [userInfoState, setUserInfoState] = useState<Account>({
-    userId: '',
-    password: '',
-    name: '',
-    phone: '',
-    avatarUrl: '',
+  const { data, refetch } = useGetUserByIdQuery(userId || '', {
+    skip: !userId,
   });
 
-  const checkedPassword = useSelector(
-    (state: RootState) => state.user.checkedPassword,
-  );
+  const [updateField] = useUpdateFieldMutation();
+  const [updateAvatar] = useUpdateAvatarMutation();
+  const [deleteAvatar] = useDeleteAvatarFileMutation();
+  const [deleteAccount] = useDeleteAccountMutation();
 
-  const navigate = useNavigate();
-
-  const { data: userInfo } = useGetUserInfoQuery(mockUserId);
-  const [updateUserInfo] = useUpdateUserInfoMutation();
-  const [uploadAvatar] = useUploadAvatarMutation();
-  const [deleteAvatar] = useDeleteAvatarMutation();
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    if (!checkedPassword) navigate('/edit-account/passwordChk');
-  }, [checkedPassword, navigate]);
-
-  useEffect(() => {
-    if (userInfo) {
-      setUserInfoState({ ...userInfo, password: '' });
-    }
-  }, [userInfo]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInfoState((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (field: string) => {
+  // 단일 필드 업데이트 핸들러
+  const handleSubmit = async (fieldName: keyof typeof data) => {
+    const stringFieldName = String(fieldName);
     try {
-      const response = await updateUserInfo({
-        userId: mockUserId,
-        field,
-        value: userInfoState[field as keyof typeof userInfoState],
+      if (!data || !userId) return;
+
+      const newValue = (
+        document.querySelector(
+          `[name="${stringFieldName}"]`,
+        ) as HTMLInputElement
+      )?.value;
+
+      const result = await updateField({
+        userId,
+        fieldName,
+        value: newValue,
       }).unwrap();
-      dispatch(
-        showSnackbar({ message: response.message, severity: 'success' }),
-      );
-      if (field === '비밀번호') {
-        setUserInfoState((prev) => ({ ...prev, password: '' }));
+
+      if (result) {
+        dispatch(
+          showSnackbar({
+            message: `${stringFieldName}이(가) 성공적으로 업데이트되었습니다.`,
+            severity: 'success',
+          }),
+        );
+        refetch();
       }
     } catch (err) {
-      const error = err as FetchBaseQueryError;
-
+      console.error(`${stringFieldName} 업데이트 중 오류가 발생했습니다.`, err);
       dispatch(
         showSnackbar({
-          message: (error.data as { message: string }).message,
+          message: `${stringFieldName} 업데이트 중 오류가 발생했습니다.`,
           severity: 'error',
         }),
       );
     }
   };
 
+  // 아바타 업로드 핸들러
   const handleAvatarUpload = async (file: File) => {
     try {
-      const response = await uploadAvatar({
-        userId: mockUserId,
-        file,
-      }).unwrap();
+      if (!userId) return;
 
-      setUserInfoState((prev) => ({ ...prev, avatarUrl: response.avatarUrl }));
-      dispatch(
-        showSnackbar({
-          message: response.message,
-          severity: 'success',
-        }),
-      );
+      const updatedAvatarUrl = await updateAvatar({ userId, file }).unwrap();
+
+      if (updatedAvatarUrl) {
+        dispatch(setAvatarUrl(updatedAvatarUrl));
+
+        dispatch(
+          showSnackbar({
+            message: `프로필 사진이 업데이트 되었습니다.`,
+            severity: 'success',
+          }),
+        );
+        refetch();
+      }
     } catch (err) {
-      const error = err as FetchBaseQueryError;
       dispatch(
         showSnackbar({
-          message: (error.data as { message: string }).message,
+          message: `프로필 사진 업데이트 중 오류가 발생했습니다.`,
           severity: 'error',
         }),
       );
+      console.error('프로필 사진 업로드 실패:', err);
     }
   };
 
+  // 아바타 삭제 핸들러
   const handleAvatarDelete = async () => {
     try {
-      const response = await deleteAvatar(mockUserId).unwrap();
-      setUserInfoState((prev) => ({ ...prev, avatarUrl: '' }));
+      if (!data?.avatar_url || !userId) return;
+
+      await deleteAvatar({ userId, avatarUrl: data.avatar_url }).unwrap();
+      dispatch(setAvatarUrl(''));
       dispatch(
         showSnackbar({
-          message: response.message,
+          message: `프로필 사진이 삭제되었습니다.`,
           severity: 'success',
         }),
       );
+      refetch();
     } catch (err) {
-      const error = err as FetchBaseQueryError;
       dispatch(
         showSnackbar({
-          message: (error.data as { message: string }).message,
+          message: `프로필 사진 삭제 중 오류가 발생했습니다.`,
           severity: 'error',
         }),
       );
+      console.error('아바타 삭제 실패:', err);
     }
   };
+
+  const handleAccountDeletion = async () => {
+    if (!userId) return;
+
+    const confirmation = window.confirm(
+      '정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+    );
+
+    if (!confirmation) return;
+
+    try {
+      const result = await deleteAccount({ userId }).unwrap();
+
+      if (result) {
+        dispatch(
+          showSnackbar({
+            message: '계정이 성공적으로 삭제되었습니다.',
+            severity: 'success',
+          }),
+        );
+
+        window.location.href = '/';
+      }
+    } catch (err) {
+      dispatch(
+        showSnackbar({
+          message: '계정 삭제 중 오류가 발생했습니다.',
+          severity: 'error',
+        }),
+      );
+      console.error('계정 삭제 실패:', err);
+    }
+  };
+
+  if (!data) return <Typography>로딩 중...</Typography>;
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>
+      {/* 아바타 섹션 */}
       <Stack alignItems="center" spacing={1} mb={3}>
         <Avatar
-          src={userInfoState.avatarUrl}
+          src={data.avatar_url}
           alt="avatar"
-          sx={{
-            width: 96,
-            height: 96,
-          }}
+          sx={{ width: 96, height: 96 }}
         />
         <Stack direction="row" spacing={1}>
           <IconButton component="label">
             <CameraAltIcon />
-            <VisuallyHiddenInput
+            <input
               type="file"
+              style={{ display: 'none' }}
               onChange={(event) => {
-                if (event.target.files) {
+                if (event.target.files)
                   handleAvatarUpload(event.target.files[0]);
-                }
               }}
             />
           </IconButton>
@@ -174,84 +191,111 @@ const EditAccountPage = (): JSX.Element => {
         </Stack>
       </Stack>
 
-      <Stack>
-        <Stack alignItems="center">
-          <Typography variant="h6" fontWeight="bold" mb={4}>
-            개인정보 수정
-          </Typography>
-        </Stack>
-
-        <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-          회원 정보
+      {/* 개인정보 수정 섹션 */}
+      <Stack gap={3}>
+        <Typography variant="h6" fontWeight="bold">
+          개인정보 수정
         </Typography>
 
-        <Stack direction="row" alignItems="center" spacing={1} mb={3}>
+        {/* 이메일 (읽기 전용) */}
+        <TextField
+          fullWidth
+          label="이메일"
+          name="email"
+          defaultValue={data.email || ''}
+          disabled
+        />
+
+        {/* 닉네임 */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <TextField
+            fullWidth
+            label="닉네임"
+            name="username"
+            defaultValue={data.username || ''}
+          />
+          <Button variant="contained" onClick={() => handleSubmit('username')}>
+            변경
+          </Button>
+        </Stack>
+
+        {/* 이름 */}
+        <Stack direction="row" alignItems="center" spacing={1}>
           <TextField
             fullWidth
             label="이름"
             name="name"
-            value={userInfoState.name}
-            onChange={handleChange}
+            defaultValue={data.name || ''}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ width: '100px', height: '50px' }}
-            onClick={() => handleSubmit('이름')}
-          >
-            변경하기
+          <Button variant="contained" onClick={() => handleSubmit('name')}>
+            변경
           </Button>
         </Stack>
 
-        <Stack direction="row" alignItems="center" spacing={1} mb={3}>
+        {/* 전화번호 */}
+        <Stack direction="row" alignItems="center" spacing={1}>
           <TextField
             fullWidth
             label="휴대폰 번호"
             name="phone"
-            value={userInfoState.phone}
-            onChange={handleChange}
+            defaultValue={data.phone || ''}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ width: '100px', height: '50px' }}
-            onClick={() => handleSubmit('휴대폰 번호')}
-          >
-            변경하기
+          <Button variant="contained" onClick={() => handleSubmit('phone')}>
+            변경
           </Button>
         </Stack>
 
-        <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-          계정 정보
-        </Typography>
+        {/* 나이 */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <BirthDatePicker
+            value={data.birth_date || ''}
+            onChange={(newDate) => {
+              const input = document.querySelector(
+                '[name="birth_date"]',
+              ) as HTMLInputElement;
+              input.value = newDate;
+            }}
+          />
+          <Input
+            type="hidden"
+            name="birth_date"
+            defaultValue={data.birth_date || ''}
+          />
+          <Button
+            variant="contained"
+            onClick={() => handleSubmit('birth_date')}
+          >
+            변경
+          </Button>
+        </Stack>
 
-        <TextField
-          sx={{ mb: 3 }}
-          fullWidth
-          label="아이디"
-          name="userId"
-          value={userInfoState.userId}
-          disabled
-        />
-
-        <Stack direction="row" alignItems="center" spacing={1} mb={3}>
+        <Stack direction="row" alignItems="center" spacing={1}>
           <TextField
             fullWidth
-            type="password"
-            label="비밀번호"
-            name="password"
-            value={userInfoState.password}
-            onChange={handleChange}
+            label="소개"
+            name="about"
+            defaultValue={data.about || ''}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ width: '100px', height: '50px' }}
-            onClick={() => handleSubmit('비밀번호')}
-          >
-            변경하기
+          <Button variant="contained" onClick={() => handleSubmit('about')}>
+            변경
           </Button>
         </Stack>
+        <Button
+          variant="outlined"
+          startIcon={<DeleteIcon />}
+          onClick={handleAccountDeletion}
+          // UI 수정 필요
+          sx={{
+            backgroundColor: '#ff0000',
+            border: 'none',
+            color: '#ffffff',
+            '&:hover': {
+              backgroundColor: '#cc0000',
+            },
+          }}
+        >
+          회원 탈퇴
+        </Button>
       </Stack>
     </Container>
   );

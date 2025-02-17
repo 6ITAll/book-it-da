@@ -1,102 +1,79 @@
 import TabSection from '@components/MyPage/TabSection';
 import UserInfoSection from '@components/MyPage/UserInfoSection';
+import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
 import { Container, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { followsData } from 'src/mocks/handlers/follow';
-import { useGetKakaoUserInfoQuery } from '@features/SNSLogin/api/Kakaoapi';
-
-interface UserInfo {
-  userId: string;
-  name: string;
-  avatarUrl: string;
-  about?: string;
-  userStats?: Array<{ count: number; label: string; isAction?: boolean }>;
-}
+import { RootState } from '@store/index';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 
 const MyPage = (): JSX.Element => {
-  const { userId: urlUserId } = useParams<{ userId: string }>();
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [kakaoAccessToken, setKakaoAccessToken] = useState<string | null>(null);
+  const { username } = useParams<{ username: string }>();
+  const currentUsername = useSelector(
+    (state: RootState) => state.user.userInfo?.username,
+  );
+  const location = useLocation();
 
-  const { data: kakaoUserInfo, error: kakaoError } = useGetKakaoUserInfoQuery(
-    kakaoAccessToken ?? '',
-    {
-      skip: !kakaoAccessToken,
-    },
+  const { data, error, isLoading, refetch } = useGetUserProfileStatsQuery(
+    username || '',
   );
 
   useEffect(() => {
-    const fetchUserInfo = () => {
-      // 카카오 로그인(로컬스토리지)
-      const storedKakaoAccessToken = localStorage.getItem('kakaoAccessToken');
-      if (storedKakaoAccessToken) {
-        setKakaoAccessToken(storedKakaoAccessToken);
-        return;
-      }
-
-      // 일반 로그인
-      const storedUserInfo = localStorage.getItem('userInfo');
-      if (storedUserInfo) {
-        const users = JSON.parse(storedUserInfo);
-        if (users.length > 0) {
-          setUserInfo(users[0]);
-          return;
-        }
-      }
-
-      // 팔로우 사용자 정보 확인
-      if (urlUserId) {
-        const follower = followsData.followers.find(
-          (user) => user.userId === urlUserId,
-        );
-        const following = followsData.followings.find(
-          (user) => user.userId === urlUserId,
-        );
-        if (follower) {
-          setUserInfo(follower);
-          return;
-        }
-        if (following) {
-          setUserInfo(following);
-          return;
-        }
-      }
-
-      setUserInfo(null);
-    };
-
-    fetchUserInfo();
-  }, [urlUserId]);
-
-  useEffect(() => {
-    //실제 카카오 api
-    if (kakaoUserInfo) {
-      setUserInfo({
-        userId: kakaoUserInfo.userId.toString(),
-        name: kakaoUserInfo.properties.userName,
-        avatarUrl: kakaoUserInfo.properties.avatarUrl,
-      });
+    if (location.pathname === `/my-page/${currentUsername}`) {
+      refetch();
     }
-    if (kakaoError) {
-      console.error('Kakao User Info Error:', kakaoError);
-    }
-  }, [kakaoUserInfo, kakaoError]);
+  }, [location, currentUsername, refetch]);
 
-  if (!userInfo) {
+  const userStats = [
+    { count: data?.completed_books_count, label: '읽은책' },
+    { count: data?.post_count, label: '피드' },
+    {
+      count: data?.follower_count,
+      label: '팔로워',
+      isAction: true,
+      type: 'followers' as const,
+    },
+    {
+      count: data?.following_count,
+      label: '팔로잉',
+      isAction: true,
+      type: 'followings' as const,
+    },
+  ];
+
+  if (isLoading) {
     return (
       <Container maxWidth="md">
-        <Typography>
-          사용자 정보를 찾을 수 없습니다. 로그인 후 다시 시도해주세요.
-        </Typography>
+        <Typography>로딩 중...</Typography>
+      </Container>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <Container maxWidth="md">
+        <Typography>사용자 정보를 찾을 수 없습니다.</Typography>
       </Container>
     );
   }
 
   return (
     <Container maxWidth="md">
-      <UserInfoSection userInfo={userInfo} />
-      <TabSection userId={userInfo.userId} />
+      <UserInfoSection
+        userInfo={{
+          id: data?.user_id,
+          name: data?.user_name,
+          avatarUrl: data?.user_avatar_url,
+          about: data?.user_about,
+        }}
+        userStats={userStats}
+        userId={data?.user_id.toString()}
+        onRefetch={refetch}
+        showFollowButton={username !== currentUsername}
+        userIdForFollow={data?.user_id.toString()}
+      />
+      {/* TabSection props username으로 추후 교체 */}
+      <TabSection userId={data?.user_id} username={username || ''} />
     </Container>
   );
 };

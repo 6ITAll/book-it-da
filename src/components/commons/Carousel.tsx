@@ -15,12 +15,22 @@ const Carousel = ({ settings, children }: CarouselProps): JSX.Element => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
     dotsClass: 'slick-dots custom-dots',
     ...settings, // 외부에서 추가 설정 전달
+    slidesToShow: settings?.slidesToShow ?? 4,
+    responsive: settings?.responsive ?? [
+      {
+        breakpoint: 768,
+        settings: { slidesToShow: 2 },
+      },
+      {
+        breakpoint: 1024,
+        settings: { slidesToShow: 3 },
+      },
+    ],
   };
 
   return (

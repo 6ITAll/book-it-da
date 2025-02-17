@@ -1,3 +1,4 @@
+import { userLikedFeedsApi } from '@features/MyPage/api/userLikedFeedsApi';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
 
@@ -67,6 +68,15 @@ export const likeApi = createApi({
         };
       },
       invalidatesTags: (_, __, postId) => [{ type: 'Like', id: postId }],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+
+          dispatch(userLikedFeedsApi.util.invalidateTags(['UserLikedFeeds']));
+        } catch (error) {
+          console.error('Error invalidating UserLikedFeeds cache:', error);
+        }
+      },
     }),
   }),
 });

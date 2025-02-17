@@ -17,6 +17,10 @@ import {
 } from 'src/utils/BookShelvesPage/readingStatusUtils';
 import { navigateToBookDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
+import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
+import { useEffect } from 'react';
+import { updateBookInfo } from '@features/BookShelvesPage/slice/bookShelvesSlice';
+import { useDispatch } from 'react-redux';
 
 interface BookCardProps {
   book: SavedBook;
@@ -25,9 +29,24 @@ interface BookCardProps {
 }
 
 const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
-  const formattedDate = formatDate(book.savedAt);
+  const formattedDate = formatDate(book.addedAt);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
+  const { data: bookInfo } = useSearchBookByIsbnQuery({ isbn: book?.isbn });
+
+  useEffect(() => {
+    if (bookInfo) {
+      dispatch(
+        updateBookInfo({
+          isbn: book.isbn,
+          title: bookInfo.title,
+          author: bookInfo.author,
+          imageUrl: bookInfo.cover,
+        }),
+      );
+    }
+  }, [bookInfo, book.isbn, dispatch]);
 
   return (
     <>
@@ -42,8 +61,8 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             <Box className="book-cover" margin="0 !important">
               <CardMedia
                 component="img"
-                image={book.imageUrl}
-                alt={book.title}
+                image={bookInfo?.cover}
+                alt={bookInfo?.title}
               />
               <Box sx={shelvesBookCardStyles.gridReadingStatusIconBox}>
                 {renderReadingStatusIcon(book.readingStatus)}
@@ -57,7 +76,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
             >
               <Box sx={shelvesBookCardStyles.gridBookTitleBox}>
                 <Typography variant="subtitle1" noWrap sx={{ flex: 1 }}>
-                  {book.title}
+                  {bookInfo?.title}
                 </Typography>
                 <IconButton
                   size="small"
@@ -69,7 +88,7 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
               </Box>
               <Box>
                 <Typography variant="body2" color="text.secondary">
-                  {book.author}
+                  {bookInfo?.author}
                 </Typography>
                 <Typography
                   variant="caption"
@@ -83,17 +102,21 @@ const ShelvesBookCard = ({ book, view, onMenuOpen }: BookCardProps) => {
           </>
         ) : (
           <>
-            <CardMedia component="img" image={book.imageUrl} alt={book.title} />
+            <CardMedia
+              component="img"
+              image={bookInfo?.cover}
+              alt={bookInfo?.title}
+            />
             <Box className="book-info" sx={{ padding: '1rem 1rem !important' }}>
               <Box sx={shelvesBookCardStyles.listBookCardContent}>
                 <Box sx={shelvesBookCardStyles.listBookInfoBox}>
                   {renderReadingStatus(book.readingStatus)}
                   <Box>
                     <Typography variant="h6" noWrap>
-                      {book.title}
+                      {bookInfo?.title}
                     </Typography>
                     <Typography variant="body1" color="text.secondary">
-                      {book.author}
+                      {bookInfo?.author}
                     </Typography>
                     <Typography
                       variant="caption"

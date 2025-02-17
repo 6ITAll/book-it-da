@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Stack, Container } from '@mui/material';
+import { Stack, Container, Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import URLShareDialog from '@components/commons/URLShareDialog';
 import PostingUserInfo from '@components/PostingDetailPage/PostingUserInfo';
 import PostingContent from '@components/PostingDetailPage/PostingContent';
 import PostingHeader from '@components/PostingDetailPage/PostingHeader';
 import OtherPostingGrid from '@components/PostingDetailPage/OtherPostingGrid';
+import CommentSection from '@components/PostingDetailPage/CommentSection';
 import { useGetPostByIdQuery } from '@features/PostDetailPage/api/postingApi';
 import { postingDetailStyles } from '@components/PostingDetailPage/PostingDetail.styles';
 
@@ -39,6 +40,15 @@ const PostingDetailPage = () => {
         {/* 포스팅 정보 */}
         <PostingContent content={post.content} book={post.book} />
       </Stack>
+
+      {/* 간격 추가 */}
+      <Box sx={{ height: '20px' }} />
+
+      {/* 댓글 섹션 */}
+      <Box sx={postingDetailStyles.CommentSectionWrapper}>
+        <CommentSection />
+      </Box>
+
       <Stack sx={{ width: '80%', mt: '1rem', boxSizing: 'border-box' }}>
         <OtherPostingGrid
           type="BookOtherPosting"

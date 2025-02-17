@@ -8,6 +8,8 @@ import { supabase } from '@utils/supabaseClient';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { FeedType, PostType, SavedPosting } from '@shared/types/type';
 import { postingApi } from '@features/PostDetailPage/api/postingApi';
+import { userFeedsApi } from '@features/MyPage/api/userFeedsApi';
+import { bookFeedPreviewApi } from '@features/BookDetailPage/api/bookFeedPreviewApi';
 
 export const postingWriteApi = createApi({
   reducerPath: 'postingWriteApi',
@@ -56,7 +58,20 @@ export const postingWriteApi = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          // 책 한줄평 미리보기 리페치
+          await dispatch(
+            bookFeedPreviewApi.util.invalidateTags(['BookFeedPreview']),
+          );
+          // 유저 페이지 피드 리페치
+          await dispatch(userFeedsApi.util.invalidateTags(['UserFeeds']));
           await dispatch(feedApi.util.invalidateTags(['Posts']));
+          await dispatch(
+            userFeedsApi.endpoints.getAllPostings.initiate({
+              username: '',
+              page: 1,
+              limit: 5,
+            }),
+          );
           const feedTypes: FeedType[] = ['추천', '팔로잉', '팔로워'];
           const postTypes: PostType[] = ['선택안함', '한줄평', '포스팅'];
           for (const feedType of feedTypes) {
@@ -117,7 +132,15 @@ export const postingWriteApi = createApi({
               { type: 'Post', id: args.postingId },
             ]),
           );
+          await dispatch(userFeedsApi.util.invalidateTags(['UserFeeds']));
           await dispatch(feedApi.util.invalidateTags(['Posts']));
+          await dispatch(
+            userFeedsApi.endpoints.getAllPostings.initiate({
+              username: '',
+              page: 1,
+              limit: 5,
+            }),
+          );
           const feedTypes: FeedType[] = ['추천', '팔로잉', '팔로워'];
           const postTypes: PostType[] = ['선택안함', '한줄평', '포스팅'];
           for (const feedType of feedTypes) {

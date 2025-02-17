@@ -1,33 +1,25 @@
 import { Stack, Typography, Avatar } from '@mui/material';
 import UserInfoSummary from './UserInfoSummary';
-
-interface UserInfo {
-  userId: string;
-  name: string;
-  avatarUrl: string;
-}
+import FollowButton from './FollowButton';
+import { UserInfo, UserStat } from './types';
 
 interface UserInfoSectionProps {
   userInfo: UserInfo;
+  userStats: UserStat[];
+  userId: string;
+  onRefetch: () => void;
+  showFollowButton: boolean;
+  userIdForFollow: string;
 }
 
-const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
-  const userStats = [
-    { count: 286, label: '피드' },
-    {
-      count: 842,
-      label: '팔로워',
-      isAction: true,
-      type: 'followers' as const,
-    }, // type 명시
-    {
-      count: 267,
-      label: '팔로잉',
-      isAction: true,
-      type: 'followings' as const,
-    },
-  ];
-
+const UserInfoSection = ({
+  userInfo,
+  userStats,
+  userId,
+  onRefetch,
+  showFollowButton,
+  userIdForFollow,
+}: UserInfoSectionProps): JSX.Element => {
   return (
     <Stack direction="row" alignItems="center" spacing={4} padding={4}>
       <Avatar
@@ -36,9 +28,12 @@ const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
         sx={{ width: 100, height: 100 }}
       />
       <Stack spacing={1}>
-        <Typography variant="h6" fontWeight="bold">
-          {userInfo.name}
-        </Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="h6" fontWeight="bold">
+            {userInfo.name}
+          </Typography>
+          {showFollowButton && <FollowButton userId={userIdForFollow} />}
+        </Stack>
         <Stack direction="row" spacing={2} alignItems="center">
           {userStats.map(({ count, label, isAction, type }) => (
             <UserInfoSummary
@@ -46,12 +41,14 @@ const UserInfoSection = ({ userInfo }: UserInfoSectionProps): JSX.Element => {
               count={count}
               label={label}
               isAction={isAction}
-              type={type} // type prop 전달
+              type={type}
+              userId={userId}
+              onRefetch={onRefetch}
             />
           ))}
         </Stack>
         <Typography variant="body2" color="grey.700">
-          책을 사랑하는 독서가
+          {userInfo.about}
         </Typography>
       </Stack>
     </Stack>
