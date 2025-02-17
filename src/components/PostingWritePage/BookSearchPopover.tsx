@@ -6,16 +6,12 @@ import { Book } from '@shared/types/type';
 export interface BookSearchPopoverProps {
   anchorEl: HTMLElement | null;
   onClose: () => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
   selectedBook: Book | null;
   setSelectedBook: (book: Book | null) => void;
 }
 const BookSearchPopover = ({
   anchorEl,
   onClose,
-  searchQuery,
-  setSearchQuery,
   selectedBook,
   setSelectedBook,
 }: BookSearchPopoverProps) => (
@@ -34,8 +30,6 @@ const BookSearchPopover = ({
   >
     <Box sx={postingWriteStyles.bookSearchBox}>
       <BookSearchAutoComplete
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
         selectedBook={selectedBook}
         setSelectedBook={setSelectedBook}
       />
