@@ -43,9 +43,10 @@ import { REPLIES_PER_PAGE } from '@constants/comment';
 interface CommentItemProps {
   comment: Comment;
   postId: string;
+  isTemp?: boolean;
 }
 
-const CommentItem = ({ comment, postId }: CommentItemProps) => {
+const CommentItem = ({ comment, postId, isTemp = false }: CommentItemProps) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
@@ -217,7 +218,14 @@ const CommentItem = ({ comment, postId }: CommentItemProps) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', mb: 2, width: '100%' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        mb: 2,
+        width: '100%',
+        backgroundColor: isTemp ? 'rgba(255, 255, 0, 0.1)' : 'transparent',
+      }}
+    >
       <Box
         sx={{
           width: 40,

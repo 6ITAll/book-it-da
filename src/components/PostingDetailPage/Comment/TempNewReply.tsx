@@ -32,6 +32,7 @@ const TempNewReply = ({ parentId, postId }: TempNewReplyProps) => {
       key={`temp-${tempNewReplies[parentId].id}`}
       comment={tempNewReplies[parentId]}
       postId={postId}
+      isTemp={true}
     />
   );
 };
