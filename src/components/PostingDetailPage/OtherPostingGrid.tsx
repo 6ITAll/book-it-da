@@ -53,9 +53,9 @@ const OtherPostingGrid: React.FC<OtherPostingGridProps> = ({
       <Typography variant="h6" sx={postingDetailStyles.otherPostingTitle}>
         {title}
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container direction="column" spacing={3}>
         {posts.map((post, index) => (
-          <Grid key={index} size={{ xs: 12, md: 4 }}>
+          <Grid key={index} size={{ xs: 12 }}>
             <OtherPostingCard post={post} />
           </Grid>
         ))}

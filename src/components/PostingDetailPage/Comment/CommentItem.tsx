@@ -108,7 +108,7 @@ const CommentItem = ({ comment, postId, isTemp = false }: CommentItemProps) => {
       dispatch(clearTempNewReply(parentId));
 
       if (
-        visibleReplies[parentId] &&
+        !visibleReplies[parentId] ||
         visibleReplies[parentId].length >= currentVisibleCount
       ) {
         dispatch(setTempNewReply({ parentId, reply: result }));

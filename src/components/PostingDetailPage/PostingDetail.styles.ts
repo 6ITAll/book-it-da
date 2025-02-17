@@ -11,13 +11,14 @@ export const postingDetailStyles = {
     padding: '0 !important',
     margin: '0 !important',
     boxSizing: 'border-box',
+    border: '1px solid blue',
   },
   posting: (theme: Theme) => ({
     px: 4,
     pt: 3,
     width: {
       xs: '100%',
-      md: '50%',
+      md: '100%',
     },
     display: 'flex',
     flexDirection: 'column',
@@ -96,10 +97,13 @@ export const postingDetailStyles = {
     },
   },
   otherPostingBox: {
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
-    my: 5,
+    py: 2,
     px: 4,
     boxSizing: 'border-box',
+    border: '1px solid red',
   },
   otherPostingTitle: {
     mb: 2,
@@ -127,10 +131,7 @@ export const postingDetailStyles = {
     padding: '4px 12px',
   }),
   CommentSectionWrapper: (theme: Theme) => ({
-    width: {
-      xs: '100%',
-      md: '50%',
-    },
+    width: '100%',
     bgcolor: theme.palette.background.paper,
   }),
 };
