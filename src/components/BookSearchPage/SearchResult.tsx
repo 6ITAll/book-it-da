@@ -1,72 +1,116 @@
-import { Box, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, SelectChangeEvent, Stack } from '@mui/material';
 import SortSelector from '@components/BookSearchPage/SortSelector';
 import Pagination from '@components/BookSearchPage/Pagination';
 import SearchBookCard from '@components/BookSearchPage/SearchBookCard';
-import { SortOption } from '@features/BookSearchPage/Slice/bookSearchSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@store/index';
-import { SelectChangeEvent } from '@mui/material';
-import { useEffect } from 'react';
 import {
-  setSearchQuery,
-  setCurrentPage,
   setSortOption,
+  setCurrentPage,
 } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { useSearchBooksQuery } from '@features/BookSearchPage/api/bookSearchApi';
-import useSearchInput from '@components/BookSearchPage/useSearchInput';
+import { RootState } from '@store/index';
+import { useDispatch, useSelector } from 'react-redux';
 import { searchResultStyles } from '@components/BookSearchPage/BookSearch.style';
-import { renderSearchResultSkeleton } from '@components/BookSearchPage/BookSearchSkeleton';
-// 정렬 옵션 배열 정의
+import { renderSearchResultSkeleton } from './BookSearchSkeleton';
+import { SortOption } from '@features/BookSearchPage/Slice/bookSearchSlice';
+import ViewOptionSelector from './ViewOptionSelector';
+
 const sortOptions: Array<{ value: SortOption; label: string }> = [
-  { value: 'SortAccuracy', label: '관련도순' },
-  { value: 'CustomerRating', label: '평점순' },
-  { value: 'SalesPoint', label: '판매량순' },
-  { value: 'PublishTime', label: '출간일순' },
+  { value: 'SortAccuracy' as SortOption, label: '관련도순' },
+  { value: 'CustomerRating' as SortOption, label: '평점순' },
+  { value: 'SalesPoint' as SortOption, label: '판매량순' },
+  { value: 'PublishTime' as SortOption, label: '출간일순' },
 ];
 
-interface SearchResultProps {
-  searchParams: URLSearchParams;
-}
-
-const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
+const SearchResult = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { setInputValue } = useSearchInput();
   const { searchQuery, currentPage, sortOption } = useSelector(
     (state: RootState) => state.bookSearch,
   );
 
-  useEffect(() => {
-    const query = searchParams.get('query') || '';
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    dispatch(setSearchQuery(query));
-    dispatch(setCurrentPage(page));
-  }, [searchParams, dispatch, setInputValue]);
+  // viewMode가 한 페이지당 보여줄 결과 수 (4 또는 8)
+  const [viewMode, setViewMode] = useState<4 | 8>(8);
+  const handleViewChange = (mode: 4 | 8) => {
+    setViewMode(mode);
+  };
 
-  // 정렬 옵션 변경 함수
-  const handleSortChange = (event: SelectChangeEvent) => {
+  // 최대 50개의 결과를 받아옴
+  const { data, isFetching } = useSearchBooksQuery({
+    query: searchQuery,
+    sort: sortOption,
+  });
+  const books = data?.allBooks ?? [];
+
+  // 클라이언트 사이드 페이지네이션: 현재 페이지에 해당하는 아이템 슬라이스
+  const startIndex = (currentPage - 1) * viewMode;
+  const paginatedBooks = books.slice(startIndex, startIndex + viewMode);
+
+  const handleSortChange = (event: SelectChangeEvent<string>) => {
     dispatch(setSortOption(event.target.value as SortOption));
   };
 
-  // 페이지네이션 처리 함수
-  const handlePageChange = (value: number) => {
-    dispatch(setCurrentPage(value));
+  const handlePageChange = (newPage: number) => {
+    dispatch(setCurrentPage(newPage));
   };
-
-  // 검색 API 호출
-  const { data, isFetching } = useSearchBooksQuery(
-    {
-      query: searchQuery,
-      page: currentPage,
-      sort: sortOption,
-    },
-    { refetchOnMountOrArgChange: true },
-  );
 
   return (
     <>
       <Box sx={searchResultStyles.searchResultBox}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h3" fontWeight="bold">
+        {/* 검색어와 결과 건수를 한 줄에 표시 */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexShrink: 1,
+            maxWidth: '100%',
+            overflow: 'hidden',
+          }}
+        >
+          {searchQuery && (
+            <>
+              <Typography
+                variant="h3"
+                fontWeight="bold"
+                sx={{
+                  color: 'primary.main',
+                  flexShrink: 1,
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                '
+              </Typography>
+              <Typography
+                variant="h3"
+                fontWeight="bold"
+                sx={{
+                  color: 'primary.main',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  flexShrink: 1,
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                {searchQuery}
+              </Typography>
+              <Typography
+                variant="h3"
+                fontWeight="bold"
+                sx={{
+                  color: 'primary.main',
+                  flexShrink: 1,
+                  display: { xs: 'none', sm: 'block' },
+                }}
+              >
+                '
+              </Typography>
+            </>
+          )}
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            sx={{ marginLeft: 1, whiteSpace: 'nowrap' }}
+          >
             검색 결과
           </Typography>
           <Typography
@@ -74,47 +118,53 @@ const SearchResult = ({ searchParams }: SearchResultProps): JSX.Element => {
             fontWeight="bold"
             sx={searchResultStyles.totalSearchText}
           >
-            {data?.totalResults || 0}
+            {books.length || 0}
           </Typography>
-          <Typography variant="h3" fontWeight="bold">
+          <Typography variant="h3" fontWeight="bold" sx={{ flexShrink: 1 }}>
             건
           </Typography>
         </Box>
-        <SortSelector
-          value={sortOption}
-          onChange={handleSortChange}
-          options={sortOptions}
-        />
+        <Stack direction="row" spacing={2}>
+          <ViewOptionSelector viewMode={viewMode} onChange={handleViewChange} />
+          <SortSelector
+            value={sortOption}
+            onChange={handleSortChange}
+            options={sortOptions}
+          />
+        </Stack>
       </Box>
 
-      {/* 검색 결과 리스트 */}
       {isFetching ? (
-        renderSearchResultSkeleton(8)
+        renderSearchResultSkeleton(viewMode)
       ) : (
         <Box sx={searchResultStyles.searchResultListBox}>
-          {data?.item?.map((book) => (
-            <SearchBookCard
-              key={book.isbn}
-              isbn={book.isbn}
-              title={book.title}
-              author={book.author}
-              cover={book.cover}
-              customerReviewRank={book.customerReviewRank}
-              priceStandard={book.priceStandard}
-            />
-          )) || <Typography height="250px">검색 결과가 없습니다.</Typography>}
+          {paginatedBooks.length > 0 ? (
+            paginatedBooks.map((book) => (
+              <SearchBookCard
+                key={book.isbn}
+                isbn={book.isbn}
+                title={book.title}
+                author={book.author}
+                cover={book.cover}
+                customerReviewRank={book.customerReviewRank}
+                priceStandard={book.priceStandard}
+              />
+            ))
+          ) : (
+            <Typography height="250px">검색 결과가 없습니다.</Typography>
+          )}
         </Box>
       )}
-      {/* 페이지네이션 */}
+
       <Box sx={searchResultStyles.paginationBox}>
         <Pagination
-          count={Math.ceil((data?.totalResults || 0) / 4)}
+          count={Math.ceil(books.length / viewMode)}
           page={currentPage}
-          onChange={(_, value) => handlePageChange(value)}
+          onChange={(_, newPage) => handlePageChange(newPage)}
         />
       </Box>
     </>
   );
 };
 
-export default SearchResult;
+export default React.memo(SearchResult);

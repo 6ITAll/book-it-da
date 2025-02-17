@@ -1,12 +1,12 @@
-import { useState, KeyboardEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, KeyboardEvent, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
 import { Box, Button, InputBase } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
 import DarkModeButton from '@components/DarkModeButton/DarkModeButton';
-
+import { setSearchQuery } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import {
   StyledHeaderContainer,
   StyledLogo,
@@ -17,29 +17,37 @@ import UserMenu from './userMenu';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams] = useSearchParams();
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
   const user = useSelector((state: RootState) => state.user);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
+
+  useEffect(() => {
+    if (searchParams.get('query')) {
+      dispatch(setSearchQuery(searchParams.get('query') || ''));
+    }
+  }, [searchParams, dispatch]);
 
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
     if (showSearchBar) {
-      setSearchQuery('');
+      setLocalSearchQuery('');
     }
   };
 
+  // 검색 실행 함수
   const handleSearch = () => {
-    const trimmedQuery = searchQuery.trim();
+    const trimmedQuery = localSearchQuery.trim();
     if (trimmedQuery) {
       navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
-      setSearchQuery('');
-      setShowSearchBar(false);
+      dispatch(setSearchQuery(trimmedQuery)); // Redux 상태 업데이트
     } else {
-      navigate('/search');
-      setShowSearchBar(false);
+      navigate('/search'); // 검색어 없으면 그냥 검색 페이지 이동
     }
+    setLocalSearchQuery(''); // 검색창 입력값 초기화
+    setShowSearchBar(false); // 검색바 닫기
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -56,8 +64,8 @@ const Header = (): JSX.Element => {
           {showSearchBar && (
             <InputBase
               placeholder="책 검색..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={localSearchQuery}
+              onChange={(e) => setLocalSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
               sx={{
                 marginRight: '10px',

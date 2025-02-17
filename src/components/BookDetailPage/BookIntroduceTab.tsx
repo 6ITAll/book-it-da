@@ -2,21 +2,17 @@ import React from 'react';
 import { Box, Typography, Skeleton } from '@mui/material';
 import GenderAgeChart from '@components/BookDetailPage/GenderAgeChart';
 import GenderAgeSummary from '@components/BookDetailPage/GenderAgeSummary';
-import { useGetGenderAgeQuery } from '@features/BookDetailPage/api/genderAgeApi';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
+// 타입 추후 components/BookDetailPage/types.ts 로
 interface BookIntroduceTabProps {
-  isbn: string;
   description: string;
   isLoading: boolean;
 }
-
+// 타입 추후 components/BookDetailPage/types.ts 로
 const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
-  isbn,
   description,
   isLoading,
 }) => {
-  const { data } = useGetGenderAgeQuery(isbn);
-
   return (
     <>
       {/* 성별·연령 인기 분포 섹션 */}
@@ -37,8 +33,8 @@ const BookIntroduceTab: React.FC<BookIntroduceTabProps> = ({
           </>
         ) : (
           <>
-            <GenderAgeChart data={data ?? []} />
-            <GenderAgeSummary data={data ?? []} />
+            <GenderAgeChart />
+            <GenderAgeSummary />
           </>
         )}
       </Box>

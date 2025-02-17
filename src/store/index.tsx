@@ -4,10 +4,11 @@ import { bookSearchApi } from '@features/BookSearchPage/api/bookSearchApi';
 import { bestBookGetApi } from '@features/BookSearchPage/api/bestBookGetApi';
 import bookSearchReducer from '@features/BookSearchPage/Slice/bookSearchSlice';
 import { bookDetailApi } from '@features/BookSearchPage/api/bookDetailApi';
+import { reviewStatsApi } from '@features/BookDetailPage/api/reviewStatsApi';
 import bookDetailReducer from '@features/BookSearchPage/Slice/bookDetailSlice';
-import { genderAgeApi } from '@features/BookDetailPage/api/genderAgeApi';
-import { postApi } from '@features/BookDetailPage/api/postApi';
-import { reviewApi } from '@features/BookDetailPage/api/reviewApi';
+import { readerStatsApi } from '@features/BookDetailPage/api/readerStatsApi';
+import { bookPostingsApi } from '@features/BookDetailPage/api/bookPostingsApi';
+import { bookReviewsApi } from '@features/BookDetailPage/api/bookReviewsApi';
 import userReducer from '@features/user/userSlice';
 import { bookShelvesApi } from '@features/BookShelvesPage/api/bookShelvesApi';
 import bookShelvesReducer from '@features/BookShelvesPage/slice/bookShelvesSlice';
@@ -34,6 +35,11 @@ import userReviewsReducer from '@features/MyPage/slice/userReviewMoreSlice';
 import likedPostingsReducer from '@features/MyPage/slice/likedPostingMoreSlice';
 import likedReviewsReducer from '@features/MyPage/slice/likedReviewMoreSlice';
 import followListReducer from '@features/MyPage/slice/followListSlice';
+import readerStatsReducer from '@features/BookDetailPage/slice/readerStatsSlice';
+import { bookOwnReviewApi } from '@features/BookDetailPage/api/bookOwnReviewApi';
+import { bookFeedPreviewApi } from '@features/BookDetailPage/api/bookFeedPreviewApi';
+import bookPostingsReducer from '@features/BookDetailPage/slice/bookPostingMoreSlice';
+import bookReviewsReducer from '@features/BookDetailPage/slice/bookReviewMoreSlice';
 
 export const store = configureStore({
   reducer: {
@@ -45,14 +51,15 @@ export const store = configureStore({
     [bookSearchByIsbnApi.reducerPath]: bookSearchByIsbnApi.reducer,
     [bestBookGetApi.reducerPath]: bestBookGetApi.reducer,
     [bookDetailApi.reducerPath]: bookDetailApi.reducer,
+    [reviewStatsApi.reducerPath]: reviewStatsApi.reducer,
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
     [postingApi.reducerPath]: postingApi.reducer,
     [userFeedsApi.reducerPath]: userFeedsApi.reducer,
     [userLikedFeedsApi.reducerPath]: userLikedFeedsApi.reducer,
-    [genderAgeApi.reducerPath]: genderAgeApi.reducer,
-    [postApi.reducerPath]: postApi.reducer,
-    [reviewApi.reducerPath]: reviewApi.reducer,
+    [readerStatsApi.reducerPath]: readerStatsApi.reducer,
+    [bookPostingsApi.reducerPath]: bookPostingsApi.reducer,
+    [bookReviewsApi.reducerPath]: bookReviewsApi.reducer,
     [oneLineReviewApi.reducerPath]: oneLineReviewApi.reducer,
     [feedApi.reducerPath]: feedApi.reducer,
     [postingWriteApi.reducerPath]: postingWriteApi.reducer,
@@ -63,6 +70,8 @@ export const store = configureStore({
     [followApi.reducerPath]: followApi.reducer,
     [likeApi.reducerPath]: likeApi.reducer,
     [userProfileStatsApi.reducerPath]: userProfileStatsApi.reducer,
+    [bookOwnReviewApi.reducerPath]: bookOwnReviewApi.reducer,
+    [bookFeedPreviewApi.reducerPath]: bookFeedPreviewApi.reducer,
     counter: counterReducer,
     user: userReducer,
     followList: followListReducer,
@@ -72,6 +81,9 @@ export const store = configureStore({
     userReviews: userReviewsReducer,
     snackbar: snackbarReducer,
     feed: feedReducer,
+    readerStats: readerStatsReducer,
+    bookPostings: bookPostingsReducer,
+    bookReviews: bookReviewsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -79,12 +91,13 @@ export const store = configureStore({
       bookSearchByIsbnApi.middleware,
       bestBookGetApi.middleware,
       bookDetailApi.middleware,
+      reviewStatsApi.middleware,
       libraryApi.middleware,
       bookShelvesApi.middleware,
       postingApi.middleware,
-      genderAgeApi.middleware,
-      postApi.middleware,
-      reviewApi.middleware,
+      readerStatsApi.middleware,
+      bookPostingsApi.middleware,
+      bookReviewsApi.middleware,
       userFeedsApi.middleware,
       userLikedFeedsApi.middleware,
       feedApi.middleware,
@@ -97,6 +110,8 @@ export const store = configureStore({
       followApi.middleware,
       likeApi.middleware,
       userProfileStatsApi.middleware,
+      bookOwnReviewApi.middleware,
+      bookFeedPreviewApi.middleware,
     ]),
 });
 
