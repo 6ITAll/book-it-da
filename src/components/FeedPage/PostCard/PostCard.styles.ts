@@ -5,7 +5,6 @@ const styles = {
     flexDirection: 'column',
     boxSizing: 'border-box',
     width: '100%',
-    aspectRatio: 'auto',
     borderRadius: '8px',
     transition: 'all 0.3s ease-in-out',
     '&:hover': {
@@ -37,7 +36,6 @@ const styles = {
         ? theme.palette.primary.light
         : theme.palette.primary.main,
     border: 'none',
-    mb: '0',
     '&:hover': {
       backgroundColor: isFollowing
         ? theme.palette.mode === 'light'
@@ -135,7 +133,7 @@ const styles = {
     whiteSpace: 'pre-wrap',
   },
   postingDescription: {
-    height: 'auto',
+    height: '120px',
     padding: '0.25rem 0.5rem',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
