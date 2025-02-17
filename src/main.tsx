@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
-import { store } from './store/index.tsx';
+import { store } from './store/index.ts';
 import { Provider } from 'react-redux';
 import { muiTheme } from '@styles/theme.ts';
 import { ThemeProvider } from '@mui/material';
