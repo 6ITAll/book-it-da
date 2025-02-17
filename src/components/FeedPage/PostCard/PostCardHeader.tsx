@@ -1,12 +1,6 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CardHeader,
-  Typography,
-  IconButton,
-} from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Avatar, Box, CardHeader, Typography, IconButton } from '@mui/material';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import styles from './PostCard.styles';
 import { PostType } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
@@ -75,20 +69,18 @@ const PostCardHeader = ({
           <>
             {followStatus?.isFollowing ? (
               <IconButton
-                sx={{ backgroundColor: 'transparent' }}
                 onClick={handleFollowClick}
+                sx={{ backgroundColor: 'transparent' }}
               >
-                <CheckCircleIcon sx={{ color: '#0095f6', fontSize: 32 }} />
+                <PersonRemoveIcon sx={{ fontSize: 32 }} />
               </IconButton>
             ) : (
-              <Button
-                variant="outlined"
-                size="small"
-                sx={styles.followButton(followStatus?.isFollowing)}
+              <IconButton
                 onClick={handleFollowClick}
+                sx={{ backgroundColor: 'transparent' }}
               >
-                팔로우
-              </Button>
+                <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 32 }} />
+              </IconButton>
             )}
           </>
         )
