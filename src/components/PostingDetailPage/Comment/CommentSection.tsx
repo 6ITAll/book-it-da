@@ -2,7 +2,6 @@ import { useEffect, useCallback, useMemo } from 'react';
 import { Box, Typography, Divider } from '@mui/material';
 import CommentItem from './CommentItem';
 import CommentInput from './CommentInput';
-
 import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -23,33 +22,7 @@ import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import LoadMoreRepliesButton from './LoadMoreRepliesButton';
 import CommentReplies from './CommentReplies';
 import TempNewReply from './TempNewReply';
-
-export interface Like {
-  userId: string;
-}
-
-export interface Comment {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  postId: string;
-  userId: string;
-  content: string;
-  parentId: string | null;
-  isEdited: boolean;
-  isDeleted: boolean;
-  user: {
-    id: string;
-    username: string;
-    avatarUrl: string | null;
-  };
-  likesCount: number;
-  likes: string[];
-  isLiked: boolean;
-}
-
-const COMMENTS_PER_PAGE = 10;
-// const REPLIES_PER_PAGE = 5;
+import { COMMENTS_PER_PAGE } from '@constants/comment';
 
 const CommentSection = ({ postId }: { postId: string }) => {
   const currentUserId = useSelector(

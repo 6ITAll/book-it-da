@@ -1,7 +1,8 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
 import { PostgrestResponse } from '@supabase/supabase-js';
-import { DbComment, DbCommentCount, Comment } from '../types/types';
+import { DbComment, DbCommentCount } from '../types/types';
+import { Comment } from '@components/PostingDetailPage/Comment/types';
 
 export const commentApi = createApi({
   reducerPath: 'commentApi',
@@ -119,7 +120,7 @@ export const commentApi = createApi({
         }
       },
       providesTags: (_, __, { postId, parentId }) => [
-        { type: 'Comments', id: `Replies-${postId}-${parentId}` },
+        { type: 'Replies', id: `Replies-${postId}-${parentId}` },
       ],
     }),
 
@@ -201,7 +202,7 @@ export const commentApi = createApi({
       },
       invalidatesTags: (_, __, { postId, parentId }) => [
         { type: 'Comments', id: `Comments-${postId}` },
-        { type: 'Comments', id: `Replies-${postId}-${parentId}` },
+        { type: 'Replies', id: `Replies-${postId}-${parentId}` },
         { type: 'CommentCount', id: postId },
         { type: 'CommentCount', id: `RepliesCount-${parentId}` },
       ],
@@ -339,7 +340,7 @@ export const commentApi = createApi({
     // 좋아요 토글
     toggleCommentLike: builder.mutation<
       void,
-      { commentId: string; postId: string }
+      { commentId: string; postId: string; parentId?: string }
     >({
       async queryFn({ commentId }) {
         try {
@@ -353,8 +354,9 @@ export const commentApi = createApi({
           return { error };
         }
       },
-      invalidatesTags: (_, __, { postId }) => [
+      invalidatesTags: (_, __, { postId, parentId }) => [
         { type: 'Comments', id: `Comments-${postId}` },
+        { type: 'Replies', id: `Replies-${postId}-${parentId}` },
       ],
     }),
 

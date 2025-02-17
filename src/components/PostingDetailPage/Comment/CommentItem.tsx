@@ -12,7 +12,7 @@ import {
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Comment, CommentItemProps } from './types';
+import { Comment } from './types';
 import CommentInput from './CommentInput';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
 import {
@@ -38,6 +38,12 @@ import { useGetAvatarUrlQuery } from '@features/user/avatarUrlApi';
 import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import { REPLIES_PER_PAGE } from '@constants/comment';
+
+interface CommentItemProps {
+  comment: Comment;
+  postId: string;
+}
 
 const CommentItem = ({ comment, postId }: CommentItemProps) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
@@ -92,7 +98,10 @@ const CommentItem = ({ comment, postId }: CommentItemProps) => {
         parentId,
       }).unwrap();
 
-      const currentVisibleCount = (replyPages[parentId] || 1) * 5;
+      // 작성한 답글이 보이는지 확인
+      // 작성 후 보이지 않는다면 임시 댓글에 Set
+      const currentVisibleCount =
+        (replyPages[parentId] || 1) * REPLIES_PER_PAGE;
 
       if (
         !visibleReplies[parentId] ||

@@ -17,21 +17,3 @@ export interface Comment {
   likes: string[];
   isLiked: boolean;
 }
-
-export interface CommentInputProps {
-  onSubmit: (content: string, hasTag: boolean) => void;
-  placeholder?: string;
-  mentionedUser?: {
-    username: string;
-    id: string;
-  };
-}
-
-export interface CommentItemProps {
-  comment: Comment;
-  postId: string;
-}
-
-export interface TagCommentProps {
-  content: string;
-}

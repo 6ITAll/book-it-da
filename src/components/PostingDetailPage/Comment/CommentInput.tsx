@@ -1,6 +1,14 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Box, TextField, Button } from '@mui/material';
-import { CommentInputProps } from './types';
+
+interface CommentInputProps {
+  onSubmit: (content: string, hasTag: boolean) => void;
+  placeholder?: string;
+  mentionedUser?: {
+    username: string;
+    id: string;
+  };
+}
 
 const CommentInput = ({
   onSubmit,

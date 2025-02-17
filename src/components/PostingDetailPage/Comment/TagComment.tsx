@@ -2,7 +2,10 @@ import { Fragment } from 'react';
 import { Box } from '@mui/material';
 import { navigateToUserPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
-import { TagCommentProps } from './types';
+
+export interface TagCommentProps {
+  content: string;
+}
 
 const TagComment = ({ content }: TagCommentProps) => {
   const navigate = useNavigate();

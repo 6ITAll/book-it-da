@@ -3,7 +3,6 @@ import { RootState } from '@store/index';
 import { useDispatch, useSelector } from 'react-redux';
 import CommentItem from './CommentItem';
 
-// TempNewReply.tsx
 interface TempNewReplyProps {
   parentId: string;
   postId: string;

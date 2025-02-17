@@ -4,6 +4,7 @@ import { RootState } from '@store/index';
 import { useGetRepliesQuery } from '@features/PostDetailPage/api/commentApi';
 import { useEffect } from 'react';
 import { updateVisibleReplies } from '@features/PostDetailPage/slice/commentSlice';
+import { REPLIES_PER_PAGE } from '@constants/comment';
 
 const CommentReplies = ({
   parentId,
@@ -22,7 +23,7 @@ const CommentReplies = ({
     postId,
     parentId,
     page: currentPage,
-    limit: 5, // REPLIES_PER_PAGE
+    limit: REPLIES_PER_PAGE,
   });
 
   useEffect(() => {

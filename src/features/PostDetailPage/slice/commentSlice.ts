@@ -124,7 +124,7 @@ const postingCommentsSlice = createSlice({
       const comment = state.comments.find(
         (comment) => comment.id === commentId,
       );
-      // 실제 댓글 업데이트
+      // 실제 댓글 업데이트 (부모 댓글)
       if (comment) {
         const likeIndex = comment.likes.indexOf(userId);
         if (likeIndex === -1) {
@@ -135,6 +135,23 @@ const postingCommentsSlice = createSlice({
           comment.likesCount -= 1;
         }
       }
+      // 실제 댓글 업데이트 (자식 댓글)
+      Object.keys(state.visibleReplies).forEach((parentId) => {
+        const reply = state.visibleReplies[parentId].find(
+          (r) => r.id === commentId,
+        );
+        if (reply) {
+          const likeIndex = reply.likes.indexOf(userId);
+          if (likeIndex === -1) {
+            reply.likes.push(userId);
+            reply.likesCount += 1;
+          } else {
+            reply.likes.splice(likeIndex, 1);
+            reply.likesCount -= 1;
+          }
+        }
+      });
+
       // 임시 댓글 업데이트
       Object.entries(state.tempNewReplies).forEach(([parentId, reply]) => {
         if (reply.id === commentId) {

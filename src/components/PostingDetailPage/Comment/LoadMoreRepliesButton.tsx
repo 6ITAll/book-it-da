@@ -1,3 +1,4 @@
+import { REPLIES_PER_PAGE } from '@constants/comment';
 import { useGetRepliesCountQuery } from '@features/PostDetailPage/api/commentApi';
 import { Button } from '@mui/material';
 
@@ -17,7 +18,7 @@ const LoadMoreRepliesButton = ({
     { skip: false },
   );
 
-  if (repliesCount <= currentPage * 5) return null;
+  if (repliesCount <= currentPage * REPLIES_PER_PAGE) return null;
 
   return (
     <Button
@@ -31,7 +32,7 @@ const LoadMoreRepliesButton = ({
         },
       }}
     >
-      답글 {repliesCount - currentPage * 5}개 더보기
+      답글 {repliesCount - currentPage * REPLIES_PER_PAGE}개 더보기
     </Button>
   );
 };
