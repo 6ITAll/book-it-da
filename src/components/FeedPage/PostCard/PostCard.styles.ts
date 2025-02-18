@@ -14,7 +14,6 @@ const styles = {
   },
   cardHeader: {
     display: 'flex',
-    height: '10%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -53,7 +52,6 @@ const styles = {
   },
   cardMediaBox: {
     position: 'relative',
-    height: '60%',
     width: '100%',
     overflow: 'hidden',
     boxSizing: 'border-box',
@@ -90,7 +88,6 @@ const styles = {
     width: '100%',
     maxWidth: '100%',
     padding: '1rem 1rem 0.5rem 1rem',
-    height: '20%',
     borderRadius: '10px 10px 10px 0px',
     position: 'relative',
     zIndex: 2,
@@ -145,7 +142,6 @@ const styles = {
   },
   cardFooter: {
     padding: '0',
-    height: '10%',
     borderTop: '1px solid #ddd',
     gap: 0,
     display: 'grid',
