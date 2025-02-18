@@ -8,9 +8,9 @@ import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
 import { usePerformAutoLogin } from '@hooks/usePerformAutoLogin';
-import { useAuthStateChange } from '@hooks/useAuthStateChange';
+import { AuthProvider } from '@components/Auth/AuthProvider';
 
-const AppContent = (): JSX.Element => {
+const MainContent = (): JSX.Element => {
   const location = useLocation();
   const isPostingDetail = location.pathname.includes('/posting/');
 
@@ -30,20 +30,27 @@ const AppContent = (): JSX.Element => {
   );
 };
 
-const App = (): JSX.Element => {
+const AppContent = (): JSX.Element => {
   const themeMode = useSelector((state: RootState) => state.darkMode.mode);
   const theme = createAppTheme(themeMode);
   usePerformAutoLogin();
-  useAuthStateChange();
 
   return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <MainContent />
+      </Router>
+    </ThemeProvider>
+  );
+};
+
+const App = (): JSX.Element => {
+  return (
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <AppContent />
-        </Router>
-      </ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Provider>
   );
 };

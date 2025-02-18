@@ -8,6 +8,7 @@ import PostCardFooter from './PostCardFooter';
 import { navigateToPostingDetailPage } from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
+import PostCardSkeleton from './PostCardSkeleton';
 
 interface PostCardBaseProps {
   postId: string;
@@ -64,7 +65,7 @@ const PostCard = ({
     }
   };
 
-  if (isLoading) return <div>Loading book information...</div>;
+  if (isLoading) return <PostCardSkeleton postType={postType} />;
   if (error) return <div>Error fetching book information</div>;
 
   return (

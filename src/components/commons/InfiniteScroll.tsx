@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Grid from '@mui/material/Grid2';
 interface InfiniteScrollComponentProps<T> {
@@ -25,9 +25,9 @@ const InfiniteScrollComponent = <T,>({
       hasMore={hasMore}
       scrollThreshold={0.99}
       loader={
-        <Typography sx={{ textAlign: 'center', marginTop: '1rem' }}>
-          Loading...
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+          <CircularProgress />
+        </Box>
       }
       endMessage={
         <Typography sx={{ textAlign: 'center', marginTop: '1rem' }}>
