@@ -52,7 +52,6 @@ const CommentSection = ({ postId }: { postId: string }) => {
   useEffect(() => {
     dispatch(clearComments());
     dispatch(setPage(1));
-    dispatch(setHasMore(true));
     dispatch(clearRepliesState());
   }, [postId, dispatch]);
 
@@ -64,16 +63,18 @@ const CommentSection = ({ postId }: { postId: string }) => {
       );
       if (hasNewComments) {
         dispatch(setComments(fetchedComments));
-        dispatch(setHasMore(fetchedComments.length === COMMENTS_PER_PAGE));
+        dispatch(setHasMore(fetchedComments.length >= COMMENTS_PER_PAGE));
       }
+    } else {
+      dispatch(setHasMore(false));
     }
   }, [fetchedComments, comments, dispatch]);
 
   const fetchMoreData = useCallback(() => {
-    if (!isLoading && hasMore) {
+    if (!isLoading && hasMore && fetchedComments?.length > 0) {
       dispatch(setPage(page + 1));
     }
-  }, [isLoading, hasMore, page, dispatch]);
+  }, [isLoading, hasMore, page, fetchedComments, dispatch]);
 
   const parentComments = useMemo(() => {
     return comments.filter((comment) => !comment.parentId);
@@ -124,41 +125,37 @@ const CommentSection = ({ postId }: { postId: string }) => {
       </Box>
       <Divider sx={{ mb: 2 }} />
 
-      {isLoading ? (
-        <Typography>댓글을 불러오는 중...</Typography>
-      ) : (
-        <InfiniteScrollComponent
-          items={parentComments}
-          hasMore={hasMore}
-          fetchMore={fetchMoreData}
-          endMessage="더 이상 댓글이 없습니다."
-          gridSize={{ xs: 12, md: 12 }}
-          renderItem={(comment) => (
-            <>
-              <CommentItem key={comment.id} comment={comment} postId={postId} />
-              {showRepliesFor.includes(comment.id) && (
-                <Box sx={{ ml: 5 }}>
-                  {!comment.parentId && (
-                    <>
-                      <TempNewReply
-                        parentId={comment.id}
-                        postId={postId}
-                        currentPage={replyPages[comment.id] || 1}
-                      />
-                      <CommentReplies parentId={comment.id} postId={postId} />
-                      <LoadMoreRepliesButton
-                        parentId={comment.id}
-                        currentPage={replyPages[comment.id] || 1}
-                        onLoadMore={handleLoadMoreReplies}
-                      />
-                    </>
-                  )}
-                </Box>
-              )}
-            </>
-          )}
-        />
-      )}
+      <InfiniteScrollComponent
+        items={parentComments}
+        hasMore={hasMore}
+        fetchMore={fetchMoreData}
+        endMessage="더 이상 댓글이 없습니다."
+        gridSize={{ xs: 12, md: 12 }}
+        renderItem={(comment) => (
+          <>
+            <CommentItem key={comment.id} comment={comment} postId={postId} />
+            {showRepliesFor.includes(comment.id) && (
+              <Box sx={{ ml: 5 }}>
+                {!comment.parentId && (
+                  <>
+                    <TempNewReply
+                      parentId={comment.id}
+                      postId={postId}
+                      currentPage={replyPages[comment.id] || 1}
+                    />
+                    <CommentReplies parentId={comment.id} postId={postId} />
+                    <LoadMoreRepliesButton
+                      parentId={comment.id}
+                      currentPage={replyPages[comment.id] || 1}
+                      onLoadMore={handleLoadMoreReplies}
+                    />
+                  </>
+                )}
+              </Box>
+            )}
+          </>
+        )}
+      />
     </Box>
   );
 };
