@@ -49,6 +49,19 @@ const EditAccountPage = (): JSX.Element => {
         ) as HTMLInputElement
       )?.value;
 
+      if (
+        fieldName === 'username' &&
+        (newValue.length < 2 || newValue.length > 10)
+      ) {
+        dispatch(
+          showSnackbar({
+            message: '닉네임은 최소 2자에서 최대 10자까지 가능합니다.',
+            severity: 'error',
+          }),
+        );
+        return;
+      }
+
       const result = await updateField({
         userId,
         fieldName,
@@ -216,6 +229,7 @@ const EditAccountPage = (): JSX.Element => {
             label="닉네임"
             name="username"
             defaultValue={data.username || ''}
+            inputProps={{ maxLength: 20 }}
           />
           <Button variant="contained" onClick={() => handleSubmit('username')}>
             변경
