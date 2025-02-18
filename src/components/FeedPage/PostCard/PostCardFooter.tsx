@@ -11,6 +11,7 @@ import {
 } from '@features/commons/likeApi';
 import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
+import { useEffect } from 'react';
 
 interface PostCardFooterProps {
   postId: string;
@@ -23,6 +24,13 @@ const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const { data: likeStatus, refetch } = useCheckLikeStatusQuery(postId);
   const [toggleLike] = useToggleLikeMutation();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      refetch();
+    }
+    // eslint-disable-next-line
+  }, [isLoggedIn]);
 
   const handleLike = async () => {
     if (!isLoggedIn) return;
