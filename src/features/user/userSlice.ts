@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserInfo {
   id: string;
-  username?: string;
+  username: string;
   email?: string;
   avatarUrl?: string;
   isSocialLogin: boolean;
