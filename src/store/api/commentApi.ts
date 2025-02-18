@@ -4,4 +4,4 @@ export const commentApiReducers = {
   [commentApi.reducerPath]: commentApi.reducer,
 };
 
-export const feedApiMiddleware = [commentApi.middleware];
+export const commentApiMiddleware = [commentApi.middleware];

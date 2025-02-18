@@ -6,6 +6,7 @@ import { feedApiReducers, feedApiMiddleware } from './api/feedApi';
 import { postingApiReducers, postingApiMiddleware } from './api/postingApi';
 import { mypageApiReducers, mypageApiMiddleware } from './api/mypageApi';
 import { reviewApiReducers, reviewApiMiddleware } from './api/reviewApi';
+import { commentApiReducers, commentApiMiddleware } from './api/commentApi';
 
 import { bookReducers } from './slices/bookSlice';
 import { libraryReducers } from './slices/librarySlice';
@@ -13,6 +14,7 @@ import { userReducers } from './slices/userSlice';
 import { feedReducers } from './slices/feedSlice';
 import { uiReducers } from './slices/uiSlice';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { commentReducers } from './slices/commentSlice';
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +30,8 @@ export const store = configureStore({
     ...userReducers,
     ...feedReducers,
     ...uiReducers,
+    ...commentApiReducers,
+    ...commentReducers,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -44,6 +48,7 @@ export const store = configureStore({
       ...postingApiMiddleware,
       ...mypageApiMiddleware,
       ...reviewApiMiddleware,
+      ...commentApiMiddleware,
     ]),
 });
 
