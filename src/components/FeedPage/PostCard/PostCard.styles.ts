@@ -5,7 +5,6 @@ const styles = {
     flexDirection: 'column',
     boxSizing: 'border-box',
     width: '100%',
-    aspectRatio: 'auto',
     borderRadius: '8px',
     transition: 'all 0.3s ease-in-out',
     '&:hover': {
@@ -15,7 +14,6 @@ const styles = {
   },
   cardHeader: {
     display: 'flex',
-    height: '10%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -37,7 +35,6 @@ const styles = {
         ? theme.palette.primary.light
         : theme.palette.primary.main,
     border: 'none',
-    mb: '0',
     '&:hover': {
       backgroundColor: isFollowing
         ? theme.palette.mode === 'light'
@@ -55,7 +52,6 @@ const styles = {
   },
   cardMediaBox: {
     position: 'relative',
-    height: '60%',
     width: '100%',
     overflow: 'hidden',
     boxSizing: 'border-box',
@@ -92,7 +88,6 @@ const styles = {
     width: '100%',
     maxWidth: '100%',
     padding: '1rem 1rem 0.5rem 1rem',
-    height: '20%',
     borderRadius: '10px 10px 10px 0px',
     position: 'relative',
     zIndex: 2,
@@ -135,7 +130,7 @@ const styles = {
     whiteSpace: 'pre-wrap',
   },
   postingDescription: {
-    height: 'auto',
+    height: '120px',
     padding: '0.25rem 0.5rem',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -147,7 +142,6 @@ const styles = {
   },
   cardFooter: {
     padding: '0',
-    height: '10%',
     borderTop: '1px solid #ddd',
     gap: 0,
     display: 'grid',

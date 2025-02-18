@@ -42,3 +42,15 @@ body {
   padding: 0;
   margin: 0;
 }
+
+.ql-align-center {
+  text-align: center;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-justify {
+  text-align: justify;
+}

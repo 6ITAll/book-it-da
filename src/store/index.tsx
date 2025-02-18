@@ -40,6 +40,9 @@ import { bookOwnReviewApi } from '@features/BookDetailPage/api/bookOwnReviewApi'
 import { bookFeedPreviewApi } from '@features/BookDetailPage/api/bookFeedPreviewApi';
 import bookPostingsReducer from '@features/BookDetailPage/slice/bookPostingMoreSlice';
 import bookReviewsReducer from '@features/BookDetailPage/slice/bookReviewMoreSlice';
+import { commentApi } from '@features/PostDetailPage/api/commentApi';
+import postingCommentsReducer from '@features/PostDetailPage/slice/commentSlice';
+import { avatarUrlApi } from '@features/user/avatarUrlApi';
 
 export const store = configureStore({
   reducer: {
@@ -55,6 +58,7 @@ export const store = configureStore({
     [libraryApi.reducerPath]: libraryApi.reducer,
     [bookShelvesApi.reducerPath]: bookShelvesApi.reducer,
     [postingApi.reducerPath]: postingApi.reducer,
+    [commentApi.reducerPath]: commentApi.reducer,
     [userFeedsApi.reducerPath]: userFeedsApi.reducer,
     [userLikedFeedsApi.reducerPath]: userLikedFeedsApi.reducer,
     [readerStatsApi.reducerPath]: readerStatsApi.reducer,
@@ -72,6 +76,7 @@ export const store = configureStore({
     [userProfileStatsApi.reducerPath]: userProfileStatsApi.reducer,
     [bookOwnReviewApi.reducerPath]: bookOwnReviewApi.reducer,
     [bookFeedPreviewApi.reducerPath]: bookFeedPreviewApi.reducer,
+    [avatarUrlApi.reducerPath]: avatarUrlApi.reducer,
     counter: counterReducer,
     user: userReducer,
     followList: followListReducer,
@@ -84,6 +89,7 @@ export const store = configureStore({
     readerStats: readerStatsReducer,
     bookPostings: bookPostingsReducer,
     bookReviews: bookReviewsReducer,
+    postingComments: postingCommentsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -95,6 +101,7 @@ export const store = configureStore({
       libraryApi.middleware,
       bookShelvesApi.middleware,
       postingApi.middleware,
+      commentApi.middleware,
       readerStatsApi.middleware,
       bookPostingsApi.middleware,
       bookReviewsApi.middleware,
@@ -110,8 +117,7 @@ export const store = configureStore({
       followApi.middleware,
       likeApi.middleware,
       userProfileStatsApi.middleware,
-      bookOwnReviewApi.middleware,
-      bookFeedPreviewApi.middleware,
+      avatarUrlApi.middleware,
     ]),
 });
 

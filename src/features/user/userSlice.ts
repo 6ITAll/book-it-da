@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserInfo {
   id: string;
-  username?: string;
+  username: string;
   email?: string;
   avatarUrl?: string;
   isSocialLogin: boolean;
@@ -44,6 +44,11 @@ export const userSlice = createSlice({
         state.userInfo.avatarUrl = action.payload;
       }
     },
+    setUsername: (state, action: PayloadAction<string>) => {
+      if (state.userInfo) {
+        state.userInfo.username = action.payload;
+      }
+    },
     setCheckedPassword(state, action: PayloadAction<boolean>) {
       state.checkedPassword = action.payload;
     },
@@ -63,5 +68,6 @@ export const {
   setCheckedPassword,
   setAutoLogin,
   setToken,
+  setUsername,
 } = userSlice.actions;
 export default userSlice.reducer;
