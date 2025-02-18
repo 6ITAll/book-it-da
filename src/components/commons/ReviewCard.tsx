@@ -113,23 +113,16 @@ const ReviewCard = ({
           </Stack>
           {/* 로그인 상태이고, 본인이 작성한 리뷰가 아니라면 팔로우 버튼 표시 */}
           {isLoggedIn && !isOwnReview && (
-            <>
+            <IconButton
+              onClick={handleFollowClick}
+              sx={{ backgroundColor: 'transparent' }}
+            >
               {followStatus?.isFollowing ? (
-                <IconButton
-                  onClick={handleFollowClick}
-                  sx={{ backgroundColor: 'transparent' }}
-                >
-                  <PersonRemoveIcon sx={{ fontSize: 32 }} />
-                </IconButton>
+                <PersonRemoveIcon sx={{ fontSize: 28 }} />
               ) : (
-                <IconButton
-                  onClick={handleFollowClick}
-                  sx={{ backgroundColor: 'transparent' }}
-                >
-                  <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 32 }} />
-                </IconButton>
+                <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 28 }} />
               )}
-            </>
+            </IconButton>
           )}
         </Stack>
         {/* 별점 표시 */}

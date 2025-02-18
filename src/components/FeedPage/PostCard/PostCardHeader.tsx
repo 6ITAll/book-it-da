@@ -67,21 +67,16 @@ const PostCardHeader = ({
         isLoggedIn &&
         !isOwnPost && (
           <>
-            {followStatus?.isFollowing ? (
-              <IconButton
-                onClick={handleFollowClick}
-                sx={{ backgroundColor: 'transparent' }}
-              >
-                <PersonRemoveIcon sx={{ fontSize: 32 }} />
-              </IconButton>
-            ) : (
-              <IconButton
-                onClick={handleFollowClick}
-                sx={{ backgroundColor: 'transparent' }}
-              >
-                <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 32 }} />
-              </IconButton>
-            )}
+            <IconButton
+              onClick={handleFollowClick}
+              sx={{ backgroundColor: 'transparent' }}
+            >
+              {followStatus?.isFollowing ? (
+                <PersonRemoveIcon sx={{ fontSize: 28 }} />
+              ) : (
+                <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 28 }} />
+              )}
+            </IconButton>
           </>
         )
       }

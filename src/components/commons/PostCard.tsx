@@ -170,34 +170,20 @@ const PostCard = ({
             justifyContent: 'flex-end',
           }}
         >
-          {/* 팔로우 아이콘 버튼 */}
           {isLoggedIn && !isOwnPost && (
-            <>
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                handleFollowClick();
+              }}
+              sx={{ backgroundColor: 'transparent' }}
+            >
               {followStatus?.isFollowing ? (
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFollowClick();
-                  }}
-                  sx={{ backgroundColor: 'transparent' }}
-                >
-                  <PersonRemoveIcon fontSize="medium" />
-                </IconButton>
+                <PersonRemoveIcon sx={{ fontSize: 28 }} />
               ) : (
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFollowClick();
-                  }}
-                  sx={{ backgroundColor: 'transparent' }}
-                >
-                  <PersonAddAlt1Icon
-                    sx={{ color: '#0095f6' }}
-                    fontSize="medium"
-                  />
-                </IconButton>
+                <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 28 }} />
               )}
-            </>
+            </IconButton>
           )}
         </Box>
       </Stack>
