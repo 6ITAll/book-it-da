@@ -70,6 +70,7 @@ const PostingDetailPage = () => {
                 />
                 <PostingContent content={post.content} book={post.book} />
               </Stack>
+              <Divider sx={{ my: 3 }} />
               <Box sx={postingDetailStyles.CommentSectionWrapper}>
                 <CommentSection postId={post.id} />
               </Box>
