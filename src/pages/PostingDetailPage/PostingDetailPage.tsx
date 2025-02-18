@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Container, Box } from '@mui/material';
+import { Stack, Container, Box, Divider } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import URLShareDialog from '@components/commons/URLShareDialog';
 import PostingUserInfo from '@components/PostingDetailPage/PostingUserInfo';
@@ -58,8 +58,7 @@ const PostingDetailPage = () => {
           <>
             <Stack
               sx={{
-                width: '70%',
-                maxWidth: '800px',
+                width: '60%',
                 ...postingDetailStyles.posting,
               }}
             >
@@ -75,11 +74,13 @@ const PostingDetailPage = () => {
                 <CommentSection postId={post.id} />
               </Box>
             </Stack>
+            <Box sx={{ mx: 3 }}>
+              <Divider orientation="vertical" />
+            </Box>
             <Stack
               sx={{
-                width: '30%',
+                width: '35%',
                 maxWidth: '400px',
-                mt: '1rem',
                 gap: '1rem',
               }}
             >
@@ -98,7 +99,12 @@ const PostingDetailPage = () => {
         ) : (
           // 모바일 레이아웃
           <>
-            <Stack sx={postingDetailStyles.posting}>
+            <Stack
+              sx={{
+                width: '100%',
+                ...postingDetailStyles.posting,
+              }}
+            >
               <PostingUserInfo
                 user={post.user}
                 createdAt={post.createdAt}
@@ -111,11 +117,13 @@ const PostingDetailPage = () => {
                 type="BookOtherPosting"
                 isbn={post.book.isbn}
                 postingId={post.id}
+                isMobile={true}
               />
               <OtherPostingGrid
                 type="UserOtherPosting"
                 userId={post.user.id}
                 postingId={post.id}
+                isMobile={true}
               />
             </Stack>
             <Box sx={postingDetailStyles.CommentSectionWrapper}>

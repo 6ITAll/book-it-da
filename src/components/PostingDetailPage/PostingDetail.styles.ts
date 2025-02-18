@@ -11,15 +11,10 @@ export const postingDetailStyles = {
     padding: '0 !important',
     margin: '0 !important',
     boxSizing: 'border-box',
-    border: '1px solid blue',
   },
   posting: (theme: Theme) => ({
     px: 4,
     pt: 3,
-    width: {
-      xs: '100%',
-      md: '100%',
-    },
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -61,7 +56,10 @@ export const postingDetailStyles = {
     borderBottom: '1px solid #eee',
   },
   bookPreviewBox: {
-    width: '50%',
+    width: {
+      xs: '100%',
+      md: '50%',
+    },
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -103,7 +101,6 @@ export const postingDetailStyles = {
     py: 2,
     px: 4,
     boxSizing: 'border-box',
-    border: '1px solid red',
   },
   otherPostingTitle: {
     mb: 2,

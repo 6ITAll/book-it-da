@@ -25,7 +25,14 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
     }
   };
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+      }}
+    >
       {/* 책 정보 */}
       <Box sx={postingDetailStyles.bookPreviewBox} onClick={handleBookClick}>
         {isBookLoading ? (
@@ -48,11 +55,12 @@ const PostingContent = ({ content, book }: PostingContentProps) => {
           wordWrap: 'break-word',
           overflowWrap: 'anywhere',
           width: '100%',
+          padding: '1rem',
         }}
       >
         {parse(content)}
       </Box>
-    </>
+    </Box>
   );
 };
 
