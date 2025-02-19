@@ -38,6 +38,7 @@ jobs:
           echo "VITE_ALADIN_ITEM_LOOK_UP_URL=${{secrets.VITE_ALADIN_ITEM_LOOK_UP_URL}}" >> .env.production
           echo "VITE_KAKAO_REST_API_KEY=${{secrets.VITE_KAKAO_REST_API_KEY}}" >> .env.production
           echo "VITE_KAKAO_REDIRECT_URI=${{secrets.VITE_KAKAO_REDIRECT_URI}}" >> .env.production
+          echo "VITE_KAKAO_JAVASCRIPT_KEY=${{secrets.VITE_KAKAO_JAVASCRIPT_KEY}}" >> .env.production
           echo "VITE_SUPABASE_URL=${{secrets.VITE_SUPABASE_URL}}" >> .env.production
           echo "VITE_SUPABASE_ANON_KEY=${{secrets.VITE_SUPABASE_ANON_KEY}}" >> .env.production
 
