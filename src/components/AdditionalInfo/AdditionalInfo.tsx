@@ -46,6 +46,7 @@ const AdditionalInfo = (): JSX.Element => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userInfo } = useSelector((state: RootState) => state.user);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [updateUserInfo] = useUpdateUserInfoMutation();
 
@@ -70,19 +71,28 @@ const AdditionalInfo = (): JSX.Element => {
           }),
         );
         navigate('/login');
-      } else if (userInfo && userInfo.username) {
-        dispatch(
-          showSnackbar({
-            message: '잘못된 접근입니다. 이미 추가 정보를 입력하셨습니다.',
-            severity: 'warning',
-          }),
-        );
+      } else if ((userInfo && userInfo.username) || isSubmitted) {
+        if (isSubmitted) {
+          dispatch(
+            showSnackbar({
+              message: '추가 정보가 성공적으로 저장되었습니다.',
+              severity: 'success',
+            }),
+          );
+        } else {
+          dispatch(
+            showSnackbar({
+              message: '잘못된 접근입니다. 이미 추가 정보를 입력하셨습니다.',
+              severity: 'warning',
+            }),
+          );
+        }
         navigate('/');
       }
     };
 
     checkUserStatus();
-  }, [navigate, userInfo, dispatch]);
+  }, [navigate, userInfo, dispatch, isSubmitted]);
 
   const onSubmit = async (formData: AdditionalInfoData) => {
     if (!isUserIdAvailable) {
@@ -114,7 +124,7 @@ const AdditionalInfo = (): JSX.Element => {
           username: formData.userId,
         }),
       );
-
+      setIsSubmitted(true);
       dispatch(
         showSnackbar({
           message: '추가 정보가 성공적으로 저장되었습니다.',
