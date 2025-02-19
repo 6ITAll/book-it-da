@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,6 +26,8 @@ import {
 import { useUpdateUserInfoMutation } from '@features/user/additionalInfoApi';
 import { additionalInfoSchema } from '@utils/SignupPage/yupSchema';
 import BirthDatePicker from '@components/LoginSignupPage/Signup/BirthDatePicker';
+import { RootState } from '@store/index';
+import { loginSuccess, UserInfo } from '@features/user/userSlice';
 
 const AdditionalInfo = (): JSX.Element => {
   const {
@@ -43,8 +45,44 @@ const AdditionalInfo = (): JSX.Element => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   const [updateUserInfo] = useUpdateUserInfoMutation();
+
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error('Session check error:', error);
+        navigate('/login');
+        return;
+      }
+
+      if (!session) {
+        dispatch(
+          showSnackbar({
+            message: '로그인 후 이용해주세요.',
+            severity: 'warning',
+          }),
+        );
+        navigate('/login');
+      } else if (userInfo && userInfo.username) {
+        dispatch(
+          showSnackbar({
+            message: '잘못된 접근입니다. 이미 추가 정보를 입력하셨습니다.',
+            severity: 'warning',
+          }),
+        );
+        navigate('/');
+      }
+    };
+
+    checkUserStatus();
+  }, [navigate, userInfo, dispatch]);
 
   const onSubmit = async (formData: AdditionalInfoData) => {
     if (!isUserIdAvailable) {
@@ -69,6 +107,13 @@ const AdditionalInfo = (): JSX.Element => {
       if (!userId) throw new Error('사용자 ID를 찾을 수 없습니다.');
 
       await updateUserInfo({ userId, formData }).unwrap();
+
+      dispatch(
+        loginSuccess({
+          ...(userInfo as UserInfo),
+          username: formData.userId,
+        }),
+      );
 
       dispatch(
         showSnackbar({
