@@ -37,6 +37,9 @@ const BookFeedTab = ({
   const { data: latestReviews } = useGetLatestBookReviewsQuery({ isbn });
   const { data: bookPostCount } = useGetBookPostCountQuery({ isbn });
 
+  console.log('latestReviews:', latestReviews);
+  console.log('bookPostCount', bookPostCount);
+  console.log('latestPostings', latestPostings);
   const handleModalClose = () => {
     setIsOneLineReviewModalOpen(false);
   };
@@ -64,7 +67,7 @@ const BookFeedTab = ({
         />
         <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
-            한줄평 ({bookPostCount?.review_count})
+            한줄평 ({bookPostCount?.review_count || 0})
           </Typography>
           <Button
             size="small"
@@ -75,7 +78,7 @@ const BookFeedTab = ({
             더보기
           </Button>
         </Box>
-        {latestReviews ? (
+        {Array.isArray(latestReviews) && latestReviews.length > 0 ? (
           <Grid container spacing={2}>
             {latestReviews.map((review, index) => (
               <Grid
@@ -115,7 +118,7 @@ const BookFeedTab = ({
       <Box>
         <Box sx={bookReviewTabStyles.sectionHeader}>
           <Typography variant="h6" fontWeight="bold">
-            포스팅 ({bookPostCount?.posting_count})
+            포스팅 ({bookPostCount?.posting_count || 0})
           </Typography>
           <Button
             size="small"
@@ -126,7 +129,7 @@ const BookFeedTab = ({
             더보기
           </Button>
         </Box>
-        {latestPostings ? (
+        {Array.isArray(latestPostings) && latestPostings.length > 0 ? (
           <Grid container spacing={2}>
             {latestPostings.map((posting, index) => (
               <Grid
