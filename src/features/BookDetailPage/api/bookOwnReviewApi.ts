@@ -36,11 +36,9 @@ export const bookOwnReviewApi = createApi({
 
           const transformedReview: UserReview = {
             postId: data.id,
-            review: data.one_line_review.review,
-            rating: data.one_line_review.rating,
-            book: {
-              isbn: data.isbn,
-            },
+            review: data.one_line_review?.review ?? '',
+            rating: data.one_line_review?.rating ?? 0,
+            book: { isbn: data.isbn },
             createdAt: data.created_at,
             user: {
               id: data.user.id,
