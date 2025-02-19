@@ -37,7 +37,7 @@ const Main = (): JSX.Element => {
 
   const { data, isLoading, isFetching } = useGetPostsQuery(
     { page, postType, feedType },
-    { refetchOnMountOrArgChange: true },
+    { refetchOnFocus: true, refetchOnMountOrArgChange: true },
   );
 
   const columnCount = useColumnCount();
