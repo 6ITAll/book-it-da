@@ -31,8 +31,7 @@ const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
     if (!isLoggedIn) {
       refetch();
     }
-    // eslint-disable-next-line
-  }, [isLoggedIn]);
+  }, [isLoggedIn, refetch]);
 
   const handleLike = async () => {
     if (!isLoggedIn) {
