@@ -7,6 +7,7 @@ import { formatDate } from '@shared/utils/dateUtils';
 import ReviewCard from '@components/commons/ReviewCard';
 
 interface OneLineReviewSectionProps {
+  userId: string;
   username: string;
   oneLineReviews: OneLineReview[];
   oneLineReviewCount: number;
@@ -14,6 +15,7 @@ interface OneLineReviewSectionProps {
 }
 
 const OneLineReviewSection = ({
+  userId,
   username,
   oneLineReviews,
   oneLineReviewCount,
@@ -64,6 +66,7 @@ const OneLineReviewSection = ({
               sx={{ display: 'flex', flexDirection: 'column' }}
             >
               <ReviewCard
+                userId={userId}
                 postId={oneLineReview.postId}
                 rating={oneLineReview.rating ?? 0}
                 username={oneLineReview.user.username}

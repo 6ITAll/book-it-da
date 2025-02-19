@@ -1,4 +1,6 @@
-import { Avatar, Box, Button, CardHeader, Typography } from '@mui/material';
+import { Avatar, Box, CardHeader, Typography, IconButton } from '@mui/material';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import styles from './PostCard.styles';
 import { PostType } from '@shared/types/type';
 import { formatTimeAgo } from '@shared/utils/formatTimeAgo';
@@ -27,16 +29,13 @@ const PostCardHeader = ({
   postType,
 }: PostCardHeaderProps): JSX.Element => {
   const navigate = useNavigate();
-
   const { isLoggedIn, userInfo } = useSelector(
     (state: RootState) => state.user,
   );
   const isOwnPost = userInfo?.id === user.id;
-
   const { data: followStatus, refetch } = useCheckFollowStatusQuery(user.id, {
     skip: !isLoggedIn || isOwnPost,
   });
-
   const [toggleFollow] = useToggleFollowMutation();
 
   const handleAvatarClick = () => {
@@ -67,14 +66,18 @@ const PostCardHeader = ({
       action={
         isLoggedIn &&
         !isOwnPost && (
-          <Button
-            variant="outlined"
-            size="small"
-            sx={styles.followButton(followStatus?.isFollowing)}
-            onClick={handleFollowClick}
-          >
-            {followStatus?.isFollowing ? '팔로잉' : '팔로우'}
-          </Button>
+          <>
+            <IconButton
+              onClick={handleFollowClick}
+              sx={{ backgroundColor: 'transparent' }}
+            >
+              {followStatus?.isFollowing ? (
+                <PersonRemoveIcon sx={{ fontSize: 28 }} />
+              ) : (
+                <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 28 }} />
+              )}
+            </IconButton>
+          </>
         )
       }
       title={
