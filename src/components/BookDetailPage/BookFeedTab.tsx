@@ -37,9 +37,6 @@ const BookFeedTab = ({
   const { data: latestReviews } = useGetLatestBookReviewsQuery({ isbn });
   const { data: bookPostCount } = useGetBookPostCountQuery({ isbn });
 
-  console.log('latestReviews:', latestReviews);
-  console.log('bookPostCount', bookPostCount);
-  console.log('latestPostings', latestPostings);
   const handleModalClose = () => {
     setIsOneLineReviewModalOpen(false);
   };
