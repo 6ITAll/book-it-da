@@ -35,8 +35,11 @@ const PostingDetailPage = () => {
       maxWidth={false}
       sx={{
         ...postingDetailStyles.container,
+        minHeight: '100vh',
         display: 'flex',
-        justifyContent: 'flex-end',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
       }}
     >
       <PostingHeader

@@ -2,11 +2,6 @@ import { Theme } from '@mui/material';
 
 export const postingDetailStyles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    minHeight: '100vh',
     width: '100%',
     padding: '0 !important',
     margin: '0 !important',
