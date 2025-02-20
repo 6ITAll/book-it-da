@@ -4,21 +4,7 @@ import { RootState } from '@store/index';
 import { defaultReaderStats } from '@features/BookDetailPage/slice/readerStatsSlice';
 import { useSelector } from 'react-redux';
 import { transformDemographicsData } from '@utils/BookDetailPage/transformDemographicsData';
-// 타입 추후 components/BookDetailPage/types.ts 로
-export type AgeGroup =
-  | '10s'
-  | '20s'
-  | '30s'
-  | '40s'
-  | '50s'
-  | '60plus'
-  | 'unknown';
-// 타입 추후 components/BookDetailPage/types.ts 로
-export interface AgeGroupData {
-  ageGroup: AgeGroup;
-  male: number;
-  female: number;
-}
+import { AgeGroup, AgeGroupData } from './types';
 
 const ageGroupLabels: Record<AgeGroup, string> = {
   '10s': '10대',

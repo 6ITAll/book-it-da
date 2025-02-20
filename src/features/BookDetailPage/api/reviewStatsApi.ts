@@ -1,17 +1,7 @@
+import { BookReviewStats } from '@components/BookDetailPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
-
-export interface DbBookReviewStats {
-  isbn: string;
-  reviewer_count: number;
-  average_rating: number;
-}
-
-export interface BookReviewStats {
-  isbn: string;
-  reviewerCount: number;
-  averageRating: number;
-}
+import { DbBookReviewStats } from '../types/types';
 
 export const reviewStatsApi = createApi({
   reducerPath: 'reviewStatsApi',

@@ -1,7 +1,7 @@
 import { OneLineReview, Posting } from '@components/MyPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '@utils/supabaseClient';
-import { BookPostCount, DbOneLineReview, DbPosting } from '../types/types';
+import { DbBookPostCount, DbOneLineReview, DbPosting } from '../types/types';
 
 export const bookFeedPreviewApi = createApi({
   reducerPath: 'bookFeedPreviewApi',
@@ -77,7 +77,7 @@ export const bookFeedPreviewApi = createApi({
         { type: 'BookFeedPreview', id: `Postings-${isbn}` },
       ],
     }),
-    getBookPostCount: builder.query<BookPostCount, { isbn: string }>({
+    getBookPostCount: builder.query<DbBookPostCount, { isbn: string }>({
       async queryFn({ isbn }) {
         try {
           const { data, error } = await supabase
@@ -88,7 +88,7 @@ export const bookFeedPreviewApi = createApi({
 
           if (error) throw error;
 
-          const postCount: BookPostCount = {
+          const postCount: DbBookPostCount = {
             isbn: data.isbn,
             review_count: data.review_count,
             posting_count: data.posting_count,

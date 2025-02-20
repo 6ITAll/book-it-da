@@ -53,3 +53,65 @@ export interface Posting {
     avatarUrl: string;
   };
 }
+
+export interface ReaderStats {
+  isbn: string;
+  totalCollectors: number;
+  demographics: {
+    gender: {
+      male: {
+        '10s': number;
+        '20s': number;
+        '30s': number;
+        '40s': number;
+        '50s': number;
+        '60plus': number;
+        unknown: number;
+      };
+      female: {
+        '10s': number;
+        '20s': number;
+        '30s': number;
+        '40s': number;
+        '50s': number;
+        '60plus': number;
+        unknown: number;
+      };
+      unknown: number;
+    };
+  };
+}
+
+export type AgeGroup =
+  | '10s'
+  | '20s'
+  | '30s'
+  | '40s'
+  | '50s'
+  | '60plus'
+  | 'unknown';
+
+export interface AgeGroupData {
+  ageGroup: AgeGroup;
+  male: number;
+  female: number;
+}
+
+export interface Demographics {
+  gender: {
+    male: Record<AgeGroup, number>;
+    female: Record<AgeGroup, number>;
+    unknown: number;
+  };
+}
+export interface ReaderStats {
+  isbn: string;
+  totalCollectors: number;
+  demographics: Demographics;
+}
+
+export interface BookReviewStats {
+  isbn: string;
+  reviewerCount: number;
+  averageRating: number;
+}

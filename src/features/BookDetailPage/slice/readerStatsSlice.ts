@@ -1,28 +1,5 @@
+import { ReaderStats } from '@components/BookDetailPage/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-// 타입 추후 components/BookDetailPage/types.ts 로
-export type AgeGroup =
-  | '10s'
-  | '20s'
-  | '30s'
-  | '40s'
-  | '50s'
-  | '60plus'
-  | 'unknown';
-// 타입 추후 components/BookDetailPage/types.ts 로
-export interface Demographics {
-  gender: {
-    male: Record<AgeGroup, number>;
-    female: Record<AgeGroup, number>;
-    unknown: number;
-  };
-}
-// 타입 추후 components/BookDetailPage/types.ts 로
-export interface ReaderStats {
-  isbn: string;
-  totalCollectors: number;
-  demographics: Demographics;
-}
 
 export const defaultReaderStats: ReaderStats = {
   isbn: '',
