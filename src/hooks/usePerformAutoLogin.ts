@@ -20,6 +20,7 @@ export const usePerformAutoLogin = () => {
             dispatch(
               loginSuccess({
                 id: user.id,
+                username: user.user_metadata?.username,
                 email: user.email,
                 isSocialLogin,
               }),
