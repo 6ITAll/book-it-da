@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Stack, Button, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import StarRating from '@components/commons/StarRating';
-import ReviewSortOptions from '@components/ReviewMorePage/ReviewSortOptions';
+// import ReviewSortOptions from '@components/ReviewMorePage/ReviewSortOptions';
 import InfiniteScrollComponent from '@components/commons/InfiniteScroll';
 import ReviewCard from '@components/commons/ReviewCard';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
@@ -38,7 +38,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
 }) => {
   const [selectedRating, setSelectedRating] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [sortOption, setSortOption] = useState<string>('likes');
+  // const [sortOption, setSortOption] = useState<string>('likes');
   // const [sortedReviews, setSortedReviews] = useState<OneLineReview[]>(reviews);
   const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
   const [selectedReviews, setSelectedReviews] = useState<string[]>([]);
@@ -76,9 +76,9 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
     setIsDialogOpen(false);
   };
 
-  const handleSortChange = (option: string) => {
-    setSortOption(option);
-  };
+  // const handleSortChange = (option: string) => {
+  //   setSortOption(option);
+  // };
 
   const handleDeleteModeToggle = () => {
     setIsDeleteMode(!isDeleteMode);
@@ -171,7 +171,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
                 )}
               </>
             )}
-          <ReviewSortOptions value={sortOption} onChange={handleSortChange} />
+          {/* <ReviewSortOptions value={sortOption} onChange={handleSortChange} /> */}
         </Stack>
       </Stack>
 
