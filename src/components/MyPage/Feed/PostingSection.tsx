@@ -4,6 +4,7 @@ import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useNavigate } from 'react-router-dom';
 import { Posting } from '../types';
+import { navigateToUserPostMorePage } from '@shared/utils/navigation';
 
 interface PostingFeedSectionProps {
   username: string;
@@ -19,13 +20,7 @@ const PostingFeedSection = ({
   type,
 }: PostingFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  const handleNavigate = () => {
-    if (type === '내 피드') {
-      navigate(`/my-page/${username}/feeds/postings`);
-    } else if (type === '좋아요한 피드') {
-      navigate(`/my-page/${username}/liked/postings`);
-    }
-  };
+
   return (
     <Box>
       <Box
@@ -43,28 +38,38 @@ const PostingFeedSection = ({
           size="small"
           variant="text"
           sx={bookReviewTabStyles.moreButton}
-          onClick={handleNavigate}
+          onClick={() =>
+            navigateToUserPostMorePage(navigate, username, type, 'postings')
+          }
         >
           더보기
         </Button>
       </Box>
-      <Grid container spacing={2}>
-        {postings.map((posting, index) => (
-          <Grid
-            key={index}
-            size={{ xs: 12, md: 4 }}
-            sx={{ display: 'flex', flexDirection: 'column' }}
-          >
-            <PostCard
-              postId={posting.postId}
-              title={posting.title}
-              content={posting.content}
-              isbn={posting.book.isbn}
-              user={posting.user}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {postings.length === 0 ? (
+        <Typography variant="body1" sx={{ textAlign: 'center', py: 4 }}>
+          {type === '내 피드'
+            ? '작성한 포스팅이 없습니다.'
+            : '포스팅에 좋아요를 누른 항목이 없습니다.'}
+        </Typography>
+      ) : (
+        <Grid container spacing={2}>
+          {postings.map((posting, index) => (
+            <Grid
+              key={index}
+              size={{ xs: 12, md: 4 }}
+              sx={{ display: 'flex', flexDirection: 'column' }}
+            >
+              <PostCard
+                postId={posting.postId}
+                title={posting.title}
+                content={posting.content}
+                isbn={posting.book.isbn}
+                user={posting.user}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 };

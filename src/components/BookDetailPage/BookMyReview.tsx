@@ -22,9 +22,10 @@ const BookMyReview = ({
   onRatingChange,
   openDialog,
 }: BookMyReviewProps): JSX.Element => {
-  const { id: currentUserId } = useSelector(
+  const userInfo = useSelector(
     (state: RootState) => state.user.userInfo as UserInfo,
   );
+  const currentUserId = userInfo?.id ?? null; // userInfo가 없으면 null 처리
 
   const {
     data: userReview,
@@ -85,6 +86,7 @@ const BookMyReview = ({
     <Box sx={bookReviewTabStyles.myReviewBox}>
       <ReviewCard
         postId={userReview.postId}
+        userId={userReview.user.id}
         username={userReview.user.username}
         avatarUrl={userReview.user.avatarUrl}
         date={formatDate(userReview.createdAt)}

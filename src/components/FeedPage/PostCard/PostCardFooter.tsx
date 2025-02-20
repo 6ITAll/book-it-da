@@ -3,14 +3,19 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import styles from './PostCard.styles';
-import { navigateToBookDetailPage } from '@shared/utils/navigation';
+import {
+  navigateToBookDetailPage,
+  navigateToLoginPage,
+} from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import {
   useCheckLikeStatusQuery,
   useToggleLikeMutation,
 } from '@features/commons/likeApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
+import { useEffect } from 'react';
+import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 
 interface PostCardFooterProps {
   postId: string;
@@ -19,13 +24,30 @@ interface PostCardFooterProps {
 
 const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const { data: likeStatus, refetch } = useCheckLikeStatusQuery(postId);
   const [toggleLike] = useToggleLikeMutation();
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      refetch();
+    }
+  }, [isLoggedIn, refetch]);
+
   const handleLike = async () => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn) {
+      // 로그인 상태가 아닐 때 스낵바 메시지와 리다이렉트 처리
+      dispatch(
+        showSnackbar({
+          message: '로그인 후 이용해주세요.',
+          severity: 'warning',
+        }),
+      );
+      navigateToLoginPage(navigate); // 로그인 페이지로 이동
+      return;
+    }
     try {
       await toggleLike(postId);
       refetch();

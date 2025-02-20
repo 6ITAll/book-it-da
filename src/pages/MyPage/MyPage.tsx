@@ -2,10 +2,11 @@ import TabSection from '@components/MyPage/TabSection';
 import UserInfoSection from '@components/MyPage/UserInfoSection';
 import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
 import { Container, Typography } from '@mui/material';
+import { navigateToUserPage } from '@shared/utils/navigation';
 import { RootState } from '@store/index';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 
 const MyPage = (): JSX.Element => {
   const { username } = useParams<{ username: string }>();
@@ -13,16 +14,24 @@ const MyPage = (): JSX.Element => {
     (state: RootState) => state.user.userInfo?.username,
   );
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { data, error, isLoading, refetch } = useGetUserProfileStatsQuery(
     username || '',
   );
 
   useEffect(() => {
-    if (location.pathname === `/my-page/${currentUsername}`) {
-      refetch();
+    if (currentUsername && username !== currentUsername) {
+      if (currentUsername === username) return;
+      if (username === currentUsername) {
+        navigateToUserPage(navigate, currentUsername, true);
+      }
     }
-  }, [location, currentUsername, refetch]);
+  }, [currentUsername, username, navigate]);
+
+  useEffect(() => {
+    refetch();
+  }, [location, username, refetch]);
 
   const userStats = [
     { count: data?.completed_books_count, label: '읽은책' },

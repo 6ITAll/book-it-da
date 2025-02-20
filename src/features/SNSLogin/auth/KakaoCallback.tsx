@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, setToken } from '@features/user/userSlice';
 import { supabase } from '@utils/supabaseClient';
+import {
+  navigateToAdditionalInfoPage,
+  navigateToLoginPage,
+  navigateToMainPage,
+} from '@shared/utils/navigation';
 
 const KakaoCallback = (): JSX.Element => {
   const navigate = useNavigate();
@@ -75,17 +80,17 @@ const KakaoCallback = (): JSX.Element => {
             !userProfile?.gender ||
             !userProfile?.birth_date
           ) {
-            navigate('/kakao/additional-info');
+            navigateToAdditionalInfoPage(navigate);
             return;
           }
 
-          navigate('/');
+          navigateToMainPage(navigate);
         } else {
           throw new Error('세션 데이터가 없습니다.');
         }
       } catch (error) {
         console.error('Authentication error:', error);
-        navigate('/login');
+        navigateToLoginPage(navigate);
       }
     };
 

@@ -19,10 +19,14 @@ export const useSetAutoLoginSettings = () => {
           .eq('user_id', session.data.session.user.id)
           .single();
 
+        const username =
+          session.data.session.user.user_metadata?.username || 'Unknown User';
+
         if (settings?.auto_login) {
           dispatch(
             loginSuccess({
               id: session.data.session.user.id,
+              username: username,
               email: session.data.session.user.email ?? '',
               isSocialLogin,
             }),

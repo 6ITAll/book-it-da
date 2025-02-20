@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   Box,
   CircularProgress,
@@ -6,7 +6,6 @@ import {
   Divider,
   Stack,
 } from '@mui/material';
-import Masonry from '@mui/lab/Masonry';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PostCard from '@components/FeedPage/PostCard/PostCard';
 import ScrollToTop from '@components/commons/ScrollToTop';
@@ -25,6 +24,7 @@ import {
   setTotalCount,
 } from '@features/FeedPage/slice/feedSlice';
 import WriteButton from '@components/FeedPage/WriteButton';
+import useColumnCount from '@hooks/useColumnCount';
 
 const Main = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -37,8 +37,22 @@ const Main = (): JSX.Element => {
 
   const { data, isLoading, isFetching } = useGetPostsQuery(
     { page, postType, feedType },
-    { refetchOnMountOrArgChange: true },
+    { refetchOnFocus: true, refetchOnMountOrArgChange: true },
   );
+
+  const columnCount = useColumnCount();
+  const columns = useMemo(() => {
+    const cols: (OneLinePost | Posting)[][] = Array.from(
+      { length: columnCount },
+      () => [],
+    );
+    if (data?.posts) {
+      data.posts.forEach((post, index) => {
+        cols[index % columnCount].push(post);
+      });
+    }
+    return cols;
+  }, [data?.posts, columnCount]);
 
   useEffect(() => {
     if (data) {
@@ -138,19 +152,7 @@ const Main = (): JSX.Element => {
         next={fetchMoreData}
         hasMore={data?.hasMore ?? false}
         scrollThreshold={0.99}
-        loader={
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '2rem 1rem',
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        }
+        loader={<></>}
         endMessage={
           <Box
             sx={{
@@ -165,7 +167,7 @@ const Main = (): JSX.Element => {
           </Box>
         }
         style={{
-          padding: '20px 0',
+          padding: '0',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
@@ -174,52 +176,40 @@ const Main = (): JSX.Element => {
           overflowX: 'hidden',
         }}
       >
-        {isLoading || !data ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Masonry
-            columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-            spacing={4}
-            sx={{
-              width: '100%',
-              boxSizing: 'border-box',
-              overflowX: 'hidden',
-            }}
-          >
-            {data?.posts?.map((post: OneLinePost | Posting) => {
-              if ('title' in post && 'content' in post) {
-                return (
-                  <Box key={post.id}>
-                    <PostCard
-                      postId={post.id}
-                      createdAt={post.createdAt}
-                      user={post.user}
-                      book={post.book}
-                      postType={post.postType}
-                      title={post.title}
-                      content={post.content}
-                    />
-                  </Box>
-                );
-              } else {
-                return (
-                  <Box key={post.id}>
-                    <PostCard
-                      postId={post.id}
-                      createdAt={post.createdAt}
-                      user={post.user}
-                      book={post.book}
-                      postType={post.postType}
-                      review={post.review}
-                    />
-                  </Box>
-                );
-              }
-            })}
-          </Masonry>
-        )}
+        <Box sx={{ display: 'flex', width: '100%' }}>
+          {columns.map((col, colIndex) => (
+            <Box
+              key={colIndex}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                margin: 2,
+                gap: 4,
+                flex: 1,
+              }}
+            >
+              {col.map((post: OneLinePost | Posting) => (
+                <PostCard
+                  key={post.id}
+                  postId={post.id}
+                  createdAt={post.createdAt}
+                  user={post.user}
+                  book={post.book}
+                  {...('title' in post
+                    ? {
+                        title: post.title,
+                        content: post.content,
+                        postType: '포스팅',
+                      }
+                    : {
+                        review: post.review,
+                        postType: '한줄평',
+                      })}
+                />
+              ))}
+            </Box>
+          ))}
+        </Box>
       </InfiniteScroll>
       <ScrollToTop />
     </Container>
