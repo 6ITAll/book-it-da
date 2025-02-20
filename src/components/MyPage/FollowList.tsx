@@ -103,7 +103,7 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
   const handleToggleFollow = async (targetUserId: string) => {
     try {
       await toggleFollow(targetUserId);
-      dispatch(toggleFollowStatus(targetUserId)); // Redux 상태 업데이트
+      dispatch(toggleFollowStatus(targetUserId));
       if (currentUserId === userId) {
         onRefetch();
       }
@@ -119,7 +119,7 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
 
   const fetchMoreData = useCallback(() => {
     if (!isFetching && hasMore) {
-      dispatch(setPage(page + 1)); // 페이지 증가
+      dispatch(setPage(page + 1));
     }
   }, [isFetching, hasMore, page, dispatch]);
 

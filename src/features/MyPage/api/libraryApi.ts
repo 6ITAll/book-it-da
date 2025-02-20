@@ -10,7 +10,6 @@ export const libraryApi = createApi({
     getLibrary: builder.query<Bookshelf[], string>({
       queryFn: async (userId) => {
         try {
-          // 유저의 library_id 가져오기
           const { data: libraryData, error: libraryError } = await supabase
             .from('library')
             .select('id')
@@ -24,7 +23,6 @@ export const libraryApi = createApi({
 
           const libraryId = libraryData.id;
 
-          // bookshelf_with_books 뷰에서 데이터 가져오기
           const { data: bookshelfData, error: bookshelfError } = await supabase
             .from('bookshelf_with_books')
             .select('*')
@@ -39,7 +37,6 @@ export const libraryApi = createApi({
             return { data: [] };
           }
 
-          // 필요한 데이터만 변환하여 반환
           const bookshelves = bookshelfData.map((shelf) => ({
             id: shelf.bookshelf_id,
             name: shelf.bookshelf_name,
