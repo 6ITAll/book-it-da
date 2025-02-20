@@ -20,15 +20,15 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            react: ['react', 'react-dom'],
+            react: ['react', 'react-dom', 'react-router-dom'],
             mui: ['@mui/material'],
-            muiBase: ['@mui/base'],
+            muiX: ['@mui/x-date-pickers'],
             muiIcon: ['@mui/icons-material'],
-            muiLab: ['@mui/lab'],
             redux: ['@reduxjs/toolkit', 'react-redux'],
+            quill: ['quill'],
+            supabase: ['@supabase/supabase-js'],
             form: ['react-hook-form', '@hookform/resolvers', 'yup'],
-            vendor: ['lodash', 'dayjs'],
-            swagger: ['swagger-jsdoc', 'swagger-ui-express', 'yamljs'],
+            lodash: ['lodash', 'lodash-es'],
           },
         },
       },
