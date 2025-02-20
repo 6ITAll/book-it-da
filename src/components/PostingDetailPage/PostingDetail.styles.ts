@@ -2,11 +2,6 @@ import { Theme } from '@mui/material';
 
 export const postingDetailStyles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    minHeight: '100vh',
     width: '100%',
     padding: '0 !important',
     margin: '0 !important',
@@ -15,16 +10,13 @@ export const postingDetailStyles = {
   posting: (theme: Theme) => ({
     px: 4,
     pt: 3,
-    width: {
-      xs: '100%',
-      md: '50%',
-    },
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     bgcolor: theme.palette.background.paper,
     boxSizing: 'border-box',
+    mb: '2rem',
   }),
   postingHeader: (theme: Theme) => ({
     width: '100%',
@@ -59,7 +51,10 @@ export const postingDetailStyles = {
     borderBottom: '1px solid #eee',
   },
   bookPreviewBox: {
-    width: '50%',
+    width: {
+      xs: '100%',
+      md: '50%',
+    },
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -95,8 +90,10 @@ export const postingDetailStyles = {
     },
   },
   otherPostingBox: {
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
-    my: 5,
+    py: 2,
     px: 4,
     boxSizing: 'border-box',
   },
@@ -126,10 +123,7 @@ export const postingDetailStyles = {
     padding: '4px 12px',
   }),
   CommentSectionWrapper: (theme: Theme) => ({
-    width: {
-      xs: '100%',
-      md: '50%',
-    },
+    width: '100%',
     bgcolor: theme.palette.background.paper,
   }),
 };

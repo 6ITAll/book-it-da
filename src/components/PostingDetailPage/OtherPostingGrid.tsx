@@ -14,6 +14,7 @@ interface OtherPostingGridProps {
   isbn?: string;
   userId?: string;
   postingId: string;
+  isMobile?: boolean;
 }
 
 const OtherPostingGrid: React.FC<OtherPostingGridProps> = ({
@@ -21,6 +22,7 @@ const OtherPostingGrid: React.FC<OtherPostingGridProps> = ({
   isbn,
   userId,
   postingId,
+  isMobile = false,
 }) => {
   const title =
     type === 'BookOtherPosting'
@@ -53,13 +55,41 @@ const OtherPostingGrid: React.FC<OtherPostingGridProps> = ({
       <Typography variant="h6" sx={postingDetailStyles.otherPostingTitle}>
         {title}
       </Typography>
-      <Grid container spacing={3}>
-        {posts.map((post, index) => (
-          <Grid key={index} size={{ xs: 12, md: 4 }}>
-            <OtherPostingCard post={post} />
-          </Grid>
-        ))}
-      </Grid>
+      {isMobile ? (
+        <Box
+          sx={{
+            display: 'flex',
+            overflowX: 'auto',
+            gap: 2,
+            pb: 2,
+            '::-webkit-scrollbar': {
+              display: 'none',
+            },
+            scrollSnapType: 'x mandatory',
+          }}
+        >
+          {posts.map((post, index) => (
+            <Box
+              key={index}
+              sx={{
+                minWidth: '280px',
+                scrollSnapAlign: 'start',
+                flexShrink: 0,
+              }}
+            >
+              <OtherPostingCard post={post} />
+            </Box>
+          ))}
+        </Box>
+      ) : (
+        <Grid container direction="column" spacing={3}>
+          {posts.map((post, index) => (
+            <Grid key={index} size={{ xs: 12 }}>
+              <OtherPostingCard post={post} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 };

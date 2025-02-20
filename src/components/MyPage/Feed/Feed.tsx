@@ -13,6 +13,7 @@ interface FeedProps {
 }
 
 const Feed = ({
+  userId,
   username,
   oneLineReviews,
   postings,
@@ -23,6 +24,7 @@ const Feed = ({
   return (
     <>
       <OneLineReviewSection
+        userId={userId}
         username={username}
         oneLineReviews={oneLineReviews}
         oneLineReviewCount={oneLineReviewsCount}

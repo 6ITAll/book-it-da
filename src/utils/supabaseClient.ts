@@ -7,6 +7,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: true, // 세션 감지 추가
+  },
+  // 실시간 연결 설정 추가
+  realtime: {
+    params: {
+      eventsPerSecond: 10,
+    },
+  },
+  // 글로벌 설정 추가
+  global: {
+    headers: {
+      'Cache-Control': 'no-cache',
+    },
   },
 });
 

@@ -12,7 +12,6 @@
     "@hooks/*",
     "@utils/*",
     "@constants/*",
-    "@assets/*",
-    "@mocks/*"
+    "@assets/*"
   ]
 }

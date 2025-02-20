@@ -3,9 +3,9 @@ import {
   Typography,
   Avatar,
   Stack,
-  Button,
   useTheme,
   Box,
+  IconButton,
 } from '@mui/material';
 import { User } from '@shared/types/type';
 import {
@@ -15,7 +15,6 @@ import {
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { stripHtml } from 'string-strip-html';
-import { Theme } from '@mui/material';
 import {
   useCheckFollowStatusQuery,
   useToggleFollowMutation,
@@ -23,6 +22,8 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
 interface PostCardProps {
   postId: string;
@@ -31,32 +32,6 @@ interface PostCardProps {
   isbn: string;
   user: User;
 }
-
-const styles = {
-  followButton: (isFollowing: boolean | undefined) => (theme: Theme) => ({
-    color: isFollowing
-      ? theme.palette.getContrastText(theme.palette.secondary.main)
-      : theme.palette.getContrastText(theme.palette.primary.main),
-    backgroundColor: isFollowing
-      ? theme.palette.mode === 'light'
-        ? theme.palette.secondary.light
-        : theme.palette.secondary.dark
-      : theme.palette.mode === 'light'
-        ? theme.palette.primary.light
-        : theme.palette.primary.main,
-    border: 'none',
-    mb: '0',
-    '&:hover': {
-      backgroundColor: isFollowing
-        ? theme.palette.mode === 'light'
-          ? theme.palette.secondary.dark
-          : theme.palette.secondary.main
-        : theme.palette.mode === 'light'
-          ? theme.palette.primary.main
-          : theme.palette.primary.light,
-    },
-  }),
-};
 
 const PostCard = ({
   postId,
@@ -67,14 +42,11 @@ const PostCard = ({
 }: PostCardProps): JSX.Element => {
   const navigate = useNavigate();
   const theme = useTheme();
-
   const { data: bookInfo } = useSearchBookByIsbnQuery({ isbn });
-
   const { isLoggedIn, userInfo } = useSelector(
     (state: RootState) => state.user,
   );
   const isOwnPost = userInfo?.id === user.id;
-
   const { data: followStatus, refetch } = useCheckFollowStatusQuery(user.id, {
     skip: !isLoggedIn || isOwnPost,
   });
@@ -98,6 +70,7 @@ const PostCard = ({
     () => stripHtml(content || '내용 없음').result,
     [content],
   );
+
   return (
     <Card
       sx={{
@@ -110,14 +83,19 @@ const PostCard = ({
       }}
       onClick={() => handleCardClick(postId)}
     >
-      <Stack direction="row" spacing={2} sx={{ padding: '16px' }}>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{ padding: '16px', height: '100%' }}
+      >
         {/* 책 이미지 */}
         <img
           src={bookInfo?.cover}
           alt={title}
           style={{
+            aspectRatio: '3 / 4',
             width: '20%',
-            height: 'auto',
+            height: '100%',
             objectFit: 'cover',
             borderRadius: '4px',
           }}
@@ -146,7 +124,6 @@ const PostCard = ({
           </Typography>
         </Stack>
       </Stack>
-
       <Stack
         direction="row"
         alignItems="center"
@@ -186,7 +163,6 @@ const PostCard = ({
             {user?.username}
           </Typography>
         </Stack>
-
         <Box
           sx={{
             width: '20%',
@@ -194,19 +170,20 @@ const PostCard = ({
             justifyContent: 'flex-end',
           }}
         >
-          {/* 팔로우 버튼 */}
           {isLoggedIn && !isOwnPost && (
-            <Button
-              variant="outlined"
-              size="small"
-              sx={styles.followButton(followStatus?.isFollowing)}
+            <IconButton
               onClick={(e) => {
-                e.stopPropagation(); // 클릭 이벤트 전파 방지
+                e.stopPropagation();
                 handleFollowClick();
               }}
+              sx={{ backgroundColor: 'transparent' }}
             >
-              {followStatus?.isFollowing ? '팔로잉' : '팔로우'}
-            </Button>
+              {followStatus?.isFollowing ? (
+                <PersonRemoveIcon sx={{ fontSize: 28 }} />
+              ) : (
+                <PersonAddAlt1Icon sx={{ color: '#0095f6', fontSize: 28 }} />
+              )}
+            </IconButton>
           )}
         </Box>
       </Stack>
