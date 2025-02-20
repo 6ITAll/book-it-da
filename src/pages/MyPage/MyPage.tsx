@@ -2,6 +2,7 @@ import TabSection from '@components/MyPage/TabSection';
 import UserInfoSection from '@components/MyPage/UserInfoSection';
 import { useGetUserProfileStatsQuery } from '@features/MyPage/api/userProfileStatsApi';
 import { Container, Typography } from '@mui/material';
+import { navigateToUserPage } from '@shared/utils/navigation';
 import { RootState } from '@store/index';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -23,7 +24,7 @@ const MyPage = (): JSX.Element => {
     if (currentUsername && username !== currentUsername) {
       if (currentUsername === username) return;
       if (username === currentUsername) {
-        navigate(`/my-page/${currentUsername}`, { replace: true });
+        navigateToUserPage(navigate, currentUsername, true);
       }
     }
   }, [currentUsername, username, navigate]);

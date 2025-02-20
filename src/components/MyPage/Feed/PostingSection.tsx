@@ -4,6 +4,7 @@ import { Box, Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useNavigate } from 'react-router-dom';
 import { Posting } from '../types';
+import { navigateToUserPostMorePage } from '@shared/utils/navigation';
 
 interface PostingFeedSectionProps {
   username: string;
@@ -19,13 +20,7 @@ const PostingFeedSection = ({
   type,
 }: PostingFeedSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  const handleNavigate = () => {
-    if (type === '내 피드') {
-      navigate(`/my-page/${username}/feeds/postings`);
-    } else if (type === '좋아요한 피드') {
-      navigate(`/my-page/${username}/liked/postings`);
-    }
-  };
+
   return (
     <Box>
       <Box
@@ -43,7 +38,9 @@ const PostingFeedSection = ({
           size="small"
           variant="text"
           sx={bookReviewTabStyles.moreButton}
-          onClick={handleNavigate}
+          onClick={() =>
+            navigateToUserPostMorePage(navigate, username, type, 'postings')
+          }
         >
           더보기
         </Button>

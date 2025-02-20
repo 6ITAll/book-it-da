@@ -2,12 +2,13 @@ import { Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import BestBookCarousel from '@components/BookSearchPage/BestBookCarousel';
 import styles from '@components/NotFoundPage/NotFoundContent.style';
+import { navigateToMainPage } from '@shared/utils/navigation';
 
 const NotFoundContent = (): JSX.Element => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate('/');
+    navigateToMainPage(navigate);
   };
 
   return (

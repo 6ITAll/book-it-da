@@ -24,11 +24,6 @@ const SearchBookCard = ({
   const { data } = useFetchRatingInfoQuery({ isbn });
   const ratingCount = data?.item?.[0]?.subInfo?.ratingInfo?.ratingCount || 0;
 
-  // 책 고유 id 값으로 상세페이지 이동
-  const handleCardClick = () => {
-    navigateToBookDetailPage(navigate, isbn);
-  };
-
   return (
     <CommonBookCard
       image={cover}
@@ -37,7 +32,7 @@ const SearchBookCard = ({
       customerReviewRank={customerReviewRank}
       priceStandard={priceStandard}
       ratingCount={ratingCount}
-      onClick={handleCardClick}
+      onClick={() => navigateToBookDetailPage(navigate, isbn)}
       sx={{
         boxShadow: 2,
         transition: 'transform 0.3s ease, box-shadow 0.3s ease',

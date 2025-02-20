@@ -6,7 +6,7 @@ import {
   useUpdatePostingMutation,
 } from '@features/PostingWritePage/api/postingWriteApi';
 import { Book } from '@shared/types/type';
-import { navigateBack } from '@shared/utils/navigation';
+import { navigateBack, navigateToMainPage } from '@shared/utils/navigation';
 import { postingWriteStyles } from './PostingWrite.styles';
 import { TEMP_SAVE_STORAGE_KEY } from '@constants/postingWrite';
 
@@ -50,7 +50,7 @@ const PostingWriteHeader = ({
         await createPosting(postData).unwrap();
       }
       localStorage.removeItem(TEMP_SAVE_STORAGE_KEY);
-      navigate('/');
+      navigateToMainPage(navigate);
     } catch (error) {
       console.error('포스팅 저장 실패:', error);
       // 에러 처리 (예: 사용자에게 에러 메시지 표시)

@@ -25,6 +25,7 @@ import {
   checkUserIdDuplicate,
 } from '@utils/SignupPage/checkDuplicate';
 import BirthDatePicker from './BirthDatePicker';
+import { navigateToLoginPage } from '@shared/utils/navigation';
 
 const Signup = (): JSX.Element => {
   const {
@@ -95,7 +96,7 @@ const Signup = (): JSX.Element => {
           severity: 'success',
         }),
       );
-      navigate('/login');
+      navigateToLoginPage(navigate);
     } catch (error) {
       console.error('Error during signup:', error);
       dispatch(

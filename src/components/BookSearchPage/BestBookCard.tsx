@@ -15,15 +15,13 @@ const BestBookCard = ({
 }: BestBookCardProps): JSX.Element => {
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    navigateToBookDetailPage(navigate, isbn);
-  };
-
   return (
     <CommonBookCard
       image={image}
       title={title || '제목 없음'}
-      onClick={handleCardClick}
+      onClick={() => {
+        navigateToBookDetailPage(navigate, isbn);
+      }}
       sx={bestBookStyles.commonCard}
     />
   );
