@@ -13,7 +13,10 @@ import ReadingStatus from './BookReadingStatus';
 import { ReadingStatusType } from '@shared/types/type';
 import AddToLibraryModal from '@components/BookDetailPage/AddToLibraryDialog';
 import PostTypeSelectDialog from '@components/FeedPage/PostTypeSelectDialog/PostTypeSelectDialog';
-import { navigateToBookDetailPage } from '@shared/utils/navigation';
+import {
+  navigateToBookDetailPage,
+  navigateToPostingWritePage,
+} from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import URLShareDialog from '@components/commons/URLShareDialog';
 import { useSearchBookByIsbnQuery } from '@features/commons/bookSearchByIsbn';
@@ -21,6 +24,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { UserInfo } from '@features/user/userSlice';
 import { useUpdateReadingStatusMutation } from '@features/BookShelvesPage/api/bookShelvesApi';
+import RoutePaths from '@routes/RoutePath';
 interface BookShelvesDetailDialogProps {
   username: string;
   openDialog: boolean;
@@ -71,11 +75,7 @@ const BookShelvesDetailDialog = ({
 
   const getShareUrl = () => {
     const baseUrl = window.location.origin;
-    return `${baseUrl}/bookDetail/${book?.isbn}`;
-  };
-
-  const handleWriteClick = () => {
-    navigate('/posting/write', { state: { book } });
+    return `${baseUrl}${RoutePaths.BOOKDETAIL}/${book?.isbn}`;
   };
 
   const handleShareClick = () => {
@@ -124,7 +124,7 @@ const BookShelvesDetailDialog = ({
           variant="outlined"
           startIcon={<EditIcon />}
           sx={bookDetailDialogStyles.mainButton}
-          onClick={handleWriteClick}
+          onClick={() => navigateToPostingWritePage(navigate, book)}
         >
           글쓰기
         </Button>

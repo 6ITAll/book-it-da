@@ -12,8 +12,8 @@ import { supabase } from '@utils/supabaseClient';
 import { useDispatch } from 'react-redux';
 import { setCheckedPassword } from '@features/user/userSlice';
 import { useNavigate } from 'react-router-dom';
-import RoutePaths from 'src/routes/RoutePath';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+import { navigateToProfileEditPage } from '@shared/utils/navigation';
 
 const PasswordChkPage = () => {
   const [password, setPassword] = useState('');
@@ -55,7 +55,7 @@ const PasswordChkPage = () => {
       }
 
       dispatch(setCheckedPassword(true));
-      navigate(RoutePaths.EDIT_ACCOUNT);
+      navigateToProfileEditPage(navigate);
     } catch (err) {
       console.error('비밀번호 확인 중 오류 발생:', err);
       dispatch(

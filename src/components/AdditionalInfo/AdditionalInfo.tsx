@@ -26,6 +26,7 @@ import {
 import { useUpdateUserInfoMutation } from '@features/user/additionalInfoApi';
 import { additionalInfoSchema } from '@utils/SignupPage/yupSchema';
 import BirthDatePicker from '@components/LoginSignupPage/Signup/BirthDatePicker';
+import { navigateToMainPage } from '@shared/utils/navigation';
 
 const AdditionalInfo = (): JSX.Element => {
   const {
@@ -76,7 +77,7 @@ const AdditionalInfo = (): JSX.Element => {
           severity: 'success',
         }),
       );
-      navigate('/');
+      navigateToMainPage(navigate);
     } catch (error) {
       console.error('추가 정보 저장 실패:', error);
       dispatch(

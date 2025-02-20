@@ -4,6 +4,7 @@ import styles from './PostTypeSelectDialog.styles';
 import { PostType } from '@shared/types/type';
 import { POST_TYPE_OPTIONS } from 'src/constants';
 import { useNavigate } from 'react-router-dom';
+import { navigateToPostingWritePage } from '@shared/utils/navigation';
 
 interface PostTypeButtonProps {
   icon: (typeof POST_TYPE_OPTIONS)[0]['icon'];
@@ -22,7 +23,7 @@ const PostTypeButton = ({
 
   const handleClick = () => {
     if (type === '포스팅') {
-      navigate('/posting/write');
+      navigateToPostingWritePage(navigate);
     } else {
       onSelect(type);
     }

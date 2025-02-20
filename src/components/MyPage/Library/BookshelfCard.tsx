@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import BookShelfThumbnail from './BookShelfThumbnail';
 import { Bookshelf } from '../types';
+import { navigateToBookShelvesPage } from '@shared/utils/navigation';
 
 interface BookshelfCardProps {
   shelf: Bookshelf;
@@ -21,10 +22,6 @@ const BookshelfCard = ({ shelf, username }: BookshelfCardProps) => {
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.up('sm'));
 
-  const handleClick = () => {
-    navigate(`/my-page/${username}/bookshelves/${shelf.id}`);
-  };
-
   return (
     <Card
       sx={{
@@ -32,7 +29,9 @@ const BookshelfCard = ({ shelf, username }: BookshelfCardProps) => {
         maxWidth: 200,
       }}
     >
-      <CardActionArea onClick={handleClick}>
+      <CardActionArea
+        onClick={() => navigateToBookShelvesPage(navigate, username, shelf.id)}
+      >
         <Grid
           container
           height={140}

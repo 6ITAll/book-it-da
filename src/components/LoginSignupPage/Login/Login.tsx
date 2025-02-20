@@ -23,6 +23,10 @@ import { useKakaoSDK } from '@hooks/useKakaoSDK';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { useSetAutoLoginSettings } from '@hooks/useSetAutoLogin';
 import { useRememberMe } from '@hooks/useRemeberMe';
+import {
+  navigateToMainPage,
+  navigateToSignUpPage,
+} from '@shared/utils/navigation';
 
 const Login = (): JSX.Element => {
   const { rememberMe, savedUserEmail, handleRememberMeChange } =
@@ -97,7 +101,7 @@ const Login = (): JSX.Element => {
             localStorage.removeItem('token');
           }
 
-          navigate('/');
+          navigateToMainPage(navigate);
         }
       } catch (error) {
         console.error('Login error:', error);
@@ -222,7 +226,10 @@ const Login = (): JSX.Element => {
           }}
         >
           <Typography variant="h6">계정이 없으신가요? </Typography>
-          <SignupButton variant="h6" onClick={() => navigate('/signup')}>
+          <SignupButton
+            variant="h6"
+            onClick={() => navigateToSignUpPage(navigate)}
+          >
             회원가입
           </SignupButton>
         </Box>

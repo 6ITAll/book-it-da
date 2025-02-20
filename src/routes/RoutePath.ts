@@ -14,7 +14,10 @@ const RoutePaths = {
   BOOKDETAIL: '/bookDetail',
   REVIEWS: 'reviews',
   POSTINGS: 'postings',
+  FEEDS: 'feeds',
+  LIKED: 'liked',
   KAKAO_ADDITIONAL_INFO: '/kakao/additional-info',
+  PASSWORD_CHECK: 'passwordChk',
   // 추가시
   // ABOUT: '/about', 식으로 가능
 };
