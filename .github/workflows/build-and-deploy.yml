@@ -2,7 +2,7 @@ name: Build & Deploy to AWS CloudFront
 on:
   push:
     branches:
-      - main
+      - webp_test
 
 jobs:
   build-and-deploy:
