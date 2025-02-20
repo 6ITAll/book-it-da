@@ -55,7 +55,6 @@ const Signup = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const onSubmit = async (formData: SignupData) => {
-    console.log(isEmailAvailable, isUserIdAvailable);
     if (!isEmailAvailable || !isUserIdAvailable) {
       dispatch(
         showSnackbar({

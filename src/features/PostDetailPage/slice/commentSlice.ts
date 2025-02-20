@@ -187,7 +187,6 @@ const postingCommentsSlice = createSlice({
     toggleShowReplies(state, action: PayloadAction<string>) {
       const commentId = action.payload;
       const index = state.showRepliesFor.indexOf(commentId);
-      console.log('toggle');
 
       if (index === -1) {
         state.showRepliesFor.push(commentId);

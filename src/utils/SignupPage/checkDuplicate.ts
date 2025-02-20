@@ -1,16 +1,11 @@
 import { supabase } from '@utils/supabaseClient';
 
 export const checkEmailDuplicate = async (email: string): Promise<boolean> => {
-  console.log(email);
-
   try {
     const { data, error } = await supabase
       .from('user')
       .select()
       .ilike('email', email);
-
-    console.log(data);
-    console.log(email);
 
     if (error) {
       console.error('Error checking email duplicate:', error);

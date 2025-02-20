@@ -22,15 +22,3 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     },
   },
 });
-
-export async function testConnection() {
-  try {
-    const { data, error } = await supabase.from('User').select('*').limit(1);
-    if (error) throw error;
-    console.log('Connection successful!', data);
-    return true;
-  } catch (error) {
-    console.error('Connection failed:', error);
-    return false;
-  }
-}
