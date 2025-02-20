@@ -8,10 +8,8 @@ import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
 import { usePerformAutoLogin } from '@hooks/usePerformAutoLogin';
-import { useAuthStateChange } from '@hooks/useAuthStateChange';
-import RequireAdditionalInfo from '@hooks/useRequireAdditionalInfo';
 import { AuthProvider } from '@components/Auth/AuthProvider';
-
+import RequireAdditionalInfo from '@hooks/useRequireAdditionalInfo';
 
 const MainContent = (): JSX.Element => {
   const location = useLocation();
@@ -56,7 +54,6 @@ const App = (): JSX.Element => {
         <AppContent />
       </AuthProvider>
     </Provider>
-    <Provider store={store}>
   );
 };
 
