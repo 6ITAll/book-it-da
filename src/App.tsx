@@ -9,6 +9,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
 import { usePerformAutoLogin } from '@hooks/usePerformAutoLogin';
 import { useAuthStateChange } from '@hooks/useAuthStateChange';
+import RequireAdditionalInfo from '@hooks/useRequireAdditionalInfo';
 
 const AppContent = (): JSX.Element => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const App = (): JSX.Element => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
+          <RequireAdditionalInfo />
           <AppContent />
         </Router>
       </ThemeProvider>
