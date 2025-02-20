@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,6 +26,8 @@ import {
 import { useUpdateUserInfoMutation } from '@features/user/additionalInfoApi';
 import { additionalInfoSchema } from '@utils/SignupPage/yupSchema';
 import BirthDatePicker from '@components/LoginSignupPage/Signup/BirthDatePicker';
+import { RootState } from '@store/index';
+import { loginSuccess, UserInfo } from '@features/user/userSlice';
 import { navigateToMainPage } from '@shared/utils/navigation';
 
 const AdditionalInfo = (): JSX.Element => {
@@ -44,8 +46,54 @@ const AdditionalInfo = (): JSX.Element => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state: RootState) => state.user);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [updateUserInfo] = useUpdateUserInfoMutation();
+
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error('Session check error:', error);
+        navigate('/login');
+        return;
+      }
+
+      if (!session) {
+        dispatch(
+          showSnackbar({
+            message: '로그인 후 이용해주세요.',
+            severity: 'warning',
+          }),
+        );
+        navigate('/login');
+      } else if ((userInfo && userInfo.username) || isSubmitted) {
+        if (isSubmitted) {
+          dispatch(
+            showSnackbar({
+              message: '추가 정보가 성공적으로 저장되었습니다.',
+              severity: 'success',
+            }),
+          );
+        } else {
+          dispatch(
+            showSnackbar({
+              message: '잘못된 접근입니다. 이미 추가 정보를 입력하셨습니다.',
+              severity: 'warning',
+            }),
+          );
+        }
+        navigate('/');
+      }
+    };
+
+    checkUserStatus();
+  }, [navigate, userInfo, dispatch, isSubmitted]);
 
   const onSubmit = async (formData: AdditionalInfoData) => {
     if (!isUserIdAvailable) {
@@ -71,6 +119,13 @@ const AdditionalInfo = (): JSX.Element => {
 
       await updateUserInfo({ userId, formData }).unwrap();
 
+      dispatch(
+        loginSuccess({
+          ...(userInfo as UserInfo),
+          username: formData.userId,
+        }),
+      );
+      setIsSubmitted(true);
       dispatch(
         showSnackbar({
           message: '추가 정보가 성공적으로 저장되었습니다.',
