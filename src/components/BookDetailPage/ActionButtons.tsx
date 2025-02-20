@@ -6,6 +6,7 @@ import URLShareDialog from '@components/commons/URLShareDialog';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Book } from '@shared/types/type';
 import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
+import { navigateToPostingWritePage } from '@shared/utils/navigation';
 
 interface ActionButtonsProps {
   book: Book;
@@ -19,7 +20,7 @@ const ActionButtons = ({ book }: ActionButtonsProps): JSX.Element => {
   const currentUrl = `${window.location.origin}${location.pathname}`;
 
   const handleWriteClick = () => {
-    navigate('/posting/write', { state: { book } });
+    navigateToPostingWritePage(navigate, book);
   };
   const handleShareClick = () => {
     setOpenShareDialog(true); // 공유 모달 열기

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { OneLineReview } from '../types';
 import { formatDate } from '@shared/utils/dateUtils';
 import ReviewCard from '@components/commons/ReviewCard';
+import { navigateToUserPostMorePage } from '@shared/utils/navigation';
 
 interface OneLineReviewSectionProps {
   userId: string;
@@ -22,13 +23,7 @@ const OneLineReviewSection = ({
   type,
 }: OneLineReviewSectionProps): JSX.Element => {
   const navigate = useNavigate();
-  const handleNavigate = () => {
-    if (type === '내 피드') {
-      navigate(`/my-page/${username}/feeds/reviews`);
-    } else if (type === '좋아요한 피드') {
-      navigate(`/my-page/${username}/liked/reviews`);
-    }
-  };
+
   return (
     <Box sx={{ marginBottom: '2rem' }}>
       <Box
@@ -46,7 +41,9 @@ const OneLineReviewSection = ({
           size="small"
           variant="text"
           sx={bookReviewTabStyles.moreButton}
-          onClick={handleNavigate}
+          onClick={() =>
+            navigateToUserPostMorePage(navigate, username, type, 'reviews')
+          }
         >
           더보기
         </Button>

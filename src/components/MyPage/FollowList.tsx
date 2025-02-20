@@ -27,6 +27,7 @@ import {
   toggleFollowStatus,
 } from '@features/MyPage/slice/followListSlice';
 import { FollowListUser } from './types';
+import { navigateToUserPage } from '@shared/utils/navigation';
 
 interface FollowListProps {
   setOpen: (open: boolean) => void;
@@ -112,7 +113,7 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
   };
 
   const handleUserClick = (username: string) => {
-    navigate(`/my-page/${username}`);
+    navigateToUserPage(navigate, username);
     setOpen(false);
   };
 

@@ -86,6 +86,7 @@ const BookMyReview = ({
     <Box sx={bookReviewTabStyles.myReviewBox}>
       <ReviewCard
         postId={userReview.postId}
+        userId={userReview.user.id}
         username={userReview.user.username}
         avatarUrl={userReview.user.avatarUrl}
         date={formatDate(userReview.createdAt)}

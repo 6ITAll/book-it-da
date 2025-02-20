@@ -198,6 +198,7 @@ const ReviewMorePageTemplate: React.FC<ReviewMorePageTemplateProps> = ({
             <Box sx={{ flexGrow: 1 }}>
               <ReviewCard
                 postId={review.postId}
+                userId={review.user.id}
                 username={review.user.username}
                 avatarUrl={review.user.avatarUrl ?? ''}
                 date={formatDate(review.createdAt)}

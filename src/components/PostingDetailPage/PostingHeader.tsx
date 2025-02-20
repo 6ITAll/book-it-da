@@ -12,6 +12,10 @@ import {
   useCheckLikeStatusQuery,
   useToggleLikeMutation,
 } from '@features/commons/likeApi';
+import {
+  navigateBack,
+  navigateToPostingEditPage,
+} from '@shared/utils/navigation';
 
 interface PostingHeaderProps {
   title: string;
@@ -52,11 +56,7 @@ const PostingHeader = ({
 
   const handleBack = () => {
     sessionStorage.removeItem('isPostingDetail');
-    navigate(-1);
-  };
-
-  const handleEdit = () => {
-    navigate(`/posting/edit/${postingId}`);
+    navigateBack(navigate);
   };
 
   return (
@@ -91,7 +91,9 @@ const PostingHeader = ({
         </IconButton>
         {/* 수정 버튼 */}
         {isUserOwnsPost && (
-          <IconButton onClick={handleEdit}>
+          <IconButton
+            onClick={() => navigateToPostingEditPage(navigate, postingId)}
+          >
             <EditIcon />
           </IconButton>
         )}

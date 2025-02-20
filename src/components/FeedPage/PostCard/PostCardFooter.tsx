@@ -3,7 +3,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import styles from './PostCard.styles';
-import { navigateToBookDetailPage } from '@shared/utils/navigation';
+import {
+  navigateToBookDetailPage,
+  navigateToLoginPage,
+} from '@shared/utils/navigation';
 import { useNavigate } from 'react-router-dom';
 import {
   useCheckLikeStatusQuery,
@@ -42,7 +45,7 @@ const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
           severity: 'warning',
         }),
       );
-      navigate('/login'); // 로그인 페이지로 이동
+      navigateToLoginPage(navigate); // 로그인 페이지로 이동
       return;
     }
     try {

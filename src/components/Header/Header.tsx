@@ -14,6 +14,10 @@ import {
   StyledIconWrapper,
 } from './Header.styles';
 import UserMenu from './userMenu';
+import {
+  navigateToLoginPage,
+  navigateToSearchPage,
+} from '@shared/utils/navigation';
 
 const Header = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -40,11 +44,9 @@ const Header = (): JSX.Element => {
   // 검색 실행 함수
   const handleSearch = () => {
     const trimmedQuery = localSearchQuery.trim();
+    navigateToSearchPage(navigate, trimmedQuery);
     if (trimmedQuery) {
-      navigate(`/search?query=${encodeURIComponent(trimmedQuery)}`);
-      dispatch(setSearchQuery(trimmedQuery)); // Redux 상태 업데이트
-    } else {
-      navigate('/search'); // 검색어 없으면 그냥 검색 페이지 이동
+      dispatch(setSearchQuery(trimmedQuery));
     }
     setLocalSearchQuery(''); // 검색창 입력값 초기화
     setShowSearchBar(false); // 검색바 닫기
@@ -84,7 +86,7 @@ const Header = (): JSX.Element => {
           <UserMenu />
         ) : (
           <Button
-            onClick={() => navigate('/login')}
+            onClick={() => navigateToLoginPage(navigate)}
             variant="outlined"
             color="primary"
           >

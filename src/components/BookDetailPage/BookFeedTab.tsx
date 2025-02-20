@@ -4,7 +4,6 @@ import ReviewCard from '@components/commons/ReviewCard';
 import PostCard from '@components/commons/PostCard';
 import { useNavigate } from 'react-router-dom';
 import OneLineReviewDialog from '@components/FeedPage/OneLineReviewDialog/OneLineReviewDialog';
-import { MoreType } from '@components/BookDetailPage/types';
 import { bookReviewTabStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { useState } from 'react';
 import BookMyReview from './BookMyReview';
@@ -14,6 +13,7 @@ import {
   useGetLatestBookReviewsQuery,
 } from '@features/BookDetailPage/api/bookFeedPreviewApi';
 import { formatDate } from '@shared/utils/dateUtils';
+import { navigateToBookDetailPostMorePage } from '@shared/utils/navigation';
 interface BookFeedTabProps {
   isbn: string;
   title: string;
@@ -41,12 +41,6 @@ const BookFeedTab = ({
     setIsOneLineReviewModalOpen(false);
   };
 
-  const handleSeeMoreClick = (type: MoreType) => {
-    if (isbn) {
-      navigate(`/bookDetail/${isbn}/${type}`);
-    }
-  };
-
   return (
     <Box sx={bookReviewTabStyles.container}>
       {/* 리뷰 섹션 */}
@@ -69,7 +63,9 @@ const BookFeedTab = ({
           <Button
             size="small"
             variant="text"
-            onClick={() => handleSeeMoreClick('reviews')}
+            onClick={() =>
+              navigateToBookDetailPostMorePage(navigate, isbn, 'reviews')
+            }
             sx={bookReviewTabStyles.moreButton}
           >
             더보기
@@ -85,6 +81,7 @@ const BookFeedTab = ({
               >
                 <ReviewCard
                   postId={review.postId}
+                  userId={review.user.id}
                   username={review.user.username}
                   avatarUrl={review.user.avatarUrl}
                   date={formatDate(review.createdAt)}
@@ -120,7 +117,9 @@ const BookFeedTab = ({
           <Button
             size="small"
             variant="text"
-            onClick={() => handleSeeMoreClick('postings')}
+            onClick={() =>
+              navigateToBookDetailPostMorePage(navigate, isbn, 'postings')
+            }
             sx={bookReviewTabStyles.moreButton}
           >
             더보기
