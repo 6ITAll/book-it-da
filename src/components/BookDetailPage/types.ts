@@ -54,34 +54,6 @@ export interface Posting {
   };
 }
 
-export interface ReaderStats {
-  isbn: string;
-  totalCollectors: number;
-  demographics: {
-    gender: {
-      male: {
-        '10s': number;
-        '20s': number;
-        '30s': number;
-        '40s': number;
-        '50s': number;
-        '60plus': number;
-        unknown: number;
-      };
-      female: {
-        '10s': number;
-        '20s': number;
-        '30s': number;
-        '40s': number;
-        '50s': number;
-        '60plus': number;
-        unknown: number;
-      };
-      unknown: number;
-    };
-  };
-}
-
 export type AgeGroup =
   | '10s'
   | '20s'
