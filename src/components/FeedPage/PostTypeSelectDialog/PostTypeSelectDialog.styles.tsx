@@ -3,13 +3,13 @@ const styles = {
   postTypeButton: (theme: Theme) => ({
     py: 2,
     justifyContent: 'space-between',
-    backgroundColor: 'transparent', // 배경색 제거
+    backgroundColor: 'transparent',
     color: theme.palette.text.primary,
     border: 'none',
     '&:hover': {
-      backgroundColor: '#e0e0e0', // hover 시 배경색
+      backgroundColor: '#e0e0e0',
       color: '#000',
-      border: 'none', // hover 시에도 테두리 제거
+      border: 'none',
     },
     '& .MuiButton-startIcon': {
       mr: 1,

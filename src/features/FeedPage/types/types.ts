@@ -12,8 +12,3 @@ export interface PostsResponse {
   hasMore: boolean;
   totalCount: number;
 }
-
-export interface FollowRequest {
-  userId: number;
-  isFollowing: boolean;
-}

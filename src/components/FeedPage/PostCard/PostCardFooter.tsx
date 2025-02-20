@@ -38,14 +38,13 @@ const PostCardFooter = ({ postId, isbn }: PostCardFooterProps): JSX.Element => {
 
   const handleLike = async () => {
     if (!isLoggedIn) {
-      // 로그인 상태가 아닐 때 스낵바 메시지와 리다이렉트 처리
       dispatch(
         showSnackbar({
           message: '로그인 후 이용해주세요.',
           severity: 'warning',
         }),
       );
-      navigateToLoginPage(navigate); // 로그인 페이지로 이동
+      navigateToLoginPage(navigate);
       return;
     }
     try {

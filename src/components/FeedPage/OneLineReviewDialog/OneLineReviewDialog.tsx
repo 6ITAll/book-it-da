@@ -15,11 +15,9 @@ import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { useDispatch } from 'react-redux';
 
 interface OneLineReviewDialogProps {
-  // 포스팅 타입 선택 다이얼로그에서 오는 Props
   handleBack?: () => void;
   selectedType?: PostType;
   setSelectedType?: React.Dispatch<React.SetStateAction<PostType>>;
-  // 상세 페이지에서 오는 Props
   receivedBook?: Book;
   receivedRating?: number;
   isOpen?: boolean;
@@ -48,10 +46,8 @@ const OneLineReviewDialog = ({
 
   const dialogOpen = selectedType ? selectedType === '한줄평' : !!isOpen;
 
-  // inputRef를 생성해 ReviewTextField의 내부 DOM에 접근
   const reviewInputRef = useRef<HTMLInputElement>(null);
 
-  // 다이얼로그 초기화 함수
   const resetState = () => {
     setSelectedBook(null);
     setError('');

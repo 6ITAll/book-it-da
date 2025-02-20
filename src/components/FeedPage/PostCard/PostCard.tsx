@@ -28,14 +28,14 @@ interface PostingCardProps extends PostCardBaseProps {
   postType: '포스팅';
   title: string;
   content: string;
-  review?: never; // 한줄평에서는 사용되지 않음
+  review?: never;
 }
 
 interface OneLineCardProps extends PostCardBaseProps {
   postType: '한줄평';
   review: string;
-  title?: never; // 포스팅에서는 사용되지 않음
-  content?: never; // 포스팅에서는 사용되지 않음
+  title?: never;
+  content?: never;
 }
 
 type PostCardProps = PostingCardProps | OneLineCardProps;
