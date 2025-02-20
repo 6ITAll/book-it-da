@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 
 async function deleteUserFiles(userId: string) {
   try {
