@@ -18,7 +18,7 @@ import {
 import { useToggleFollowMutation } from '@features/commons/followApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import {
   clearUsers,
   setHasMore,

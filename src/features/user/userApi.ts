@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import deleteUserFiles from '@utils/deleteUserFiles';
-import { supabase } from '@utils/supabaseClient';
+import deleteUserFiles from '@utils/User/deleteUserFiles';
+import { supabase } from '@utils/Supabase/supabaseClient';
 
 export const userApi = createApi({
   reducerPath: 'userApi',

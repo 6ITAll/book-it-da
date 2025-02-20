@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { DbReaderStats } from '../types/types';
 import { ReaderStats } from '@components/BookDetailPage/types';
 

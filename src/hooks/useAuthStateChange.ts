@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../utils/Supabase/supabaseClient';
 import { loginSuccess, logoutSuccess } from '@features/user/userSlice';
 import { Session } from '@supabase/supabase-js';
 

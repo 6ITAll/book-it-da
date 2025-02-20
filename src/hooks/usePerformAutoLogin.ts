@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, setAutoLogin, setToken } from '@features/user/userSlice';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 
 export const usePerformAutoLogin = () => {
   const dispatch = useDispatch();

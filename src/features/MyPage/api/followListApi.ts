@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { PostgrestResponse } from '@supabase/supabase-js';
 import { DbFollowerData, DbFollowingData } from '../types/types';
 import { User } from '@shared/types/type';

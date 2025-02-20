@@ -1,6 +1,6 @@
 import { OneLineReview, Posting } from '@components/MyPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { DbBookPostCount, DbOneLineReview, DbPosting } from '../types/types';
 
 export const bookFeedPreviewApi = createApi({

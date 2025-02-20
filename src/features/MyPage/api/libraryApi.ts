@@ -1,6 +1,6 @@
 import { Book, Bookshelf } from '@components/MyPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 
 export const libraryApi = createApi({
   reducerPath: 'libraryApi',

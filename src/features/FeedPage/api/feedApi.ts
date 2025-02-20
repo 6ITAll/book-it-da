@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { GetPostsParams, PostsResponse } from '../types/types';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 
 export const feedApi = createApi({
   reducerPath: 'feedApi',

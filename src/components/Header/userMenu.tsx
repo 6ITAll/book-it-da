@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Menu, MenuItem } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { logoutSuccess, UserInfo } from '@features/user/userSlice';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { StyledIconWrapper } from './Header.styles';
 import { RootState } from '@store/index';
 import {

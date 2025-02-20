@@ -1,4 +1,4 @@
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 
 export const checkEmailDuplicate = async (email: string): Promise<boolean> => {
   try {

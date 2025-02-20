@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { OneLineReviewRequest, OneLineReviewResponse } from '../types/types';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { FeedType, PostType } from '@shared/types/type';
 import { userFeedsApi } from '@features/MyPage/api/userFeedsApi';

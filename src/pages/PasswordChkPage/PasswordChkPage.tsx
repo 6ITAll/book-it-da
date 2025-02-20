@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import { useState } from 'react';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { useDispatch } from 'react-redux';
 import { setCheckedPassword } from '@features/user/userSlice';
 import { useNavigate } from 'react-router-dom';

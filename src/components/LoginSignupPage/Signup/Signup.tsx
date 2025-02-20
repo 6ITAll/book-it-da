@@ -19,7 +19,7 @@ import PasswordInput from '../PasswordInput';
 import { StyledTitle, StyledSubmitButton, signupStyles } from './Signup.styles';
 import { SignupData } from '@features/SignupPage/types';
 import { signupSchema } from '@utils/SignupPage/yupSchema';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import {
   checkEmailDuplicate,
   checkUserIdDuplicate,

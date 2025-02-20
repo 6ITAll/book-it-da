@@ -17,7 +17,7 @@ import { loginSuccess, setAutoLogin, setToken } from '@features/user/userSlice';
 import { LoginMessage } from './types';
 import { loginStyles, StyledKakaoButton, SignupButton } from './Login.styles';
 import kakaoLogo from '@assets/images/kakao-logo.svg';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { RootState } from '@store/index';
 import { useKakaoSDK } from '@hooks/useKakaoSDK';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
