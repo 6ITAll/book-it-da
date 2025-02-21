@@ -1,5 +1,6 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { DialogWithOutActionProps } from './HybridDialog/HybridDialog';
+import { CircularProgress } from '@mui/material';
 
 const HybridDialog = lazy(
   () => import('@components/commons/HybridDialog/HybridDialog'),
@@ -17,15 +18,17 @@ const NonTitleDialog = ({
   fullScreen,
 }: NonTitleDialogProps): JSX.Element => {
   return (
-    <HybridDialog
-      contentNode={contentNode}
-      action="닫기"
-      onActionClick={() => setOpen(false)}
-      maxWidth={maxWidth}
-      open={open}
-      setOpen={setOpen}
-      fullScreen={fullScreen}
-    />
+    <Suspense fallback={<CircularProgress />}>
+      <HybridDialog
+        contentNode={contentNode}
+        action="닫기"
+        onActionClick={() => setOpen(false)}
+        maxWidth={maxWidth}
+        open={open}
+        setOpen={setOpen}
+        fullScreen={fullScreen}
+      />
+    </Suspense>
   );
 };
 
