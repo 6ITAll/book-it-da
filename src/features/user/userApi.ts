@@ -1,6 +1,7 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import deleteUserFiles from '@utils/deleteUserFiles';
 import { supabase } from '@utils/supabaseClient';
+import imageCompression from 'browser-image-compression';
 
 export const userApi = createApi({
   reducerPath: 'userApi',
@@ -55,10 +56,18 @@ export const userApi = createApi({
     updateAvatar: builder.mutation({
       async queryFn({ userId, file }) {
         try {
-          const filePath = `${userId}/${Date.now()}_${file.name}`;
+          const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 500,
+            useWebWorker: true,
+          };
+
+          const compressedFile = await imageCompression(file, options);
+
+          const filePath = `${userId}/${Date.now()}_${compressedFile.name}`;
           const { error } = await supabase.storage
             .from('avatars')
-            .upload(filePath, file);
+            .upload(filePath, compressedFile);
 
           if (error) {
             return { error };
