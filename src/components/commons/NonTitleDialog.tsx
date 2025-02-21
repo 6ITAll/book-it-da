@@ -1,6 +1,9 @@
-import HybridDialog, {
-  DialogWithOutActionProps,
-} from './HybridDialog/HybridDialog';
+import { lazy } from 'react';
+import { DialogWithOutActionProps } from './HybridDialog/HybridDialog';
+
+const HybridDialog = lazy(
+  () => import('@components/commons/HybridDialog/HybridDialog'),
+);
 
 interface NonTitleDialogProps extends Omit<DialogWithOutActionProps, 'title'> {
   title?: never;

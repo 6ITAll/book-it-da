@@ -16,5 +16,22 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ['react', 'react-dom', 'react-router-dom'],
+            mui: ['@mui/material'],
+            muiX: ['@mui/x-date-pickers'],
+            muiIcon: ['@mui/icons-material'],
+            redux: ['@reduxjs/toolkit', 'react-redux'],
+            quill: ['quill'],
+            supabase: ['@supabase/supabase-js'],
+            form: ['react-hook-form', '@hookform/resolvers', 'yup'],
+            lodash: ['lodash', 'lodash-es'],
+          },
+        },
+      },
+    },
   };
 });
