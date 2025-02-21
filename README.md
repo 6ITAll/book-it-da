@@ -3,17 +3,20 @@
 ## 1. 기대 효과
 
 ### 1.1 서비스 기대 효과
+
 - 독서 문화 활성화
 - 개인화된 독서 경험
 - 비판적 사고력 향상
 
 ### 1.2 개발자로서 성장 기대 효과
+
 - 테스트 코드 작성 경험
 - 협업 툴 활용(Github Project)
 - UI 라이브러리 활용 경험(MUI)
 - 서드파티 API 활용 경험(Aladin API)
 
 ## 2. 기능
+
 <table>
   <thead>
     <tr>
@@ -88,8 +91,8 @@
   </tbody>
 </table>
 
-
 ### 3. 팀 구성 및 역할
+
 <table>
     <tr>
         <td><strong>이종혁</strong></td>
@@ -107,10 +110,12 @@
         <td>
             - 프로젝트 생성 및 개발 환경 세팅<br>
             - 마이페이지 구현<br>
+            - 개인정보수정 페이지 구현<br>
             - PR 템플릿 설정<br>
             - Eslint & Prettier 관리<br>
-            - 배포 관련 세팅<br>
-            - MSW, StoryBook 세팅
+            - 배포 관련 세팅 및 관리<br>
+            - MSW, StoryBook 세팅<br>
+            - 프로젝트 lighthouse 성능 분석 및 개선
         </td>
     </tr>
     <tr>
@@ -132,7 +137,7 @@
             - Eslint, Prettier 초기 설정<br>
             - 커밋 템플릿 & 가이드 작성<br>
             - 프로젝트 구조 및 개발 환경 세팅<br>
-            - MUI Theme 관리
+            - MUI Theme 관리<br>
             - 전체 프로젝트 렌더링 성능 관리
         </td>
     </tr>
@@ -141,6 +146,7 @@
 ## 4. 개발 환경 및 배포 URL
 
 ### 4.1 개발 환경
+
 **:pencil: 언어:** TypeScript
 
 **:books: 라이브러리:** React
@@ -161,39 +167,43 @@
 
 **:mag: 코드 품질 검사:** Eslint, Prettier
 
-**:test_tube:  테스트 툴:** Vitest, Cypress
+**:test_tube: 테스트 툴:** Vitest, Cypress
 
 ### 4.2 배포 URL
+
 - https://www.bookitda.store/
 
 ### 4.3 URL 구조
-| 기능 | URL |
-|------|-----|
-| 메인 페이지 | `/` |
-| 로그인 | `/login` |
-| 회원가입 | `/signup` |
-| 피드 | `/feed` |
-| 책 검색 | `/search` |
-| 마이페이지 | `/my-page` |
-| 특정 사용자 마이페이지 | `/my-page/:userId` |
-| 책장 페이지 | `/my-page/:userId/bookshelves/:bookShelvesId` |
-| 좋아요한 포스트 더보기 | `/my-page/:userId/feeds/posts` |
-| 좋아요한 리뷰 더보기 | `/my-page/:userId/feeds/reviews` |
-| 계정 수정 | `/edit-account` |
-| 비밀번호 확인 | `/edit-account/passwordChk` |
-| 책 상세 페이지 | `/books/:itemId` |
-| 책 리뷰 더보기 | `/books/:itemId/reviews` |
-| 책 포스트 더보기 | `/books/:itemId/posts` |
-| 포스팅 목록 | `/posting` |
-| 포스팅 상세 | `/posting/:postingId` |
-| 포스팅 작성 | `/posting/write` |
-| 포스팅 수정 | `/posting/edit/:postingId` |
-| 카카오 로그인 콜백 | `/oauth/kakao` |
+
+| 기능                   | URL                                           |
+| ---------------------- | --------------------------------------------- |
+| 메인 페이지            | `/`                                           |
+| 로그인                 | `/login`                                      |
+| 회원가입               | `/signup`                                     |
+| 피드                   | `/feed`                                       |
+| 책 검색                | `/search`                                     |
+| 마이페이지             | `/my-page`                                    |
+| 특정 사용자 마이페이지 | `/my-page/:userId`                            |
+| 책장 페이지            | `/my-page/:userId/bookshelves/:bookShelvesId` |
+| 좋아요한 포스트 더보기 | `/my-page/:userId/feeds/posts`                |
+| 좋아요한 리뷰 더보기   | `/my-page/:userId/feeds/reviews`              |
+| 계정 수정              | `/edit-account`                               |
+| 비밀번호 확인          | `/edit-account/passwordChk`                   |
+| 책 상세 페이지         | `/books/:itemId`                              |
+| 책 리뷰 더보기         | `/books/:itemId/reviews`                      |
+| 책 포스트 더보기       | `/books/:itemId/posts`                        |
+| 포스팅 목록            | `/posting`                                    |
+| 포스팅 상세            | `/posting/:postingId`                         |
+| 포스팅 작성            | `/posting/write`                              |
+| 포스팅 수정            | `/posting/edit/:postingId`                    |
+| 카카오 로그인 콜백     | `/oauth/kakao`                                |
 
 ## 5. API 명세
-### [북잇다 API 명세](http://api-docs-bookitda.store/) 
+
+### [북잇다 API 명세](http://api-docs-bookitda.store/)
 
 ## 6. 프로젝트 구조
+
 ```
 📦book-it-da
 ┣ 📂public
@@ -230,6 +240,7 @@
 ```
 
 ## 7. 와이어프레임
+
 ### [북잇다 와이어프레임](https://www.figma.com/design/OfB5ssv758IYKh93oWoZ70/Untitled?node-id=0-1&p=f&t=9XEwmzeAYrTLsExK-0)
 
 ## 8. Architecture
