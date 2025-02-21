@@ -2,13 +2,15 @@ import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import AppRouter from './routes/index';
 import Header from '@components/Header/Header';
-import SnackBar from './components/commons/SnackBar';
 import { store, RootState } from '@store/index';
 import './App.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
 import { usePerformAutoLogin } from '@hooks/usePerformAutoLogin';
 import { AuthProvider } from '@components/Auth/AuthProvider';
+import RequireAdditionalInfo from '@hooks/useRequireAdditionalInfo';
+import { lazy } from 'react';
+const SnackBar = lazy(() => import('@components/commons/SnackBar'));
 
 const MainContent = (): JSX.Element => {
   const location = useLocation();
@@ -39,6 +41,7 @@ const AppContent = (): JSX.Element => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <RequireAdditionalInfo />
         <MainContent />
       </Router>
     </ThemeProvider>

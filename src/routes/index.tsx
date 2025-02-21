@@ -1,27 +1,58 @@
+import { lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import LoginSignup from '@pages/LoginSignupPage/LoginPage';
-import SignupPage from '@pages/LoginSignupPage/SignupPage';
-import FeedPage from '@pages/MainPage/Main';
-import BookSearchPage from '@pages/BookSearchPage/BookSearch';
-import NotFoundPage from '@pages/NotFoundPage/NotFoundPage';
-import RoutePaths from './RoutePath';
-import BookShelvesPage from '@pages/BookShelvesPage/BookShelvesPage';
-import PostingDetailPage from '@pages/PostingDetailPage/PostingDetailPage';
-import BookDetailPage from '@pages/BookDetailPage/BookDetailPage';
-import EditAccountPage from '@pages/EditAccountPage.tsx/EditAccountPage';
-import PasswordChkPage from '@pages/PasswordChkPage/PasswordChkPage';
-import KakaoCallback from '@features/SNSLogin/auth/KakaoCallback';
-import PostingWritePage from '@pages/PostingWritePage/PostingWritePage';
-import LikedPostingMorePage from '@pages/LikedPostingMorePage/LikedPostingMorePage';
-import LikedReviewMorePage from '@pages/LikedReviewMorePage/LikedReviewMorePage';
-import MyPage from '@pages/MyPage/MyPage';
-import AdditionalInfoPage from '@pages/AdditionalInfoPage/AdditionalInfoPage';
 import { RootState } from '@store/index';
 import { useSelector } from 'react-redux';
-import UserPostingMorePage from '@pages/UserPostingMorePage/UserPostingMorePage';
-import UserReviewMorePage from '@pages/UserReviewMorePage/UserReviewMorePage';
-import BookPostingMorePage from '@pages/BookPostingMorePage/BookPostingMorePage';
-import BookReviewMorePage from '@pages/BookReviewMorePage/BookReviewMorePage';
+import RoutePaths from './RoutePath';
+
+const LoginSignup = lazy(() => import('@pages/LoginSignupPage/LoginPage'));
+const SignupPage = lazy(() => import('@pages/LoginSignupPage/SignupPage'));
+const FeedPage = lazy(() => import('@pages/MainPage/Main'));
+const BookSearchPage = lazy(() => import('@pages/BookSearchPage/BookSearch'));
+const NotFoundPage = lazy(() => import('@pages/NotFoundPage/NotFoundPage'));
+const BookShelvesPage = lazy(
+  () => import('@pages/BookShelvesPage/BookShelvesPage'),
+);
+const PostingDetailPage = lazy(
+  () => import('@pages/PostingDetailPage/PostingDetailPage'),
+);
+const BookDetailPage = lazy(
+  () => import('@pages/BookDetailPage/BookDetailPage'),
+);
+const EditAccountPage = lazy(
+  () => import('@pages/EditAccountPage/EditAccountPage'),
+);
+const PasswordChkPage = lazy(
+  () => import('@pages/PasswordChkPage/PasswordChkPage'),
+);
+const KakaoCallback = lazy(
+  () => import('@features/SNSLogin/auth/KakaoCallback'),
+);
+const PostingWritePage = lazy(
+  () => import('@pages/PostingWritePage/PostingWritePage'),
+);
+const LikedPostingMorePage = lazy(
+  () => import('@pages/LikedPostingMorePage/LikedPostingMorePage'),
+);
+const LikedReviewMorePage = lazy(
+  () => import('@pages/LikedReviewMorePage/LikedReviewMorePage'),
+);
+const MyPage = lazy(() => import('@pages/MyPage/MyPage'));
+const AdditionalInfoPage = lazy(
+  () => import('@pages/AdditionalInfoPage/AdditionalInfoPage'),
+);
+const UserPostingMorePage = lazy(
+  () => import('@pages/UserPostingMorePage/UserPostingMorePage'),
+);
+const UserReviewMorePage = lazy(
+  () => import('@pages/UserReviewMorePage/UserReviewMorePage'),
+);
+const BookPostingMorePage = lazy(
+  () => import('@pages/BookPostingMorePage/BookPostingMorePage'),
+);
+const BookReviewMorePage = lazy(
+  () => import('@pages/BookReviewMorePage/BookReviewMorePage'),
+);
+
 const AppRouter = () => {
   const { userInfo, checkedPassword } = useSelector(
     (state: RootState) => state.user,
