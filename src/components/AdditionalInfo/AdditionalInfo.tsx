@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -48,7 +48,7 @@ const AdditionalInfo = (): JSX.Element => {
   const navigate = useNavigate();
   const { userInfo } = useSelector((state: RootState) => state.user);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const location = useLocation();
   const [updateUserInfo] = useUpdateUserInfoMutation();
 
   useEffect(() => {
@@ -89,11 +89,19 @@ const AdditionalInfo = (): JSX.Element => {
           );
         }
         navigate('/');
+      } else if (location.pathname !== '/kakao/additional-info') {
+        dispatch(
+          showSnackbar({
+            message: '추가 정보를 입력해야 합니다.',
+            severity: 'warning',
+          }),
+        );
+        navigate('/kakao/additional-info');
       }
     };
 
     checkUserStatus();
-  }, [navigate, userInfo, dispatch, isSubmitted]);
+  }, [navigate, userInfo, dispatch, isSubmitted, location.pathname]);
 
   const onSubmit = async (formData: AdditionalInfoData) => {
     if (!isUserIdAvailable) {
