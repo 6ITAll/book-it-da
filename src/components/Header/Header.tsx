@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { Box, Button, InputBase } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@store/index';
-import DarkModeButton from '@components/DarkModeButton/DarkModeButton';
+import DarkModeButton from '@components/Header/DarkModeButton';
 import { setSearchQuery } from '@features/BookSearchPage/Slice/bookSearchSlice';
 import {
   StyledHeaderContainer,

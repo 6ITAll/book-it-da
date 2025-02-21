@@ -7,8 +7,8 @@ const userInfoStyles = {
     '&:hover': {
       bgcolor:
         theme.palette.mode === 'light'
-          ? theme.palette.grey[200] // 라이트 모드에서는 밝은 색
-          : theme.palette.background.paper, // 다크 모드에서는 기존 색 유지
+          ? theme.palette.grey[200]
+          : theme.palette.background.paper,
     },
   }),
   userInfoButtonFollower: (theme: Theme) => ({
@@ -17,8 +17,8 @@ const userInfoStyles = {
     '&:hover': {
       bgcolor:
         theme.palette.mode === 'light'
-          ? theme.palette.grey[200] // 라이트 모드에서는 밝은 색
-          : theme.palette.background.paper, // 다크 모드에서는 기존 색 유지
+          ? theme.palette.grey[200]
+          : theme.palette.background.paper,
     },
   }),
 };

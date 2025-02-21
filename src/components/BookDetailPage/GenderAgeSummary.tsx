@@ -3,8 +3,7 @@ import { summaryStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { RootState } from '@store/index';
 import { defaultReaderStats } from '@features/BookDetailPage/slice/readerStatsSlice';
 import { useSelector } from 'react-redux';
-// 타입 추후 components/BookDetailPage/types.ts 로
-type AgeGroup = '10s' | '20s' | '30s' | '40s' | '50s' | '60plus' | 'unknown';
+import { AgeGroup } from './types';
 
 const ageGroupLabels: Record<AgeGroup, string> = {
   '10s': '10대',

@@ -1,12 +1,5 @@
 import { ReadingStatusType, SavedBook } from '@shared/types/type';
 
-export interface BookInfo {
-  isbn: string;
-  bookTitle: string;
-  author: string;
-  imageUrl: string;
-}
-
 export interface GetBookshelfResponse {
   books: SavedBook[];
   totalCount: number;

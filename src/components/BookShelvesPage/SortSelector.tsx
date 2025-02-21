@@ -1,10 +1,4 @@
-import {
-  FormControl,
-  // InputLabel,
-  MenuItem,
-  Select,
-  // Typography,
-} from '@mui/material';
+import { FormControl, MenuItem, Select } from '@mui/material';
 import { bookShelvesStyles } from './BookShelves.styles';
 import { SortOption } from './types';
 

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Comment } from '../types/types';
+import { Comment } from '@components/PostingDetailPage/Comment/types';
 
 export interface PostingCommentsState {
   comments: Comment[];
@@ -187,7 +187,6 @@ const postingCommentsSlice = createSlice({
     toggleShowReplies(state, action: PayloadAction<string>) {
       const commentId = action.payload;
       const index = state.showRepliesFor.indexOf(commentId);
-      console.log('toggle');
 
       if (index === -1) {
         state.showRepliesFor.push(commentId);

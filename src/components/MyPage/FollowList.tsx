@@ -18,7 +18,7 @@ import {
 import { useToggleFollowMutation } from '@features/commons/followApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import {
   clearUsers,
   setHasMore,
@@ -103,7 +103,7 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
   const handleToggleFollow = async (targetUserId: string) => {
     try {
       await toggleFollow(targetUserId);
-      dispatch(toggleFollowStatus(targetUserId)); // Redux 상태 업데이트
+      dispatch(toggleFollowStatus(targetUserId));
       if (currentUserId === userId) {
         onRefetch();
       }
@@ -119,7 +119,7 @@ const FollowList = ({ setOpen, type, userId, onRefetch }: FollowListProps) => {
 
   const fetchMoreData = useCallback(() => {
     if (!isFetching && hasMore) {
-      dispatch(setPage(page + 1)); // 페이지 증가
+      dispatch(setPage(page + 1));
     }
   }, [isFetching, hasMore, page, dispatch]);
 

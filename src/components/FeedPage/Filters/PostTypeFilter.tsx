@@ -16,7 +16,7 @@ const PostTypeFilter = ({
   postType,
   onPostTypeChange,
 }: PostTypeFilterProps): JSX.Element => {
-  const theme = useTheme(); // 현재 테마 가져오기
+  const theme = useTheme();
   return (
     <Stack direction="row" spacing={1}>
       {POST_TYPES.map((type) => (
@@ -27,7 +27,7 @@ const PostTypeFilter = ({
           onClick={(e) =>
             onPostTypeChange(e, postType === type ? '선택안함' : type)
           }
-          sx={styles.filterButton(theme, postType === type)} // isSelected 상태 전달
+          sx={styles.filterButton(theme, postType === type)}
         >
           {type}
         </Button>

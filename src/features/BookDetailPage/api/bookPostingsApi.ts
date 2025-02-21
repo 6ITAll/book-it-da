@@ -1,6 +1,6 @@
 import { Posting } from '@components/BookDetailPage/types';
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { DbPosting } from '../types/types';
 
 export const bookPostingsApi = createApi({

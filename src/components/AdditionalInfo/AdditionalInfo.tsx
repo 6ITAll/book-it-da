@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { checkUserIdDuplicate } from '@utils/SignupPage/checkDuplicate';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { AdditionalInfoData } from './AdditionalInfo.types';
 import {
   FormContainer,

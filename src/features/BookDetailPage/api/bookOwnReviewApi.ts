@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { DbUserReview } from '../types/types';
 import { UserReview } from '@components/BookDetailPage/types';
 

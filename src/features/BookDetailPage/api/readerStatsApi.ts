@@ -1,62 +1,7 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { supabase } from '@utils/supabaseClient';
-
-export interface DbReaderStats {
-  isbn: string;
-  total_collectors: number;
-  demographics: {
-    gender: {
-      male: {
-        '10s': number;
-        '20s': number;
-        '30s': number;
-        '40s': number;
-        '50s': number;
-        '60plus': number;
-        unknown: number;
-      };
-      female: {
-        '10s': number;
-        '20s': number;
-        '30s': number;
-        '40s': number;
-        '50s': number;
-        '60plus': number;
-        unknown: number;
-      };
-      unknown: number;
-    };
-  };
-}
-
-// 프론트엔드 사용 타입
-export interface ReaderStats {
-  isbn: string;
-  totalCollectors: number;
-  demographics: {
-    gender: {
-      male: {
-        '10s': number;
-        '20s': number;
-        '30s': number;
-        '40s': number;
-        '50s': number;
-        '60plus': number;
-        unknown: number;
-      };
-      female: {
-        '10s': number;
-        '20s': number;
-        '30s': number;
-        '40s': number;
-        '50s': number;
-        '60plus': number;
-        unknown: number;
-      };
-      unknown: number;
-    };
-  };
-}
+import { supabase } from '@utils/Supabase/supabaseClient';
+import { DbReaderStats } from '../types/types';
+import { ReaderStats } from '@components/BookDetailPage/types';
 
 export const readerStatsApi = createApi({
   reducerPath: 'bookReaderStatsApi',

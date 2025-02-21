@@ -5,6 +5,7 @@ import { bookDetailStyles } from '@components/BookDetailPage/BookDetail.styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/index';
 import { showSnackbar } from '@features/Snackbar/snackbarSlice';
+
 interface FooterButtonsProps {
   isbn: string;
   title: string;

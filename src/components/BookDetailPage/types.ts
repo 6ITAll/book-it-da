@@ -53,3 +53,37 @@ export interface Posting {
     avatarUrl: string;
   };
 }
+
+export type AgeGroup =
+  | '10s'
+  | '20s'
+  | '30s'
+  | '40s'
+  | '50s'
+  | '60plus'
+  | 'unknown';
+
+export interface AgeGroupData {
+  ageGroup: AgeGroup;
+  male: number;
+  female: number;
+}
+
+export interface Demographics {
+  gender: {
+    male: Record<AgeGroup, number>;
+    female: Record<AgeGroup, number>;
+    unknown: number;
+  };
+}
+export interface ReaderStats {
+  isbn: string;
+  totalCollectors: number;
+  demographics: Demographics;
+}
+
+export interface BookReviewStats {
+  isbn: string;
+  reviewerCount: number;
+  averageRating: number;
+}

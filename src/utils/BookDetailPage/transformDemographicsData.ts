@@ -1,8 +1,8 @@
 import {
   AgeGroup,
   AgeGroupData,
-} from '@components/BookDetailPage/GenderAgeChart';
-import { ReaderStats } from '@features/BookDetailPage/api/readerStatsApi';
+  ReaderStats,
+} from '@components/BookDetailPage/types';
 
 export const transformDemographicsData = (
   bookStats: ReaderStats,

@@ -1,45 +1,12 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { Posting } from '@shared/types/type';
 import {
   PostgrestResponse,
   PostgrestSingleResponse,
 } from '@supabase/supabase-js';
-import { OtherPost } from '../types/types';
-
-interface SupabasePostingResponse {
-  id: string;
-  created_at: string;
-  isbn: string;
-  user: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
-  posting: {
-    title: string;
-    content: string;
-  };
-}
-
-interface SupabaseBookOtherPostsResponse {
-  id: string;
-  created_at: string;
-  user: {
-    id: string;
-    username: string;
-    avatar_url: string;
-  };
-  isbn: string;
-  posting: {
-    title: string;
-    content: string;
-  };
-  post_like: {
-    user_id: string;
-  }[];
-  like_count: number;
-}
+import { DbBookOtherPostsResponse, DbPostingResponse } from '../types/types';
+import { OtherPost } from '@components/PostingDetailPage/types';
 
 export const postingApi = createApi({
   reducerPath: 'postingApi',
@@ -75,7 +42,7 @@ export const postingApi = createApi({
             `,
             )
             .eq('id', postId)
-            .single()) as PostgrestSingleResponse<SupabasePostingResponse>;
+            .single()) as PostgrestSingleResponse<DbPostingResponse>;
 
           if (error) {
             return { error };
@@ -139,7 +106,7 @@ export const postingApi = createApi({
             .neq('id', currentPostingId)
             .order('like_count', { ascending: false }) // 임시 집계 컬럼으로 정렬
             .order('created_at', { ascending: false })
-            .limit(3)) as PostgrestResponse<SupabaseBookOtherPostsResponse>;
+            .limit(3)) as PostgrestResponse<DbBookOtherPostsResponse>;
 
           if (error) throw error;
 
@@ -187,7 +154,7 @@ export const postingApi = createApi({
             .neq('id', currentPostingId)
             .order('like_count', { ascending: false }) // 임시 집계 컬럼으로 정렬
             .order('created_at', { ascending: false })
-            .limit(3)) as PostgrestResponse<SupabaseBookOtherPostsResponse>;
+            .limit(3)) as PostgrestResponse<DbBookOtherPostsResponse>;
 
           if (error) throw error;
 

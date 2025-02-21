@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import deleteUserFiles from '@utils/deleteUserFiles';
-import { supabase } from '@utils/supabaseClient';
+import deleteUserFiles from '@utils/User/deleteUserFiles';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import imageCompression from 'browser-image-compression';
 
 export const userApi = createApi({
@@ -29,10 +29,7 @@ export const userApi = createApi({
     updateField: builder.mutation({
       async queryFn({ userId, fieldName, value }) {
         try {
-          console.log('Updating field:', fieldName, 'with value:', value);
-          console.log('Updating user with ID:', userId);
-
-          const { data, error } = await supabase
+          const { error } = await supabase
             .from('user')
             .update({ [fieldName]: value })
             .eq('id', userId)
@@ -43,7 +40,6 @@ export const userApi = createApi({
             return { error };
           }
 
-          console.log('Update successful:', data);
           return { data: true };
         } catch (err) {
           console.error('Unknown error occurred during update:', err);
@@ -149,9 +145,6 @@ export const userApi = createApi({
               error: { message: '사용자 데이터를 삭제하지 못했습니다.' },
             };
           }
-
-          console.log('사용자 데이터가 성공적으로 삭제되었습니다.');
-
           return { data: true };
         } catch (err) {
           console.error('계정 삭제 중 알 수 없는 오류 발생:', err);

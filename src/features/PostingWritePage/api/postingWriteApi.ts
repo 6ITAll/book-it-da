@@ -4,7 +4,7 @@ import {
   PostingResponse,
   UpdatePostingRequest,
 } from '../types/types';
-import { supabase } from '@utils/supabaseClient';
+import { supabase } from '@utils/Supabase/supabaseClient';
 import { feedApi } from '@features/FeedPage/api/feedApi';
 import { FeedType, PostType, SavedPosting } from '@shared/types/type';
 import { postingApi } from '@features/PostDetailPage/api/postingApi';
