@@ -8,7 +8,6 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@styles/theme';
 import { usePerformAutoLogin } from '@hooks/usePerformAutoLogin';
 import { AuthProvider } from '@components/Auth/AuthProvider';
-import RequireAdditionalInfo from '@hooks/useRequireAdditionalInfo';
 import { lazy } from 'react';
 const SnackBar = lazy(() => import('@components/commons/SnackBar'));
 
@@ -41,7 +40,6 @@ const AppContent = (): JSX.Element => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <RequireAdditionalInfo />
         <MainContent />
       </Router>
     </ThemeProvider>
